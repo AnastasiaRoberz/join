@@ -1,12 +1,33 @@
 @use '../../styles/';
 
 html {
+  font-family: 'Inter';
   font-size: 16px;
-  font-weight: 400;
-  color: styles.$txt-dark;
 }
 
+// * --- h-TAGS --- *
 h2 {
   font-size: clamp(2.938rem, calc(2.688rem + 1.25vw), 3.813rem);
   font-weight: 700;
 }
+// * -------------- *
+
+// * --- GENERAL TAGS --- *
+p {
+  font-weight: 400;
+  color: styles.$txt-dark;
+}
+// * ------------ *
+
+/* ------------------------------------------------
+            * --- CLASSES --- * 
+------------------------------------------------ */
+// * --- texts --- *
+.subheading {
+  font-size: clamp(1.25rem, calc(1.125rem + 0.625vw), 1.688rem);
+}
+
+.mail {
+  color: styles.$mail;
+}
+// * ------------- *
