@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Supabase } from '../../../../../services/supabase';
 
 @Component({
   imports: [],
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './contact-list.scss',
   templateUrl: './contact-list.html',
 })
-export class ContactList {}
+export class ContactList {
+  supabase = inject(Supabase);
+}

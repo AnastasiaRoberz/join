@@ -9,8 +9,4 @@ import { Supabase } from '../../../services/supabase';
 })
 export class Contacts {
   supabase = inject(Supabase);
-
-  ngOnInit() {
-    this.supabase.getAllContacts();
-  }
 }
