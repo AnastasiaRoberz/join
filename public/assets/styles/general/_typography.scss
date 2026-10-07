@@ -1,4 +1,4 @@
-@use '../../styles/';
+@use '../../styles';
 
 html {
   font-family: 'Inter';
@@ -25,7 +25,7 @@ h4 {
 // * --- GENERAL TAGS --- *
 p {
   font-weight: 400;
-  color: styles.$txt-dark;
+  color: styles.$text-dark;
 }
 // * ------------ *
 
