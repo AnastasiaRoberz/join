@@ -1,4 +1,4 @@
-@use '../../styles/';
+@use '../../styles';
 
 // BUTTONS DEFAULT
 .btn {
@@ -32,7 +32,7 @@
 // BUTTONS COLORS
 .btn-primary {
   background-color: styles.$btn-primary-default;
-  color: styles.$btn-primary-text;
+  color: styles.$btn-primary-txt;
 
   &:hover {
     background-color: styles.$btn-primary-hover;
@@ -60,7 +60,7 @@
 
 .btn-add {
   background-color: styles.$btn-add-default;
-  color: styles.$btn-add-text;
+  color: styles.$btn-add-txt;
   gap: 16px;
 
   &:hover {
