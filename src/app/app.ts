@@ -1,6 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Supabase } from './services/supabase';
 
 @Component({
   imports: [RouterOutlet],
@@ -10,5 +9,4 @@ import { Supabase } from './services/supabase';
 })
 export class App {
   protected readonly title = signal('join');
-  supabase = inject(Supabase);
 }
