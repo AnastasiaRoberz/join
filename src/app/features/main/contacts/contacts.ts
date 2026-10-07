@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Supabase } from '../../../services/supabase';
 
 @Component({
   imports: [],
@@ -6,4 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
 })
-export class Contacts {}
+export class Contacts {
+  supabase = inject(Supabase);
+
+  ngOnInit() {
+    this.supabase.getAllContacts();
+  }
+}
