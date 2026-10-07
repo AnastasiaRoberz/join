@@ -1,0 +1,72 @@
+// ==========================================
+// 1. PRIMITIVES
+// ==========================================
+
+// Neutrals
+$color-white: #ffffff;
+$color-black: #000000;
+$color-grey-100: #d1d1d1;
+$color-grey-200: #cdcdcd;
+
+// Blues
+$color-cyan-500: #29abe2;
+$color-cyan-700: #124658;
+$color-blue-500: #007cee;
+$color-navy-700: #2a3d59;
+$color-navy-800: #2a3647;
+$color-navy-900: #091931;
+
+// Feedback & Priorities
+$color-red-500: #e60026;
+$color-orange-500: #ff3d00;
+$color-amber-500: #ffa800;
+$color-green-500: #7ae229;
+
+// ==========================================
+// SEMANTIC TOKENS
+// ==========================================
+
+// TEXT
+$text-dark: $color-navy-800;
+$text-light: $color-white;
+$text-muted: $color-grey-200;
+
+// BUTTONS
+$btn-primary-default: $color-navy-800;
+$btn-primary-hover: $color-cyan-700;
+$btn-primary-active: $color-navy-900;
+$btn-primary-txt: $color-white;
+
+$btn-secondary-default: $color-cyan-500;
+$btn-secondary-hover: $color-cyan-700;
+$btn-secondary-active: $color-navy-900;
+
+$btn-add-default: $color-navy-800;
+$btn-add-hover: $color-cyan-500;
+$btn-add-active: $color-navy-900;
+$btn-add-txt: $color-white;
+
+$btn-icon: $color-navy-800;
+
+$btn-shadow: 0px 4px 4px 0px #00000040;
+
+// NAVIGATION & SIDEBAR
+$sidebar-bg-active: $color-navy-900;
+$sidebar-txt-default: $color-grey-200;
+$sidebar-txt-active: $color-white;
+
+// FEEDBACK & STATES
+$state-error: $color-red-500;
+$state-info: $color-blue-500;
+
+// TASK PRIORITIES
+$prio-urgent: $color-orange-500;
+$prio-medium: $color-amber-500;
+$prio-low: $color-green-500;
+
+// ==========================================
+// FONT SIZES
+// ==========================================
+$font-default: 16px;
+$font-medium: 20px;
+$font-large: 47px;
