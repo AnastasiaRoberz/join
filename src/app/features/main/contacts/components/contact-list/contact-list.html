@@ -1,1 +1,24 @@
-<p>contact-list works!</p>
+<button class="btn btn-medium btn-add">
+  Add new Contact
+  <svg class="icon">
+    <use href="/assets/icons/icons.svg#add-contact"></use>
+  </svg>
+</button>
+
+<div class="contact-list scroll-container">
+  @for (group of supabase.getGroupedContacts(); track $index) {
+    <p class="group-letter">{{ group.letter }}</p>
+    <hr />
+    <div class="group-wrapper">
+      @for (contact of group.contacts; track $index) {
+        <button class="contact">
+          <p class="name-icon">{{ contact.firstname.charAt(0) }}{{ contact.surname.charAt(0) }}</p>
+          <div class="details">
+            <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
+            <p class="mail">{{ contact.mail }}</p>
+          </div>
+        </button>
+      }
+    </div>
+  }
+</div>
