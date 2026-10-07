@@ -1,7 +1,8 @@
-@use '../../styles';
+@use '../../styles' as *;
 
 // BUTTONS DEFAULT
 .btn {
+  @include flex-center;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -12,62 +13,62 @@
 
   &:hover,
   &:active {
-    box-shadow: styles.$btn-shadow;
+    box-shadow: $btn-shadow;
   }
 }
 
 // BUTTONS SIZES
 .btn-small {
-  font-size: styles.$font-default;
+  font-size: $font-default;
   padding: 16px 24px;
   border-radius: 8px;
 }
 
 .btn-medium {
-  font-size: styles.$font-medium;
+  font-size: $font-medium;
   padding: 12px 16px;
   border-radius: 10px;
 }
 
 // BUTTONS COLORS
 .btn-primary {
-  background-color: styles.$btn-primary-default;
-  color: styles.$btn-primary-txt;
+  background-color: $btn-primary-default;
+  color: $btn-primary-txt;
 
   &:hover {
-    background-color: styles.$btn-primary-hover;
+    background-color: $btn-primary-hover;
   }
 
   &:active {
-    background-color: styles.$btn-primary-active;
+    background-color: $btn-primary-active;
   }
 }
 
 .btn-secondary {
   background-color: transparent;
-  border: 1px solid styles.$btn-secondary-default;
+  border: 1px solid $btn-secondary-default;
 
   &:hover {
-    border: 2px solid styles.$btn-secondary-hover;
-    color: styles.$btn-secondary-hover;
+    border: 2px solid $btn-secondary-hover;
+    color: $btn-secondary-hover;
   }
 
   &:active {
-    border: 1px solid styles.$btn-secondary-active;
-    color: styles.$btn-secondary-active;
+    border: 1px solid $btn-secondary-active;
+    color: $btn-secondary-active;
   }
 }
 
 .btn-add {
-  background-color: styles.$btn-add-default;
-  color: styles.$btn-add-txt;
+  background-color: $btn-add-default;
+  color: $btn-add-txt;
   gap: 16px;
 
   &:hover {
-    background-color: styles.$btn-add-hover;
+    background-color: $btn-add-hover;
   }
 
   &:active {
-    background-color: styles.$btn-add-active;
+    background-color: $btn-add-active;
   }
 }

@@ -1,2 +1,43 @@
 @use '../public/assets/styles/general/_buttons.scss';
 @use '../public/assets/styles/general/_typography.scss';
+@use '../public/assets/styles' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button,
+label {
+  background: none;
+  border: none;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  padding-right: 24px;
+
+  ::-webkit-scrollbar {
+    background: none;
+    width: 24px;
+  }
+
+  ::-webkit-scrollbar-button {
+    background-color: $icon;
+    width: 10px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+  ::-webkit-scrollbar-thumb {
+    width: 8px;
+    border-radius: 3px;
+    background-color: $icon;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
