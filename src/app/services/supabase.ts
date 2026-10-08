@@ -39,10 +39,6 @@ export class Supabase {
     }));
   }
 
-  getInitials(contact: Contact): string {
-    return contact.firstname.charAt(0) + contact.surname.charAt(0);
-  }
-
   setToLocalStorage(): void {
     localStorage.setItem('contactList', JSON.stringify(this.contacts));
   }
