@@ -12,28 +12,24 @@ import { Login } from './features/auth/login/login';
 export const routes: Routes = [
   //   { path: 'login', component: Login }, //für später: login-page
 
-  //main-Pfad soll immer erreichbar sein mit Privacy & legal, auch ohne login (inkl. sidebar + header nach design)
+  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen
   {
     path: '',
     component: Main,
     children: [
+      //immer erreichbar
       { path: 'privacy-policy', component: PrivacyPolicy },
       { path: 'legal-notice', component: LegalNotice },
-    ],
-  },
 
-  //main-Pfad nur im eingeloggten Zustand zusätzlich zu oberem main-Pfad -> durch Methode erst aktiviert (nach Login)
-  {
-    path: '',
-    component: Main,
-    // canActivate: [Methodenname], //property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt
-    children: [
+      //nur eingeloggt, canActivate kommt später
       { path: 'summary', component: Dashboard },
       { path: 'contacts', component: Contacts },
       { path: 'add-task', component: AddTask },
       { path: 'board', component: Board },
       { path: 'help', component: Help },
-      { path: '', redirectTo: 'summary', pathMatch: 'full' }, //wenn url leer: zu summary weiterleiten
+
+      //Weiterleitung, wenn URL leer
+      { path: '', redirectTo: 'summary', pathMatch: 'full' },
     ],
   },
   //   {path: '**', redirectTo: 'login'} //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
