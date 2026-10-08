@@ -1,1 +1,17 @@
-<p>contact-details works!</p>
+@if (selectedContact(); as contact) {
+  <div class="detail-header">
+    <p>{{ supabase.getInitials(contact) }}</p>
+    <div>
+      <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
+      <div>
+        <button>Edit</button>
+        <button>Delete</button>
+      </div>
+    </div>
+  </div>
+  <p>Contact Information</p>
+  <p>E-Mail</p>
+  <p>{{ contact.mail }}</p>
+  <p>Phone</p>
+  <p>{{ contact.phone }}</p>
+}
