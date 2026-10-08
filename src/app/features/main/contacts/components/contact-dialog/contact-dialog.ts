@@ -2,9 +2,10 @@ import { Component, effect, inject, input } from '@angular/core';
 import { Supabase } from '../../../../../services/supabase';
 import { Contact } from '../../../../../interfaces/contact';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { InputField } from '../../../../../shared/input-field/input-field';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, InputField],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
@@ -14,6 +15,7 @@ export class ContactDialog {
   fb = inject(FormBuilder);
 
   contact = input<Contact | null>(null);
+  initials = '';
 
   contactForm = this.fb.group({
     name: '',
@@ -25,10 +27,11 @@ export class ContactDialog {
     effect(() => {
       const currentContact = this.contact();
       if (currentContact) {
+        this.initials = this.supabase.getInitials(currentContact);
         this.contactForm.setValue({
           name: currentContact.firstname + ' ' + currentContact.surname,
           mail: currentContact.mail,
-          phone: currentContact.phone,
+          phone: currentContact.phone ?? '',
         });
       } else {
         this.contactForm.reset();
@@ -38,8 +41,20 @@ export class ContactDialog {
 
   async saveContact() {
     const { name, mail, phone } = this.contactForm.getRawValue();
-    // const { firstname, surname } = this.splitName(name);
-    const formValues = this.contactForm.getRawValue();
+    const { firstname, surname } = this.splitName(name ?? '');
+    const contactInfos = {
+      firstname: firstname,
+      surname: surname,
+      mail: mail ?? '',
+      phone: phone ?? '',
+    };
+
+    const existingContact = this.contact();
+    if (existingContact) {
+      await this.supabase.updateContact(existingContact.id ?? null, contactInfos);
+    } else {
+      await this.supabase.addContact(contactInfos);
+    }
   }
 
   splitName(name: string) {

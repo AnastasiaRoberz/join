@@ -1,1 +1,63 @@
-<p>contact-dialog works!</p>
+<div class="dialog-content">
+  <div class="header-section">
+    <svg class="logo">
+      <use href="/assets/icons/icons.svg#logo"></use>
+    </svg>
+    @if (contact()) {
+      <h2>Edit contact</h2>
+    } @else {
+      <h2>Add contact</h2>
+      <p class="subheading">Tasks are better with a team!</p>
+    }
+  </div>
+  <div class="content-section">
+    <button class="btn-close">
+      <svg class="icon-close">
+        <use href="/assets/icons/icons.svg#cancel"></use>
+      </svg>
+    </button>
+
+    <div class="input-wrapper">
+      @if (contact()) {
+        <span class="initials" [style.background-color]="contact()?.badge_color">{{
+          initials
+        }}</span>
+      } @else {
+        <span class="initials">
+          <svg class="icon-person">
+            <use href="/assets/icons/icons.svg#person"></use>
+          </svg>
+        </span>
+      }
+
+      <form class="form-section" [formGroup]="contactForm">
+        <app-input-field label="Name" icon="person">
+          <input type="text" formControlName="name" />
+        </app-input-field>
+
+        <app-input-field label="Mail" icon="mail">
+          <input type="text" formControlName="mail" />
+        </app-input-field>
+
+        <app-input-field label="Phone" icon="phone">
+          <input type="text" formControlName="phone" />
+        </app-input-field>
+
+        <div class="buttons">
+          <button class="btn btn-small btn-secondary">
+            Cancel
+            <svg class="icon">
+              <use href="/assets/icons/icons.svg#cancel"></use>
+            </svg>
+          </button>
+          <button class="btn btn-small btn-primary">
+            Create contact
+            <svg class="icon">
+              <use href="/assets/icons/icons.svg#check"></use>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
