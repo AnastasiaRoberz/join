@@ -51,7 +51,7 @@
 }
 
 .form-section {
-  @include flex-center(column);
+  @include flex-start(column);
   flex: 1;
   gap: 32px;
 }
@@ -59,4 +59,10 @@
 .icon {
   width: 24px;
   height: 24px;
+}
+
+.buttons-wrapper {
+  @include flex-center;
+  gap: 24px;
+  margin-top: 16px;
 }
