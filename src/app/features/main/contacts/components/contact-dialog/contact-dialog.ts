@@ -3,9 +3,10 @@ import { Supabase } from '../../../../../services/supabase';
 import { Contact } from '../../../../../interfaces/contact';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
+import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField],
+  imports: [ReactiveFormsModule, InputField, UserAvatar],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
@@ -15,7 +16,6 @@ export class ContactDialog {
   fb = inject(FormBuilder);
 
   contact = input<Contact | null>(null);
-  initials = '';
 
   contactForm = this.fb.group({
     name: '',
@@ -27,7 +27,6 @@ export class ContactDialog {
     effect(() => {
       const currentContact = this.contact();
       if (currentContact) {
-        this.initials = this.supabase.getInitials(currentContact);
         this.contactForm.setValue({
           name: currentContact.firstname + ' ' + currentContact.surname,
           mail: currentContact.mail,
