@@ -46,6 +46,10 @@
             gap: 8px;
             padding-inline: 56px;
 
+            &.active {
+              background-color: $sidebar-bg-active;
+            }
+
             p {
               color: $text-muted;
             }
@@ -86,6 +90,10 @@
       align-items: center;
       padding-inline: 52px;
       color: $text-muted;
+
+      &.active {
+        background-color: $sidebar-bg-active;
+      }
 
       &:hover {
         color: $text-lightblue;

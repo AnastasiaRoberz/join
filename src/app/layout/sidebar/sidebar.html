@@ -28,7 +28,7 @@
     <nav class="sidebar__wrapper--nav">
       <ul>
         <li>
-          <a routerLink="/summary">
+          <a routerLink="/summary" routerLinkActive="active">
             <svg
               width="30"
               height="30"
@@ -45,7 +45,7 @@
           </a>
         </li>
         <li>
-          <a routerLink="/add-task">
+          <a routerLink="/add-task" routerLinkActive="active">
             <svg
               width="30"
               height="30"
@@ -75,7 +75,7 @@
           </a>
         </li>
         <li>
-          <a routerLink="/board">
+          <a routerLink="/board" routerLinkActive="active">
             <svg
               width="30"
               height="30"
@@ -96,7 +96,7 @@
           </a>
         </li>
         <li>
-          <a routerLink="/contacts">
+          <a routerLink="/contacts" routerLinkActive="active">
             <svg
               width="30"
               height="30"
@@ -130,7 +130,11 @@
   </div>
 
   <div class="sidebar__imprint">
-    <a routerLink="/privacy-policy" class="sidebar__imprint--privacy">Privacy Policy</a>
-    <a routerLink="/legal-notice" class="sidebar__imprint--legal">Legal Notice</a>
+    <a routerLink="/privacy-policy" routerLinkActive="active" class="sidebar__imprint--privacy"
+      >Privacy Policy</a
+    >
+    <a routerLink="/legal-notice" routerLinkActive="active" class="sidebar__imprint--legal"
+      >Legal Notice</a
+    >
   </div>
 </section>
