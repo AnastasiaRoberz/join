@@ -33,6 +33,7 @@ $main-color: $color-navy-800;
 $text-dark: $color-navy-800;
 $text-light: $color-white;
 $text-muted: $color-grey-200;
+$text-underline: $color-cyan-500;
 
 // BUTTONS
 $btn-primary-default: $color-navy-800;
@@ -56,6 +57,7 @@ $btn-icon: $color-navy-800;
 $icon: #a8a8a8;
 
 $btn-shadow: 0px 4px 4px 0px #00000040;
+$btn-shadow-placeholder: 0px 4px 4px 0px transparent;
 $avatar-shadow: 0px 0px 4px 0px #00000066;
 
 // NAVIGATION & SIDEBAR
