@@ -20,12 +20,36 @@
   height: 100%;
   background-color: $main-color;
   padding: 0 48px;
-  color: $text-light;
-  gap: 32px;
+}
 
-  .logo {
+.header {
+  @include flex-start(column);
+  gap: 8px;
+  position: relative;
+  color: $text-light;
+
+  .subheading {
+    color: $text-light;
+  }
+
+  &::before {
+    content: url('/assets/icons/logo.svg');
     height: 64px;
     width: 64px;
+    position: absolute;
+    top: calc(-50% - 32px);
+    transform: translateY(-50%);
+    left: 0;
+  }
+
+  &::after {
+    content: '';
+    width: 90px;
+    height: 3px;
+    background-color: $text-underline;
+    position: absolute;
+    bottom: -16px;
+    left: 0;
   }
 }
 
@@ -33,6 +57,10 @@
   @include flex-center;
   width: 32px;
   height: 32px;
+}
+
+.avatar {
+  transform: translateY(-50%);
 }
 
 .input-wrapper {
