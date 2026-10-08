@@ -72,3 +72,41 @@
     background-color: $btn-add-active;
   }
 }
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: $btn-icon;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .btn-label {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+      content: attr(data-text);
+      display: block;
+      font-weight: 700;
+      height: 0;
+      visibility: hidden;
+      overflow: hidden;
+      user-select: none;
+      pointer-events: none;
+    }
+  }
+
+  &:hover {
+    font-weight: 700;
+  }
+}
