@@ -39,10 +39,6 @@ export class Supabase {
     }));
   }
 
-  getInitials(contact: Contact): string {
-    return contact.firstname.charAt(0) + contact.surname.charAt(0);
-  }
-
   async updateContact(contactId: number | null, contactInfos: Contact) {
     const { error } = await this.supabase
       .from('contacts')

@@ -1,0 +1,41 @@
+@use '../../../../public/assets/styles' as *;
+
+.avatar-circle {
+  @include flex-center;
+  border-radius: 50%;
+  color: $text-light;
+  border: 1px solid $color-white;
+  background-color: $icon-bg;
+
+  &.size-small {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.size-medium {
+    width: 42px;
+    height: 42px;
+    border-width: 2px;
+  }
+
+  &.size-large {
+    width: 120px;
+    height: 120px;
+    border-width: 3px;
+    font-size: $font-large;
+    font-weight: 500;
+    box-shadow: $btn-shadow;
+  }
+
+  &.header {
+    width: 56px;
+    height: 56px;
+    border: 3px solid $main-color;
+    color: $main-color;
+  }
+
+  .avatar-icon {
+    width: 50%;
+    height: 50%;
+  }
+}

@@ -7,7 +7,8 @@ $color-white: #ffffff;
 $color-black: #000000;
 $color-grey-100: #d1d1d1;
 $color-grey-200: #cdcdcd;
-$color-grey-300: #a8a8a8;
+$color-grey-300: #d9d9d9;
+$color-grey-400: #a8a8a8;
 
 // Blues
 $color-cyan-500: #29abe2;
@@ -76,6 +77,9 @@ $input-default-label: $color-grey-100;
 $input-icon: $color-grey-300;
 $input-focus-border: $color-cyan-700;
 $input-focus-label: $color-cyan-700;
+
+// AVATAR ICON
+$icon-bg: $color-grey-300;
 
 // ==========================================
 // FONT SIZES

@@ -63,17 +63,6 @@ hr {
   }
 }
 
-.name-icon {
-  @include flex-center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: lightcoral;
-  color: $text-light;
-  border: 2px solid transparent;
-}
-
 .details {
   @include flex-start(column);
   gap: 4px;

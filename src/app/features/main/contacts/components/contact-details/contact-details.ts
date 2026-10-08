@@ -1,8 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Supabase } from '../../../../../services/supabase';
+import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 
 @Component({
-  imports: [],
+  imports: [UserAvatar],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
