@@ -15,6 +15,22 @@
         />
       </svg>
     </a>
-    <button class="header__nav--avatar">G</button>
+    <button class="header__nav--avatar" (click)="toggleMenu()">G</button>
   </div>
+  <nav class="header__menu" [class.header__menu--open]="menuOpen()">
+    <ul>
+      <li class="help-mobile" (click)="closeMenu()">
+        <a routerLink="/help">Help</a>
+      </li>
+      <li (click)="closeMenu()">
+        <a routerLink="/legal-notice">Legal Notice</a>
+      </li>
+      <li (click)="closeMenu()">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+      </li>
+      <li (click)="closeMenu()">
+        <a routerLink="">Log Out</a>
+      </li>
+    </ul>
+  </nav>
 </header>
