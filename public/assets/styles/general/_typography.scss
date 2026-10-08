@@ -3,6 +3,8 @@
 html {
   font-family: 'Inter';
   font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
 
@@ -40,5 +42,10 @@ p {
 
 .mail {
   color: styles.$mail;
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 // * ------------- *

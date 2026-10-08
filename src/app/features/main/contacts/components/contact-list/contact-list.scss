@@ -65,8 +65,8 @@ hr {
 
 .name-icon {
   @include flex-center;
+  flex-shrink: 0;
   width: 40px;
-  min-width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: lightcoral;
@@ -77,10 +77,18 @@ hr {
 .details {
   @include flex-start(column);
   gap: 4px;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
 }
 
 .name {
   font-size: $font-medium;
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn {
