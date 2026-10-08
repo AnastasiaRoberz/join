@@ -7,6 +7,7 @@ $color-white: #ffffff;
 $color-black: #000000;
 $color-grey-100: #d1d1d1;
 $color-grey-200: #cdcdcd;
+$color-bluish-grey: #0c2e621f;
 
 // Blues
 $color-cyan-500: #29abe2;
@@ -27,10 +28,11 @@ $color-green-500: #7ae229;
 // ==========================================
 
 // TEXT
+$text-normal: $color-black;
 $text-dark: $color-navy-800;
 $text-light: $color-white;
 $text-muted: $color-grey-200;
-$text-hover: $color-cyan-700;
+$text-lightblue: $color-cyan-700;
 
 // BUTTONS
 $btn-primary-default: $color-navy-800;
@@ -52,6 +54,7 @@ $btn-contact-active: $color-navy-800;
 
 $btn-icon: $color-navy-800;
 $icon: #a8a8a8;
+$avatar-hover: $color-bluish-grey;
 
 $btn-shadow: 0px 4px 4px 0px #00000040;
 
