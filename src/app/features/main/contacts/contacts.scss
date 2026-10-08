@@ -1,28 +1,23 @@
-@use '../../../../../public/assets/styles/index' as *;
-@use '../../../../../public/assets/styles/mixins' as mixin;
+@use '../../../../../public/assets/styles/' as *;
 
-* {
-  margin: 0; // placeholder
-}
-// Width hier definieren oder in den components?
 .contacts {
   display: flex;
   height: 100dvh;
   width: 100dvw;
-  overflow: hidden; // the page never scrolls, only the columns
 
   &__list {
-    width: clamp(20rem, 18.1429rem + 9.2857vw, 26.5rem); // 320px -> 424px
+    width: 100%;
+    min-width: 320px;
+    max-width: 424px;
+    height: 100%;
     position: relative;
-    z-index: 1; // shadow sits on top of the grey area
-    background: grey; // placeholder
     box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
   }
 
   &__detail {
     width: 100%;
-    background: $color-grey-100;
+    background: $color-grey-background;
     padding: 110px 58px;
     display: flex;
     flex-direction: column;
@@ -30,10 +25,7 @@
   }
 
   &__title {
-    // @include mixin.flex-start;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    @include flex-start;
     gap: 30px;
   }
 
@@ -55,24 +47,21 @@
   }
 }
 
-// mobile: one column, list first; details appear later via a modifier class
 @media screen and (max-width: 768px) {
   .contacts {
     &__list {
       width: 100%;
-      display: none; // placeholder
+      max-width: 768px;
+      //   display: none; // placeholder
     }
 
     &__detail {
-      //   display: none;
+      display: none; // needed!!
       padding: 48px 16px;
     }
 
     &__title {
-      //   @include mixin.flex-start(column);
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+      @include flex-start(column);
       gap: 8px;
     }
 
@@ -83,12 +72,12 @@
     }
 
     &__divider {
-      width: 90px; // fine for any width under 768px ?
-      height: 3px; // the line moves under the title on mobile
+      width: 100px;
+      height: 3px;
     }
 
+    // TBD
     &--detail-open {
-      // TBD
       .contacts__list {
         display: none;
       }
