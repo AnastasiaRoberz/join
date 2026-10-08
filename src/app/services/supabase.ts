@@ -43,6 +43,29 @@ export class Supabase {
     return contact.firstname.charAt(0) + contact.surname.charAt(0);
   }
 
+  async updateContact(contactId: number | null, contactInfos: Contact) {
+    const { error } = await this.supabase
+      .from('contacts')
+      .update({
+        firstname: contactInfos.firstname,
+        surname: contactInfos.surname,
+        mail: contactInfos.mail,
+        phone: contactInfos.phone,
+      })
+      .eq('id', contactId);
+  }
+
+  async addContact(contactInfos: Contact) {
+    const contact: Contact = {
+      firstname: contactInfos.firstname,
+      surname: contactInfos.surname,
+      mail: contactInfos.mail,
+      phone: contactInfos.phone ?? '',
+      badge_color: getRandomColor(),
+    };
+    const { error } = await this.supabase.from('contacts').insert(contact);
+  }
+
   setToLocalStorage(): void {
     localStorage.setItem('contactList', JSON.stringify(this.contacts));
   }
