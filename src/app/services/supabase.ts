@@ -1,6 +1,5 @@
 import { computed, Service, signal } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
-import { Login } from '../features/auth/login/login';
 import { Contact } from '../interfaces/contact';
 
 @Service()
@@ -21,6 +20,7 @@ export class Supabase {
   async getAllContacts() {
     let { data: contacts, error } = await this.supabase.from('contacts').select('*');
     if (contacts) this.contacts.set(contacts);
+    this.setToLocalStorage();
   }
 
   getGroupedContacts() {
@@ -37,5 +37,21 @@ export class Supabase {
       letter,
       contacts: groups[letter],
     }));
+  }
+
+  getInitials(contact: Contact): string {
+    return contact.firstname.charAt(0) + contact.surname.charAt(0);
+  }
+
+  setToLocalStorage(): void {
+    localStorage.setItem('contactList', JSON.stringify(this.contacts));
+  }
+
+  getFromLocalStorage(): void {
+    const storageItem = localStorage.getItem('contactList');
+    if (storageItem) {
+      const cachedContacts: Contact[] = JSON.parse(storageItem);
+      this.contacts.set(cachedContacts);
+    }
   }
 }
