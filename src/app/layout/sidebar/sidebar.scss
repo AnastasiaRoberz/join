@@ -46,12 +46,18 @@
             gap: 8px;
             padding-inline: 56px;
 
-            &.active {
-              background-color: $sidebar-bg-active;
-            }
-
             p {
               color: $text-muted;
+            }
+
+            &.active {
+              background-color: $sidebar-bg-active;
+
+              p,
+              path {
+                color: $text-light;
+                fill: $text-light;
+              }
             }
           }
 
@@ -93,6 +99,7 @@
 
       &.active {
         background-color: $sidebar-bg-active;
+        color: $text-light;
       }
 
       &:hover {
