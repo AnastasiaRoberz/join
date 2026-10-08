@@ -5,57 +5,64 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 114px;
+  justify-content: space-between;
   height: 100%;
   padding-block: 64px;
   color: $text-muted;
 
-  &__logo {
-    width: 100px;
-    height: 121px;
-  }
-
-  &__nav {
-    width: 100%;
-    height: auto;
+  &__wrapper {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 114px;
 
-    ul {
+    &--logo {
+      width: 100px;
+      height: 121px;
+    }
+
+    &--nav {
+      width: 100%;
+      height: auto;
       display: flex;
       flex-direction: column;
       gap: 15px;
 
-      li {
-        width: 100%;
-        height: 46px;
+      ul {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
 
-        a {
+        li {
           width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding-inline: 56px;
-
-          p {
-            color: $text-muted;
-          }
-        }
-
-        &:hover {
-          background-color: $sidebar-bg-hover;
-        }
-
-        &:active {
-          background-color: $sidebar-bg-active;
+          height: 46px;
 
           a {
-            p,
-            path {
-              color: $text-light;
-              fill: $text-light;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-inline: 56px;
+
+            p {
+              color: $text-muted;
+            }
+          }
+
+          &:hover {
+            background-color: $sidebar-bg-hover;
+          }
+
+          &:active {
+            background-color: $sidebar-bg-active;
+
+            a {
+              p,
+              path {
+                color: $text-light;
+                fill: $text-light;
+              }
             }
           }
         }
