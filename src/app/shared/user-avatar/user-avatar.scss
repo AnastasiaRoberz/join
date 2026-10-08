@@ -2,6 +2,7 @@
 
 .avatar-circle {
   @include flex-center;
+  flex-shrink: 0;
   border-radius: 50%;
   color: $text-light;
   border: 1px solid $color-white;
@@ -24,7 +25,7 @@
     border-width: 3px;
     font-size: $font-large;
     font-weight: 500;
-    box-shadow: $btn-shadow;
+    box-shadow: $avatar-shadow;
   }
 
   &.header {
