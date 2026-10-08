@@ -50,24 +50,6 @@
   padding: 48px;
 }
 
-.initials {
-  @include flex-center;
-  width: 120px;
-  flex-shrink: 0;
-  height: 120px;
-  border: 3px solid $color-white;
-  box-shadow: $btn-shadow;
-  border-radius: 50%;
-  background-color: $color-grey-100;
-  font-size: $font-large;
-  color: $text-light;
-
-  .icon-person {
-    width: 64px;
-    height: 64px;
-  }
-}
-
 .form-section {
   @include flex-center(column);
   flex: 1;

@@ -18,17 +18,7 @@
     </button>
 
     <div class="input-wrapper">
-      @if (contact()) {
-        <span class="initials" [style.background-color]="contact()?.badge_color">{{
-          initials
-        }}</span>
-      } @else {
-        <span class="initials">
-          <svg class="icon-person">
-            <use href="/assets/icons/icons.svg#person"></use>
-          </svg>
-        </span>
-      }
+      <app-user-avatar [user]="contact()" size="large"></app-user-avatar>
 
       <form class="form-section" [formGroup]="contactForm">
         <app-input-field label="Name" icon="person">
