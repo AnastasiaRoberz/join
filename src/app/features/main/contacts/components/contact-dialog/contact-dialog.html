@@ -1,14 +1,13 @@
 <div class="dialog-content">
   <div class="header-section">
-    <svg class="logo">
-      <use href="/assets/icons/icons.svg#logo"></use>
-    </svg>
-    @if (contact()) {
-      <h2>Edit contact</h2>
-    } @else {
-      <h2>Add contact</h2>
-      <p class="subheading">Tasks are better with a team!</p>
-    }
+    <div class="header">
+      @if (contact()) {
+        <h2>Edit contact</h2>
+      } @else {
+        <h2>Add contact</h2>
+        <p class="subheading">Tasks are better with a team!</p>
+      }
+    </div>
   </div>
   <div class="content-section">
     <button class="btn-close">
@@ -18,7 +17,7 @@
     </button>
 
     <div class="input-wrapper">
-      <app-user-avatar [user]="contact()" size="large"></app-user-avatar>
+      <app-user-avatar class="avatar" [user]="contact()" size="large"></app-user-avatar>
 
       <form class="form-section" [formGroup]="contactForm">
         <app-input-field label="Name" icon="person">
