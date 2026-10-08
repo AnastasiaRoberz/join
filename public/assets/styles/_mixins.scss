@@ -1,0 +1,20 @@
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+
+  @if ($direction == 'row') {
+    justify-content: flex-start;
+    align-items: center;
+  }
+  @if ($direction == 'column') {
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
