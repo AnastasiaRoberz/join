@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { ContactList } from './features/main/contacts/components/contact-list/contact-list';
+import { Contacts } from './features/main/contacts/contacts';
 
 export const routes: Routes = [
   {
     path: '',
-    component: ContactList,
+    component: Contacts,
   },
 ];
