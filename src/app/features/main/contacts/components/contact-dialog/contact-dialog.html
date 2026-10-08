@@ -1,4 +1,4 @@
-<div class="dialog-content">
+<div class="dialog-content" (click)="$event.stopPropagation()">
   <div class="header-section">
     <div class="header">
       @if (contact()) {
@@ -10,7 +10,7 @@
     </div>
   </div>
   <div class="content-section">
-    <button class="btn-close">
+    <button class="btn-close" (click)="closeDialog()">
       <svg class="icon-close">
         <use href="/assets/icons/icons.svg#cancel"></use>
       </svg>
@@ -21,15 +21,15 @@
 
       <form class="form-section" [formGroup]="contactForm">
         <app-input-field label="Name" icon="person">
-          <input type="text" formControlName="name" />
+          <input type="text" formControlName="name" placeholder=" " />
         </app-input-field>
 
         <app-input-field label="Mail" icon="mail">
-          <input type="text" formControlName="mail" />
+          <input type="text" formControlName="mail" placeholder=" " />
         </app-input-field>
 
         <app-input-field label="Phone" icon="phone">
-          <input type="text" formControlName="phone" />
+          <input type="text" formControlName="phone" placeholder="" />
         </app-input-field>
 
         <div class="buttons-wrapper">
@@ -42,7 +42,7 @@
               </svg>
             </button>
           } @else {
-            <button class="btn btn-small btn-secondary">
+            <button class="btn btn-small btn-secondary" (click)="closeDialog()">
               Cancel
               <svg class="icon">
                 <use href="/assets/icons/icons.svg#cancel"></use>

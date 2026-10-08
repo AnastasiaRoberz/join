@@ -24,7 +24,9 @@
   background-color: $color-white;
   position: relative;
 
-  &:focus-within {
+  &:focus-within,
+  &:has(input:not(:placeholder-shown)),
+  &:has(textarea:not(:placeholder-shown)) {
     border-color: $input-focus-border;
 
     label {

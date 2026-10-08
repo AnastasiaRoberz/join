@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Contact } from '../interfaces/contact';
 
 @Service()
-export class Supabase {
+export class SupabaseService {
   projectUrl = 'https://nnvjteipgjertrdzhhww.supabase.co';
   projectKey = 'sb_publishable_MfdCcewSWbbgiL-yF1eQnQ_CQoS8Cqs';
 

@@ -2,17 +2,20 @@
 
 :host {
   @include flex-center;
-  height: 592px;
-  width: 1212px;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(2px);
+  background-color: rgba($color: #000000, $alpha: 0.1);
 }
 
 .dialog-content {
   @include flex-start;
   align-items: flex-start;
-  width: 100%;
-  height: 100%;
+  width: 1212px;
+  height: 592px;
   border-radius: 30px;
   overflow: hidden;
+  background-color: white;
 }
 
 .header-section {

@@ -1,0 +1,8 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+}

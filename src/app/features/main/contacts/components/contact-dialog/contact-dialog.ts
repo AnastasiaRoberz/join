@@ -1,9 +1,10 @@
 import { Component, effect, inject, input } from '@angular/core';
-import { Supabase } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase';
 import { Contact } from '../../../../../interfaces/contact';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
+import { DialogService } from '../../../../../services/dialog';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar],
@@ -12,8 +13,9 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
   templateUrl: './contact-dialog.html',
 })
 export class ContactDialog {
-  supabase = inject(Supabase);
+  supabase = inject(SupabaseService);
   fb = inject(FormBuilder);
+  dialogService = inject(DialogService);
 
   contact = input<Contact | null>(null);
 
@@ -54,6 +56,8 @@ export class ContactDialog {
     } else {
       await this.supabase.addContact(contactInfos);
     }
+
+    this.contactForm.reset();
   }
 
   splitName(name: string) {
@@ -65,5 +69,10 @@ export class ContactDialog {
       firstname: name.substring(0, lastSpaceIndex).trim(),
       surname: name.substring(lastSpaceIndex + 1).trim(),
     };
+  }
+
+  closeDialog(): void {
+    this.dialogService.closeDialog();
+    this.contactForm.reset();
   }
 }
