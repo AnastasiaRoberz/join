@@ -29,7 +29,6 @@ hr {
 
 .contact-list {
   @include flex-start(column);
-  justify-content: flex-start;
   height: 700px;
   width: 100%;
 }
@@ -77,13 +76,12 @@ hr {
 .details {
   @include flex-start(column);
   gap: 4px;
-  flex: 1;
-  width: 100%;
   min-width: 0;
 }
 
 .name {
   font-size: $font-medium;
+  text-align: left;
   width: 100%;
   display: block;
   white-space: nowrap;
