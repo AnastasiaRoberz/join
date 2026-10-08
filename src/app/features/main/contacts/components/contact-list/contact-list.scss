@@ -29,6 +29,7 @@ hr {
 
 .contact-list {
   @include flex-start(column);
+  justify-content: flex-start;
   height: 700px;
   width: 100%;
 }
