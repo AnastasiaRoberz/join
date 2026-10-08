@@ -12,9 +12,7 @@
     <div class="group-wrapper">
       @for (contact of group.contacts; track $index) {
         <button class="contact">
-          <p class="name-icon" [style.background-color]="contact.badge_color">
-            {{ contact.firstname.charAt(0) }}{{ contact.surname.charAt(0) }}
-          </p>
+          <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
           <div class="details">
             <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
             <p class="mail">{{ contact.mail }}</p>
