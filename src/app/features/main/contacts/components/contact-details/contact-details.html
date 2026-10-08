@@ -1,17 +1,33 @@
 @if (selectedContact(); as contact) {
   <div class="detail-header">
-    <p>{{ supabase.getInitials(contact) }}</p>
-    <div>
+    <p class="name-icon" [style.background]="contact.badge_color">
+      {{ supabase.getInitials(contact) }}
+    </p>
+    <div class="name-wrapper">
       <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
-      <div>
-        <button>Edit</button>
-        <button>Delete</button>
+      <div class="btn-wrapper">
+        <button class="btn-icon">
+          <svg class="icon">
+            <use href="/assets/icons/icons.svg#edit"></use>
+          </svg>
+          <span class="btn-label" data-text="Edit">Edit</span>
+        </button>
+        <button class="btn-icon" data-text="Delete">
+          <svg class="icon">
+            <use href="/assets/icons/icons.svg#delete"></use>
+          </svg>
+          <span class="btn-label" data-text="Delete">Delete</span>
+        </button>
       </div>
     </div>
   </div>
-  <p>Contact Information</p>
-  <p>E-Mail</p>
-  <p>{{ contact.mail }}</p>
-  <p>Phone</p>
-  <p>{{ contact.phone }}</p>
+  <p class="info-heading">Contact Information</p>
+  <div class="detail-info">
+    <strong>E-Mail</strong>
+    <p class="mail">{{ contact.mail }}</p>
+  </div>
+  <div class="detail-info">
+    <strong>Phone</strong>
+    <p>{{ contact.phone }}</p>
+  </div>
 }
