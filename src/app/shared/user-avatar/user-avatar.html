@@ -1,0 +1,13 @@
+<div
+  class="avatar-circle"
+  [class]="'size-' + size()"
+  [style.background-color]="user()?.badge_color"
+>
+  @if (user()) {
+    <span class="initials">{{ initials() }}</span>
+  } @else {
+    <svg class="avatar-icon">
+      <use href="/assets/icons/icons.svg#person"></use>
+    </svg>
+  }
+</div>

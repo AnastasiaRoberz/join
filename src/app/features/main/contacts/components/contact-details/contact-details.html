@@ -1,8 +1,6 @@
 @if (selectedContact(); as contact) {
   <div class="detail-header">
-    <p class="name-icon" [style.background]="contact.badge_color">
-      {{ supabase.getInitials(contact) }}
-    </p>
+    <app-user-avatar [user]="contact" size="large"></app-user-avatar>
     <div class="name-wrapper">
       <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
       <div class="btn-wrapper">
