@@ -10,7 +10,7 @@
   height: 100dvh;
 
   @include mobile {
-    display: block;
+    display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
   }
 }
 
@@ -20,29 +20,15 @@ app-sidebar {
 
 app-header {
   grid-area: header;
-
-  @include mobile {
-    width: 100%;
-    height: 80px;
-    position: fixed;
-    top: 0;
-  }
-}
-
-app-footer {
-  @include mobile {
-    width: 100%;
-    height: 80px;
-    position: fixed;
-    bottom: 0;
-  }
 }
 
 .pages {
   grid-area: pages;
   overflow-y: auto;
 
+  // top und bottom sind Asbtand zu Header/Footer
   @include mobile {
+    width: 100%;
     position: fixed;
     top: 80px;
     bottom: 80px;
