@@ -9,9 +9,21 @@
   position: relative;
   z-index: 1;
 
+  @include mobile {
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    top: 0;
+    padding: 20px 16px;
+  }
+
   &__title {
     font-size: $font-medium;
     color: $text-normal;
+
+    @include mobile {
+      display: none;
+    }
   }
 
   &__nav {
@@ -25,6 +37,10 @@
       width: 22px;
       height: 22px;
       @include flex-center;
+
+      @include mobile {
+        display: none;
+      }
 
       &:hover {
         transform: scale(1.1);
@@ -40,6 +56,12 @@
       font-size: $font-medium;
       font-weight: 700;
       color: $text-lightblue;
+
+      @include mobile {
+        width: 40px;
+        height: 40px;
+        border: 2px solid $btn-icon;
+      }
 
       &:hover {
         background-color: $avatar-hover;
@@ -63,12 +85,25 @@
     transform: translateY(-8px);
     transition: opacity 0.2s ease;
     visibility: 0.2s ease;
-    transform: 0.2s ease;
+    transition: 0.2s ease;
 
     &--open {
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
+    }
+
+    @include mobile {
+      top: 60px;
+      right: 10px;
+      transform: translateY(0);
+      transform: translateX(100%);
+
+      &--open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
     }
 
     ul {
@@ -87,8 +122,18 @@
           background-color: $sidebar-bg-hover;
         }
       }
+
       .help-mobile {
         display: none;
+
+        @include mobile {
+          display: unset;
+          width: 100%;
+          height: 46px;
+          @include flex-start;
+          padding-left: 16px;
+          cursor: pointer;
+        }
       }
     }
   }
