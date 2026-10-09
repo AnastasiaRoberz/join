@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { Supabase } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
+import { DialogService } from '../../../../../services/dialog';
 
 @Component({
   imports: [UserAvatar],
@@ -9,5 +10,6 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
   templateUrl: './contact-list.html',
 })
 export class ContactList {
-  supabase = inject(Supabase);
+  supabase = inject(SupabaseService);
+  dialogService = inject(DialogService);
 }

@@ -8,8 +8,10 @@
   align-items: center;
   gap: 4px;
   border: 1px solid transparent;
+  outline: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
+  box-shadow: $btn-shadow-placeholder;
 
   &:hover,
   &:active {
@@ -49,7 +51,8 @@
   border: 1px solid $btn-secondary-default;
 
   &:hover {
-    border: 2px solid $btn-secondary-hover;
+    border: 1px solid $btn-secondary-hover;
+    outline: 1px solid $btn-secondary-hover;
     color: $btn-secondary-hover;
   }
 
@@ -109,4 +112,11 @@
   &:hover {
     font-weight: 700;
   }
+}
+
+.btn-close {
+  width: 32px;
+  height: 32px;
+  color: $main-color;
+  cursor: pointer;
 }

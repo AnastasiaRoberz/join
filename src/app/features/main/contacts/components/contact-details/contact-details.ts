@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Supabase } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
+import { DialogService } from '../../../../../services/dialog';
 
 @Component({
   imports: [UserAvatar],
@@ -9,8 +10,9 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
   templateUrl: './contact-details.html',
 })
 export class ContactDetails {
-  supabase = inject(Supabase);
-  selectedId = signal<number>(4);
+  supabase = inject(SupabaseService);
+  dialogService = inject(DialogService);
+  selectedId = signal<number | null>(4);
 
   selectedContact = computed(() => {
     return this.supabase.contacts().find((item) => item.id === this.selectedId());
