@@ -10,6 +10,7 @@
   border: 1px solid transparent;
   cursor: pointer;
   text-decoration: none;
+  box-shadow: $btn-shadow-placeholder;
 
   &:hover,
   &:active {
@@ -47,12 +48,11 @@
 .btn-secondary {
   background-color: transparent;
   border: 1px solid $btn-secondary-default;
-  margin: 1px;
 
   &:hover {
-    border: 2px solid $btn-secondary-hover;
+    border: 1px solid $btn-secondary-hover;
+    outline: 1px solid $btn-secondary-hover;
     color: $btn-secondary-hover;
-    margin: 0;
   }
 
   &:active {

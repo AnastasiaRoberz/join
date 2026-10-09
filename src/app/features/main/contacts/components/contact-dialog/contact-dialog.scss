@@ -68,7 +68,6 @@
 
 .input-wrapper {
   @include flex-center;
-  justify-content: space-between;
   width: 100%;
   gap: 72px;
 }
@@ -78,14 +77,13 @@
   align-items: flex-end;
   justify-content: flex-start;
   flex: 1;
-  // gap: 57px;
+  gap: 57px;
   height: 100%;
   padding: 48px;
 }
 
 .form-section {
   @include flex-start(column);
-  justify-content: space-between;
   flex: 1;
   gap: 32px;
 }
@@ -97,6 +95,6 @@
 
 .buttons-wrapper {
   @include flex-center;
-  // gap: 24px;
+  gap: 24px;
   margin-top: 16px;
 }
