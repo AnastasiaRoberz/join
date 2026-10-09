@@ -4,8 +4,10 @@ import { Sidebar } from '../../layout/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { ContactDialog } from './contacts/components/contact-dialog/contact-dialog';
 import { DialogService } from '../../services/dialog';
+import { Footer } from '../../layout/footer/footer';
+
 @Component({
-  imports: [Header, Sidebar, RouterOutlet, ContactDialog],
+  imports: [Header, Sidebar, RouterOutlet, ContactDialog, Footer],
   selector: 'app-main',
   styleUrl: './main.scss',
   templateUrl: './main.html',
