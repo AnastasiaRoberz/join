@@ -27,12 +27,12 @@
 
   &__detail {
     width: 100%;
+    height: 100%;
     background: $color-grey-background;
     padding: 110px 58px;
     display: flex;
     flex-direction: column;
     gap: 32px;
-    z-index: -1;
   }
 
   &__title {
@@ -96,18 +96,5 @@
         display: block;
       }
     }
-  }
-}
-
-.dialog {
-  position: fixed;
-  transform: translateX(100vw);
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  transition: all 250ms ease-in-out;
-
-  &.is-open {
-    transform: translateX(0);
   }
 }
