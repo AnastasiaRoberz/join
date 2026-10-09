@@ -18,3 +18,21 @@
     align-items: flex-start;
   }
 }
+
+@mixin desktop($width: 1025px) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin tablet($width: 1024px) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin mobile($width: 768px) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
