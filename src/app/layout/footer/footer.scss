@@ -9,7 +9,7 @@
   bottom: 0;
   box-shadow: 0 0 4px 0 #00000066;
 
-  @include desktop {
+  @include desktop(769px) {
     display: none;
   }
 

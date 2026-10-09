@@ -17,6 +17,12 @@
     padding: 20px 16px;
   }
 
+  &__logo {
+    @include desktop(769px) {
+      display: none;
+    }
+  }
+
   &__title {
     font-size: $font-medium;
     color: $text-normal;
