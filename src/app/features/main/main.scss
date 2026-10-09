@@ -18,4 +18,5 @@ app-header {
 
 .pages {
   grid-area: pages;
+  overflow-y: auto;
 }
