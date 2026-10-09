@@ -1,0 +1,84 @@
+@use '../../../../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  width: 100%;
+  height: 100%;
+  padding: 32px 24px;
+  gap: 24px;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
+
+.group-letter {
+  font-size: $font-medium;
+  padding: 16px 32px;
+  line-height: 0.75;
+}
+
+hr {
+  width: 100%;
+  margin: 8px 0;
+  border: none;
+  border-top: 1px solid $color-grey-100;
+  border-radius: 3px;
+}
+
+.contact-list {
+  @include flex-start(column);
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.group-wrapper {
+  @include flex-center(column);
+  width: 100%;
+}
+
+.contact {
+  @include flex-start;
+  width: 100%;
+  gap: 32px;
+  padding: 16px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background: $btn-contact-hover;
+  }
+
+  &:active {
+    background: $btn-contact-active;
+    .name {
+      color: $text-light;
+    }
+
+    .name-icon {
+      border-color: $color-white;
+    }
+  }
+}
+
+.details {
+  @include flex-start(column);
+  gap: 4px;
+  min-width: 0;
+}
+
+.name {
+  font-size: $font-medium;
+  text-align: left;
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn {
+  width: 100%;
+}

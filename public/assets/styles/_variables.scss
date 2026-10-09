@@ -5,8 +5,10 @@
 // Neutrals
 $color-white: #ffffff;
 $color-black: #000000;
+$color-grey-background: #f6f7f8;
 $color-grey-100: #d1d1d1;
 $color-grey-200: #cdcdcd;
+$color-grey-300: #d9d9d9;
 $color-bluish-grey: #0c2e621f;
 
 // Blues
@@ -27,6 +29,8 @@ $color-green-500: #7ae229;
 // SEMANTIC TOKENS
 // ==========================================
 
+$main-color: $color-navy-800;
+
 // TEXT
 $text-normal: $color-black;
 $text-dark: $color-navy-800;
@@ -40,7 +44,7 @@ $btn-primary-hover: $color-cyan-700;
 $btn-primary-active: $color-navy-900;
 $btn-primary-txt: $color-white;
 
-$btn-secondary-default: $color-cyan-500;
+$btn-secondary-default: $color-navy-800;
 $btn-secondary-hover: $color-cyan-700;
 $btn-secondary-active: $color-navy-900;
 
@@ -73,6 +77,9 @@ $mail: $color-blue-500;
 $prio-urgent: $color-orange-500;
 $prio-medium: $color-amber-500;
 $prio-low: $color-green-500;
+
+// AVATAR ICON
+$icon-bg: $color-grey-300;
 
 // ==========================================
 // FONT SIZES

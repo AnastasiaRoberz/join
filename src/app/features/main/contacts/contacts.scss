@@ -1,0 +1,89 @@
+@use '../../../../../public/assets/styles/' as *;
+
+.contacts {
+  display: flex;
+  height: 100dvh;
+  width: 100dvw;
+
+  &__list {
+    width: 100%;
+    min-width: 320px;
+    max-width: 424px;
+    height: 100%;
+    position: relative;
+    box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+
+  &__detail {
+    width: 100%;
+    background: $color-grey-background;
+    padding: 110px 58px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__title {
+    @include flex-start;
+    gap: 30px;
+  }
+
+  &__slogan {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  &__divider {
+    width: 3px;
+    height: 59px;
+    background: $color-cyan-500;
+  }
+
+  .placeholder {
+    height: 364px;
+    background-color: chocolate;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .contacts {
+    &__list {
+      width: 100%;
+      max-width: 768px;
+      //   display: none; // placeholder
+    }
+
+    &__detail {
+      display: none; // needed!!
+      padding: 48px 16px;
+    }
+
+    &__title {
+      @include flex-start(column);
+      gap: 8px;
+    }
+
+    &__slogan {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    &__divider {
+      width: 100px;
+      height: 3px;
+    }
+
+    // TBD
+    &--detail-open {
+      .contacts__list {
+        display: none;
+      }
+      .contacts__detail {
+        display: block;
+      }
+    }
+  }
+}
