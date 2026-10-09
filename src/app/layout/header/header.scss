@@ -6,6 +6,8 @@
   justify-content: space-between;
   padding: 20px 40px 20px 96px;
   box-shadow: 0 4px 4px 0 #0000001a;
+  position: relative;
+  z-index: 1;
 
   &__title {
     font-size: $font-medium;
