@@ -1,0 +1,115 @@
+@use '../../../../public/assets/styles/' as *;
+
+.sidebar {
+  background-color: $sidebar-main-theme;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding-block: 64px;
+  color: $text-muted;
+
+  &__wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 114px;
+
+    &--logo {
+      width: 100px;
+      height: 121px;
+    }
+
+    &--nav {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      ul {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        li {
+          width: 100%;
+          height: 46px;
+
+          a {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-inline: 56px;
+
+            p {
+              color: $text-muted;
+            }
+
+            &.active {
+              background-color: $sidebar-bg-active;
+
+              p,
+              path {
+                color: $text-light;
+                fill: $text-light;
+              }
+            }
+          }
+
+          &:hover {
+            background-color: $sidebar-bg-hover;
+          }
+
+          &:active {
+            background-color: $sidebar-bg-active;
+
+            a {
+              p,
+              path {
+                color: $text-light;
+                fill: $text-light;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__imprint {
+    width: 100%;
+    height: 317px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
+
+    a {
+      width: auto;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      padding-inline: 52px;
+      color: $text-muted;
+
+      &.active {
+        background-color: $sidebar-bg-active;
+        color: $text-light;
+      }
+
+      &:hover {
+        color: $text-lightblue;
+      }
+
+      &:active {
+        background-color: $sidebar-bg-active;
+        color: $text-light;
+      }
+    }
+  }
+}

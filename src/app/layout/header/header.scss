@@ -1,0 +1,93 @@
+@use '../../../../public/assets/styles/' as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px 20px 96px;
+  box-shadow: 0 4px 4px 0 #0000001a;
+
+  &__title {
+    font-size: $font-medium;
+    color: $text-normal;
+  }
+
+  &__nav {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    &--help {
+      width: 22px;
+      height: 22px;
+      @include flex-center;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    &--avatar {
+      width: 56px;
+      height: 56px;
+      @include flex-center;
+      border: 3px solid $btn-icon;
+      border-radius: 50%;
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-lightblue;
+
+      &:hover {
+        background-color: $avatar-hover;
+      }
+    }
+  }
+
+  &__menu {
+    width: 150px;
+    height: auto;
+    background-color: $sidebar-main-theme;
+    border-radius: 20px 0 20px 20px;
+    padding: 10px;
+    position: absolute;
+    top: 96px;
+    right: 20px;
+    box-shadow: 0 0 4px 0 #00000066;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease;
+    visibility: 0.2s ease;
+    transform: 0.2s ease;
+
+    &--open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    ul {
+      li {
+        width: 100%;
+        height: 46px;
+        @include flex-start;
+        padding-left: 16px;
+        cursor: pointer;
+
+        a {
+          color: $text-muted;
+        }
+
+        &:hover {
+          background-color: $sidebar-bg-hover;
+        }
+      }
+      .help-mobile {
+        display: none;
+      }
+    }
+  }
+}

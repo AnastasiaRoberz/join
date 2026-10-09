@@ -1,0 +1,21 @@
+.main-page {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  grid-template-rows: 96px 1fr;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar pages';
+  height: 100dvh;
+}
+
+app-sidebar {
+  grid-area: sidebar;
+}
+
+app-header {
+  grid-area: header;
+}
+
+.pages {
+  grid-area: pages;
+}

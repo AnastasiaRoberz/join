@@ -6,6 +6,16 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-overflow: ellipsis;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
 }
 
 button,
