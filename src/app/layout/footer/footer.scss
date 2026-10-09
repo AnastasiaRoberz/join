@@ -1,12 +1,8 @@
 @use '../../../../public/assets/styles' as *;
 
 .footer {
-  width: 100%;
-  height: 80px;
   @include flex-center;
   background: $sidebar-main-theme;
-  position: fixed;
-  bottom: 0;
   box-shadow: 0 0 4px 0 #00000066;
 
   @include desktop(769px) {
