@@ -1,1 +1,7 @@
-<p>buttons works!</p>
+<ng-content />
+
+@if (icon()) {
+  <svg class="btn-icon">
+    <use [attr.href]="'/assets/icons/icons.svg#' + icon()"></use>
+  </svg>
+}
