@@ -47,8 +47,17 @@ hr {
   border-radius: 10px;
   cursor: pointer;
 
-  &:hover {
+  // hover action & no action on hover, when contact is active
+  &:not(.contact--active):hover {
     background: $btn-contact-hover;
+  }
+
+  &.contact--active {
+    background-color: $btn-contact-active;
+
+    .name {
+      color: $color-white;
+    }
   }
 
   &:active {

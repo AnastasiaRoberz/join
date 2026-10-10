@@ -1,6 +1,11 @@
 <section class="contacts">
   <div class="contacts__list">
-    <app-contact-list></app-contact-list>
+    <app-contact-list
+      [selectedId]="selectedId()"
+      // container’s current selectedId value is handed to the list’s selectedId input.
+      (contactSelected)="selectContact($event)"
+      // calls selectContact(). $event is the value
+    />
   </div>
 
   <div class="contacts__detail">
@@ -11,6 +16,8 @@
         <p class="subheading">Better with a team</p>
       </div>
     </header>
-    <app-contact-details></app-contact-details>
+    @if (selectedId(); as id) {
+      <app-contact-details [selectedId]="id" />
+    }
   </div>
 </section>

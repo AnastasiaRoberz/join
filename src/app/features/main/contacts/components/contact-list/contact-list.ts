@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Supabase } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 
@@ -10,4 +10,10 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 })
 export class ContactList {
   supabase = inject(Supabase);
+
+  /** Id of the contact shown in the detail pane; set by the Contacts container. */
+  selectedId = input<number | null>(null);
+
+  /** Emits the id of the clicked contact. */
+  contactSelected = output<number>();
 }

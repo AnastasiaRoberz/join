@@ -11,13 +11,27 @@
     <hr />
     <div class="group-wrapper">
       @for (contact of group.contacts; track $index) {
-        <button class="contact">
+        <button
+          class="contact"
+          type="button"
+          [class.contact--active]="contact.id === selectedId()"
+          // Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container.
+          (click)="contactSelected.emit(contact.id)"
+          // sends id to contacts.ts
+        >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
           <div class="details">
             <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
             <p class="mail">{{ contact.mail }}</p>
           </div>
         </button>
+        <!-- <button class="contact">
+          <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
+          <div class="details">
+            <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
+            <p class="mail">{{ contact.mail }}</p>
+          </div>
+        </button> -->
       }
     </div>
   }

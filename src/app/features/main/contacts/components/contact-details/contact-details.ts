@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Supabase } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 
@@ -10,9 +10,10 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 })
 export class ContactDetails {
   supabase = inject(Supabase);
-  selectedId = signal<number>(4);
+  selectedId = input.required<number>(); // id from contacts
 
   selectedContact = computed(() => {
     return this.supabase.contacts().find((item) => item.id === this.selectedId());
   });
+  // finds contact with received id
 }
