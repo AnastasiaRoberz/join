@@ -18,6 +18,9 @@
   }
 
   &__logo {
+    width: 32px;
+    height: 40px;
+
     @include desktop(769px) {
       display: none;
     }
@@ -50,6 +53,11 @@
 
       &:hover {
         transform: scale(1.1);
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
       }
     }
 

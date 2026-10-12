@@ -19,6 +19,12 @@
     @include flex-center;
     padding: 2px calcClamp(5, 16, 370, 320);
 
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+      color: $text-muted;
+    }
+
     ul {
       width: 100%;
       display: flex;
@@ -47,9 +53,8 @@
             background-color: $sidebar-bg-active;
 
             p,
-            path {
+            .nav-icon {
               color: $text-light;
-              fill: $text-light;
             }
           }
 
@@ -57,9 +62,8 @@
             background-color: $sidebar-bg-active;
 
             p,
-            path {
+            .nav-icon {
               color: $text-light;
-              fill: $text-light;
             }
           }
         }

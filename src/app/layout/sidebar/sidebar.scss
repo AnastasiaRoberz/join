@@ -24,6 +24,11 @@
     &--logo {
       width: 100px;
       height: 121px;
+
+      .nav-logo {
+        width: 101px;
+        height: 122px;
+      }
     }
 
     &--nav {
@@ -32,6 +37,12 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
+
+      .nav-icon {
+        width: 30px;
+        height: 30px;
+        color: $text-muted;
+      }
 
       ul {
         display: flex;
@@ -58,9 +69,8 @@
               background-color: $sidebar-bg-active;
 
               p,
-              path {
+              .nav-icon {
                 color: $text-light;
-                fill: $text-light;
               }
             }
           }
@@ -74,9 +84,8 @@
 
             a {
               p,
-              path {
+              .nav-icon {
                 color: $text-light;
-                fill: $text-light;
               }
             }
           }
