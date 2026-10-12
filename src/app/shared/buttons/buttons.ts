@@ -1,8 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 import { BtnPreset, BUTTON_STYLES } from './buttons.config';
 
-export type BtnVariant = 'primary' | 'secondary' | 'add' | 'icon';
-export type BtnSize = 'small' | 'medium' | 'large';
+export type BtnVariant = 'primary' | 'secondary' | 'add' | 'icon' | 'txtIcon';
+export type BtnSize = 'medium' | 'large' | null;
 
 @Component({
   imports: [],
@@ -18,6 +18,7 @@ export type BtnSize = 'small' | 'medium' | 'large';
 export class Buttons {
   preset = input<BtnPreset | null>(null);
 
+  inputLabel = input<string | null>(null);
   inputVariant = input<BtnVariant | null>(null);
   inputSize = input<BtnSize | null>(null);
   inputIcon = input<string | null>(null);
@@ -28,12 +29,14 @@ export class Buttons {
     return btnPreset ? BUTTON_STYLES[btnPreset] : null;
   });
 
+  label = computed(() => this.inputLabel() ?? this.btnConfig()?.label ?? null);
   variant = computed(() => this.inputVariant() ?? this.btnConfig()?.variant ?? 'primary');
-  size = computed(() => this.inputSize() ?? this.btnConfig()?.size ?? 'medium');
+  size = computed(() => this.inputSize() ?? this.btnConfig()?.size ?? null);
   icon = computed(() => this.inputIcon() ?? this.btnConfig()?.icon ?? null);
   type = computed(() => this.inputType() ?? this.btnConfig()?.type ?? 'button');
 
   hostClasses = computed(() => {
-    return `btn 'btn-${this.variant()} btn-${this.size()}`;
+    console.log(this.variant(), this.size());
+    return `btn btn-${this.variant()}${this.size() ? ` btn-${this.size()}` : ''}`;
   });
 }
