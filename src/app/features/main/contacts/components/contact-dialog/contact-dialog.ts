@@ -5,9 +5,10 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+import { Buttons } from '../../../../../shared/buttons/buttons';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar],
+  imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',

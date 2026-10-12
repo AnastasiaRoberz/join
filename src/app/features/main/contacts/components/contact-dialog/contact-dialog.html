@@ -10,11 +10,7 @@
     </div>
   </div>
   <div class="content-section">
-    <button class="btn-close" (click)="closeDialog()">
-      <svg class="icon-close">
-        <use href="/assets/icons/icons.svg#cancel"></use>
-      </svg>
-    </button>
+    <button appBtn preset="close" (click)="closeDialog()"></button>
 
     <div class="input-wrapper">
       <app-user-avatar class="avatar" [user]="contact()" size="large"></app-user-avatar>
@@ -34,26 +30,11 @@
 
         <div class="buttons-wrapper">
           @if (contact()) {
-            <button class="btn btn-small btn-secondary">Delete</button>
-            <button class="btn btn-small btn-primary">
-              Save
-              <svg class="icon">
-                <use href="/assets/icons/icons.svg#check"></use>
-              </svg>
-            </button>
+            <button appBtn preset="secondary">Delete</button>
+            <button appBtn preset="check">Save</button>
           } @else {
-            <button class="btn btn-small btn-secondary" (click)="closeDialog()">
-              Cancel
-              <svg class="icon">
-                <use href="/assets/icons/icons.svg#cancel"></use>
-              </svg>
-            </button>
-            <button class="btn btn-small btn-primary">
-              Create contact
-              <svg class="icon">
-                <use href="/assets/icons/icons.svg#check"></use>
-              </svg>
-            </button>
+            <button appBtn preset="x" (click)="closeDialog()">Cancel</button>
+            <button appBtn preset="check">Create contact</button>
           }
         </div>
       </form>

@@ -1,9 +1,4 @@
-<button class="btn btn-medium btn-add" (click)="dialogService.openDialog(null)">
-  Add new Contact
-  <svg class="icon">
-    <use href="/assets/icons/icons.svg#add-contact"></use>
-  </svg>
-</button>
+<button appBtn preset="addContact" (click)="dialogService.openDialog(null)"></button>
 
 <div class="contact-list scroll-container">
   @for (group of supabase.getGroupedContacts(); track $index) {

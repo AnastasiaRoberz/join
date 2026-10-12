@@ -4,18 +4,8 @@
     <div class="name-wrapper">
       <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
       <div class="btn-wrapper">
-        <button class="btn-icon" (click)="dialogService.openDialog(contact)">
-          <svg class="icon">
-            <use href="/assets/icons/icons.svg#edit"></use>
-          </svg>
-          <span class="btn-label" data-text="Edit">Edit</span>
-        </button>
-        <button class="btn-icon" data-text="Delete">
-          <svg class="icon">
-            <use href="/assets/icons/icons.svg#delete"></use>
-          </svg>
-          <span class="btn-label" data-text="Delete">Delete</span>
-        </button>
+        <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
+        <button appBtn preset="deleteIcon"></button>
       </div>
     </div>
   </div>

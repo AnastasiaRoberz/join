@@ -2,9 +2,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+import { Buttons } from '../../../../../shared/buttons/buttons';
 
 @Component({
-  imports: [UserAvatar],
+  imports: [UserAvatar, Buttons],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
