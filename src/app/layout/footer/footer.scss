@@ -24,17 +24,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 calcClamp(0, 30, 768, 400);
+      padding: 0 calcClamp(0, 30, 768, 450);
 
       li {
         width: calcClamp(70, 80, 370, 320);
         height: calcClamp(70, 76, 370, 320);
-        border-radius: 16px;
         @include flex-center;
 
         a {
           width: 100%;
           height: 100%;
+          border-radius: 16px;
           @include flex-center(column);
           gap: 4px;
 
