@@ -84,6 +84,20 @@ export const BUTTON_STYLES = {
     icon: 'cancel',
     type: 'button',
   },
+  search: {
+    label: null,
+    variant: 'icon',
+    size: null,
+    icon: 'search',
+    type: 'button',
+  },
+  addTaskIcon: {
+    label: null,
+    variant: 'add',
+    size: 'small',
+    icon: 'plus',
+    type: 'button',
+  },
 
   // * --- ICONS --- *
 } as const satisfies Record<string, Button>;
