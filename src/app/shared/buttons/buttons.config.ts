@@ -1,49 +1,89 @@
 import { Button } from '../../interfaces/button';
 
-export type BtnPreset = 'cancel';
+export type BtnPreset =
+  | 'primary'
+  | 'secondary'
+  | 'x'
+  | 'check'
+  | 'addContact'
+  | 'addTask'
+  | 'editIcon'
+  | 'deleteIcon'
+  | 'close';
 
 export const BUTTON_STYLES = {
-  cancel: {
-    label: 'Cancel',
+  // * --- DEFAULTS --- *
+  primary: {
+    label: '',
+    variant: 'primary',
+    size: 'large',
+    icon: null,
+    type: 'button',
+  },
+  secondary: {
+    label: '',
+    variant: 'secondary',
+    size: 'large',
+    icon: null,
+    type: 'button',
+  },
+
+  // * --- GLOBALS ---*
+  x: {
+    label: '',
     variant: 'secondary',
     size: 'large',
     icon: 'cancel',
     type: 'button',
   },
-  delete: {
-    label: 'Delete',
-    variant: 'secondary',
+  check: {
+    label: '',
+    variant: 'primary',
     size: 'large',
-    icon: 'edit',
+    icon: 'check',
     type: 'button',
   },
+
+  // * --- SPECIFIC BUTTONS --- *
+  addContact: {
+    label: 'Add new Contact',
+    variant: 'add',
+    size: 'large',
+    icon: 'add-contact',
+    type: 'button',
+  },
+  addTask: {
+    label: 'Add Task',
+    variant: 'add',
+    size: 'large',
+    icon: 'plus',
+    type: 'button',
+  },
+
+  // * --- TEXT WITH ICON --- *
   editIcon: {
     label: 'Edit',
     variant: 'txtIcon',
-    size: 'small',
+    size: null,
     icon: 'edit',
     type: 'button',
   },
   deleteIcon: {
     label: 'Delete',
     variant: 'txtIcon',
-    size: 'small',
+    size: null,
     icon: 'delete',
     type: 'button',
   },
-  clear: {
-    label: 'Clear',
-    variant: 'secondary',
-    size: 'medium',
+
+  // * --- ICON --- *
+  close: {
+    label: null,
+    variant: 'icon',
+    size: null,
     icon: 'cancel',
     type: 'button',
   },
 
-  addContact: {
-    label: 'Add new Contact',
-    variant: 'primary',
-    size: 'large',
-    icon: 'add-contact',
-    type: 'button',
-  },
+  // * --- ICONS --- *
 } as const satisfies Record<string, Button>;
