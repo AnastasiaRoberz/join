@@ -11,13 +11,13 @@
     <hr />
     <div class="group-wrapper">
       @for (contact of group.contacts; track $index) {
+        <!-- Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container. -->
+        <!-- (click) sends id to contacts.ts -->
         <button
           class="contact"
           type="button"
           [class.contact--active]="contact.id === selectedId()"
-          // Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container.
           (click)="contactSelected.emit(contact.id)"
-          // sends id to contacts.ts
         >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
           <div class="details">

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog';
@@ -20,13 +20,13 @@ import { DialogService } from '../../../services/dialog';
 })
 export class Contacts {
   dialogService = inject(DialogService);
-  
+
   /**
    * Id of the contact currently selected in the list.
    * `null` means no contact is selected, so the details pane stays empty
    * and on mobile the list is shown.
    */
-  selectedId = signal<number | null>(null);
+  selectedId = signal<number | undefined | null>(null);
 
   /**
    * Selects a contact and opens its details.
@@ -34,7 +34,7 @@ export class Contacts {
    *
    * @param id - Id of the clicked contact.
    */
-  selectContact(id: number): void {
+  selectContact(id: number | undefined): void {
     this.selectedId.set(id);
   }
 
