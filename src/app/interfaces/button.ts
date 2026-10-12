@@ -1,7 +1,7 @@
 export interface Button {
-  label: string;
-  variant: 'primary' | 'secondary' | 'icon' | 'txtIcon';
-  size: 'small' | 'medium' | 'large';
-  icon?: string;
+  label: string | null;
+  variant: 'primary' | 'secondary' | 'add' | 'icon' | 'txtIcon';
+  size: 'medium' | 'large' | null;
+  icon: string | null;
   type: 'button' | 'submit';
 }
