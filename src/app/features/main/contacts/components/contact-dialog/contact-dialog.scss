@@ -4,9 +4,21 @@
   @include flex-center;
   height: 100%;
   width: 100%;
-  backdrop-filter: blur(2px);
-  background-color: rgba($color: #000000, $alpha: 0.2);
-  transition: all 250ms ease-in-out;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+
+  backdrop-filter: blur(0px);
+  background-color: rgba($color: #000000, $alpha: 0);
+  transition:
+    background-color 400ms ease,
+    backdrop-filter 400ms ease;
+
+  &.is-open {
+    pointer-events: all;
+    backdrop-filter: blur(2px);
+    background-color: rgba($color: #000000, $alpha: 0.2);
+  }
 }
 
 .dialog-content {
@@ -17,6 +29,13 @@
   border-radius: 30px;
   overflow: hidden;
   background-color: white;
+
+  transform: translateX(100dvw);
+  transition: transform 400ms ease;
+
+  :host.is-open & {
+    transform: translateX(0);
+  }
 }
 
 .header-section {
@@ -61,6 +80,11 @@
   @include flex-center;
   width: 32px;
   height: 32px;
+  border-radius: 100%;
+
+  &:hover {
+    background-color: $close-btn-hover;
+  }
 }
 
 .avatar {
