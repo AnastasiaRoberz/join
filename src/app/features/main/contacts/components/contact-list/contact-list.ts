@@ -35,13 +35,12 @@ export class ContactList {
    * class (dark blue highlight) to the matching list entry.
    * `null` when no contact is selected.
    */
-  selectedId = input<number | null>(null);
+  selectedId = input<number | undefined | null>(null);
 
   /**
    * Emits the id of the contact the user clicked.
    * The Contacts container listens to this and updates its `selectedId`,
    * which then opens the contact details.
    */
-  contactSelected = output<number>();
-
+  contactSelected = output<number | undefined>();
 }

@@ -1,12 +1,9 @@
 <section class="contacts" [class.contacts--detail-open]="selectedId() !== null">
   <!-- class "&--detail-open" is added when an id is present-->
   <div class="contacts__list">
-    <app-contact-list
-      [selectedId]="selectedId()"
-      // container’s current selectedId value is handed to the list’s selectedId input.
-      (contactSelected)="selectContact($event)"
-      // calls selectContact(). $event is the value
-    />
+    <!-- container’s current selectedId value is handed to the list’s selectedId input.
+     contactSelected calls selectContact(). $event is the value  -->
+    <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
   </div>
 
   <div class="contacts__detail">
