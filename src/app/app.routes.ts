@@ -8,8 +8,10 @@ import { AddTask } from './features/main/add-task/add-task';
 import { Board } from './features/main/board/board';
 import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
+import { Cheatsheet } from './features/cheatsheet/cheatsheet';
 
 export const routes: Routes = [
+  { path: 'cheatsheet', component: Cheatsheet },
   //   { path: 'login', component: Login }, //für später: login-page
 
   //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen
