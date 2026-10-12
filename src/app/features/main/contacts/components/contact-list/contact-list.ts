@@ -1,6 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
-import { Supabase } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
+import { DialogService } from '../../../../../services/dialog';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.
@@ -25,7 +26,8 @@ export class ContactList {
    * Shared Supabase service that provides the contact data
    * (e.g. `getGroupedContacts()` used in the template).
    */
-  supabase = inject(Supabase);
+  supabase = inject(SupabaseService);
+  dialogService = inject(DialogService);
 
   /**
    * Id of the contact currently shown in the detail pane.
@@ -41,4 +43,5 @@ export class ContactList {
    * which then opens the contact details.
    */
   contactSelected = output<number>();
+
 }

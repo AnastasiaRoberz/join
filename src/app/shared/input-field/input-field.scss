@@ -1,0 +1,56 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  gap: 16px;
+  width: 100%;
+}
+
+::ng-deep input,
+::ng-deep textarea,
+::ng-deep select {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
+}
+
+.input-container {
+  @include flex-center;
+  width: 100%;
+  padding: 12px 21px;
+  border: 1px solid $icon;
+  border-radius: 10px;
+  background-color: $color-white;
+  position: relative;
+
+  &:focus-within,
+  &:has(input:not(:placeholder-shown)),
+  &:has(textarea:not(:placeholder-shown)) {
+    border-color: $input-focus-border;
+
+    label {
+      transform: translateY(-120%);
+      color: $input-focus-label;
+    }
+  }
+}
+
+label {
+  position: absolute;
+  left: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $input-default-label;
+  pointer-events: none;
+  background-color: white;
+  padding: 8px;
+  transition: all 150ms ease-in-out;
+}
+
+.input-icon {
+  width: 24px;
+  height: 24px;
+  color: $input-icon;
+  pointer-events: none;
+}

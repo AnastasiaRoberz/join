@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
+import { DialogService } from '../../../services/dialog';
 
 /**
  * Container component for the Contacts page.
@@ -18,6 +19,8 @@ import { ContactDetails } from './components/contact-details/contact-details';
   templateUrl: './contacts.html',
 })
 export class Contacts {
+  dialogService = inject(DialogService);
+  
   /**
    * Id of the contact currently selected in the list.
    * `null` means no contact is selected, so the details pane stays empty

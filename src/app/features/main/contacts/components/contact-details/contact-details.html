@@ -4,7 +4,7 @@
     <div class="name-wrapper">
       <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
       <div class="btn-wrapper">
-        <button class="btn-icon">
+        <button class="btn-icon" (click)="dialogService.openDialog(contact)">
           <svg class="icon">
             <use href="/assets/icons/icons.svg#edit"></use>
           </svg>

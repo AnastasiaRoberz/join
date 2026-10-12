@@ -1,9 +1,19 @@
 @use '../../../../../public/assets/styles/' as *;
 
-.contacts {
-  display: flex;
+:host {
+  @include flex-center;
   width: 100%;
   height: 100%;
+}
+
+.contacts {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100%;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
 
   &__list {
     width: 100%;
@@ -17,6 +27,7 @@
 
   &__detail {
     width: 100%;
+    height: 100%;
     background: $color-grey-background;
     padding: 110px 58px;
     display: flex;

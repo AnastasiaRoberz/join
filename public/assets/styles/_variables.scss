@@ -9,6 +9,7 @@ $color-grey-background: #f6f7f8;
 $color-grey-100: #d1d1d1;
 $color-grey-200: #cdcdcd;
 $color-grey-300: #d9d9d9;
+$color-grey-400: #a8a8a8;
 $color-bluish-grey: #0c2e621f;
 
 // Blues
@@ -28,6 +29,7 @@ $color-green-500: #7ae229;
 // ==========================================
 // SEMANTIC TOKENS
 // ==========================================
+$main-color: $color-navy-800;
 
 $main-color: $color-navy-800;
 
@@ -37,6 +39,7 @@ $text-dark: $color-navy-800;
 $text-light: $color-white;
 $text-muted: $color-grey-200;
 $text-lightblue: $color-cyan-700;
+$text-underline: $color-cyan-500;
 
 // BUTTONS
 $btn-primary-default: $color-navy-800;
@@ -61,6 +64,8 @@ $icon: #a8a8a8;
 $avatar-hover: $color-bluish-grey;
 
 $btn-shadow: 0px 4px 4px 0px #00000040;
+$btn-shadow-placeholder: 0px 4px 4px 0px transparent;
+$avatar-shadow: 0px 0px 4px 0px #00000066;
 
 // NAVIGATION & SIDEBAR
 $sidebar-main-theme: $color-navy-800;
@@ -77,6 +82,13 @@ $mail: $color-blue-500;
 $prio-urgent: $color-orange-500;
 $prio-medium: $color-amber-500;
 $prio-low: $color-green-500;
+
+// INPUT FIELDS
+$input-default-border: $color-grey-100;
+$input-default-label: $color-grey-100;
+$input-icon: $color-grey-300;
+$input-focus-border: $color-cyan-700;
+$input-focus-label: $color-cyan-700;
 
 // AVATAR ICON
 $icon-bg: $color-grey-300;

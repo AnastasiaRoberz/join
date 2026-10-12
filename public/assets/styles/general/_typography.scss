@@ -1,4 +1,4 @@
-@use '../../styles';
+@use '../../styles' as *;
 
 html {
   font-family: 'Inter';
@@ -7,8 +7,9 @@ html {
 
 // * --- h-TAGS --- *
 h2 {
-  font-size: clamp(2.938rem, calc(2.688rem + 1.25vw), 3.813rem);
+  font-size: calcClamp(47, 61);
   font-weight: 700;
+  line-height: 0.75;
 }
 
 h3 {
@@ -25,7 +26,13 @@ h4 {
 // * --- GENERAL TAGS --- *
 p {
   font-weight: 400;
-  color: styles.$text-dark;
+  color: $text-dark;
+}
+
+button {
+  font-family: 'Inter';
+  font-size: 1rem;
+  line-height: 150%;
 }
 // * ------------ *
 
@@ -38,7 +45,7 @@ p {
 }
 
 .mail {
-  color: styles.$mail;
+  color: $mail;
   width: 100%;
   display: block;
   white-space: nowrap;

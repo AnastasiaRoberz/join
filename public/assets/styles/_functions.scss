@@ -1,0 +1,10 @@
+@function calcClamp($minFont, $maxFont, $minScreen: 320, $maxScreen: 1440) {
+  @return clamp(
+    $minFont * 1px,
+    calc(
+      (100svw - $minScreen * 1px) * ($maxFont - $minFont) / ($maxScreen - $minScreen) + $minFont *
+        1px
+    ),
+    $maxFont * 1px
+  );
+}

@@ -1,6 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { Supabase } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
+import { DialogService } from '../../../../../services/dialog';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -18,11 +19,8 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
   templateUrl: './contact-details.html',
 })
 export class ContactDetails {
-  /**
-   * Shared Supabase service that holds all contacts
-   * (read via the `contacts()` signal).
-   */
-  supabase = inject(Supabase);
+  supabase = inject(SupabaseService);
+  dialogService = inject(DialogService);
 
   /**
    * Id of the contact to display, passed in by the Contacts container.
