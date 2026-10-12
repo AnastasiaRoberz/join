@@ -14,3 +14,10 @@
     <app-contact-details></app-contact-details>
   </div>
 </section>
+
+<app-contact-dialog
+  class="dialog"
+  [class.is-open]="dialogService.isOpen()"
+  [contact]="dialogService.selectedContact()"
+  (click)="dialogService.closeDialog()"
+></app-contact-dialog>
