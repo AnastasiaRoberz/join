@@ -52,9 +52,9 @@
     background: $color-cyan-500;
   }
 
-  .placeholder {
-    height: 364px;
-    background-color: chocolate;
+  // arrow for mobile functionality
+  &__back {
+    display: none;
   }
 }
 
@@ -63,12 +63,15 @@
     &__list {
       width: 100%;
       max-width: 768px;
-      //   display: none; // placeholder
     }
 
     &__detail {
-      display: none; // needed!!
-      padding: 48px 16px;
+      display: none; // detail page closed by default in mobile until id is given
+    }
+
+    &__title__container {
+      display: flex;
+      justify-content: space-between;
     }
 
     &__title {
@@ -87,13 +90,29 @@
       height: 3px;
     }
 
-    // TBD
+    // arrow for mobile
+    &__back {
+      display: flex;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      color: $color-cyan-700;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__back:hover {
+      background: $color-grey-300;
+    }
+
+    // swaps list with details in mobile
     &--detail-open {
       .contacts__list {
         display: none;
       }
       .contacts__detail {
-        display: block;
+        display: flex;
+        padding: 48px 16px;
       }
     }
   }

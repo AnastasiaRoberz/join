@@ -1,16 +1,32 @@
-<section class="contacts">
+<section class="contacts" [class.contacts--detail-open]="selectedId() !== null">
+  <!-- class "&--detail-open" is added when an id is present-->
   <div class="contacts__list">
-    <app-contact-list></app-contact-list>
+    <app-contact-list
+      [selectedId]="selectedId()"
+      // container’s current selectedId value is handed to the list’s selectedId input.
+      (contactSelected)="selectContact($event)"
+      // calls selectContact(). $event is the value
+    />
   </div>
 
   <div class="contacts__detail">
-    <header class="contacts__title">
-      <h2>Contacts</h2>
-      <div class="contacts__slogan">
-        <span class="contacts__divider"></span>
-        <p class="subheading">Better with a team</p>
-      </div>
-    </header>
-    <app-contact-details></app-contact-details>
+    <div class="contacts__title__container">
+      <header class="contacts__title">
+        <h2>Contacts</h2>
+        <div class="contacts__slogan">
+          <span class="contacts__divider"></span>
+          <p class="subheading">Better with a team</p>
+        </div>
+      </header>
+      <!-- Back arrow: only visible on mobile (contacts.scss) -->
+      <button class="contacts__back" type="button" (click)="closeDetails()">
+        <svg class="contacts__back__arrow">
+          <use href="/assets/icons/icons.svg#contact-arrow"></use>
+        </svg>
+      </button>
+    </div>
+    @if (selectedId(); as id) {
+      <app-contact-details [selectedId]="id" />
+    }
   </div>
 </section>

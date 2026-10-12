@@ -45,20 +45,17 @@ hr {
   gap: 32px;
   padding: 16px 24px;
   border-radius: 10px;
-  cursor: pointer;
 
-  &:hover {
+  // hover action & no action on hover, when contact is active
+  &:not(.contact--active):hover {
     background: $btn-contact-hover;
   }
 
-  &:active {
-    background: $btn-contact-active;
-    .name {
-      color: $text-light;
-    }
+  &.contact--active {
+    background-color: $btn-contact-active;
 
-    .name-icon {
-      border-color: $color-white;
+    .name {
+      color: $color-white;
     }
   }
 }
