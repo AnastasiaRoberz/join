@@ -1,3 +1,5 @@
+@use '../../../../public/assets/styles' as *;
+
 .main-page {
   display: grid;
   grid-template-columns: 232px 1fr;
@@ -6,6 +8,10 @@
     'sidebar header'
     'sidebar pages';
   height: 100dvh;
+
+  @include mobile {
+    display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
+  }
 }
 
 app-sidebar {
@@ -19,6 +25,14 @@ app-header {
 .pages {
   grid-area: pages;
   overflow-y: auto;
+
+  // top und bottom sind Asbtand zu Header/Footer
+  @include mobile {
+    width: 100%;
+    position: fixed;
+    top: 80px;
+    bottom: 80px;
+  }
 }
 
 .dialog {
