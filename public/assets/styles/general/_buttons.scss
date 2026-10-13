@@ -1,5 +1,17 @@
 @use '../../styles' as *;
 
+button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: none;
+    pointer-events: none;
+  }
+}
+
 // BUTTONS DEFAULT
 .btn {
   @include flex-center;
