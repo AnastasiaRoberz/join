@@ -72,14 +72,14 @@ export class ContactDialog {
     };
   }
 
-  async deleteContact() {
-    const id = this.contact()?.id;
-    if (!id) return;
+  // async deleteContact() {
+  //   const id = this.contact()?.id;
+  //   if (!id) return;
 
-    await this.supabase.deleteContact(id); // send id to deleteContact in Service for Db
-    await this.supabase.getAllContacts(); // removes the contact from the list
-    this.closeDialog();
-  }
+  //   await this.supabase.deleteContact(id); // send id to deleteContact in Service for Db
+  //   // await this.supabase.getAllContacts(); // removes the contact from the list
+  //   this.closeDialog();
+  // }
 
   closeDialog(): void {
     this.dialogService.closeDialog();

@@ -65,9 +65,12 @@ export class SupabaseService {
     console.log(error);
   }
 
-  async deleteContact(contactId: number) {
+  async deleteContact(contactId?: number) {
+    if (!contactId) return; // real check: no id, so nothing happens
+
     const { error } = await this.supabase.from('contacts').delete().eq('id', contactId); // only the row with this id
     console.error(error);
+    await this.getAllContacts(); // service updates its own list
   }
 
   setToLocalStorage(): void {
