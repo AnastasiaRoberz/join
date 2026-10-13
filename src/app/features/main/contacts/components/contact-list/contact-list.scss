@@ -4,7 +4,7 @@
   @include flex-start(column);
   width: 100%;
   height: 100%;
-  padding: 32px 24px;
+  padding: 32px 24px 10px 24px;
   gap: 24px;
 }
 
@@ -78,4 +78,39 @@ hr {
 
 .btn {
   width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  :host {
+    padding: 0px 24px;
+  }
+
+  .icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .contact-list {
+    padding-top: 32px;
+  }
+
+  .btn {
+    display: flex;
+    position: absolute;
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    bottom: 32px;
+    right: 16px;
+
+    .icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    &__text {
+      display: none;
+    }
+  }
 }
