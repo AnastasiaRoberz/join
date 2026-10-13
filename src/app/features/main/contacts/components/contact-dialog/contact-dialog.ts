@@ -5,6 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+import { CustomValidators } from '../../../../../utils/custom-validators';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar],
@@ -20,9 +21,18 @@ export class ContactDialog {
   contact = input<Contact | null>(null);
 
   contactForm = this.fb.group({
-    name: ['', { validators: Validators.required, updateOn: 'blur' }],
-    mail: ['', { validators: [Validators.required, Validators.email], updateOn: 'blur' }],
-    phone: ['', { validators: Validators.required, updateOn: 'blur' }],
+    name: [
+      '',
+      { validators: [Validators.required, CustomValidators.noNumbers()], updateOn: 'blur' },
+    ],
+    mail: [
+      '',
+      {
+        validators: [Validators.required, CustomValidators.customEmail()],
+        updateOn: 'blur',
+      },
+    ],
+    phone: ['', { validators: [Validators.required, CustomValidators.phone()], updateOn: 'blur' }],
   });
 
   constructor() {

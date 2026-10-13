@@ -11,6 +11,7 @@ import { ErrorService } from '../../services/error-service';
 import { NgControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { JsonPipe } from '@angular/common';
+import { merge } from 'rxjs';
 
 @Component({
   imports: [JsonPipe],
@@ -33,9 +34,11 @@ export class InputField {
     effect(() => {
       const ctrl = this.ngControl()?.control;
       if (ctrl) {
-        ctrl.statusChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-          this.cdr.markForCheck();
-        });
+        merge(ctrl.statusChanges, ctrl.valueChanges)
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.cdr.markForCheck();
+          });
       }
     });
   }
