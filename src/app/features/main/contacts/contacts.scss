@@ -29,7 +29,6 @@
     width: 100%;
     height: 100%;
     background: $color-grey-background;
-    // padding: 110px 58px;
     padding: calcClamp(48, 110, 1440, 768) calcClamp(16, 58, 1440, 768);
     display: flex;
     flex-direction: column;
