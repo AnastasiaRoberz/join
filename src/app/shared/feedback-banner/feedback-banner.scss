@@ -1,0 +1,43 @@
+@use '../../../../public/assets/styles' as *;
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  padding: 64px;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.feedback-toast {
+  font-size: $font-medium;
+  color: $text-light;
+  background-color: $main-color;
+  box-shadow: 0px 0px 4px 0px #00000026;
+  border-radius: 20px;
+  padding: 24px 32px;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(100dvw);
+  transition:
+    opacity 0.2s ease,
+    transform 0.4s ease,
+    visibility 0s linear 0.2s;
+
+  :host.is-open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition:
+      opacity 0.2s ease,
+      transform 0.4s ease,
+      visibility 0s linear 0s;
+  }
+
+  &.error {
+    background-color: $error;
+  }
+}
