@@ -4,14 +4,11 @@ import { ValidationErrors } from '@angular/forms';
 @Service()
 export class ErrorService {
   messages: Record<string, (field: string, err: any) => string> = {
-    required: (field) => `${field} is required`,
-    email: (field) => `Please enter a valid ${field}`,
+    required: (field) => `Your ${field} is required.`,
+    email: (field) => `Please enter a valid ${field.toLowerCase()}.`,
   };
 
-  getErrorMessage(
-    errors: ValidationErrors | null,
-    fieldName: string = 'This field',
-  ): string | null {
+  getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
     if (!errors) return null;
 
     const firstKey = Object.keys(errors)[0];

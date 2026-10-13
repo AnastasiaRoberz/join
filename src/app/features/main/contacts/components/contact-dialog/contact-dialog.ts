@@ -1,7 +1,7 @@
 import { Component, effect, inject, input } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { Contact } from '../../../../../interfaces/contact';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
@@ -20,9 +20,9 @@ export class ContactDialog {
   contact = input<Contact | null>(null);
 
   contactForm = this.fb.group({
-    name: '',
-    mail: '',
-    phone: '',
+    name: ['', { validators: Validators.required, updateOn: 'blur' }],
+    mail: ['', { validators: [Validators.required, Validators.email], updateOn: 'blur' }],
+    phone: ['', { validators: Validators.required, updateOn: 'blur' }],
   });
 
   constructor() {

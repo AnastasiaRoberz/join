@@ -1,6 +1,6 @@
 <div class="input-container">
   @if (label()) {
-    <label [for]="forId()">{{ label() }}</label>
+    <label>{{ label() }}</label>
   }
   <ng-content select="input, textarea, select" />
   @if (icon()) {
@@ -8,4 +8,5 @@
       <use [attr.href]="`/assets/icons/icons.svg#${icon()}`"></use>
     </svg>
   }
+  <span class="error-msg">{{ showError() }}</span>
 </div>
