@@ -1,6 +1,5 @@
-import { Location } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationService } from '../../../../services/navigation-service';
 
 @Component({
   imports: [],
@@ -9,14 +8,5 @@ import { Router } from '@angular/router';
   templateUrl: './legal-notice.html',
 })
 export class LegalNotice {
-  location = inject(Location);
-  router = inject(Router);
-
-  goBack(): void {
-    if (window.history.length > 1) {
-      this.location.back();
-    } else {
-      this.router.navigate(['/summary']);
-    }
-  }
+  navService = inject(NavigationService);
 }
