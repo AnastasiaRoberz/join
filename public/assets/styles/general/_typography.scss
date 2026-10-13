@@ -7,7 +7,7 @@ html {
 
 // * --- h-TAGS --- *
 h2 {
-  font-size: calcClamp(47, 61);
+  font-size: calcClamp(40, 61);
   font-weight: 700;
   line-height: 0.75;
 }
@@ -41,7 +41,8 @@ button {
 ------------------------------------------------ */
 // * --- texts --- *
 .subheading {
-  font-size: clamp(1.25rem, calc(1.125rem + 0.625vw), 1.688rem);
+  // font-size: clamp(1.25rem, calc(1.125rem + 0.625vw), 1.688rem);
+  font-size: calcClamp(16, 27);
 }
 
 .mail {
