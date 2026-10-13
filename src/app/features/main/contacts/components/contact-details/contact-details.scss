@@ -7,7 +7,7 @@
 
 .detail-header {
   @include flex-start;
-  gap: 54px;
+  gap: calcClamp(24, 54, 1440, 768);
 
   .name-wrapper {
     @include flex-start(column);
@@ -15,7 +15,7 @@
   }
 
   .name {
-    font-size: $font-large;
+    font-size: calcClamp(36, 47);
   }
 
   .btn-wrapper {

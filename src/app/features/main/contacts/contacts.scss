@@ -29,7 +29,8 @@
     width: 100%;
     height: 100%;
     background: $color-grey-background;
-    padding: 110px 58px;
+    // padding: 110px 58px;
+    padding: calcClamp(48, 110, 1440, 768) calcClamp(16, 58, 1440, 768);
     display: flex;
     flex-direction: column;
     gap: 32px;
@@ -37,7 +38,7 @@
 
   &__title {
     @include flex-start;
-    gap: 30px;
+    gap: calcClamp(15, 30, 1440, 768);
   }
 
   &__slogan {
@@ -58,7 +59,27 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1290px) {
+  .contacts {
+    &__title {
+      @include flex-start(column);
+      gap: 16px;
+    }
+
+    &__slogan {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    &__divider {
+      width: 100px;
+      height: 3px;
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
   .contacts {
     &__list {
       width: 100%;
