@@ -102,6 +102,11 @@
     justify-content: flex-end;
     gap: 4px;
 
+    @include widescreen {
+      margin-top: 0;
+      margin-bottom: auto;
+    }
+
     a {
       width: auto;
       height: 35px;
