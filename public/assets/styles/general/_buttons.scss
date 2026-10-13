@@ -2,20 +2,24 @@
 
 // BUTTONS DEFAULT
 .btn {
-  @include flex-center;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   gap: 4px;
   border: 1px solid transparent;
   outline: 1px solid transparent;
-  cursor: pointer;
-  text-decoration: none;
   box-shadow: $btn-shadow-placeholder;
+  text-decoration: none;
+  cursor: pointer;
 
   &:hover,
   &:active {
     box-shadow: $btn-shadow;
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -36,6 +40,7 @@
 .btn-primary {
   background-color: $btn-primary-default;
   color: $btn-primary-txt;
+  font-weight: 700;
 
   &:hover {
     background-color: $btn-primary-hover;
@@ -49,6 +54,7 @@
 .btn-secondary {
   background-color: transparent;
   border: 1px solid $btn-secondary-default;
+  padding: 16px 24px;
 
   &:hover {
     border: 1px solid $btn-secondary-hover;
@@ -65,7 +71,13 @@
 .btn-add {
   background-color: $btn-add-default;
   color: $btn-add-txt;
+  font-weight: 700;
   gap: 16px;
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
 
   &:hover {
     background-color: $btn-add-hover;
@@ -73,29 +85,21 @@
 
   &:active {
     background-color: $btn-add-active;
+    box-shadow: $btn-shadow-placeholder;
   }
 }
 
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.btn-txtIcon {
   gap: 8px;
   color: $btn-icon;
-  background: none;
-  border: none;
-  cursor: pointer;
-
-  .icon {
-    width: 24px;
-    height: 24px;
-  }
+  box-shadow: none;
 
   .btn-label {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    order: 1;
 
     &::after {
       content: attr(data-text);
@@ -111,12 +115,26 @@
 
   &:hover {
     font-weight: 700;
+    box-shadow: none;
   }
 }
 
-.btn-close {
+.btn-icon {
   width: 32px;
   height: 32px;
   color: $main-color;
-  cursor: pointer;
+
+  .btn-label {
+    display: none;
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover,
+  &:active {
+    box-shadow: none;
+  }
 }
