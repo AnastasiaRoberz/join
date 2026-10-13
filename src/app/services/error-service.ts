@@ -10,6 +10,7 @@ export class ErrorService {
     onlyLetters: (field) => `Your ${field.toLowerCase()} can only contain letters.`,
     invalidPhone: () => `Please enter a valid phone number.`,
     minNames: () => 'Please enter your firstname and your surname.',
+    whitespace: (field) => `Your ${field} connot consist only of spaces.`,
   };
 
   getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {

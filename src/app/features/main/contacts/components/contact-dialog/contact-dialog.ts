@@ -26,6 +26,7 @@ export class ContactDialog {
       {
         validators: [
           Validators.required,
+          CustomValidators.noWhitespace(),
           CustomValidators.onlyLetters(),
           CustomValidators.twoNames(),
         ],
@@ -35,11 +36,25 @@ export class ContactDialog {
     mail: [
       '',
       {
-        validators: [Validators.required, CustomValidators.customEmail()],
+        validators: [
+          Validators.required,
+          CustomValidators.noWhitespace(),
+          CustomValidators.customEmail(),
+        ],
         updateOn: 'blur',
       },
     ],
-    phone: ['', { validators: [Validators.required, CustomValidators.phone()], updateOn: 'blur' }],
+    phone: [
+      '',
+      {
+        validators: [
+          Validators.required,
+          CustomValidators.noWhitespace(),
+          CustomValidators.phone(),
+        ],
+        updateOn: 'blur',
+      },
+    ],
   });
 
   constructor() {

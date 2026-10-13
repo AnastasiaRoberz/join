@@ -49,4 +49,14 @@ export class CustomValidators {
       return wordsCount.length >= 2 ? null : { minNames: true };
     };
   }
+
+  static noWhitespace(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (!control.value) return null;
+
+      const onlyWhitespace = typeof value === 'string' && value.trim().length === 0;
+      return onlyWhitespace ? { whitespace: true } : null;
+    };
+  }
 }
