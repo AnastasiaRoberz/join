@@ -26,7 +26,7 @@ export class ContactDialog {
       {
         validators: [
           Validators.required,
-          CustomValidators.noNumbers(),
+          CustomValidators.onlyLetters(),
           CustomValidators.twoNames(),
         ],
         updateOn: 'blur',

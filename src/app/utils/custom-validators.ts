@@ -1,12 +1,14 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
-  static noNumbers(): ValidatorFn {
+  static onlyLetters(): ValidatorFn {
+    const lettersRegex = /^[\p{L}\s'-]+$/u;
+
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
 
-      const hasNum = /\d/.test(control.value);
-      return hasNum ? { hasNumber: true } : null;
+      const isValid = lettersRegex.test(control.value);
+      return isValid ? null : { onlyLetters: true };
     };
   }
 

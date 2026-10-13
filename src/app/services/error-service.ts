@@ -7,7 +7,7 @@ export class ErrorService {
     required: (field) => `Your ${field.toLowerCase()} is required.`,
     email: (field) => `Please enter a valid ${field.toLowerCase()}.`,
     invalidEmail: () => `Please enter a valid email address.`,
-    hasNumber: (field) => `Your ${field.toLowerCase()} cannot contain numbers.`,
+    onlyLetters: (field) => `Your ${field.toLowerCase()} can only contain letters.`,
     invalidPhone: () => `Please enter a valid phone number.`,
     minNames: () => 'Please enter your firstname and your surname.',
   };
