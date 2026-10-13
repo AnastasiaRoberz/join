@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog';
+import { ContactDialog } from './components/contact-dialog/contact-dialog';
 
 /**
  * Container component for the Contacts page.
@@ -13,7 +14,7 @@ import { DialogService } from '../../../services/dialog';
  * (to load and display the contact).
  */
 @Component({
-  imports: [ContactList, ContactDetails],
+  imports: [ContactList, ContactDetails, ContactDialog],
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',

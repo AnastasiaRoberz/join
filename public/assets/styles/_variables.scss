@@ -10,6 +10,7 @@ $color-grey-100: #d1d1d1;
 $color-grey-200: #cdcdcd;
 $color-grey-300: #d9d9d9;
 $color-grey-400: #a8a8a8;
+$color-grey-500: #e7e7e7;
 $color-bluish-grey: #0c2e621f;
 
 // Blues
@@ -55,6 +56,10 @@ $btn-add-default: $color-navy-800;
 $btn-add-hover: $color-cyan-500;
 $btn-add-active: $color-navy-900;
 $btn-add-txt: $color-white;
+
+$close-btn-hover: $color-grey-500;
+$close-btn-mobile-default: $color-white;
+$close-btn-mobile-active: $color-cyan-700;
 
 $btn-contact-hover: linear-gradient(180deg, #f9f9f9 0%, #f0f0f0 100%);
 $btn-contact-active: $color-navy-800;
