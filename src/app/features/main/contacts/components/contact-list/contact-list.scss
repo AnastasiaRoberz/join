@@ -2,6 +2,7 @@
 
 :host {
   @include flex-start(column);
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
   padding: 32px 24px 10px 24px;
@@ -32,6 +33,15 @@ hr {
   justify-content: flex-start;
   height: 100%;
   width: 100%;
+
+  @include mobile {
+    overflow-y: visible;
+    scrollbar-gutter: auto;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 
 .group-wrapper {
@@ -82,7 +92,7 @@ hr {
 
 @media screen and (max-width: 768px) {
   :host {
-    padding: 0px 24px;
+    padding: 8px 0 8px 24px;
   }
 
   .icon {
@@ -96,11 +106,11 @@ hr {
 
   .btn {
     display: flex;
-    position: absolute;
+    position: fixed;
     height: 56px;
     width: 56px;
     border-radius: 50%;
-    bottom: 32px;
+    bottom: 112px;
     right: 16px;
 
     .icon {
