@@ -23,7 +23,14 @@ export class ContactDialog {
   contactForm = this.fb.group({
     name: [
       '',
-      { validators: [Validators.required, CustomValidators.noNumbers()], updateOn: 'blur' },
+      {
+        validators: [
+          Validators.required,
+          CustomValidators.noNumbers(),
+          CustomValidators.twoNames(),
+        ],
+        updateOn: 'blur',
+      },
     ],
     mail: [
       '',

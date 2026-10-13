@@ -9,6 +9,7 @@ export class ErrorService {
     invalidEmail: () => `Please enter a valid email address.`,
     hasNumber: (field) => `Your ${field.toLowerCase()} cannot contain numbers.`,
     invalidPhone: () => `Please enter a valid phone number.`,
+    minNames: () => 'Please enter your firstname and your surname.',
   };
 
   getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
