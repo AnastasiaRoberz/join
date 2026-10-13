@@ -34,7 +34,9 @@
 
         <div class="buttons-wrapper">
           @if (contact()) {
-            <button type="button" class="btn btn-small btn-secondary">Delete</button>
+            <button type="button" class="btn btn-small btn-secondary" (click)="deleteContact()">
+              Delete
+            </button>
             <button type="submit" class="btn btn-small btn-primary">
               Save
               <svg class="icon">
