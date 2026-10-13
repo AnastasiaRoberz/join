@@ -38,6 +38,10 @@
       color: $input-focus-label;
     }
   }
+
+  &:has(.ng-invalid:is(.ng-touched)) {
+    border-color: $error;
+  }
 }
 
 label {
@@ -61,4 +65,12 @@ label {
   height: 24px;
   color: $input-icon;
   pointer-events: none;
+}
+
+.error-msg {
+  color: $error;
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  transform: translateY(100%);
 }
