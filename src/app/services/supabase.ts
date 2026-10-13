@@ -1,6 +1,7 @@
 import { computed, Service, signal } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
 import { Contact } from '../interfaces/contact';
+import { getRandomColor } from '../utils/utils';
 
 @Service()
 export class SupabaseService {
@@ -49,6 +50,7 @@ export class SupabaseService {
         phone: contactInfos.phone,
       })
       .eq('id', contactId);
+    console.log(error);
   }
 
   async addContact(contactInfos: Contact) {
@@ -60,6 +62,7 @@ export class SupabaseService {
       badge_color: getRandomColor(),
     };
     const { error } = await this.supabase.from('contacts').insert(contact);
+    console.log(error);
   }
 
   setToLocalStorage(): void {

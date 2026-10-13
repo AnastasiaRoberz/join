@@ -57,7 +57,8 @@ export class ContactDialog {
       await this.supabase.addContact(contactInfos);
     }
 
-    this.contactForm.reset();
+    await this.supabase.getAllContacts(); // reloads list and details with the new data
+    this.closeDialog(); // closes the dialog and resets the form
   }
 
   splitName(name: string) {
