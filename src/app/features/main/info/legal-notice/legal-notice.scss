@@ -7,6 +7,26 @@
   gap: 24px;
   padding: calcClamp(48, 116) calcClamp(16, 96);
   line-height: 1.2;
+
+  @include mobile {
+    padding-right: 0;
+  }
+}
+
+.header {
+  width: 100%;
+  display: none;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .back-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  @include mobile {
+    display: flex;
+  }
 }
 
 li {
