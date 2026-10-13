@@ -30,7 +30,6 @@ export class ContactDialog {
           CustomValidators.onlyLetters(),
           CustomValidators.twoNames(),
         ],
-        updateOn: 'blur',
       },
     ],
     mail: [
@@ -41,7 +40,6 @@ export class ContactDialog {
           CustomValidators.noWhitespace(),
           CustomValidators.customEmail(),
         ],
-        updateOn: 'blur',
       },
     ],
     phone: [
@@ -52,7 +50,6 @@ export class ContactDialog {
           CustomValidators.noWhitespace(),
           CustomValidators.phone(),
         ],
-        updateOn: 'blur',
       },
     ],
   });

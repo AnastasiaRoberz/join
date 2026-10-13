@@ -35,7 +35,7 @@
     }
   }
 
-  &:has(.ng-invalid:is(.ng-touched, .ng-dirty)) {
+  &:has(.ng-invalid:is(.ng-touched)) {
     border-color: $error;
   }
 }

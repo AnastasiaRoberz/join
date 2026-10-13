@@ -9,12 +9,9 @@ import {
 } from '@angular/core';
 import { ErrorService } from '../../services/error-service';
 import { NgControl } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { JsonPipe } from '@angular/common';
-import { merge } from 'rxjs';
 
 @Component({
-  imports: [JsonPipe],
+  imports: [],
   selector: 'app-input-field',
   styleUrl: './input-field.scss',
   templateUrl: './input-field.html',
@@ -23,7 +20,6 @@ export class InputField {
   errorService = inject(ErrorService);
 
   cdr = inject(ChangeDetectorRef);
-  destroyRef = inject(DestroyRef);
 
   ngControl = contentChild(NgControl);
   label = input<string>('');
@@ -31,14 +27,14 @@ export class InputField {
   type = input<string>('text');
 
   constructor() {
-    effect(() => {
+    effect((onCleanUp) => {
       const ctrl = this.ngControl()?.control;
       if (ctrl) {
-        merge(ctrl.statusChanges, ctrl.valueChanges)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe(() => {
-            this.cdr.markForCheck();
-          });
+        const sub = ctrl.events.subscribe(() => {
+          console.log('Event gefeuert:', event);
+          this.cdr.markForCheck();
+        });
+        onCleanUp(() => sub.unsubscribe());
       }
     });
   }
@@ -46,7 +42,7 @@ export class InputField {
   showError(): string | null {
     const ctrl = this.ngControl()?.control;
 
-    if (!(ctrl && ctrl.invalid && (ctrl.touched || ctrl.dirty))) return null;
+    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
     return this.errorService.getErrorMessage(ctrl.errors, this.label());
   }
