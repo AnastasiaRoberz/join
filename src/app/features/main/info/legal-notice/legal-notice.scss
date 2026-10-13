@@ -1,0 +1,14 @@
+@use '../../../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  justify-content: flex-start;
+  width: 100%;
+  gap: 24px;
+  padding: calcClamp(48, 116) calcClamp(16, 96);
+  line-height: 1.2;
+}
+
+li {
+  margin-left: 24px;
+}
