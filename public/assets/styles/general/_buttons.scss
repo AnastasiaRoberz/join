@@ -91,7 +91,7 @@
 
 .btn-txtIcon {
   gap: 8px;
-  color: $btn-icon;
+  color: $btn-txtIcon-default;
   box-shadow: none;
 
   .btn-label {
@@ -116,6 +116,7 @@
   &:hover {
     font-weight: 700;
     box-shadow: none;
+    color: $btn-txtIcon-hover;
   }
 }
 
