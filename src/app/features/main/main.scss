@@ -29,8 +29,8 @@ app-header {
   // top und bottom sind Asbtand zu Header/Footer
   @include mobile {
     width: 100%;
-    position: fixed;
-    top: 80px;
-    bottom: 80px;
+    height: calc(100dvh - 80px);
+    padding-top: 80px;
+    overflow-y: auto;
   }
 }

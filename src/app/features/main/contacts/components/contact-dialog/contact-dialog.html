@@ -1,5 +1,10 @@
 <div class="dialog-content" (click)="$event.stopPropagation()">
   <div class="header-section">
+    <button class="btn-close-mobile" (click)="closeDialog()">
+      <svg class="icon-close">
+        <use href="/assets/icons/icons.svg#cancel"></use>
+      </svg>
+    </button>
     <div class="header">
       @if (contact()) {
         <h2>Edit contact</h2>
@@ -42,7 +47,7 @@
               </svg>
             </button>
           } @else {
-            <button type="button" class="btn btn-small btn-secondary" (click)="closeDialog()">
+            <button type="button" class="btn btn-small btn-secondary cancel-mobile" (click)="closeDialog()">
               Cancel
               <svg class="icon">
                 <use href="/assets/icons/icons.svg#cancel"></use>
