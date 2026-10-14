@@ -8,6 +8,7 @@
     'sidebar header'
     'sidebar pages';
   height: 100dvh;
+  // overflow: hidden; //wahrscheinlich nicht benötigt
 
   @include mobile {
     display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
@@ -24,13 +25,13 @@ app-header {
 
 .pages {
   grid-area: pages;
-  overflow-y: auto;
+  height: 100%;
+  min-height: 0;
 
   // top und bottom sind Asbtand zu Header/Footer
   @include mobile {
     width: 100%;
-    height: calc(100dvh - 80px);
-    padding-top: 80px;
-    overflow-y: auto;
+    height: calc(100dvh - 160px);
+    margin: 80px 0;
   }
 }

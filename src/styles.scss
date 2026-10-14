@@ -15,28 +15,57 @@ a {
 
 .scroll-container {
   overflow-y: auto;
-  padding-right: 24px;
+  scrollbar-gutter: stable;
+  overscroll-behavior-y: contain;
 
-  ::-webkit-scrollbar {
-    background: none;
+  &::-webkit-scrollbar {
+    background: transparent;
     width: 24px;
   }
 
-  ::-webkit-scrollbar-button {
-    background-color: $icon;
+  &::-webkit-scrollbar-button:single-button {
+    display: block;
+    height: 30px;
     width: 10px;
-    height: 4px;
+    background-size: 10px 4px;
+    background-repeat: no-repeat;
   }
 
-  ::-webkit-scrollbar-track {
+  &::-webkit-scrollbar-button:single-button:vertical:start {
+    background: transparent url('/assets/icons/scrollbar-up.svg') no-repeat center;
+    background-position: center bottom;
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:end {
+    background: transparent url('/assets/icons/scrollbar-down.svg') no-repeat center;
+    background-position: center top;
+  }
+
+  &::-webkit-scrollbar-track {
     background: none;
   }
-  ::-webkit-scrollbar-thumb {
-    width: 8px;
-    border-radius: 3px;
+
+  &::-webkit-scrollbar-thumb {
+    border: 8px solid transparent;
+    border-radius: 9999px;
+    background-clip: content-box;
     background-color: $icon;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+
+  @include mobile {
+    &::-webkit-scrollbar-button:single-button {
+      display: none;
+      background: none;
+      width: 0;
+      height: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 10px solid transparent;
+    }
   }
 }
