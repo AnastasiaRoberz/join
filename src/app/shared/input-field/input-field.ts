@@ -10,6 +10,8 @@ import {
 import { ErrorService } from '../../services/error-service';
 import { NgControl } from '@angular/forms';
 
+let nextId = 0;
+
 @Component({
   imports: [],
   selector: 'app-input-field',
@@ -18,13 +20,13 @@ import { NgControl } from '@angular/forms';
 })
 export class InputField {
   errorService = inject(ErrorService);
-
   cdr = inject(ChangeDetectorRef);
 
   ngControl = contentChild(NgControl);
   label = input<string>('');
   icon = input<string>('');
   type = input<string>('text');
+  id = input<string>(`app-input-${nextId++}`);
 
   constructor() {
     effect((onCleanUp) => {

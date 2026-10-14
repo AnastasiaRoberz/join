@@ -28,21 +28,23 @@
       <app-user-avatar class="avatar" [user]="contact()" size="large"></app-user-avatar>
 
       <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-        <app-input-field label="Name" icon="person">
-          <input type="text" formControlName="name" placeholder=" " />
+        <app-input-field label="Name" icon="person" [id]="'name'">
+          <input type="text" formControlName="name" placeholder=" " id="name" autocomplete="off" />
         </app-input-field>
 
-        <app-input-field label="Mail" icon="mail">
-          <input type="text" formControlName="mail" placeholder=" " />
+        <app-input-field label="Mail" icon="mail" [id]="'mail'">
+          <input type="text" formControlName="mail" placeholder=" " id="mail" autocomplete="off" />
         </app-input-field>
 
-        <app-input-field label="Phone" icon="phone">
-          <input type="text" formControlName="phone" placeholder="" />
+        <app-input-field label="Phone" icon="phone" [id]="'phone'">
+          <input type="text" formControlName="phone" placeholder="" id="phone" autocomplete="off" />
         </app-input-field>
 
         <div class="buttons-wrapper">
           @if (contact()) {
-            <button type="button" class="btn btn-small btn-secondary" (click)="deleteAndClose()">Delete</button>
+            <button type="button" class="btn btn-small btn-secondary" (click)="deleteAndClose()">
+              Delete
+            </button>
             <button type="submit" class="btn btn-small btn-primary" [disabled]="!contactForm.valid">
               Save
               <svg class="icon">
