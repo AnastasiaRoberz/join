@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
@@ -17,10 +17,17 @@ import { DialogService } from '../../../../../services/dialog';
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
+  host: {
+    // Any click anywhere on the page closes the mobile menu (listener)
+    '(document:click)': 'closeMenu()',
+  },
 })
 export class ContactDetails {
   supabase = inject(SupabaseService);
   dialogService = inject(DialogService);
+
+  /** Whether the mobile Edit/Delete menu is open. */
+  menuOpen = signal(false);
 
   /**
    * Id of the contact to display, passed in by the Contacts container.
@@ -37,4 +44,19 @@ export class ContactDetails {
   selectedContact = computed(() => {
     return this.supabase.contacts().find((item) => item.id === this.selectedId());
   });
+
+  /**
+   * Opens or closes the mobile menu.
+   * stopPropagation keeps this click from reaching the listener (see above),
+   * which would close the menu again right away.
+   */
+  toggleMenu(event: Event): void {
+    event.stopPropagation();
+    this.menuOpen.update((open) => !open);
+  }
+
+  /** Closes the mobile menu. */
+  closeMenu(): void {
+    this.menuOpen.set(false);
+  }
 }

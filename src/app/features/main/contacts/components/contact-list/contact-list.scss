@@ -42,7 +42,7 @@ hr {
 .contact {
   @include flex-start;
   width: 100%;
-  gap: 32px;
+  gap: calcClamp(8, 32);
   padding: 16px 24px;
   border-radius: 10px;
 
@@ -80,9 +80,10 @@ hr {
   width: 100%;
 }
 
-@media screen and (max-width: 768px) {
+// media screen mobile
+@include mobile {
   :host {
-    padding: 0px 24px;
+    padding: 0px 5px 0px 24px;
   }
 
   .icon {
