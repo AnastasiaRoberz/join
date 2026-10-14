@@ -79,6 +79,10 @@
 // @media screen tablet
 @include tablet {
   .contacts {
+    &__list {
+      max-width: 840px;
+    }
+
     &__detail {
       display: none; // detail page closed by default in mobile until id is given
     }
