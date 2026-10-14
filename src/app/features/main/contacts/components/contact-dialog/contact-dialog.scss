@@ -48,6 +48,7 @@
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
+    transform: translateY(0);
     transition:
       opacity 0.2s ease,
       transform 0.4s ease,
@@ -66,6 +67,7 @@
     margin-inline: 16px;
     display: flex;
     flex-direction: column;
+    transform: translateY(100dvw);
   }
 }
 
