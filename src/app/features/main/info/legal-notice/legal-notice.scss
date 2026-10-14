@@ -14,10 +14,11 @@
 }
 
 .header {
-  display: flex;
   width: 100%;
+  display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
 
   .back-icon {
     display: none;
@@ -26,7 +27,9 @@
 
     @include mobile {
       display: flex;
-      transform: translateY(-100%);
+      position: absolute;
+      top: -100%;
+      right: 0;
     }
   }
 }

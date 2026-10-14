@@ -18,6 +18,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
 
   .back-icon {
     display: none;
@@ -25,7 +26,10 @@
     height: 32px;
 
     @include mobile {
-      display: inline-flex;
+      display: flex;
+      position: absolute;
+      top: -100%;
+      right: 0;
     }
   }
 
