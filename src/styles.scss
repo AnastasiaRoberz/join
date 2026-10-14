@@ -67,13 +67,6 @@ input {
   }
 
   @include mobile {
-    // scrollbar-gutter: auto;
-    // overscroll-behavior-y: auto;
-
-    &::-webkit-scrollbar {
-      width: 16px;
-    }
-
     &::-webkit-scrollbar-button:single-button {
       display: none;
       background: none;
@@ -82,7 +75,7 @@ input {
     }
 
     &::-webkit-scrollbar-thumb {
-      border: 6px solid transparent;
+      border: 10px solid transparent;
     }
   }
 }

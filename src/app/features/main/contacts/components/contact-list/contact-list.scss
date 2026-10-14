@@ -5,7 +5,7 @@
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  padding: 32px 24px 10px 24px;
+  padding: 32px 12px 10px 24px;
   gap: 24px;
 }
 
@@ -50,7 +50,8 @@ hr {
 }
 
 .contact {
-  @include flex-start;
+  display: flex;
+  align-items: center;
   width: 100%;
   gap: 32px;
   padding: 16px 24px;
@@ -88,7 +89,7 @@ hr {
 }
 
 .btn {
-  width: 100%;
+  width: calc(100% - 24px);
 }
 
 @media screen and (max-width: 768px) {
@@ -99,10 +100,6 @@ hr {
   .icon {
     width: 50px;
     height: 50px;
-  }
-
-  .contact-list {
-    padding-top: 32px;
   }
 
   .btn {

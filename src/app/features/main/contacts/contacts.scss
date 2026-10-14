@@ -17,12 +17,10 @@
 
   &__list {
     width: 100%;
-    min-width: 320px;
     max-width: 424px;
     height: 100%;
     position: relative;
     box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
   }
 
   &__detail {
@@ -60,12 +58,6 @@
 
 @media screen and (max-width: 768px) {
   .contacts {
-    &__list {
-      width: 100%;
-      max-width: 768px;
-      height: auto;
-    }
-
     &__detail {
       display: none; // detail page closed by default in mobile until id is given
     }
