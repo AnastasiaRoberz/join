@@ -31,7 +31,6 @@ export class InputField {
       const ctrl = this.ngControl()?.control;
       if (ctrl) {
         const sub = ctrl.events.subscribe(() => {
-          console.log('Event gefeuert:', event);
           this.cdr.markForCheck();
         });
         onCleanUp(() => sub.unsubscribe());
