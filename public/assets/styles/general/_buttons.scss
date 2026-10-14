@@ -9,6 +9,7 @@ button {
   &:disabled {
     cursor: none;
     pointer-events: none;
+    background-color: $btn-disabled;
   }
 }
 
