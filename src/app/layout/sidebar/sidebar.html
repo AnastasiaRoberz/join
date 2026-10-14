@@ -7,42 +7,21 @@
     </div>
     <nav class="sidebar__wrapper--nav">
       <ul>
-        <li>
-          <a routerLink="/summary" routerLinkActive="active">
-            <svg class="nav-icon">
-              <use href="/assets/icons/icons.svg#summary"></use>
-            </svg>
-            <p>Summary</p>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/add-task" routerLinkActive="active">
-            <svg class="nav-icon">
-              <use href="/assets/icons/icons.svg#task"></use>
-            </svg>
-            <p>Add Task</p>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/board" routerLinkActive="active">
-            <svg class="nav-icon">
-              <use href="/assets/icons/icons.svg#board"></use>
-            </svg>
-            <p>Board</p>
-          </a>
-        </li>
-        <li>
-          <a routerLink="/contacts" routerLinkActive="active">
-            <svg class="nav-icon">
-              <use href="/assets/icons/icons.svg#contacts"></use>
-            </svg>
-            <p>Contacts</p>
-          </a>
-        </li>
+        @for (item of navList; track item.section) {
+          <li>
+            <a [routerLink]="'/' + item.section" routerLinkActive="active">
+              <div class="link-wrapper">
+                <svg class="nav-icon">
+                  <use [attr.href]="'/assets/icons/icons.svg#' + item.svgId"></use>
+                </svg>
+                <p>{{ item.label }}</p>
+              </div>
+            </a>
+          </li>
+        }
       </ul>
     </nav>
   </div>
-
   <div class="sidebar__imprint">
     <a routerLink="/privacy-policy" routerLinkActive="active" class="sidebar__imprint--privacy"
       >Privacy Policy</a
