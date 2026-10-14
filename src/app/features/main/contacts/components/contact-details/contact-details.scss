@@ -20,12 +20,7 @@
 
   .btn-wrapper {
     @include flex-start;
-    // gap: 16px;
   }
-
-  // .btn-dots {
-  //   display: none;
-  // }
 
   // Desktop: Edit and Delete next to each other
   .menu {
@@ -50,83 +45,6 @@
   gap: 16px;
   color: $text-dark;
 }
-
-// @include mobile {
-//   .detail-header {
-//     .btn-wrapper {
-//       @include flex-center;
-//       position: absolute;
-//       height: 56px;
-//       width: 56px;
-//       border-radius: 50%;
-//       bottom: 32px;
-//       right: 16px;
-//       background: $btn-primary-default;
-//       // z-index: 10;
-//     }
-
-//     .btn-dots {
-//       @include flex-center;
-//       width: 56px;
-//       height: 56px;
-//       padding: 0;
-//       // border: none;
-//       border-radius: 50%;
-//       background: $btn-primary-default;
-//       // box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-
-//       svg {
-//         // display: block;
-//         width: 24px;
-//         height: 24px;
-//       }
-//     }
-
-//     // .btn-icon {
-//     //   display: none;
-//     // }
-
-//     // Popup menu: hidden until the dots are clicked
-//     .menu {
-//       display: none;
-//       flex-direction: column;
-//       align-items: flex-start;
-//       height: 100px;
-//       width: 110px;
-//       position: absolute;
-//       right: 0px;
-//       bottom: 0px;
-//       gap: 8px;
-//       padding: 16px;
-//       background: $color-white;
-//       border-radius: 20px 20px 0 20px; // pointed corner towards the button
-//       box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-//     }
-
-//     // Menu open: show the menu, hide the dots
-//     .btn-wrapper--open {
-//       .menu {
-//         display: flex;
-//         justify-content: space-around;
-//         animation: menu-slide-in 0.5s ease-out;
-//       }
-
-//       .btn-dots {
-//         display: none;
-//       }
-//     }
-//   }
-// }
-
-// // Menu slides in from the right edge
-// @keyframes menu-slide-in {
-//   from {
-//     transform: translateX(110%);
-//   }
-//   to {
-//     transform: translateX(0);
-//   }
-// }
 
 @include mobile {
   .detail-header {

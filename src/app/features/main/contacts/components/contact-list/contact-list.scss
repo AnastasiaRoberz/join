@@ -80,6 +80,7 @@ hr {
   width: 100%;
 }
 
+// media screen tablet
 @include tablet {
   :host {
     padding-right: 5px;

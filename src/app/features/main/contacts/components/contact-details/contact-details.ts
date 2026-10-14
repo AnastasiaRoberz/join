@@ -18,13 +18,16 @@ import { DialogService } from '../../../../../services/dialog';
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
   host: {
-    // Any click anywhere on the page closes the mobile menu
+    // Any click anywhere on the page closes the mobile menu (listener)
     '(document:click)': 'closeMenu()',
   },
 })
 export class ContactDetails {
   supabase = inject(SupabaseService);
   dialogService = inject(DialogService);
+
+  /** Whether the mobile Edit/Delete menu is open. */
+  menuOpen = signal(false);
 
   /**
    * Id of the contact to display, passed in by the Contacts container.
@@ -42,12 +45,9 @@ export class ContactDetails {
     return this.supabase.contacts().find((item) => item.id === this.selectedId());
   });
 
-  /** Whether the mobile Edit/Delete menu is open. */
-  menuOpen = signal(false);
-
   /**
    * Opens or closes the mobile menu.
-   * stopPropagation keeps this click from reaching the document listener,
+   * stopPropagation keeps this click from reaching the listener (see above),
    * which would close the menu again right away.
    */
   toggleMenu(event: Event): void {
