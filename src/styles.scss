@@ -56,7 +56,7 @@ input {
   }
 
   &::-webkit-scrollbar-thumb {
-    border: 10px solid transparent;
+    border: 8px solid transparent;
     border-radius: 9999px;
     background-clip: content-box;
     background-color: $icon;
