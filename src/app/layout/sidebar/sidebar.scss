@@ -45,32 +45,44 @@
       }
 
       ul {
+        width: 100%;
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 15px;
 
         li {
           width: 100%;
           height: 46px;
+          @include flex-center;
 
           a {
             width: 100%;
             height: 100%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding-inline: 56px;
+            justify-content: center;
 
-            p {
-              color: $text-muted;
+            .link-wrapper {
+              width: 120px;
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              gap: 8px;
+
+              p {
+                color: $text-muted;
+              }
             }
 
             &.active {
               background-color: $sidebar-bg-active;
 
-              p,
-              .nav-icon {
-                color: $text-light;
+              .link-wrapper {
+                p,
+                .nav-icon {
+                  color: $text-light;
+                }
               }
             }
           }
@@ -82,7 +94,7 @@
           &:active {
             background-color: $sidebar-bg-active;
 
-            a {
+            a .link-wrapper {
               p,
               .nav-icon {
                 color: $text-light;
@@ -108,11 +120,11 @@
     }
 
     a {
-      width: auto;
+      width: 100%;
       height: 35px;
       display: flex;
       align-items: center;
-      padding-inline: 52px;
+      padding-left: calcClamp(40, 52, 1300, 770);
       color: $text-muted;
 
       &.active {
