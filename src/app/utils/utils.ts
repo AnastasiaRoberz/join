@@ -1,8 +1,7 @@
 export function getRandomColor() {
-  const letters = 'BCDEF'.split('');
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * letters.length)];
-  }
-  return color;
+  const hue = Math.floor(Math.random() * 360);
+  const saturation = 70;
+  const lightness = 40;
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
