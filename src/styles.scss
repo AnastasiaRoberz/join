@@ -67,16 +67,22 @@ input {
   }
 
   @include mobile {
-    ::-webkit-scrollbar {
-      width: 20px;
+    // scrollbar-gutter: auto;
+    // overscroll-behavior-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 16px;
     }
 
-    ::-webkit-scrollbar-button {
+    &::-webkit-scrollbar-button:single-button {
       display: none;
+      background: none;
+      width: 0;
+      height: 0;
     }
 
     &::-webkit-scrollbar-thumb {
-      border: 8px solid transparent;
+      border: 6px solid transparent;
     }
   }
 }
