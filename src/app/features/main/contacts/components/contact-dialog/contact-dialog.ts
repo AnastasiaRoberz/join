@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { Contact } from '../../../../../interfaces/contact';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -17,6 +17,7 @@ export class ContactDialog {
   supabase = inject(SupabaseService);
   fb = inject(FormBuilder);
   dialogService = inject(DialogService);
+  isSubmitting = signal<boolean>(false);
 
   contact = input<Contact | null>(null);
 
@@ -70,6 +71,9 @@ export class ContactDialog {
   }
 
   async saveContact() {
+    if (this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();
     const { firstname, surname } = this.splitName(name ?? '');
     const contactInfos = {
@@ -88,6 +92,7 @@ export class ContactDialog {
 
     await this.supabase.getAllContacts();
     this.closeDialog();
+    this.isSubmitting.set(false);
   }
 
   splitName(name: string) {
@@ -102,11 +107,15 @@ export class ContactDialog {
   }
 
   async deleteAndClose() {
+    if (this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
     const id = this.contact()?.id;
     if (!id) return;
 
     await this.supabase.deleteContact(id);
     this.closeDialog();
+    this.isSubmitting.set(false);
   }
 
   closeDialog(): void {
