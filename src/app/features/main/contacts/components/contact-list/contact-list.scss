@@ -80,7 +80,8 @@ hr {
   width: 100%;
 }
 
-@media screen and (max-width: 768px) {
+// media screen mobile
+@include mobile {
   :host {
     padding: 0px 24px;
   }

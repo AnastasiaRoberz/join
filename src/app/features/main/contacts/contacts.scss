@@ -78,11 +78,13 @@
   }
 }
 
-@media screen and (max-width: 1000px) {
+// @media screen tablet
+@include tablet {
   .contacts {
     &__list {
       width: 100%;
-      max-width: 768px;
+      // max-width: 768px;
+      max-width: 840px;
     }
 
     &__detail {
