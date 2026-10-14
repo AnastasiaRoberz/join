@@ -72,7 +72,7 @@ export class ContactDialog {
     };
   }
 
-  async deleteContact() {
+  async deleteAndClose() {
     const id = this.contact()?.id;
     if (!id) return;
 
