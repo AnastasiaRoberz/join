@@ -68,9 +68,14 @@ label {
 }
 
 .error-msg {
+  font-size: calcClamp(12, 16, 940, 400);
   color: $error;
   position: absolute;
   right: 0;
   bottom: -8px;
   transform: translateY(100%);
+
+  @include mobile(940px) {
+    transform: translateY(80%);
+  }
 }
