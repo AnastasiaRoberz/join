@@ -268,7 +268,7 @@
     @include mobile(940px) {
       height: 100%;
       align-items: center;
-      gap: calcClamp(8, 24, 400, 330);
+      gap: calcClamp(20, 24, 400, 330);
       margin-top: 30px;
     }
   }
