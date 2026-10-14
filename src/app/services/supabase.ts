@@ -80,10 +80,19 @@ export class SupabaseService {
       this.feedbackService.showError('Create contact failed.');
     }
   }
+ 
+
+  async deleteContact(contactId?: number) {
+    if (!contactId) return;
+
+    const { error } = await this.supabase.from('contacts').delete().eq('id', contactId);
+    await this.getAllContacts();
+  }
 
   setToLocalStorage(): void {
     localStorage.setItem('contactList', JSON.stringify(this.contacts));
   }
+
 
   getFromLocalStorage(): void {
     const storageItem = localStorage.getItem('contactList');

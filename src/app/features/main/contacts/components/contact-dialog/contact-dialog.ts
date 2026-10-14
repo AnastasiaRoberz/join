@@ -86,8 +86,8 @@ export class ContactDialog {
       await this.supabase.addContact(contactInfos);
     }
 
-    await this.supabase.getAllContacts(); // reloads list and details with the new data
-    this.closeDialog(); // closes the dialog and resets the form
+    await this.supabase.getAllContacts();
+    this.closeDialog();
   }
 
   splitName(name: string) {
@@ -99,6 +99,14 @@ export class ContactDialog {
       firstname: name.substring(0, lastSpaceIndex).trim(),
       surname: name.substring(lastSpaceIndex + 1).trim(),
     };
+  }
+
+  async deleteAndClose() {
+    const id = this.contact()?.id;
+    if (!id) return;
+
+    await this.supabase.deleteContact(id);
+    this.closeDialog();
   }
 
   closeDialog(): void {
