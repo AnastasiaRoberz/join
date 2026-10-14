@@ -20,7 +20,7 @@
   }
 
   &.size-large {
-    width: calcClamp(90, 120, 400, 330);
+    width: calcClamp(50, 120, 400, 330);
     aspect-ratio: 1 / 1;
     border-width: 3px;
     font-size: $font-large;
