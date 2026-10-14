@@ -24,6 +24,10 @@
   background-color: $color-white;
   position: relative;
 
+  @include mobile {
+    height: 40px;
+  }
+
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
   &:has(textarea:not(:placeholder-shown)) {
@@ -33,6 +37,10 @@
       transform: translateY(-120%);
       color: $input-focus-label;
     }
+  }
+
+  &:has(.ng-invalid:is(.ng-touched)) {
+    border-color: $error;
   }
 }
 
@@ -46,6 +54,10 @@ label {
   background-color: white;
   padding: 8px;
   transition: all 150ms ease-in-out;
+
+  @include mobile {
+    font-size: 13px;
+  }
 }
 
 .input-icon {
@@ -53,4 +65,17 @@ label {
   height: 24px;
   color: $input-icon;
   pointer-events: none;
+}
+
+.error-msg {
+  font-size: calcClamp(12, 16, 940, 400);
+  color: $error;
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  transform: translateY(100%);
+
+  @include mobile(940px) {
+    transform: translateY(80%);
+  }
 }

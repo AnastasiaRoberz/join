@@ -2,7 +2,7 @@
 
 .main-page {
   display: grid;
-  grid-template-columns: 232px 1fr;
+  grid-template-columns: calcClamp(190, 232, 1300, 770) 1fr;
   grid-template-rows: 96px 1fr;
   grid-template-areas:
     'sidebar header'
@@ -29,8 +29,8 @@ app-header {
   // top und bottom sind Asbtand zu Header/Footer
   @include mobile {
     width: 100%;
-    position: fixed;
-    top: 80px;
-    bottom: 80px;
+    height: calc(100dvh - 80px);
+    padding-top: 80px;
+    overflow-y: auto;
   }
 }

@@ -1,5 +1,18 @@
 @use '../../styles' as *;
 
+button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: none;
+    pointer-events: none;
+    background-color: $btn-disabled;
+  }
+}
+
 // BUTTONS DEFAULT
 .btn {
   @include flex-center;
@@ -9,7 +22,6 @@
   gap: 4px;
   border: 1px solid transparent;
   outline: 1px solid transparent;
-  cursor: pointer;
   text-decoration: none;
   box-shadow: $btn-shadow-placeholder;
 
@@ -84,7 +96,6 @@
   color: $btn-icon;
   background: none;
   border: none;
-  cursor: pointer;
 
   .icon {
     width: 24px;
@@ -118,5 +129,4 @@
   width: 32px;
   height: 32px;
   color: $main-color;
-  cursor: pointer;
 }

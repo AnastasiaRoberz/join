@@ -1,17 +1,21 @@
-import { computed, Service, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
 import { Contact } from '../interfaces/contact';
 import { getRandomColor } from '../utils/utils';
+import { FeedbackService } from './feedback-service';
 
 @Service()
 export class SupabaseService {
   projectUrl = 'https://nnvjteipgjertrdzhhww.supabase.co';
   projectKey = 'sb_publishable_MfdCcewSWbbgiL-yF1eQnQ_CQoS8Cqs';
 
+  feedbackService = inject(FeedbackService);
+
   supabase = createClient(this.projectUrl, this.projectKey);
 
   contacts = signal<Contact[]>([]);
   groupedContacts = signal<Contact[]>([]);
+  successful = signal<boolean>(false);
 
   constructor() {
     this.getAllContacts();
@@ -50,6 +54,13 @@ export class SupabaseService {
         phone: contactInfos.phone,
       })
       .eq('id', contactId);
+
+    if (!error) {
+      this.feedbackService.showSuccess('Contact succesfully updated.');
+    } else {
+      console.log('Supabase Error: ', error);
+      this.feedbackService.showError('Update contact failed.');
+    }
   }
 
   async addContact(contactInfos: Contact) {
@@ -61,7 +72,15 @@ export class SupabaseService {
       badge_color: getRandomColor(),
     };
     const { error } = await this.supabase.from('contacts').insert(contact);
+
+    if (!error) {
+      this.feedbackService.showSuccess('Contact succesfully created.');
+    } else {
+      console.log('Supabase Error: ', error);
+      this.feedbackService.showError('Create contact failed.');
+    }
   }
+ 
 
   async deleteContact(contactId?: number) {
     if (!contactId) return;
@@ -73,6 +92,7 @@ export class SupabaseService {
   setToLocalStorage(): void {
     localStorage.setItem('contactList', JSON.stringify(this.contacts));
   }
+
 
   getFromLocalStorage(): void {
     const storageItem = localStorage.getItem('contactList');

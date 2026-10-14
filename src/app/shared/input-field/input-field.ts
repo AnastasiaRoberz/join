@@ -1,4 +1,14 @@
-import { Component, input } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  contentChild,
+  DestroyRef,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
+import { ErrorService } from '../../services/error-service';
+import { NgControl } from '@angular/forms';
 
 @Component({
   imports: [],
@@ -7,7 +17,32 @@ import { Component, input } from '@angular/core';
   templateUrl: './input-field.html',
 })
 export class InputField {
+  errorService = inject(ErrorService);
+
+  cdr = inject(ChangeDetectorRef);
+
+  ngControl = contentChild(NgControl);
   label = input<string>('');
-  forId = input<string>('');
   icon = input<string>('');
+  type = input<string>('text');
+
+  constructor() {
+    effect((onCleanUp) => {
+      const ctrl = this.ngControl()?.control;
+      if (ctrl) {
+        const sub = ctrl.events.subscribe(() => {
+          this.cdr.markForCheck();
+        });
+        onCleanUp(() => sub.unsubscribe());
+      }
+    });
+  }
+
+  showError(): string | null {
+    const ctrl = this.ngControl()?.control;
+
+    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
+
+    return this.errorService.getErrorMessage(ctrl.errors, this.label());
+  }
 }
