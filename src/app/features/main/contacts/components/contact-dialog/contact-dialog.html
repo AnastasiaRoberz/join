@@ -45,7 +45,11 @@
             <button type="button" class="btn btn-small btn-secondary" (click)="deleteAndClose()">
               Delete
             </button>
-            <button type="submit" class="btn btn-small btn-primary" [disabled]="!contactForm.valid">
+            <button
+              type="submit"
+              class="btn btn-small btn-primary"
+              [disabled]="!contactForm.valid || !isSubmitting"
+            >
               Save
               <svg class="icon">
                 <use href="/assets/icons/icons.svg#check"></use>
@@ -62,7 +66,11 @@
                 <use href="/assets/icons/icons.svg#cancel"></use>
               </svg>
             </button>
-            <button type="submit" class="btn btn-small btn-primary" [disabled]="!contactForm.valid">
+            <button
+              type="submit"
+              class="btn btn-small btn-primary"
+              [disabled]="!contactForm.valid || !isSubmitting"
+            >
               Create contact
               <svg class="icon">
                 <use href="/assets/icons/icons.svg#check"></use>

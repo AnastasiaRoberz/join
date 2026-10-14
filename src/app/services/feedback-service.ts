@@ -11,7 +11,6 @@ export class FeedbackService {
 
   showSuccess(msg: string) {
     this.showMessage(msg, 'success');
-    console.log(this.feedbackState());
   }
 
   showError(msg: string) {
