@@ -72,6 +72,10 @@
     height: calc(100dvh - 160px);
     transform: translateY(100dvw);
   }
+
+  @include mobile(380px) {
+    height: 95%;
+  }
 }
 
 .header-section {

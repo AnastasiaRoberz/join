@@ -20,7 +20,7 @@
   }
 
   &.size-large {
-    width: calcClamp(50, 120, 400, 330);
+    width: calcClamp(95, 120, 400, 330); //changed from 120px to clamp for dialog
     aspect-ratio: 1 / 1;
     border-width: 3px;
     font-size: $font-large;
