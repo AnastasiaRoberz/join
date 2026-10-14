@@ -2,7 +2,7 @@
 
 .main-page {
   display: grid;
-  grid-template-columns: 232px 1fr;
+  grid-template-columns: calcClamp(190, 232, 1300, 770) 1fr;
   grid-template-rows: 96px 1fr;
   grid-template-areas:
     'sidebar header'
