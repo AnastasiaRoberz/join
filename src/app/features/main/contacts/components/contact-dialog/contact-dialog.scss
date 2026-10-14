@@ -87,9 +87,13 @@
     padding: 66px calcClamp(24, 88, 940, 500);
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 30px;
+  }
+
+  @include mobile(768px) {
+    justify-content: flex-start;
   }
 }
 
