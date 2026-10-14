@@ -14,19 +14,25 @@
 }
 
 .header {
+  display: flex;
   width: 100%;
-  display: none;
   justify-content: space-between;
   align-items: flex-start;
 
   .back-icon {
+    display: none;
     width: 32px;
     height: 32px;
-  }
 
-  @include mobile {
-    display: flex;
+    @include mobile {
+      display: flex;
+      transform: translateY(-100%);
+    }
   }
+}
+
+h3 {
+  margin-bottom: 16px;
 }
 
 li {
