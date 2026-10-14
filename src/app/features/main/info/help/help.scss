@@ -1,0 +1,64 @@
+@use '../../../../../../public/assets/styles' as *;
+
+.help {
+  padding: calcClamp(48, 100) calcClamp(16, 100);
+
+  &__header {
+    @include flex-start;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+
+  &__back {
+    @include flex-center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    color: $color-cyan-700;
+    transition: background-color 100ms ease-in-out;
+
+    &:hover {
+      background: $color-grey-300;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    p {
+      color: $text-normal;
+      line-height: 1.25;
+    }
+
+    h3 {
+      margin-top: 20px;
+    }
+  }
+
+  &__highlight {
+    color: $text-lightblue;
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  &__step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    counter-increment: step;
+
+    &::before {
+      content: counter(step) '.';
+      grid-row: 1 / span 2;
+      font-size: 27px;
+      font-weight: 700;
+    }
+  }
+}
