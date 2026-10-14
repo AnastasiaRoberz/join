@@ -1,6 +1,6 @@
 <div class="input-container">
   @if (label()) {
-    <label>{{ label() }}</label>
+    <label [attr.for]="id()">{{ label() }}</label>
   }
   <ng-content select="input, textarea, select" />
   @if (icon()) {
