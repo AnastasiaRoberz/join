@@ -3,7 +3,7 @@
     <app-user-avatar [user]="contact" size="large"></app-user-avatar>
     <div class="name-wrapper">
       <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
-      <div class="btn-wrapper">
+      <!-- <div class="btn-wrapper">
         <button class="btn-icon" (click)="dialogService.openDialog(contact)">
           <svg class="icon">
             <use href="/assets/icons/icons.svg#edit"></use>
@@ -15,6 +15,38 @@
             <use href="/assets/icons/icons.svg#delete"></use>
           </svg>
           <span class="btn-label" data-text="Delete">Delete</span>
+        </button>
+        <button class="btn-dots" data-text="">
+          <svg class="dots">
+            <use href="/assets/icons/icons.svg#dots"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div> -->
+      <!-- btn-wrapper--open is set while the mobile menu is open -->
+      <div class="btn-wrapper" [class.btn-wrapper--open]="menuOpen()">
+        <!-- Desktop: shown inline next to each other. Mobile: the popup menu -->
+        <div class="menu">
+          <button class="btn-icon" (click)="dialogService.openDialog(contact)">
+            <svg class="icon">
+              <use href="/assets/icons/icons.svg#edit"></use>
+            </svg>
+            <span class="btn-label" data-text="Edit">Edit</span>
+          </button>
+          <button class="btn-icon" data-text="Delete">
+            <svg class="icon">
+              <use href="/assets/icons/icons.svg#delete"></use>
+            </svg>
+            <span class="btn-label" data-text="Delete">Delete</span>
+          </button>
+        </div>
+
+        <!-- Mobile only: opens the menu -->
+        <button type="button" class="btn-dots" (click)="toggleMenu($event)">
+          <svg class="dots">
+            <use href="/assets/icons/icons.svg#dots"></use>
+          </svg>
         </button>
       </div>
     </div>
