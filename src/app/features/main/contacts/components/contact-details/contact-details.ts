@@ -37,9 +37,4 @@ export class ContactDetails {
   selectedContact = computed(() => {
     return this.supabase.contacts().find((item) => item.id === this.selectedId());
   });
-
-  // async deleteContact() {
-  //   await this.supabase.deleteContact(this.selectedId()); // send id to deleteContact in Service for Db
-  //   await this.supabase.getAllContacts(); // removes the contact from the list
-  // }
 }

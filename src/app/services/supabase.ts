@@ -50,7 +50,6 @@ export class SupabaseService {
         phone: contactInfos.phone,
       })
       .eq('id', contactId);
-    console.log(error);
   }
 
   async addContact(contactInfos: Contact) {
@@ -62,15 +61,13 @@ export class SupabaseService {
       badge_color: getRandomColor(),
     };
     const { error } = await this.supabase.from('contacts').insert(contact);
-    console.log(error);
   }
 
   async deleteContact(contactId?: number) {
-    if (!contactId) return; // real check: no id, so nothing happens
+    if (!contactId) return;
 
-    const { error } = await this.supabase.from('contacts').delete().eq('id', contactId); // only the row with this id
-    console.error(error);
-    await this.getAllContacts(); // service updates its own list
+    const { error } = await this.supabase.from('contacts').delete().eq('id', contactId);
+    await this.getAllContacts();
   }
 
   setToLocalStorage(): void {
