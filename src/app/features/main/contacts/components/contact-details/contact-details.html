@@ -7,14 +7,14 @@
       <div class="btn-wrapper" [class.btn-wrapper--open]="menuOpen()">
         <!-- Desktop: shown inline next to each other. Mobile: the popup menu -->
         <div class="menu">
-          <button class="btn-icon" (click)="dialogService.openDialog(contact)">
-            <svg class="icon">
+          <button class="btn btn-txtIcon" (click)="dialogService.openDialog(contact)">
+            <svg class="btn-icon">
               <use href="/assets/icons/icons.svg#edit"></use>
             </svg>
             <span class="btn-label" data-text="Edit">Edit</span>
           </button>
-          <button class="btn-icon" data-text="Delete">
-            <svg class="icon">
+          <button class="btn btn-txtIcon" data-text="Delete">
+            <svg class="btn-icon">
               <use href="/assets/icons/icons.svg#delete"></use>
             </svg>
             <span class="btn-label" data-text="Delete">Delete</span>

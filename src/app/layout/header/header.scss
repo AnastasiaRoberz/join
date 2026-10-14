@@ -20,6 +20,7 @@
   &__logo {
     width: 32px;
     height: 40px;
+    --logo-main: $main-color;
 
     @include desktop(769px) {
       display: none;
@@ -43,8 +44,8 @@
     gap: 16px;
 
     &--help {
-      width: 22px;
-      height: 22px;
+      width: 32px;
+      height: 32px;
       @include flex-center;
 
       @include mobile {
@@ -56,8 +57,8 @@
       }
 
       svg {
-        width: 20px;
-        height: 20px;
+        width: 32px;
+        height: 32px;
       }
     }
 
