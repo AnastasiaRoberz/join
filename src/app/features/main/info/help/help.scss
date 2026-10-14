@@ -6,19 +6,20 @@
   &__header {
     @include flex-start;
     justify-content: space-between;
+    width: 100%;
     margin-bottom: 40px;
+    position: relative;
   }
 
-  &__back {
-    @include flex-center;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    color: $color-cyan-700;
-    transition: background-color 100ms ease-in-out;
+  .back-icon {
+    display: flex;
+    width: 32px;
+    height: 32px;
 
-    &:hover {
-      background: $color-grey-300;
+    @include mobile {
+      position: absolute;
+      top: -100%;
+      right: 0;
     }
   }
 
@@ -27,18 +28,9 @@
     flex-direction: column;
     gap: 20px;
 
-    p {
-      color: $text-normal;
-      line-height: 1.25;
-    }
-
     h3 {
       margin-top: 20px;
     }
-  }
-
-  &__highlight {
-    color: $text-lightblue;
   }
 
   &__steps {

@@ -13,10 +13,6 @@ export class Header {
   private elementRef = inject(ElementRef);
   navService = inject(NavigationService);
 
-  currentUrl = computed(() => {
-    return this.navService.getCurrentUrl();
-  });
-
   toggleMenu() {
     this.menuOpen.update((v) => !v);
   }
