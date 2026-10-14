@@ -3,19 +3,25 @@
 :host {
   @include flex-start(column);
   gap: 21px;
+  min-width: 0; // the component may get narrower than the long name
 }
 
 .detail-header {
   @include flex-start;
   gap: calcClamp(24, 54, 1440, 768);
+  max-width: 100%; // never wider than the component
 
   .name-wrapper {
     @include flex-start(column);
     gap: 8px;
+    min-width: 0;
   }
 
   .name {
     font-size: calcClamp(36, 47);
+    max-width: 100%; // never wider than the wrapper
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .btn-wrapper {
@@ -44,6 +50,13 @@
   @include flex-start(column);
   gap: 16px;
   color: $text-dark;
+  max-width: 100%; // instead of min-width: 0
+
+  .mail {
+    max-width: 100%; // never wider than the wrapper
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 @include mobile {
