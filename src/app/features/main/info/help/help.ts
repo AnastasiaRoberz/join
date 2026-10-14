@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { NavigationService } from '../../../../services/navigation-service';
 
 @Component({
   imports: [],
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './help.scss',
   templateUrl: './help.html',
 })
-export class Help {}
+export class Help {
+  navService = inject(NavigationService);
+}
