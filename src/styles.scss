@@ -32,12 +32,12 @@ a {
   }
 
   &::-webkit-scrollbar-button:single-button:vertical:start {
-    background: transparent url('./assets/icons/scrollbar-up.svg') no-repeat center;
+    background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
     background-position: center bottom;
   }
 
   &::-webkit-scrollbar-button:single-button:vertical:end {
-    background: transparent url('./assets/icons/scrollbar-down.svg') no-repeat center;
+    background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
     background-position: center top;
   }
 
