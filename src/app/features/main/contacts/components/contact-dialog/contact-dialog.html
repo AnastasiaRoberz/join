@@ -1,5 +1,10 @@
 <div class="dialog-content" (click)="$event.stopPropagation()">
   <div class="header-section">
+    <button class="btn-close-mobile" (click)="closeDialog()">
+      <svg class="icon-close-mobile">
+        <use href="./assets/icons/icons.svg#cancel"></use>
+      </svg>
+    </button>
     <svg class="header-logo">
       <use href="./assets/icons/icons.svg#logo"></use>
     </svg>
@@ -13,8 +18,8 @@
     </div>
   </div>
   <div class="content-section">
-    <button class="btn btn-icon" (click)="closeDialog()">
-      <svg class="icon">
+    <button class="btn-close" (click)="closeDialog()">
+      <svg class="icon-close">
         <use href="./assets/icons/icons.svg#close"></use>
       </svg>
     </button>
