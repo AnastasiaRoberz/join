@@ -1,10 +1,6 @@
-<div class="main-page" [class.is-mobile]="responsiveService.isMobile()">
-  <app-header />
-  @if (!responsiveService.isMobile()) {
-    <app-sidebar />
-  }
-  <div class="pages scroll-container">
-    <router-outlet />
-  </div>
-  <app-footer />
+<app-header />
+<div class="pages scroll-container">
+  <router-outlet />
 </div>
+<app-sidebar />
+<!-- <app-footer /> -->

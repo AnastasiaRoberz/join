@@ -10,6 +10,9 @@ import { ResponsiveService } from '../../services/responsive.service';
   selector: 'app-main',
   styleUrl: './main.scss',
   templateUrl: './main.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class Main {
   responsiveService = inject(ResponsiveService);

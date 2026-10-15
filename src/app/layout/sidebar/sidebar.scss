@@ -1,78 +1,106 @@
 @use '../../../../public/assets/styles/' as *;
 
 :host {
-  @include flex-between(column);
+  @include flex-center(column);
   height: 100%;
   padding-block: 64px;
   background-color: $sidebar-main-theme;
   color: $sidebar-txt-default;
   container-type: inline-size;
+}
+
+.sidebar-wrapper {
+  @include flex-center(column);
+  width: 100%;
+  gap: 114px;
+  margin-bottom: auto;
+  .nav-logo {
+    width: 100px;
+    height: 122px;
+  }
+
+  nav {
+    @include flex-center(column);
+    gap: 15px;
+
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+a {
+  justify-content: flex-start;
+  width: 100%;
+  gap: 8px;
+  padding: 8px 0;
+  color: $sidebar-txt-default;
+  position: relative;
+  z-index: 2;
+  transition: all 250ms ease-in-out;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    background-color: inherit;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+  }
+
+  &:hover {
+    background-color: $sidebar-bg-hover;
+    color: $sidebar-txt-hover;
+  }
+
+  &.active,
+  &:active {
+    background-color: $sidebar-bg-active;
+    color: $text-light;
+  }
+}
+
+:host.is-mobile {
+  position: sticky;
+  bottom: 0;
+  padding-block: 0;
+  padding: 2px;
+
+  height: auto;
+  width: 100vw;
 
   .sidebar-wrapper {
-    @include flex-center(column);
-    width: 100%;
-    gap: 114px;
+    gap: 0;
 
-    .nav-logo {
-      width: 100px;
-      height: 122px;
-    }
-
-    &__nav {
-      @include flex-center(column);
-      gap: 15px;
+    nav {
+      flex-direction: row;
+      justify-content: space-around;
+      width: 100%;
+      gap: 0;
 
       .nav-icon {
-        width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 24px;
       }
     }
   }
 
   a {
-    justify-content: flex-start;
-    width: 100%;
-    gap: 8px;
-    padding: 8px 0;
-    color: $sidebar-txt-default;
-    position: relative;
-    z-index: 2;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    width: calcClamp(70, 76, 370, 320);
+    height: calcClamp(70, 76, 370, 320);
+    font-size: calcClamp(13, 16, 370, 320);
+    border-radius: 8px;
+    white-space: nowrap;
 
     &::before {
-      content: '';
-      width: 100cqw;
-      height: 100%;
-      background-color: inherit;
-      position: absolute;
-      left: 50%;
-      translate: -50% 0;
-      z-index: -1;
-    }
-
-    &:hover {
-      background-color: $sidebar-bg-hover;
-      color: $sidebar-txt-hover;
-    }
-
-    &.active,
-    &:active {
-      background-color: $sidebar-bg-active;
-      color: $text-light;
-    }
-  }
-
-  .sidebar-imprint {
-    @include flex-center(column);
-    gap: 4px;
-
-    &.is-widescreen {
-      margin-top: 0;
-      margin-bottom: auto;
-    }
-
-    a:hover:not(.active) {
-      color: $text-lightblue;
-      background-color: transparent;
+      display: none;
     }
   }
 }

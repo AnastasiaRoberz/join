@@ -1,8 +1,11 @@
 <div class="sidebar-wrapper">
-  <svg class="nav-logo">
-    <use href="./assets/icons/icons.svg#logo"></use>
-  </svg>
-  <nav class="sidebar-wrapper__nav">
+  @if (!responsiveService.isMobile()) {
+    <svg class="nav-logo">
+      <use href="./assets/icons/icons.svg#logo"></use>
+    </svg>
+  }
+
+  <nav>
     @for (item of navList; track item.section) {
       <a [routerLink]="'/' + item.section" routerLinkActive="active">
         <svg class="nav-icon">
@@ -14,7 +17,6 @@
   </nav>
 </div>
 
-<div class="sidebar-imprint" [class.is-widescreen]="responsiveService.isWidescreen()">
-  <a routerLink="/privacy-policy" routerLinkActive="active">Privacy Policy</a>
-  <a routerLink="/legal-notice" routerLinkActive="active">Legal Notice</a>
-</div>
+@if (!responsiveService.isMobile()) {
+  <app-footer />
+}
