@@ -36,13 +36,14 @@ hr {
   width: 100%;
 
   @include mobile {
-    overflow-y: visible;
+    // overflow-y: visible;
     scrollbar-gutter: auto;
-    padding-right: 0;
+    padding-inline: 12px;
+    padding-block: 24px;
 
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    // &::-webkit-scrollbar {
+    //   display: none;
+    // }
   }
 }
 

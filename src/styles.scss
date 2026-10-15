@@ -65,7 +65,8 @@ a {
     }
 
     &::-webkit-scrollbar-thumb {
-      border: 10px solid transparent;
+      border: 9px solid transparent;
+      background-color: $color-grey-500;
     }
   }
 }
