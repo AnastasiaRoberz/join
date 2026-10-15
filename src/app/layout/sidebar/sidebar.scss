@@ -1,145 +1,78 @@
 @use '../../../../public/assets/styles/' as *;
 
-.sidebar {
-  background-color: $sidebar-main-theme;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+:host {
+  @include flex-between(column);
   height: 100%;
   padding-block: 64px;
-  color: $text-muted;
+  background-color: $sidebar-main-theme;
+  color: $sidebar-txt-default;
+  container-type: inline-size;
 
-  @include mobile {
-    display: none;
-  }
-
-  &__wrapper {
+  .sidebar-wrapper {
+    @include flex-center(column);
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     gap: 114px;
 
-    &--logo {
+    .nav-logo {
       width: 100px;
-      height: 121px;
-
-      .nav-logo {
-        width: 101px;
-        height: 122px;
-      }
+      height: 122px;
     }
 
-    &--nav {
-      width: 100%;
-      height: auto;
-      display: flex;
-      flex-direction: column;
+    &__nav {
+      @include flex-center(column);
       gap: 15px;
 
       .nav-icon {
         width: 30px;
         height: 30px;
-        color: $text-muted;
-      }
-
-      ul {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
-
-        li {
-          width: 100%;
-          height: 46px;
-          @include flex-center;
-
-          a {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .link-wrapper {
-              width: 120px;
-              display: flex;
-              justify-content: flex-start;
-              align-items: center;
-              gap: 8px;
-
-              p {
-                color: $text-muted;
-              }
-            }
-
-            &.active {
-              background-color: $sidebar-bg-active;
-
-              .link-wrapper {
-                p,
-                .nav-icon {
-                  color: $text-light;
-                }
-              }
-            }
-          }
-
-          &:hover {
-            background-color: $sidebar-bg-hover;
-          }
-
-          &:active {
-            background-color: $sidebar-bg-active;
-
-            a .link-wrapper {
-              p,
-              .nav-icon {
-                color: $text-light;
-              }
-            }
-          }
-        }
       }
     }
   }
 
-  &__imprint {
+  a {
+    justify-content: flex-start;
     width: 100%;
-    height: 317px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px 0;
+    color: $sidebar-txt-default;
+    position: relative;
+    z-index: 2;
+
+    &::before {
+      content: '';
+      width: 100cqw;
+      height: 100%;
+      background-color: inherit;
+      position: absolute;
+      left: 50%;
+      translate: -50% 0;
+      z-index: -1;
+    }
+
+    &:hover {
+      background-color: $sidebar-bg-hover;
+      color: $sidebar-txt-hover;
+    }
+
+    &.active,
+    &:active {
+      background-color: $sidebar-bg-active;
+      color: $text-light;
+    }
+  }
+
+  .sidebar-imprint {
+    @include flex-center(column);
     gap: 4px;
 
-    @include widescreen {
+    &.is-widescreen {
       margin-top: 0;
       margin-bottom: auto;
     }
 
-    a {
-      width: 100%;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      padding-left: calcClamp(40, 52, 1300, 770);
-      color: $text-muted;
-
-      &.active {
-        background-color: $sidebar-bg-active;
-        color: $text-light;
-      }
-
-      &:hover {
-        color: $text-lightblue;
-      }
-
-      &:active {
-        background-color: $sidebar-bg-active;
-        color: $text-light;
-      }
+    a:hover:not(.active) {
+      color: $text-lightblue;
+      background-color: transparent;
     }
   }
 }
