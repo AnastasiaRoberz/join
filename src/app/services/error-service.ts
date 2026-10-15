@@ -17,7 +17,6 @@ export class ErrorService {
     if (!errors) return null;
 
     const firstKey = Object.keys(errors)[0];
-    console.log('Gemeldeter Error-Key:', firstKey, 'Werte:', errors[firstKey]);
     const errorMsg = this.messages[firstKey];
     return errorMsg ? errorMsg(fieldName, errors[firstKey]) : 'Invalid input.';
   }

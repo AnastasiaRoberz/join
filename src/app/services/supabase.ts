@@ -58,7 +58,6 @@ export class SupabaseService {
     if (!error) {
       this.feedbackService.showSuccess('Contact succesfully updated.');
     } else {
-      console.log('Supabase Error: ', error);
       this.feedbackService.showError('Update contact failed.');
     }
   }
@@ -76,7 +75,6 @@ export class SupabaseService {
     if (!error) {
       this.feedbackService.showSuccess('Contact succesfully created.');
     } else {
-      console.log('Supabase Error: ', error);
       this.feedbackService.showError('Create contact failed.');
     }
   }
@@ -90,7 +88,6 @@ export class SupabaseService {
     if (!error) {
       this.feedbackService.showSuccess('Contact succesfully deleted.');
     } else {
-      console.log('Supabase Error: ', error);
       this.feedbackService.showError('Delete contact failed.');
     }
   }
