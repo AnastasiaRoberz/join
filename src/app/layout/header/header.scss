@@ -1,90 +1,41 @@
 @use '../../../../public/assets/styles/' as *;
 
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 40px 20px calcClamp(16, 96, 1300, 770);
+:host {
+  @include flex-between;
+  padding: 20px calcClamp(16, 40, 1440, 769) 20px calcClamp(16, 96, 1440, 769);
   box-shadow: 0 4px 4px 0 #0000001a;
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1;
+  width: 100%;
 
-  @include mobile {
-    width: 100%;
-    height: 80px;
-    position: fixed;
-    top: 0;
-    padding: 20px 16px;
-  }
-
-  &__logo {
+  .logo {
     width: 32px;
     height: 40px;
     --logo-main: $main-color;
-
-    @include desktop(769px) {
-      display: none;
-    }
   }
 
-  &__title {
+  .title {
     font-size: $font-medium;
     color: $text-normal;
-
-    @include mobile {
-      display: none;
-    }
   }
 
-  &__nav {
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
+  .nav {
+    @include flex-center;
     gap: 16px;
 
-    &--help {
+    .help-icon {
       width: 32px;
       height: 32px;
-
-      @include mobile {
-        display: none;
-      }
-
-      svg {
-        width: 32px;
-        height: 32px;
-        padding: 2px;
-
-        &:hover {
-          padding: 0;
-        }
-      }
-    }
-
-    &--avatar {
-      width: 56px;
-      height: 56px;
-      @include flex-center;
-      border: 3px solid $btn-icon;
-      border-radius: 50%;
-      font-size: $font-medium;
-      font-weight: 700;
-      color: $text-lightblue;
-
-      @include mobile {
-        width: 40px;
-        height: 40px;
-        border: 2px solid $btn-icon;
-      }
+      padding: 2px;
 
       &:hover {
-        background-color: $avatar-hover;
+        padding: 0;
       }
     }
   }
 
-  &__menu {
+  .menu {
     width: 150px;
     height: auto;
     background-color: $sidebar-main-theme;
@@ -121,34 +72,19 @@
       }
     }
 
-    ul {
-      li {
-        width: 100%;
-        height: 46px;
-        @include flex-start;
-        padding-left: 16px;
-        cursor: pointer;
+    li {
+      @include flex-start;
+      width: 100%;
+      height: 46px;
+      padding-left: 16px;
+      cursor: pointer;
 
-        a {
-          color: $text-muted;
-        }
-
-        &:hover {
-          background-color: $sidebar-bg-hover;
-        }
+      a {
+        color: $text-muted;
       }
 
-      .help-mobile {
-        display: none;
-
-        @include mobile {
-          display: unset;
-          width: 100%;
-          height: 46px;
-          @include flex-start;
-          padding-left: 16px;
-          cursor: pointer;
-        }
+      &:hover {
+        background-color: $sidebar-bg-hover;
       }
     }
   }
