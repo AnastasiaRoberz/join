@@ -8,9 +8,8 @@
     'sidebar header'
     'sidebar pages';
   height: 100dvh;
-  // overflow: hidden; //wahrscheinlich nicht benötigt
 
-  @include mobile {
+  &.is-mobile {
     display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
   }
 }

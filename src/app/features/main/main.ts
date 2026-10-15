@@ -3,6 +3,7 @@ import { Header } from '../../layout/header/header';
 import { Sidebar } from '../../layout/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from '../../layout/footer/footer';
+import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   imports: [Header, Sidebar, RouterOutlet, Footer],
@@ -10,4 +11,6 @@ import { Footer } from '../../layout/footer/footer';
   styleUrl: './main.scss',
   templateUrl: './main.html',
 })
-export class Main {}
+export class Main {
+  responsiveService = inject(ResponsiveService);
+}
