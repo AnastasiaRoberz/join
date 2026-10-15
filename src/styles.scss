@@ -15,7 +15,7 @@ a {
 
 .scroll-container {
   overflow-y: auto;
-  // scrollbar-gutter: stable;
+  scrollbar-gutter: stable;
   overscroll-behavior-y: contain;
 
   &::-webkit-scrollbar {
