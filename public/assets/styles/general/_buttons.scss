@@ -134,20 +134,20 @@ button {
 }
 
 .btn-icon {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   color: $main-color;
+  border-radius: 50%;
 
   .btn-label {
     display: none;
   }
 
-  .icon {
-    width: 32px;
-    height: 32px;
+  &:hover {
+    box-shadow: none;
+    background-color: $btn-icon-hover;
   }
 
-  &:hover,
   &:active {
     box-shadow: none;
   }

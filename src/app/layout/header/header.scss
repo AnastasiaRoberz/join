@@ -46,23 +46,19 @@
     &--help {
       width: 32px;
       height: 32px;
-      @include flex-center;
 
       @include mobile {
         display: none;
       }
 
-      &:hover {
-        transform: scale(1.1);
-      }
-
       svg {
         width: 32px;
         height: 32px;
-      }
+        padding: 2px;
 
-      &.d-none {
-        display: none;
+        &:hover {
+          padding: 0;
+        }
       }
     }
 

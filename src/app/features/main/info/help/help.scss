@@ -12,9 +12,13 @@
   }
 
   .back-icon {
-    display: flex;
     width: 32px;
     height: 32px;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: $btn-icon-hover;
+    }
 
     @include mobile {
       position: absolute;
