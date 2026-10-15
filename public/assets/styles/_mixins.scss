@@ -19,8 +19,8 @@
   }
 }
 
-@mixin widescreen($width: 1920px) {
-  @media screen and (min-width: $width) {
+@mixin widescreen($height: 1800px) {
+  @media screen and (min-height: $height) {
     @content;
   }
 }
