@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Contact } from '../../interfaces/contact';
+import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   imports: [],
@@ -8,8 +9,10 @@ import { Contact } from '../../interfaces/contact';
   templateUrl: './user-avatar.html',
 })
 export class UserAvatar {
+  responsiveService = inject(ResponsiveService);
+
   user = input<Contact | null>(null);
-  size = input<'small' | 'medium' | 'large'>('medium');
+  size = input<'small' | 'medium' | 'large' | 'header'>('medium');
 
   initials = computed(() => {
     if (!this.user()) return '';

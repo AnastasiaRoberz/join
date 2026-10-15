@@ -1,10 +1,13 @@
 <div
   class="avatar-circle"
   [class]="'size-' + size()"
+  [class.is-mobile]="responsiveService.isMobile()"
   [style.background-color]="user()?.badge_color"
 >
   @if (user()) {
     <span class="initials">{{ initials() }}</span>
+  } @else if (size() === 'header') {
+    <span class="initials">G</span>
   } @else {
     <svg class="avatar-icon">
       <use href="./assets/icons/icons.svg#person"></use>
