@@ -5,7 +5,7 @@
   <ng-content select="input, textarea, select" />
   @if (icon()) {
     <svg class="input-icon">
-      <use [attr.href]="`/assets/icons/icons.svg#${icon()}`"></use>
+      <use [attr.href]="`./assets/icons/icons.svg#${icon()}`"></use>
     </svg>
   }
   <span class="error-msg">{{ showError() }}</span>

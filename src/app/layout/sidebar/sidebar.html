@@ -2,7 +2,7 @@
   <div class="sidebar__wrapper">
     <div class="sidebar__wrapper--logo">
       <svg class="nav-logo">
-        <use href="/assets/icons/icons.svg#logo"></use>
+        <use href="./assets/icons/icons.svg#logo"></use>
       </svg>
     </div>
     <nav class="sidebar__wrapper--nav">
@@ -12,7 +12,7 @@
             <a [routerLink]="'/' + item.section" routerLinkActive="active">
               <div class="link-wrapper">
                 <svg class="nav-icon">
-                  <use [attr.href]="'/assets/icons/icons.svg#' + item.svgId"></use>
+                  <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
                 </svg>
                 <p>{{ item.label }}</p>
               </div>

@@ -11,7 +11,7 @@
         <div class="menu">
           <button class="btn btn-txtIcon" (click)="dialogService.openDialog(contact)">
             <svg class="btn-icon">
-              <use href="/assets/icons/icons.svg#edit"></use>
+              <use href="./assets/icons/icons.svg#edit"></use>
             </svg>
             <span class="btn-label" data-text="Edit">Edit</span>
           </button>
@@ -21,7 +21,7 @@
             (click)="supabase.deleteContact(contact.id)"
           >
             <svg class="btn-icon">
-              <use href="/assets/icons/icons.svg#delete"></use>
+              <use href="./assets/icons/icons.svg#delete"></use>
             </svg>
             <span class="btn-label" data-text="Delete">Delete</span>
           </button>
@@ -30,7 +30,7 @@
         <!-- Mobile only: opens the menu -->
         <button type="button" class="btn-dots" (click)="toggleMenu($event)">
           <svg class="dots">
-            <use href="/assets/icons/icons.svg#dots"></use>
+            <use href="./assets/icons/icons.svg#dots"></use>
           </svg>
         </button>
       </div>
