@@ -20,21 +20,13 @@
   </button>
 </div>
 
-<nav class="menu" [class.menu--open]="menuOpen()">
-  <ul>
+@if (menuOpen()) {
+  <nav>
     @if (responsiveService.isMobile()) {
-      <li (click)="closeMenu()">
-        <a routerLink="/help">Help</a>
-      </li>
+      <a routerLink="/help" (click)="closeMenu()">Help</a>
     }
-    <li (click)="closeMenu()">
-      <a routerLink="/legal-notice">Legal Notice</a>
-    </li>
-    <li (click)="closeMenu()">
-      <a routerLink="/privacy-policy">Privacy Policy</a>
-    </li>
-    <li (click)="closeMenu()">
-      <a routerLink="">Log Out</a>
-    </li>
-  </ul>
-</nav>
+    <a routerLink="/legal-notice" (click)="closeMenu()">Legal Notice</a>
+    <a routerLink="/privacy-policy" (click)="closeMenu()">Privacy Policy</a>
+    <a routerLink="" (click)="closeMenu()">Log Out</a>
+  </nav>
+}

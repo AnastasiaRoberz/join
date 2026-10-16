@@ -9,6 +9,9 @@ import { UserAvatar } from '../../shared/user-avatar/user-avatar';
   selector: 'app-header',
   styleUrl: './header.scss',
   templateUrl: './header.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class Header {
   menuOpen = signal(false);

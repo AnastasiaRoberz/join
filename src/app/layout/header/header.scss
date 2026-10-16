@@ -4,15 +4,10 @@
   @include flex-between;
   padding: 20px calcClamp(16, 40, 1440, 769) 20px calcClamp(16, 96, 1440, 769);
   box-shadow: 0 4px 4px 0 #0000001a;
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1;
   width: 100%;
   height: auto;
-
-  &.is-mobile {
-    position: fixed;
-  }
 }
 
 .logo {
@@ -41,53 +36,24 @@
   }
 }
 
-.menu {
+nav {
   width: 150px;
   height: auto;
   background-color: $sidebar-main-theme;
   border-radius: 20px 0 20px 20px;
   padding: 10px;
   position: absolute;
-  top: 96px;
-  right: 20px;
+  bottom: 0;
+  transform: translateY(100%);
+  right: 16px;
   box-shadow: 0 0 4px 0 #00000066;
 
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-8px);
-  transition: opacity 0.2s ease;
-  visibility: 0.2s ease;
-  transition: 0.2s ease;
-
-  &--open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-
-  @include mobile {
-    top: 60px;
-    right: 10px;
-    transform: translateY(0);
-    transform: translateX(100%);
-
-    &--open {
-      opacity: 1;
-      visibility: visible;
-      transform: translateX(0);
-    }
-  }
-
-  li {
-    @include flex-start;
+  a {
+    justify-content: flex-start;
     width: 100%;
     height: 46px;
     padding-left: 16px;
-    cursor: pointer;
-
-    a {
-      color: $text-muted;
-    }
+    color: $text-muted;
 
     &:hover {
       background-color: $sidebar-bg-hover;

@@ -24,8 +24,6 @@
   border-radius: 20px;
   padding: 24px calcClamp(24, 32);
 
-  opacity: 0;
-  visibility: hidden;
   transform: translateX(100dvw);
   transition:
     opacity 0.2s ease,

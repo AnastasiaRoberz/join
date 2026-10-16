@@ -7,13 +7,12 @@
   grid-template-areas:
     'sidebar header'
     'sidebar pages';
-  height: 100dvh;
+  height: 100svh;
+  width: 100vw;
   position: relative;
 
   &.is-mobile {
-    @include flex-center(column);
-    height: 100%;
-    min-height: 100dvh;
+    @include flex-between(column);
   }
 }
 
