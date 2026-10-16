@@ -1,0 +1,9 @@
+<span class="btn-label" [attr.data-text]="label()">
+  <ng-content>{{ label() }}</ng-content>
+</span>
+
+@if (icon()) {
+  <svg class="icon">
+    <use [attr.href]="'/assets/icons/icons.svg#' + icon()"></use>
+  </svg>
+}
