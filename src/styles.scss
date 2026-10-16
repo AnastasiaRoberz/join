@@ -13,6 +13,10 @@ a {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+}
+
 .scroll-container {
   overflow-y: auto;
   // scrollbar-gutter: stable;
