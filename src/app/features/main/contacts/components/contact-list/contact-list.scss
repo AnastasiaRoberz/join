@@ -1,0 +1,124 @@
+@use '../../../../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  padding: 32px 0 10px 24px;
+  gap: 24px;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
+
+.group-letter {
+  font-size: $font-medium;
+  padding: 16px 32px;
+  line-height: 0.75;
+}
+
+hr {
+  width: 100%;
+  margin: 8px 0;
+  border: none;
+  border-top: 1px solid $color-grey-100;
+  border-radius: 3px;
+}
+
+.contact-list {
+  @include flex-start(column);
+  justify-content: flex-start;
+  padding-right: 24px;
+  height: 100%;
+  width: 100%;
+
+  @include mobile {
+    scrollbar-gutter: auto;
+    padding-inline: 12px;
+    padding-block: 24px;
+  }
+}
+
+.group-wrapper {
+  @include flex-center(column);
+  width: 100%;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: calcClamp(8, 32);
+  padding: 16px 24px;
+  border-radius: 10px;
+
+  // hover action & no action on hover, when contact is active
+  &:not(.contact--active):hover {
+    background: $btn-contact-hover;
+  }
+
+  &.contact--active {
+    background-color: $btn-contact-active;
+
+    .name {
+      color: $color-white;
+    }
+  }
+}
+
+.details {
+  @include flex-start(column);
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+}
+
+.name {
+  font-size: $font-medium;
+  text-align: left;
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn {
+  width: calc(100% - 24px);
+}
+
+// media screen mobile
+@include mobile {
+  :host {
+    padding: 8px 12px 8px 24px;
+  }
+
+  .icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .btn {
+    display: flex;
+    position: fixed;
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    bottom: 112px;
+    right: 16px;
+    box-shadow: $btn-shadow;
+
+    .icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    &__text {
+      display: none;
+    }
+  }
+}

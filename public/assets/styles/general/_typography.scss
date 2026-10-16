@@ -1,0 +1,59 @@
+@use '../../styles' as *;
+
+html {
+  font-family: 'Inter';
+  font-size: 16px;
+}
+
+// * --- h-TAGS --- *
+h2 {
+  font-size: calcClamp(40, 61);
+  font-weight: 700;
+  line-height: 0.75;
+}
+
+h3 {
+  font-size: 27px;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 20px;
+  font-weight: 700;
+}
+// * -------------- *
+
+// * --- GENERAL TAGS --- *
+p {
+  font-weight: 400;
+  color: $text-normal;
+}
+
+button {
+  font-family: 'Inter';
+  font-size: 1rem;
+  line-height: 150%;
+}
+// * ------------ *
+
+/* ------------------------------------------------
+            * --- CLASSES --- * 
+------------------------------------------------ */
+// * --- texts --- *
+.subheading {
+  font-size: calcClamp(16, 27);
+}
+
+.mail {
+  color: $mail;
+  width: 100%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.highlighted-txt {
+  color: $text-lightblue;
+}
+// * ------------- *

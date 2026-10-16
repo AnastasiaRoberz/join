@@ -1,0 +1,41 @@
+@use '../../../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  justify-content: flex-start;
+  width: 100%;
+  gap: 24px;
+  padding: calcClamp(48, 116) calcClamp(16, 96);
+  line-height: 1.2;
+
+  @include mobile {
+    padding-right: 0;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+
+  .back-icon {
+    display: none;
+    width: 32px;
+    height: 32px;
+
+    @include mobile {
+      display: flex;
+      position: absolute;
+      top: -100%;
+      right: 0;
+    }
+  }
+
+  section {
+    @include flex-center(column);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+}

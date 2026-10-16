@@ -1,0 +1,44 @@
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+
+  @if ($direction == 'row') {
+    justify-content: flex-start;
+    align-items: center;
+  }
+  @if ($direction == 'column') {
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+@mixin widescreen($height: 1800px) {
+  @media screen and (min-height: $height) {
+    @content;
+  }
+}
+
+@mixin desktop($width: 1025px) {
+  @media screen and (min-width: $width) {
+    @content;
+  }
+}
+
+@mixin tablet($width: 1024px) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin mobile($width: 768px) {
+  @media screen and (max-width: $width) {
+    @content;
+  }
+}

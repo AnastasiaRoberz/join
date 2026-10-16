@@ -1,0 +1,60 @@
+@use '../../../../../../public/assets/styles' as *;
+
+.help {
+  padding: calcClamp(48, 100) calcClamp(16, 100);
+
+  &__header {
+    @include flex-start;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .back-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: $btn-icon-hover;
+    }
+
+    @include mobile {
+      position: absolute;
+      top: -100%;
+      right: 0;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    h3 {
+      margin-top: 20px;
+    }
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  &__step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    counter-increment: step;
+
+    &::before {
+      content: counter(step) '.';
+      grid-row: 1 / span 2;
+      font-size: 27px;
+      font-weight: 700;
+    }
+  }
+}

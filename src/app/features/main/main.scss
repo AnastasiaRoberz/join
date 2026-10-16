@@ -1,0 +1,37 @@
+@use '../../../../public/assets/styles' as *;
+
+.main-page {
+  display: grid;
+  grid-template-columns: calcClamp(190, 232, 1300, 770) 1fr;
+  grid-template-rows: 96px 1fr;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar pages';
+  height: 100dvh;
+  // overflow: hidden; //wahrscheinlich nicht benötigt
+
+  @include mobile {
+    display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
+  }
+}
+
+app-sidebar {
+  grid-area: sidebar;
+}
+
+app-header {
+  grid-area: header;
+}
+
+.pages {
+  grid-area: pages;
+  height: 100%;
+  min-height: 0;
+
+  // top und bottom sind Asbtand zu Header/Footer
+  @include mobile {
+    width: 100%;
+    height: calc(100dvh - 160px);
+    margin: 80px 0;
+  }
+}

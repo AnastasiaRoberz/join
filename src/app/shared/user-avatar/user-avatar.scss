@@ -1,0 +1,42 @@
+@use '../../../../public/assets/styles' as *;
+
+.avatar-circle {
+  @include flex-center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: $text-light;
+  border: 1px solid $color-white;
+  background-color: $icon-bg;
+
+  &.size-small {
+    width: 32px;
+    height: 32px;
+  }
+
+  &.size-medium {
+    width: 42px;
+    height: 42px;
+    border-width: 2px;
+  }
+
+  &.size-large {
+    width: calcClamp(95, 120, 768, 330); //changed from 120px to clamp for dialog
+    aspect-ratio: 1 / 1;
+    border-width: 3px;
+    font-size: $font-large;
+    font-weight: 500;
+    box-shadow: $avatar-shadow;
+  }
+
+  &.size-header {
+    width: 56px;
+    height: 56px;
+    border: 3px solid $main-color;
+    color: $main-color;
+  }
+
+  .avatar-icon {
+    width: 50%;
+    height: 50%;
+  }
+}

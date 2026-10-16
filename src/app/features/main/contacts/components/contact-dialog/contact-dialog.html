@@ -1,0 +1,84 @@
+<div class="dialog-content" (click)="$event.stopPropagation()">
+  <div class="header-section">
+    <button class="btn-close-mobile" (click)="closeDialog()">
+      <svg class="icon-close-mobile">
+        <use href="./assets/icons/icons.svg#cancel"></use>
+      </svg>
+    </button>
+    <svg class="header-logo">
+      <use href="./assets/icons/icons.svg#logo"></use>
+    </svg>
+    <div class="header">
+      @if (contact()) {
+        <h2>Edit contact</h2>
+      } @else {
+        <h2>Add contact</h2>
+        <p class="subheading">Tasks are better with a team!</p>
+      }
+    </div>
+  </div>
+  <div class="content-section">
+    <button class="btn-close" (click)="closeDialog()">
+      <svg class="icon-close">
+        <use href="./assets/icons/icons.svg#close"></use>
+      </svg>
+    </button>
+
+    <div class="input-wrapper">
+      <app-user-avatar class="avatar" [user]="contact()" size="large"></app-user-avatar>
+
+      <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
+        <app-input-field label="Name" icon="person" [id]="'name'">
+          <input type="text" formControlName="name" placeholder=" " id="name" autocomplete="off" />
+        </app-input-field>
+
+        <app-input-field label="Mail" icon="mail" [id]="'mail'">
+          <input type="text" formControlName="mail" placeholder=" " id="mail" autocomplete="off" />
+        </app-input-field>
+
+        <app-input-field label="Phone" icon="phone" [id]="'phone'">
+          <input type="text" formControlName="phone" placeholder="" id="phone" autocomplete="off" />
+        </app-input-field>
+
+        <div class="buttons-wrapper">
+          @if (contact()) {
+            <button type="button" class="btn btn-small btn-secondary" (click)="deleteAndClose()">
+              Delete
+            </button>
+            <button
+              type="submit"
+              class="btn btn-small btn-primary"
+              [disabled]="!contactForm.valid || !isSubmitting"
+            >
+              Save
+              <svg class="icon">
+                <use href="./assets/icons/icons.svg#check"></use>
+              </svg>
+            </button>
+          } @else {
+            <button
+              type="button"
+              class="btn btn-small btn-secondary cancel-mobile"
+              (click)="closeDialog()"
+            >
+              Cancel
+              <svg class="icon">
+                <use href="./assets/icons/icons.svg#cancel"></use>
+              </svg>
+            </button>
+            <button
+              type="submit"
+              class="btn btn-small btn-primary"
+              [disabled]="!contactForm.valid || !isSubmitting"
+            >
+              Create contact
+              <svg class="icon">
+                <use href="./assets/icons/icons.svg#check"></use>
+              </svg>
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

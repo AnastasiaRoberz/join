@@ -1,1 +1,72 @@
-/* You can add global styles to this file, and also import other style files */
+@use '../public/assets/styles/general/_buttons.scss';
+@use '../public/assets/styles/general/_typography.scss';
+@use '../public/assets/styles' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  // scrollbar-gutter: stable;
+  overscroll-behavior-y: contain;
+
+  &::-webkit-scrollbar {
+    background: transparent;
+    width: 24px;
+  }
+
+  &::-webkit-scrollbar-button:single-button {
+    display: block;
+    height: 30px;
+    width: 10px;
+    background-size: 10px 4px;
+    background-repeat: no-repeat;
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:start {
+    background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
+    background-position: center bottom;
+  }
+
+  &::-webkit-scrollbar-button:single-button:vertical:end {
+    background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
+    background-position: center top;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 8px solid transparent;
+    border-radius: 9999px;
+    background-clip: content-box;
+    background-color: $icon;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+
+  @include mobile {
+    &::-webkit-scrollbar-button:single-button {
+      display: none;
+      background: none;
+      width: 0;
+      height: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border: 9px solid transparent;
+      background-color: $color-grey-500;
+    }
+  }
+}

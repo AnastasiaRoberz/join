@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve -o",
-    "build": "ng build",
+    "build": "ng build --source-map=true --base-href='/angular-projects/join/'",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -17,6 +17,9 @@
     "@angular/forms": "^22.1.0",
     "@angular/platform-browser": "^22.1.0",
     "@angular/router": "^22.1.0",
+    "@supabase/supabase-js": "^2.117.3",
+    "ngx-gravatar": "^13.0.0",
+    "ngx-spinner": "^22.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -26,5 +29,11 @@
     "@angular/compiler-cli": "^22.1.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.28.2": true,
+    "lmdb@3.5.6": true,
+    "msgpackr-extract@3.0.4": true
   }
 }
