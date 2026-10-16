@@ -6,7 +6,7 @@ import { Footer } from '../../layout/footer/footer';
 import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
-  imports: [Header, Sidebar, RouterOutlet, Footer],
+  imports: [Header, Sidebar, RouterOutlet],
   selector: 'app-main',
   styleUrl: './main.scss',
   templateUrl: './main.html',

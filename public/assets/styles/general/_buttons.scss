@@ -152,3 +152,24 @@ button {
     box-shadow: none;
   }
 }
+
+.btn-back {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  .icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover {
+    background-color: $btn-icon-hover;
+  }
+
+  // @include mobile {
+  //   position: absolute;
+  //   top: 0;
+  //   right: 0;
+  // }
+}

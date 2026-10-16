@@ -1,6 +1,6 @@
 @if (selectedContact(); as contact) {
   <div class="detail-header">
-    <app-user-avatar [user]="contact" size="large"></app-user-avatar>
+    <app-user-avatar [user]="contact" size="large" />
     <div class="name-wrapper">
       <p class="name" [title]="contact.firstname + ' ' + contact.surname">
         {{ contact.firstname }} {{ contact.surname }}

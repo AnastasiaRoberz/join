@@ -3,6 +3,7 @@ import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog';
 import { ContactDialog } from './components/contact-dialog/contact-dialog';
+import { ResponsiveService } from '../../../services/responsive.service';
 
 /**
  * Container component for the Contacts page.
@@ -18,9 +19,13 @@ import { ContactDialog } from './components/contact-dialog/contact-dialog';
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
+  host: {
+    '[class.is-tablet]': 'responsiveService.isTablet()',
+  },
 })
 export class Contacts {
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   /**
    * Id of the contact currently selected in the list.
