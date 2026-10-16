@@ -3,11 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import { Contact } from '../interfaces/contact';
 import { getRandomColor } from '../utils/utils';
 import { FeedbackService } from './feedback-service';
+import { environment } from '../../environment/environment';
 
 @Service()
 export class SupabaseService {
-  projectUrl = 'https://nnvjteipgjertrdzhhww.supabase.co';
-  projectKey = 'sb_publishable_MfdCcewSWbbgiL-yF1eQnQ_CQoS8Cqs';
+  projectUrl = environment.supabaseUrl;
+  projectKey = environment.supabaseAnonKey;
 
   feedbackService = inject(FeedbackService);
 
