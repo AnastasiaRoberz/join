@@ -1,0 +1,25 @@
+@use '../../../../../public/assets/styles/' as *;
+
+:host {
+  width: 100%;
+  height: 100%;
+  padding-inline: 96px 136px;
+  padding-block: 124px 66px;
+  background-color: antiquewhite;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.task-container {
+  background-color: pink;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  gap: 96px;
+}
