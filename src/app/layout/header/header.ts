@@ -1,6 +1,7 @@
 import { Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavigationService } from '../../services/navigation-service';
+import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   imports: [RouterLink],
@@ -12,6 +13,7 @@ export class Header {
   menuOpen = signal(false);
   private elementRef = inject(ElementRef);
   navService = inject(NavigationService);
+  responsiveService = inject(ResponsiveService);
 
   toggleMenu() {
     this.menuOpen.update((v) => !v);
