@@ -1,10 +1,10 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase';
-import { Contact } from '../../../../../interfaces/contact';
+import { SupabaseService } from '../../../../../services/supabase.service';
+import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
-import { DialogService } from '../../../../../services/dialog';
+import { DialogService } from '../../../../../services/dialog.service';
 import { CustomValidators } from '../../../../../utils/custom-validators';
 
 @Component({
@@ -19,7 +19,7 @@ export class ContactDialog {
   dialogService = inject(DialogService);
   isSubmitting = signal<boolean>(false);
 
-  contact = input<Contact | null>(null);
+  contact = input<ContactInterface | null>(null);
 
   contactForm = this.fb.group({
     name: [

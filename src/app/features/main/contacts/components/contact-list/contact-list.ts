@@ -1,7 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase.service';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
-import { DialogService } from '../../../../../services/dialog';
+import { DialogService } from '../../../../../services/dialog.service';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.

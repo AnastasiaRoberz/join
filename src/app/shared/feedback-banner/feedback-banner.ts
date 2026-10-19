@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FeedbackService } from '../../services/feedback-service';
+import { FeedbackService } from '../../services/feedback.service';
 
 @Component({
   imports: [],

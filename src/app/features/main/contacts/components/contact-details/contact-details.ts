@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase';
+import { SupabaseService } from '../../../../../services/supabase.service';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
-import { DialogService } from '../../../../../services/dialog';
+import { DialogService } from '../../../../../services/dialog.service';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).

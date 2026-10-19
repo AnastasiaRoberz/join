@@ -7,7 +7,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { ErrorService } from '../../services/error-service';
+import { ErrorService } from '../../services/error.service';
 import { NgControl } from '@angular/forms';
 
 let nextId = 0;
