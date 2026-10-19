@@ -6,9 +6,11 @@ import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
 import { CustomValidators } from '../../../../../utils/custom-validators';
+import { ResponsiveService } from '../../../../../services/responsive.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar],
+  imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
@@ -17,6 +19,7 @@ export class ContactDialog {
   supabase = inject(SupabaseService);
   fb = inject(FormBuilder);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
   isSubmitting = signal<boolean>(false);
 
   contact = input<Contact | null>(null);

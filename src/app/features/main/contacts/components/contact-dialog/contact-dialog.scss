@@ -6,22 +6,10 @@
   width: 100%;
   position: fixed;
   inset: 0;
-  pointer-events: none;
   z-index: 10;
 
-  //backdrop unsichtbar, wenn dialog geschlossen
-  backdrop-filter: blur(0px);
-  background-color: rgba($color: #000000, $alpha: 0);
-  transition:
-    background-color 400ms ease,
-    backdrop-filter 400ms ease;
-
-  //backdrop sichtbar, wenn dialog geöffnet
-  &.is-open {
-    pointer-events: all;
-    backdrop-filter: blur(2px);
-    background-color: rgba($color: #000000, $alpha: 0.2);
-  }
+  backdrop-filter: blur(2px);
+  background-color: rgba($color: #000000, $alpha: 0.2);
 }
 
 .dialog-content {
@@ -34,27 +22,6 @@
   background-color: white;
   z-index: 100;
 
-  //dialog ohne Hintergrund ungeöffnet: unsichtbar + slide-out
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(100dvw);
-  transition:
-    opacity 0.2s ease,
-    transform 0.4s ease,
-    visibility 0s linear 0.2s;
-
-  //dialog ohne HG geöffnet: sichtbar + slide-in
-  :host.is-open & {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-    transform: translateY(0);
-    transition:
-      opacity 0.2s ease,
-      transform 0.4s ease,
-      visibility 0s linear 0s;
-  }
-
   @include tablet(1260px) {
     width: 100%;
     margin-inline: calcClamp(16, 30, 500, 1260);
@@ -63,14 +30,14 @@
   @include mobile(940px) {
     height: 80%;
     min-height: 560px;
-    margin-inline: 16px;
+    // margin-inline: 16px;
     display: flex;
     flex-direction: column;
   }
 
   @include mobile {
     height: calc(100dvh - 160px);
-    transform: translateY(100dvw);
+    // transform: translateY(100dvw);
   }
 
   @include mobile(380px) {
@@ -147,26 +114,6 @@
     position: absolute;
     bottom: -16px;
     left: 0;
-  }
-}
-
-.btn-close {
-  @include flex-center;
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-
-  @include mobile(940px) {
-    display: none;
-  }
-
-  .icon-close {
-    width: 100%;
-    height: 100%;
-  }
-
-  &:hover {
-    background-color: $close-btn-hover;
   }
 }
 

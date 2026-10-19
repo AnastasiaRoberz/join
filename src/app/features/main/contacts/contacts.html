@@ -5,30 +5,33 @@
   <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
 }
 
-<div class="details">
-  <div class="details__title__container">
-    <div class="details__title">
-      <h2>Contacts</h2>
-      <hr />
-      <p class="subheading">Better with a team</p>
+@if (!responsiveService.isTablet() || selectedId()) {
+  <div class="details">
+    <div class="details__title__container">
+      <div class="details__title">
+        <h2>Contacts</h2>
+        <hr />
+        <p class="subheading">Better with a team</p>
+      </div>
+      <!-- Back arrow: only visible on mobile (contacts.scss) -->
+      @if (responsiveService.isTablet()) {
+        <button class="btn btn-icon" type="button" (click)="closeDetails()">
+          <svg class="icon">
+            <use href="./assets/icons/icons.svg#arrow"></use>
+          </svg>
+        </button>
+      }
     </div>
-    <!-- Back arrow: only visible on mobile (contacts.scss) -->
-    @if (responsiveService.isTablet()) {
-      <button class="btn btn-icon" type="button" (click)="closeDetails()">
-        <svg class="icon">
-          <use href="./assets/icons/icons.svg#arrow"></use>
-        </svg>
-      </button>
+    @if (selectedId(); as id) {
+      <app-contact-details [selectedId]="id" />
     }
   </div>
-  @if (selectedId(); as id) {
-    <app-contact-details [selectedId]="id" />
-  }
-</div>
+}
 
-<app-contact-dialog
-  class="dialog"
-  [class.is-open]="dialogService.isOpen()"
-  [contact]="dialogService.selectedContact()"
-  (click)="dialogService.closeDialog()"
-/>
+@if (dialogService.isOpen()) {
+  <app-contact-dialog
+    class="dialog"
+    [contact]="dialogService.selectedContact()"
+    (click)="dialogService.closeDialog()"
+  />
+}

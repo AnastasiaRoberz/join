@@ -22,6 +22,12 @@
       width: 24px;
       height: 24px;
     }
+
+    &:disabled {
+      cursor: none;
+      pointer-events: none;
+      background-color: $btn-disabled;
+    }
   }
 
   // BUTTONS SIZES
