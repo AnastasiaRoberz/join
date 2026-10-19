@@ -5,44 +5,33 @@
       <p class="name" [title]="contact.firstname + ' ' + contact.surname">
         {{ contact.firstname }} {{ contact.surname }}
       </p>
-      <!-- btn-wrapper--open is set while the mobile menu is open -->
-      <div class="btn-wrapper" [class.btn-wrapper--open]="menuOpen()">
-        <!-- Desktop: shown inline next to each other. Mobile: the popup menu -->
-        <div class="menu">
-          <button class="btn btn-txtIcon" (click)="dialogService.openDialog(contact)">
-            <svg class="btn-icon">
-              <use href="./assets/icons/icons.svg#edit"></use>
-            </svg>
-            <span class="btn-label" data-text="Edit">Edit</span>
-          </button>
-          <button
-            class="btn btn-txtIcon"
-            data-text="Delete"
-            (click)="supabase.deleteContact(contact.id)"
-          >
-            <svg class="btn-icon">
-              <use href="./assets/icons/icons.svg#delete"></use>
-            </svg>
-            <span class="btn-label" data-text="Delete">Delete</span>
-          </button>
-        </div>
 
-        <!-- Mobile only: opens the menu -->
-        <button type="button" class="btn-dots" (click)="toggleMenu($event)">
-          <svg class="dots">
-            <use href="./assets/icons/icons.svg#dots-menu"></use>
-          </svg>
-        </button>
-      </div>
+      @if (responsiveService.isTablet() && menuOpen()) {
+        <div class="btn-wrapper" [class.is-tablet]="responsiveService.isTablet()">
+          <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
+          <button appBtn preset="deleteIcon" (click)="supabase.deleteContact(contact.id)"></button>
+        </div>
+      }
     </div>
   </div>
+
   <p class="info-heading">Contact Information</p>
+
   <div class="detail-info">
     <strong>E-Mail</strong>
-    <p class="mail" [title]="contact.mail">{{ contact.mail }}</p>
+    <p>{{ contact.mail }}</p>
   </div>
+
   <div class="detail-info">
     <strong>Phone</strong>
     <p>{{ contact.phone }}</p>
   </div>
+
+  @if (responsiveService.isTablet()) {
+    <button type="button" class="btn-dots" (click)="toggleMenu($event)">
+      <svg class="icon">
+        <use href="./assets/icons/icons.svg#dots-menu"></use>
+      </svg>
+    </button>
+  }
 }

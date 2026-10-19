@@ -2,6 +2,8 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+import { ResponsiveService } from '../../../../../services/responsive.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -13,7 +15,7 @@ import { DialogService } from '../../../../../services/dialog';
  * <app-contact-details [selectedId]="id" />
  */
 @Component({
-  imports: [UserAvatar],
+  imports: [UserAvatar, Buttons],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
@@ -25,9 +27,10 @@ import { DialogService } from '../../../../../services/dialog';
 export class ContactDetails {
   supabase = inject(SupabaseService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   /** Whether the mobile Edit/Delete menu is open. */
-  menuOpen = signal(false);
+  menuOpen = signal<boolean>(false);
 
   /**
    * Id of the contact to display, passed in by the Contacts container.
