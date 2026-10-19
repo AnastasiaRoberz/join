@@ -8,9 +8,9 @@ import { ResponsiveService } from '../../services/responsive.service';
   styleUrl: './user-avatar.scss',
   templateUrl: './user-avatar.html',
   host: {
-    class: "'size-' + size()",
-    'class.is-mobile': 'responsiveService.isMobile()',
-    'style.background-color': 'user()?.badge_color',
+    '[class]': "'size-' + size()",
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[style.background-color]': 'user()?.badge_color',
   },
 })
 export class UserAvatar {
