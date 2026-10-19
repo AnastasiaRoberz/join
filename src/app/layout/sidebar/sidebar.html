@@ -1,24 +1,26 @@
-<div class="sidebar__wrapper">
-  <svg class="nav-logo">
-    <use href="./assets/icons/icons.svg#logo"></use>
-  </svg>
-</div>
-<nav class="sidebar__wrapper--nav">
-  <ul>
-    @for (item of navList; track item.section) {
-      <li>
-        <a [routerLink]="'/' + item.section" routerLinkActive="active">
-          <div class="link-wrapper">
+<div class="sidebar-wrapper">
+  @if (!responsiveService.isMobile()) {
+    <svg class="nav-logo">
+      <use href="./assets/icons/icons.svg#logo"></use>
+    </svg>
+  }
+
+  <nav>
+    <ul>
+      @for (item of navList; track item.section) {
+        <li>
+          <a [routerLink]="'/' + item.section" routerLinkActive="active">
             <svg class="nav-icon">
               <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
             </svg>
             <p>{{ item.label }}</p>
-          </div>
-        </a>
-      </li>
-    }
-  </ul>
-</nav>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+</div>
+
 <div class="sidebar__imprint">
   <a routerLink="/privacy-policy" routerLinkActive="active" class="sidebar__imprint--privacy"
     >Privacy Policy</a
