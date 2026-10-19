@@ -73,8 +73,8 @@ export class ContactDialog {
     const contactInfos = {
       firstname: firstname,
       surname: surname,
-      mail: mail ?? '',
-      phone: phone ?? '',
+      mail: mail?.trim() ?? '',
+      phone: phone?.trim() ?? '',
     };
 
     const existingContact = this.contact();
