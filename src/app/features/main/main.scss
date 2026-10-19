@@ -10,7 +10,10 @@
   height: 100dvh;
 
   &.is-mobile {
-    display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 

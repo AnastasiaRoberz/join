@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   padding: 20px calcClamp(16, 40, 1440, 769) 20px calcClamp(16, 96, 1440, 769);
   box-shadow: 0 4px 4px 0 #0000001a;
   position: relative;

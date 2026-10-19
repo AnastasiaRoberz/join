@@ -72,3 +72,43 @@ nav {
     }
   }
 }
+
+:host.is-mobile {
+  padding-block: 0;
+  padding: 2px;
+
+  height: auto;
+  width: 100%;
+
+  ul {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 0;
+    width: 100%;
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+    }
+
+    li {
+      width: auto;
+
+      a {
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        min-width: 0;
+        width: calcClamp(70, 80, 370, 320);
+        height: calcClamp(70, 76, 370, 320);
+        font-size: calcClamp(13, 16, 370, 320);
+        border-radius: 8px;
+        white-space: nowrap;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+}

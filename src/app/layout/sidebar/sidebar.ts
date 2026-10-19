@@ -8,6 +8,9 @@ import { Footer } from '../footer/footer';
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class Sidebar {
   responsiveService = inject(ResponsiveService);
