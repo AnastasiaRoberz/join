@@ -1,6 +1,6 @@
 @use '../../../../public/assets/styles' as *;
 
-.main-page {
+:host {
   display: grid;
   grid-template-columns: calcClamp(190, 232, 1300, 770) 1fr;
   grid-template-rows: 96px 1fr;
@@ -8,9 +8,8 @@
     'sidebar header'
     'sidebar pages';
   height: 100dvh;
-  // overflow: hidden; //wahrscheinlich nicht benötigt
 
-  @include mobile {
+  &.is-mobile {
     display: block; //in mobile kein grid mehr -> Komponenten fixed angeordnet
   }
 }
