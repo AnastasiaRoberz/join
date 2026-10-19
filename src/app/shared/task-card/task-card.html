@@ -1,0 +1,37 @@
+<article class="task-card">
+  <span
+    class="task-card__category"
+    [class.task-card__category--user-story]="task().category === 'User Story'"
+    [class.task-card__category--technical-task]="task().category === 'Technical Task'"
+  >
+    {{ task().category }}
+  </span>
+
+  <h4 class="task-card__title">{{ task().title }}</h4>
+
+  @if (task().description) {
+    <p class="task-card__description">{{ task().description }}</p>
+  }
+
+  @if (task().subtasks.length > 0) {
+    <div class="task-card__progress">
+      <div class="task-card__bar">
+        <div class="task-card__bar-fill" [style.width.%]="progress()"></div>
+      </div>
+      <span class="task-card__count"
+        >{{ doneSubtasks() }}/{{ task().subtasks.length }} Subtasks</span
+      >
+    </div>
+  }
+
+  <footer class="task-card__footer">
+    <div class="task-card__users">
+      @for (user of assignedUsers(); track user.id) {
+        <app-user-avatar [user]="user" size="small"></app-user-avatar>
+      }
+    </div>
+    <svg class="task-card__priority" [class]="'task-card__priority--' + task().priority">
+      <use [attr.href]="'/assets/icons/icons.svg#' + task().priority"></use>
+    </svg>
+  </footer>
+</article>
