@@ -1,0 +1,72 @@
+@use '../../../../public/assets/styles/' as *;
+
+:host {
+  width: 136px;
+  height: 56px;
+  border-radius: 10px;
+  padding: 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 4px 0 #00000066;
+  background-color: $color-white;
+  font-size: 20px;
+  line-height: 120%;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    box-shadow: 0 4px 4px 0 #00000040;
+  }
+
+  &:active {
+    color: $text-light;
+    font-weight: 700;
+  }
+}
+
+:host([priority='urgent']) {
+  svg {
+    color: $prio-urgent;
+  }
+
+  &:active {
+    background-color: $prio-urgent;
+
+    svg {
+      color: $text-light;
+    }
+  }
+}
+
+:host([priority='medium']) {
+  svg {
+    color: $prio-medium;
+  }
+
+  &:active {
+    background-color: $prio-medium;
+
+    svg {
+      color: $text-light;
+    }
+  }
+}
+
+:host([priority='low']) {
+  svg {
+    color: $prio-low;
+  }
+
+  &:active {
+    background-color: $prio-low;
+
+    svg {
+      color: $text-light;
+    }
+  }
+}
