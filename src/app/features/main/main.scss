@@ -33,7 +33,6 @@ app-header {
   // top und bottom sind Asbtand zu Header/Footer
   @include mobile {
     width: 100%;
-    height: calc(100dvh - 160px);
-    margin: 80px 0;
+    flex: 1;
   }
 }
