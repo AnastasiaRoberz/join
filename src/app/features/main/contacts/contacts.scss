@@ -32,6 +32,7 @@
     display: flex;
     flex-direction: column;
     gap: 48px;
+    overflow-x: hidden; // no scrollbar for animation of contact details sliding in
   }
 
   &__title {
