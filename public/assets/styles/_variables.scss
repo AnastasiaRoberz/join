@@ -6,6 +6,7 @@
 $color-white: #ffffff;
 $color-black: #000000;
 $color-grey-background: #f6f7f8;
+$color-grey-50: #edf2fa;
 $color-grey-100: #d1d1d1;
 $color-grey-200: #cdcdcd;
 $color-grey-300: #d9d9d9;
@@ -31,6 +32,7 @@ $color-green-500: #7ae229;
 // SEMANTIC TOKENS
 // ==========================================
 $main-color: $color-navy-800;
+$devider: $color-grey-100;
 
 // TEXT
 $text-normal: $color-black;
@@ -101,6 +103,8 @@ $input-default-label: $color-grey-100;
 $input-icon: $color-grey-300;
 $input-focus-border: $color-cyan-700;
 $input-focus-label: $color-cyan-700;
+
+$checkbox-hover: $color-grey-50;
 
 // AVATAR ICON
 $icon-bg: $color-grey-300;
