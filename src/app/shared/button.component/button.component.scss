@@ -88,6 +88,26 @@
       background-color: $btn-add-active;
       box-shadow: $btn-shadow-placeholder;
     }
+
+    &.is-mobile {
+      @include flex-center;
+      position: absolute;
+      bottom: 32px;
+      right: 16px;
+      height: 56px;
+      width: 56px;
+      border-radius: 50%;
+      box-shadow: $btn-shadow;
+
+      .icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .btn-label {
+        display: none;
+      }
+    }
   }
 
   &.btn-txtIcon {

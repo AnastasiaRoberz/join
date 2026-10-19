@@ -2,6 +2,8 @@ import { Component, inject, input, output } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+import { Buttons } from '../../../../../shared/button.component/button.component';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.
@@ -16,10 +18,13 @@ import { DialogService } from '../../../../../services/dialog';
  *   (contactSelected)="selectContact($event)" />
  */
 @Component({
-  imports: [UserAvatar],
+  imports: [UserAvatar, Buttons],
   selector: 'app-contact-list',
   styleUrl: './contact-list.scss',
   templateUrl: './contact-list.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class ContactList {
   /**
@@ -28,6 +33,7 @@ export class ContactList {
    */
   supabase = inject(SupabaseService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   /**
    * Id of the contact currently shown in the detail pane.

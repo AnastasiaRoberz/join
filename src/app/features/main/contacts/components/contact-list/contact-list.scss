@@ -36,7 +36,6 @@ hr {
   width: 100%;
 
   @include mobile {
-    scrollbar-gutter: auto;
     padding-inline: 12px;
     padding-block: 24px;
   }
@@ -56,10 +55,9 @@ hr {
   border-radius: 10px;
 
   // hover action & no action on hover, when contact is active
-  &:not(.contact--active):hover {
+  &:hover:not(.contact--active) {
     background: $btn-contact-hover;
   }
-
   &.contact--active {
     background-color: $btn-contact-active;
 
@@ -88,33 +86,4 @@ hr {
 
 .btn {
   width: calc(100% - 24px);
-}
-
-// media screen mobile
-@include mobile {
-  .icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .btn {
-    display: flex;
-    position: absolute;
-    height: 56px;
-    width: 56px;
-    border-radius: 50%;
-    bottom: 32px;
-    right: 16px;
-    box-shadow: $btn-shadow;
-
-    .icon {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
-    }
-
-    &__text {
-      display: none;
-    }
-  }
 }
