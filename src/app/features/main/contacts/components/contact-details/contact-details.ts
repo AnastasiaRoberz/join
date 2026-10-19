@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase.service';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
+import { ContactService } from '../../../../../services/contact.service';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -23,7 +23,7 @@ import { DialogService } from '../../../../../services/dialog.service';
   },
 })
 export class ContactDetails {
-  supabase = inject(SupabaseService);
+  contactService = inject(ContactService);
   dialogService = inject(DialogService);
 
   /** Whether the mobile Edit/Delete menu is open. */
@@ -42,7 +42,7 @@ export class ContactDetails {
    * contact list in the service changes.
    */
   selectedContact = computed(() => {
-    return this.supabase.contacts().find((item) => item.id === this.selectedId());
+    return this.contactService.contacts().find((item) => item.id === this.selectedId());
   });
 
   /**

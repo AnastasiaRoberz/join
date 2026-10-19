@@ -1,11 +1,11 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase.service';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { CustomValidators } from '../../../../../utils/custom-validators';
+import { ContactService } from '../../../../../services/contact.service';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar],
@@ -14,9 +14,9 @@ import { CustomValidators } from '../../../../../utils/custom-validators';
   templateUrl: './contact-dialog.html',
 })
 export class ContactDialog {
-  supabase = inject(SupabaseService);
-  fb = inject(FormBuilder);
+  contactService = inject(ContactService);
   dialogService = inject(DialogService);
+  fb = inject(FormBuilder);
   isSubmitting = signal<boolean>(false);
 
   contact = input<ContactInterface | null>(null);
@@ -62,7 +62,7 @@ export class ContactDialog {
         this.contactForm.setValue({
           name: currentContact.firstname + ' ' + currentContact.surname,
           mail: currentContact.mail,
-          phone: currentContact.phone ?? '',
+          phone: currentContact.phone,
         });
       } else {
         this.contactForm.reset();
@@ -85,12 +85,11 @@ export class ContactDialog {
 
     const existingContact = this.contact();
     if (existingContact) {
-      await this.supabase.updateContact(existingContact.id ?? null, contactInfos);
+      await this.contactService.updateContact(existingContact.id, contactInfos);
     } else {
-      await this.supabase.addContact(contactInfos);
+      await this.contactService.addContact(contactInfos);
     }
 
-    await this.supabase.getAllContacts();
     this.closeDialog();
     this.isSubmitting.set(false);
   }
@@ -113,7 +112,7 @@ export class ContactDialog {
     const id = this.contact()?.id;
     if (!id) return;
 
-    await this.supabase.deleteContact(id);
+    await this.contactService.deleteContact(id);
     this.closeDialog();
     this.isSubmitting.set(false);
   }
