@@ -5,7 +5,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
-import { CustomValidators } from '../../../../../utils/custom-validators';
+import {
+  customMailValidator,
+  customNameValidator,
+  customPhoneValidator,
+  generalCustomValidators,
+  uniqueMailValidator,
+} from '../../../../../utils/custom-validators';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar],
@@ -25,32 +31,20 @@ export class ContactDialog {
     name: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.onlyLetters(),
-          CustomValidators.twoNames(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customNameValidator()],
       },
     ],
     mail: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.customEmail(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customMailValidator()],
+        asyncValidators: [uniqueMailValidator(this.supabase)],
       },
     ],
     phone: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.phone(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customPhoneValidator()],
       },
     ],
   });
