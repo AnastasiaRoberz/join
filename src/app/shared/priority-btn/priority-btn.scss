@@ -1,5 +1,6 @@
 @use '../../../../public/assets/styles/' as *;
 
+// allgemeines btn-Styling mit svg, hover + active
 :host {
   width: 136px;
   height: 56px;
@@ -28,6 +29,8 @@
     font-weight: 700;
   }
 }
+
+//jeweiliges Styling für jede Prio (urgent, medium, low) inkl. active-svg-farbe
 
 :host([priority='urgent']) {
   svg {
