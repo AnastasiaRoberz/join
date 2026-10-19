@@ -5,12 +5,17 @@ import { ValidationErrors } from '@angular/forms';
 export class ErrorService {
   messages: Record<string, (field: string, err: any) => string> = {
     required: (field) => `Your ${field.toLowerCase()} is required.`,
-    email: (field) => `Please enter a valid ${field.toLowerCase()}.`,
-    invalidEmail: () => `Please enter a valid email address.`,
-    onlyLetters: (field) => `Your ${field.toLowerCase()} can only contain letters.`,
-    invalidPhone: () => `Please enter a valid phone number.`,
+
+    invalidSpecials: (field) =>
+      `Your ${field} cannot contain consecutive special characters or whitespaces.`,
+    onlyWhitespace: (field) => `Your ${field} cannot consist only of spaces.`,
+
+    invalidChars: () => 'Your name can only contain letters, a . or a -.',
     minNames: () => 'Please enter your firstname and your surname.',
-    whitespace: (field) => `Your ${field} connot consist only of spaces.`,
+    invalidMail: () => `Please enter a valid email adress.`,
+    uniqueEmail: () => 'There is already a contact with that email adress',
+    email: () => `Please enter a valid email adress.`,
+    invalidPhone: () => `Please enter a valid phone number.`,
   };
 
   getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
