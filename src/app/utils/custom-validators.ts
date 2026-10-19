@@ -1,62 +1,71 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { SupabaseService } from '../services/supabase';
 
-export class CustomValidators {
-  static onlyLetters(): ValidatorFn {
-    const lettersRegex = /^[\p{L}\s'-]+$/u;
+export function generalCustomValidators(): ValidatorFn {
+  const noConsecutiveSpecials = /^(?!.*([.\-\s])\1).*$/;
 
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) return null;
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
 
-      const isValid = lettersRegex.test(control.value);
-      return isValid ? null : { onlyLetters: true };
-    };
-  }
+    if (!noConsecutiveSpecials.test(value)) return { invalidSpecials: true };
+    if (typeof value === 'string' && value.trim().length === 0) return { onlyWhitespace: true };
+    return null;
+  };
+}
 
-  static customEmail(): ValidatorFn {
-    const mailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export function customNameValidator(): ValidatorFn {
+  const allowedChars = /^[\p{L}\s'.-]+$/u;
 
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) return null;
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
 
-      const isValid = mailRegex.test(control.value.trim());
-      return isValid ? null : { invalidEmail: true };
-    };
-  }
+    if (!allowedChars.test(value)) return { invalidChars: true };
+    const wordsCount = control.value
+      .trim()
+      .split(/\s/)
+      .filter((word: any) => word.length >= 2);
+    if (!(wordsCount.length >= 2)) return { minNames: true };
+    return null;
+  };
+}
 
-  static phone(): ValidatorFn {
-    const phoneRegex = /^\+?[0-9\s\()]{6,20}$/;
+export function customMailValidator(): ValidatorFn {
+  const basicMailFormat =
+    /^[a-zA-Z0-9_%+-]+(?:[.-][a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      if (!control.value) return null;
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
 
-      const onlyDigits = value.replace(/\D/g, '');
-      const pattern = phoneRegex.test(value.trim());
-      const validDigitsCount = onlyDigits.length >= 6 && onlyDigits.length <= 15;
+    return basicMailFormat.test(value) ? null : { invalidMail: true };
+  };
+}
 
-      return pattern && validDigitsCount ? null : { invalidPhone: true };
-    };
-  }
+export function uniqueMailValidator(
+  supabaseService: SupabaseService,
+  currentContactId?: number,
+): AsyncValidatorFn {
+  return async (control: AbstractControl): Promise<ValidationErrors | null> => {
+    const value = control.value;
+    if (!value) return null;
 
-  static twoNames(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) return null;
+    let query = supabaseService.supabase.from('contacts').select('id').eq('mail', value);
+    if (currentContactId) query = query.neq('id', currentContactId);
+    const { data, error } = await query.single();
 
-      const wordsCount = control.value
-        .trim()
-        .split(/\s/)
-        .filter((word: any) => word.length >= 2);
-      return wordsCount.length >= 2 ? null : { minNames: true };
-    };
-  }
+    return data ? { uniqueEmail: true } : null;
+  };
+}
 
-  static noWhitespace(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      if (!control.value) return null;
+export function customPhoneValidator(): ValidatorFn {
+  const basicPhoneFormat = /^\+?[0-9\s\()]{6,20}$/;
 
-      const onlyWhitespace = typeof value === 'string' && value.trim().length === 0;
-      return onlyWhitespace ? { whitespace: true } : null;
-    };
-  }
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (!value) return null;
+
+    return basicPhoneFormat.test(value) ? null : { invalidPhone: true };
+  };
 }
