@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],
@@ -7,4 +8,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './footer.scss',
   templateUrl: './footer.html',
 })
-export class Footer {}
+export class Footer {
+  responsiveService = inject(ResponsiveService);
+}

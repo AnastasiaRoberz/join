@@ -13,7 +13,7 @@
             <svg class="nav-icon">
               <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
             </svg>
-            <p>{{ item.label }}</p>
+            <span>{{ item.label }}</span>
           </a>
         </li>
       }
@@ -21,11 +21,6 @@
   </nav>
 </div>
 
-<div class="sidebar__imprint">
-  <a routerLink="/privacy-policy" routerLinkActive="active" class="sidebar__imprint--privacy"
-    >Privacy Policy</a
-  >
-  <a routerLink="/legal-notice" routerLinkActive="active" class="sidebar__imprint--legal"
-    >Legal Notice</a
-  >
-</div>
+@if (!responsiveService.isMobile()) {
+  <app-footer />
+}
