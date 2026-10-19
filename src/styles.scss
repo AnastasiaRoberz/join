@@ -13,6 +13,10 @@ a {
   text-decoration: none;
 }
 
+input {
+  display: none;
+}
+
 .scroll-container {
   overflow-y: auto;
   // scrollbar-gutter: stable;

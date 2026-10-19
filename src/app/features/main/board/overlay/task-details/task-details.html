@@ -1,0 +1,57 @@
+<div>
+  <div class="header">
+    <span class="task-tag">User Story</span>
+    <button appBtn preset="close"></button>
+  </div>
+
+  <h2>Kochwelt Page & Recipe Recommender</h2>
+
+  <p class="description">Build start page with recipe recommendation.</p>
+</div>
+
+<div class="content scroll-container">
+  <table>
+    <tr>
+      <th>Due date:</th>
+      <td>10/05/2023</td>
+    </tr>
+    <tr class="spacer"></tr>
+    <tr>
+      <th>Priority</th>
+      <td class="priority">
+        <span>Medium</span>
+        <svg>
+          <use href="./assets/icons/icons.svg#medium"></use>
+        </svg>
+      </td>
+    </tr>
+  </table>
+
+  <ul>
+    <span>Assigned To:</span>
+    @for (user of member; track $index) {
+      <li>
+        <app-user-avatar [user]="null" size="medium" />
+        <span>{{ user }}</span>
+      </li>
+    }
+  </ul>
+
+  <ul>
+    <span>Subtasks</span>
+    @for (task of tasks; track $index) {
+      <li class="subtask">
+        <app-checkbox>
+          <input type="checkbox" />
+        </app-checkbox>
+        <span>{{ task }}</span>
+      </li>
+    }
+  </ul>
+</div>
+
+<div class="button-wrapper">
+  <button appBtn preset="deleteIcon"></button>
+  <hr />
+  <button appBtn preset="editIcon"></button>
+</div>
