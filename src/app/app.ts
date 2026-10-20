@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FeedbackService } from './services/feedback-service';
+import { FeedbackService } from './services/feedback.service';
 import { FeedbackBanner } from './shared/feedback-banner/feedback-banner';
 
 @Component({
