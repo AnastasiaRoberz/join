@@ -29,6 +29,8 @@ export class SupabaseService {
    * const tasks = await supabaseService.getData('tasks', '*, subtasks(*)');
    */
   async getData(table: string, selectedData: string = '*'): Promise<any[] | null> {
+    console.log('Supabase');
+
     let { data, error } = await this.supabase.from(table).select(selectedData);
 
     if (error) {

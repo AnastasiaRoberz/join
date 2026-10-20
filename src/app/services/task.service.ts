@@ -34,6 +34,8 @@ export class TaskService {
       '*, subtasks(*), task-assignment(contacts(id, firstname, surname, badge_color))',
     );
 
+    console.log(taskData);
+
     if (!taskData) return;
 
     const mappedTasks = taskData.map((task: any) => ({

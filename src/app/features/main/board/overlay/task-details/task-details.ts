@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
+import { TaskService } from '../../../../../services/task.service';
 
 @Component({
   imports: [Buttons, UserAvatar, CheckboxComponent],
@@ -10,7 +11,13 @@ import { CheckboxComponent } from '../../../../../shared/checkbox.component/chec
   templateUrl: './task-details.html',
 })
 export class TaskDetails {
-  member = ['Emmanuel Mauer', 'Marcel Bauer', 'Anton Mayer'];
+  taskService = inject(TaskService);
 
-  tasks = ['Implement Recipe Recommendation', 'Start Page Layout'];
+  selectedId = input<number>(6);
+
+  selectedTask = computed(() => {
+    console.log(this.taskService.tasks());
+
+    return this.taskService.tasks().find((task) => task.id === this.selectedId());
+  });
 }
