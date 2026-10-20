@@ -4,7 +4,7 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
 
 // amount of loetter as of where a name is considered long
-const longNames = 20;
+const longNames = 10;
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).

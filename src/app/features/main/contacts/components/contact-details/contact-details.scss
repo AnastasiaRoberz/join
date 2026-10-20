@@ -8,7 +8,7 @@
 
 .detail-header {
   @include flex-start;
-  gap: calcClamp(24, 54, 1440, 768);
+  gap: calcClamp(16, 54, 1440, 1290);
   max-width: 100%; // never wider than the component
 
   .name-wrapper {
@@ -19,7 +19,7 @@
   }
 
   .name {
-    font-size: calcClamp(36, 47);
+    font-size: calcClamp(32, 47, 1440, 1290);
     max-width: 100%; // never wider than the wrapper
     overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
   }
