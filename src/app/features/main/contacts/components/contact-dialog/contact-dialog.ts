@@ -14,6 +14,10 @@ import { Buttons } from '../../../../../shared/button.component/button.component
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.is-tablet]': 'responsiveService.isTablet()',
+  },
 })
 export class ContactDialog {
   supabase = inject(SupabaseService);

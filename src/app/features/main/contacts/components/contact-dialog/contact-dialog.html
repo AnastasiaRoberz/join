@@ -1,18 +1,14 @@
 <div class="dialog-content" (click)="$event.stopPropagation()">
   <div class="header-section">
     @if (responsiveService.isMobile()) {
-      <button appBtn preset="close" (click)="closeDialog()"></button>
+      <button appBtn preset="close" class="btn-close-mobile" (click)="closeDialog()"></button>
     }
-
-    <svg class="header-logo">
-      <use href="./assets/icons/icons.svg#logo"></use>
-    </svg>
     <div class="header">
       @if (contact()) {
         <h2>Edit contact</h2>
       } @else {
         <h2>Add contact</h2>
-        <p class="subheading">Tasks are better with a team!</p>
+        <span class="subheading">Tasks are better with a team!</span>
       }
     </div>
   </div>
@@ -50,7 +46,10 @@
               Save
             </button>
           } @else {
-            <button appBtn preset="x" (click)="closeDialog()">Cancel</button>
+            @if (!responsiveService.isMobile()) {
+              <button appBtn preset="x" (click)="closeDialog()">Cancel</button>
+            }
+
             <button
               appBtn
               preset="check"

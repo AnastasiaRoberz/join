@@ -18,7 +18,7 @@
 .input-container {
   @include flex-center;
   width: 100%;
-  padding: 12px 21px;
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 20, 768, 320);
   border: 1px solid $icon;
   border-radius: 10px;
   background-color: $color-white;
@@ -34,7 +34,7 @@
     border-color: $input-focus-border;
 
     label {
-      transform: translateY(-120%);
+      transform: translateY(-180%);
       color: $input-focus-label;
     }
   }
@@ -46,13 +46,13 @@
 
 label {
   position: absolute;
-  left: 21px;
+  left: calcClamp(12, 20, 768, 320);
   top: 50%;
   transform: translateY(-50%);
   color: $input-default-label;
   pointer-events: none;
   background-color: white;
-  padding: 8px;
+  padding: 0 8px;
   transition: all 150ms ease-in-out;
 
   @include mobile {

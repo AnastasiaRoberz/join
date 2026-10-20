@@ -7,79 +7,29 @@
   position: fixed;
   inset: 0;
   z-index: 10;
+  padding: calcClamp(16, 112);
 
   backdrop-filter: blur(2px);
   background-color: rgba($color: #000000, $alpha: 0.2);
 }
 
 .dialog-content {
-  @include flex-start;
-  align-items: flex-start;
-  width: 1212px;
-  height: 592px;
+  @include flex-center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1212px;
+  max-height: 592px;
   border-radius: 30px;
   overflow: hidden;
   background-color: white;
   z-index: 100;
-
-  @include tablet(1260px) {
-    width: 100%;
-    margin-inline: calcClamp(16, 30, 500, 1260);
-  }
-
-  @include mobile(940px) {
-    height: 80%;
-    min-height: 560px;
-    // margin-inline: 16px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  @include mobile {
-    height: calc(100dvh - 160px);
-    // transform: translateY(100dvw);
-  }
-
-  @include mobile(380px) {
-    height: 95%;
-  }
 }
 
 .header-section {
   @include flex-start(column);
-  height: 100%;
   background-color: $main-color;
-  padding: 0 48px;
+  padding: 0 calcClamp(24, 48);
   position: relative;
-
-  @include mobile(940px) {
-    width: 100%;
-    height: 45%;
-    padding: 66px calcClamp(24, 88, 940, 500);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-  }
-
-  @include mobile(768px) {
-    justify-content: flex-start;
-  }
-}
-
-.header-logo {
-  display: none;
-  height: 64px;
-  width: 64px;
-
-  @include mobile(940px) {
-    display: flex;
-  }
-
-  @include mobile {
-    display: none;
-  }
 }
 
 .header {
@@ -88,8 +38,8 @@
   position: relative;
   color: $text-light;
 
-  .subheading {
-    color: $text-light;
+  h2 {
+    line-height: 1;
   }
 
   &::before {
@@ -97,13 +47,9 @@
     height: 64px;
     width: 64px;
     position: absolute;
-    top: calc(-50% - 32px);
-    transform: translateY(-50%);
+    top: -24px;
+    transform: translateY(-100%);
     left: 0;
-
-    @include mobile(940px) {
-      display: none;
-    }
   }
 
   &::after {
@@ -118,37 +64,10 @@
 }
 
 .btn-close-mobile {
-  display: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 100%;
   color: $close-btn-mobile-default;
   position: absolute;
   top: 24px;
   right: 16px;
-  @include flex-center;
-
-  @include mobile(940px) {
-    position: absolute;
-    top: 40px;
-    right: 40px;
-  }
-
-  @include mobile(768px) {
-    position: absolute;
-    top: 24px;
-    right: 16px;
-  }
-
-  .icon-close-mobile {
-    width: 100%;
-    height: 100%;
-    display: none;
-
-    @include mobile(940px) {
-      display: flex;
-    }
-  }
 
   &:active {
     background-color: $close-btn-mobile-active;
@@ -160,64 +79,26 @@
   align-items: flex-end;
   justify-content: flex-start;
   flex: 1;
-  gap: 57px;
+  gap: 56px;
   height: 100%;
-  padding: 48px;
+  padding: calcClamp(24, 48, 1440, 769);
   position: relative;
+}
 
-  @include tablet(1260px) {
-    justify-content: space-between;
-  }
-
-  @include mobile(940px) {
-    width: 100%;
-    height: 55%;
-    padding: 0 calcClamp(16, 88, 940, 500);
-    justify-content: center;
-  }
+.avatar {
+  transform: translateY(-50%);
 }
 
 .input-wrapper {
   @include flex-center;
   width: 100%;
-  gap: 72px;
-  position: relative;
-
-  @include mobile(940px) {
-    height: 100%;
-  }
-
-  .avatar {
-    transform: translateY(-50%);
-    @include flex-center;
-
-    @include tablet(1260px) {
-      transform: translateY(-165%);
-      position: absolute;
-      top: 40px;
-      // left: 50%;
-    }
-
-    @include mobile(940px) {
-      transform: translateY(0);
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
+  gap: calcClamp(48, 72, 1440, 1025);
 
   .form-section {
     @include flex-start(column);
     flex: 1;
+    width: 100%;
     gap: 32px;
-
-    @include mobile(940px) {
-      height: 100%;
-      align-items: center;
-      gap: calcClamp(20, 24, 400, 330);
-      margin-top: 30px;
-    }
   }
 }
 
@@ -227,22 +108,77 @@
 }
 
 .buttons-wrapper {
-  @include flex-center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   gap: 24px;
   margin-top: 16px;
+}
 
-  .btn-primary,
-  .btn-secondary {
-    height: calcClamp(50, 57, 1024, 430);
+:host.is-tablet {
+  .content-section {
+    gap: 0;
   }
 
-  @include mobile(940px) {
-    margin-top: 8px;
+  .avatar {
+    transform: none;
   }
 
-  .cancel-mobile {
-    @include mobile(768px) {
-      display: none;
+  .input-wrapper {
+    flex-direction: column;
+  }
+}
+
+:host.is-mobile {
+  padding: calcClamp(16, 27, 768, 320) calcClamp(16, 112);
+
+  .dialog-content {
+    height: 100%;
+    max-height: 760px;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .header-section {
+    width: 100%;
+    height: 40%;
+    padding: 66px calcClamp(24, 88, 940, 500);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+
+    .header {
+      gap: 8px;
+      &::before {
+        display: none;
+      }
     }
+  }
+
+  .content-section {
+    width: 100%;
+    height: 55%;
+    justify-content: center;
+    padding: calcClamp(16, 48, 768, 320);
+  }
+
+  .avatar {
+    transform: translateY(0);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .form-section {
+    height: 100%;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .buttons-wrapper {
+    margin-top: 0;
   }
 }

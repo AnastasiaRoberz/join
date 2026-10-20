@@ -12,6 +12,7 @@
     box-shadow: $btn-shadow-placeholder;
     text-decoration: none;
     cursor: pointer;
+    white-space: nowrap;
 
     &:hover,
     &:active {
@@ -33,13 +34,13 @@
   // BUTTONS SIZES
   &.btn-medium {
     font-size: $font-default;
-    padding: 16px 24px;
+    padding: calcClamp(10, 16, 768, 320);
     border-radius: 8px;
   }
 
   &.btn-large {
     font-size: $font-medium;
-    padding: 16px;
+    padding: calcClamp(10, 16, 768, 320);
     border-radius: 10px;
   }
 
@@ -61,7 +62,6 @@
   &.btn-secondary {
     background-color: transparent;
     border: 1px solid $btn-secondary-default;
-    padding: 16px 24px;
 
     &:hover {
       border: 1px solid $btn-secondary-hover;
