@@ -2,6 +2,7 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+import { Buttons } from '../../../../../shared/button.component/button.component';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -13,7 +14,7 @@ import { DialogService } from '../../../../../services/dialog';
  * <app-contact-details [selectedId]="id" />
  */
 @Component({
-  imports: [UserAvatar],
+  imports: [UserAvatar, Buttons],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
