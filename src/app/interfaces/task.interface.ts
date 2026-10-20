@@ -1,4 +1,3 @@
-import { ContactInterface } from './contact.interface';
 import { SubtaskInterface } from './subtask.interface';
 
 export interface TaskInterface {
