@@ -1,7 +1,17 @@
-import { Component, inject, input, output } from '@angular/core';
+import {
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  output,
+  QueryList,
+  ViewChildren,
+} from '@angular/core';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { ContactService } from '../../../../../services/contact.service';
+import { ContactInterface } from '../../../../../interfaces/contact.interface';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.
@@ -43,4 +53,32 @@ export class ContactList {
    * which then opens the contact details.
    */
   contactSelected = output<number | undefined>();
+
+  // Collects all <button #contactBtn> elements from the template into a queryable list
+  @ViewChildren('contactBtn') contactButtons!: QueryList<ElementRef>;
+
+  constructor() {
+    // Runs automatically whenever selectedId changes
+    effect(() => {
+      const id = this.selectedId();
+      if (!id) return; // No contact selected → nothing to scroll to
+
+      // Wait for Angular to finish rendering the DOM before scrolling
+      setTimeout(() => {
+        // Flatten the grouped contacts into a single array,
+        // preserving the same order as the buttons appear in the DOM
+        const allContacts = this.contactService
+          .groupedContacts()
+          .flatMap((g: { letter: string; contacts: ContactInterface[] }) => g.contacts);
+
+        // Find the position of the selected contact in the flattened list —
+        // this index matches the button's position in contactButtons
+        const index = allContacts.findIndex((c) => c.id === id);
+
+        // Get the corresponding DOM button by index and scroll it into view
+        const button = this.contactButtons.toArray()[index];
+        button?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    });
+  }
 }
