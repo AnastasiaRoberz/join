@@ -4,7 +4,7 @@ import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],
-  selector: 'app-footer',
+  selector: 'footer[app-footer]',
   styleUrl: './footer.scss',
   templateUrl: './footer.html',
 })

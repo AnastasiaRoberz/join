@@ -1,19 +1,13 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-center;
-  width: 100%;
-  container-type: inline-size;
+  @include flex-start(column);
+  gap: 4px;
 }
 
 &.is-widescreen {
   margin-top: 0;
   margin-bottom: auto;
-}
-
-footer {
-  @include flex-start(column);
-  gap: 4px;
 }
 
 a {
@@ -31,14 +25,15 @@ a {
     height: 100%;
     background-color: inherit;
     position: absolute;
+    top: 0;
     left: 50%;
     translate: -50% 0;
     z-index: -1;
   }
 
   &:hover {
-    color: $text-lightblue;
-    background-color: transparent;
+    background-color: $sidebar-bg-hover;
+    color: $sidebar-txt-hover;
   }
 
   &.active,

@@ -6,6 +6,7 @@
   padding-block: 64px;
   background-color: $sidebar-main-theme;
   color: $text-muted;
+  container-type: inline-size;
 }
 
 .sidebar-wrapper {
@@ -23,7 +24,6 @@
 nav {
   @include flex-center(column);
   width: 100%;
-  container-type: inline-size;
 
   .nav-icon {
     width: 30px;
