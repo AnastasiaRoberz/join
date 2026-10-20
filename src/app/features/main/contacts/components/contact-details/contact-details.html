@@ -1,10 +1,8 @@
 @if (selectedContact(); as contact) {
-  <div class="detail-header">
+  <div class="detail-header" [class.detail-header__long]="isLongName()">
     <app-user-avatar [user]="contact" size="large"></app-user-avatar>
     <div class="name-wrapper">
-      <p class="name" [title]="contact.firstname + ' ' + contact.surname">
-        {{ contact.firstname }} {{ contact.surname }}
-      </p>
+      <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
       <!-- btn-wrapper--open is set while the mobile menu is open -->
       <div class="btn-wrapper" [class.btn-wrapper--open]="menuOpen()">
         <!-- Desktop: shown inline next to each other. Mobile: the popup menu -->

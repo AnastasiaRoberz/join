@@ -3,6 +3,9 @@ import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
 
+// amount of loetter as of where a name is considered long
+const longNames = 20;
+
 /**
  * Shows the details of one contact (avatar, name, email, phone).
  *
@@ -43,6 +46,13 @@ export class ContactDetails {
    */
   selectedContact = computed(() => {
     return this.supabase.contacts().find((item) => item.id === this.selectedId());
+  });
+
+  // true if full name is longer than 20 characters
+  isLongName = computed(() => {
+    const contact = this.selectedContact();
+    if (!contact) return false;
+    return contact.firstname.length > longNames || contact.surname.length > longNames;
   });
 
   /**
