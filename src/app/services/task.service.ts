@@ -49,7 +49,7 @@ export class TaskService {
     return completeTask;
   }
 
-  async addTask(taskData: TaskInterface) {
+  async addTask(taskData: Omit<TaskInterface, 'id'>) {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
       this.getAllTasks();
@@ -94,7 +94,7 @@ export class TaskService {
   }
 
   //#region SUBTASKS
-  async addSubtask(subtaskData: SubtaskInterface, taskId: number) {
+  async addSubtask(subtaskData: Omit<SubtaskInterface, 'id'>, taskId: number) {
     const subtask = {
       ...subtaskData,
       task_id: taskId,
