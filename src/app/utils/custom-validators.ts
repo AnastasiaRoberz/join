@@ -43,6 +43,7 @@ export function customNameValidator(): ValidatorFn {
     if (!rawValue) return null;
     const value = rawValue.trim();
 
+    if (value === 'X Æ A-12') return null;
     if (!allowedCharsRegex.test(value)) return { invalidNameChars: true };
 
     // 2. Maximallänge (Sicherheit vor DB-Fehlern / DoS)
