@@ -20,7 +20,7 @@ import { ResponsiveService } from '../../../services/responsive.service';
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
   host: {
-    '[class.is-tablet]': 'responsiveService.isTablet()',
+    '[class.is-mobile]': 'responsiveService.isMobile()',
   },
 })
 export class Contacts {

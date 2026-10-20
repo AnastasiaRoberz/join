@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { Header } from '../../layout/header/header';
 import { Sidebar } from '../../layout/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
-import { Footer } from '../../layout/footer/footer';
 import { ResponsiveService } from '../../services/responsive.service';
 
 @Component({
@@ -11,7 +10,7 @@ import { ResponsiveService } from '../../services/responsive.service';
   styleUrl: './main.scss',
   templateUrl: './main.html',
   host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.is-tablet]': 'responsiveService.isTablet()',
   },
 })
 export class Main {

@@ -8,7 +8,7 @@
 }
 
 app-contact-list {
-  width: 100%;
+  width: 35%;
   max-width: 424px;
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
   z-index: 3;
@@ -58,9 +58,10 @@ app-contact-details {
   }
 }
 
-:host.is-tablet {
+:host.is-mobile {
   app-contact-list {
-    max-width: 840px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .details__title {

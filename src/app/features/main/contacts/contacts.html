@@ -1,11 +1,11 @@
 <!-- class "&--detail-open" is added when an id is present-->
 <!-- container’s current selectedId value is handed to the list’s selectedId input.
      contactSelected calls selectContact(). $event is the value  -->
-@if (!(responsiveService.isTablet() && selectedId())) {
+@if (!(responsiveService.isMobile() && selectedId())) {
   <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
 }
 
-@if (!responsiveService.isTablet() || selectedId()) {
+@if (!responsiveService.isMobile() || selectedId()) {
   <div class="details">
     <div class="details__title__container">
       <div class="details__title">
@@ -14,7 +14,7 @@
         <p class="subheading">Better with a team</p>
       </div>
       <!-- Back arrow: only visible on mobile (contacts.scss) -->
-      @if (responsiveService.isTablet()) {
+      @if (responsiveService.isMobile()) {
         <button class="btn btn-icon" type="button" (click)="closeDetails()">
           <svg class="icon">
             <use href="./assets/icons/icons.svg#arrow"></use>

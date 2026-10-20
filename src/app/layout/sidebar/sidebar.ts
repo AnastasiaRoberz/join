@@ -9,7 +9,7 @@ import { Footer } from '../footer/footer';
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
   host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.is-tablet]': 'responsiveService.isTablet()',
   },
 })
 export class Sidebar {

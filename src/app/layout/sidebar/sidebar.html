@@ -1,5 +1,5 @@
 <div class="sidebar-wrapper">
-  @if (!responsiveService.isMobile()) {
+  @if (!responsiveService.isTablet()) {
     <svg class="nav-logo">
       <use href="./assets/icons/icons.svg#logo"></use>
     </svg>
@@ -21,6 +21,6 @@
   </nav>
 </div>
 
-@if (!responsiveService.isMobile()) {
+@if (!responsiveService.isTablet()) {
   <footer app-footer></footer>
 }
