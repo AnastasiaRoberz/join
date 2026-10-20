@@ -19,7 +19,7 @@
   font-size: $font-medium;
   width: 42px;
   height: 42px;
-  padding: 16px 0;
+  padding: calcClamp(8, 16, 1440, 768) 0;
   margin-left: 24px;
   line-height: 0.75;
 }
