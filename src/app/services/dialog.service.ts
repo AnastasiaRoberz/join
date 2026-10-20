@@ -1,18 +1,24 @@
 import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
+import { TaskInterface } from '../interfaces/task.interface';
+
+export type DialogContentType = 'contact' | 'task' | null;
 
 @Service()
 export class DialogService {
   isOpen = signal<boolean>(false);
-  selectedContact = signal<ContactInterface | null>(null);
+  dialogType = signal<DialogContentType>(null);
+  selectedItem = signal<any | null>(null);
 
-  openDialog(contact: ContactInterface | null): void {
-    this.selectedContact.set(contact);
+  openDialog<T>(type: DialogContentType, item: T | null = null): void {
+    this.dialogType.set(type);
+    this.selectedItem.set(item);
     this.isOpen.set(true);
   }
 
   closeDialog(): void {
-    this.selectedContact.set(null);
+    this.dialogType.set(null);
+    this.selectedItem.set(null);
     this.isOpen.set(false);
   }
 }
