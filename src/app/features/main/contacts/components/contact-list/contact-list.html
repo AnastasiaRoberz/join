@@ -14,6 +14,7 @@
         <!-- Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container. -->
         <!-- (click) sends id to contacts.ts -->
         <button
+          #contactBtn
           class="contact"
           type="button"
           [class.contact--active]="contact.id === selectedId()"
