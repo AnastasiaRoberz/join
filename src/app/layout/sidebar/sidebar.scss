@@ -1,7 +1,10 @@
 @use '../../../../public/assets/styles/' as *;
 
 :host {
-  @include flex-center(column);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   height: 100%;
   padding-block: 64px;
   background-color: $sidebar-main-theme;
@@ -13,7 +16,6 @@
   @include flex-center(column);
   width: 100%;
   gap: 114px;
-  margin-bottom: auto;
 
   .nav-logo {
     width: 100px;

@@ -7,6 +7,9 @@ import { ResponsiveService } from '../../services/responsive.service';
   selector: 'footer[app-footer]',
   styleUrl: './footer.scss',
   templateUrl: './footer.html',
+  host: {
+    '[class.is-widescreen]': 'responsiveService.isWidescreen()',
+  },
 })
 export class Footer {
   responsiveService = inject(ResponsiveService);

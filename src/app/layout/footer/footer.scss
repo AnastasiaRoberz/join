@@ -3,11 +3,11 @@
 :host {
   @include flex-start(column);
   gap: 4px;
-}
+  margin-top: auto;
 
-&.is-widescreen {
-  margin-top: 0;
-  margin-bottom: auto;
+  &.is-widescreen {
+    margin-top: calc(50vh - 529px);
+  }
 }
 
 a {
