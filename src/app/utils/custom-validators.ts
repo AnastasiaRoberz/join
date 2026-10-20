@@ -33,7 +33,7 @@ export function customNameValidator(): ValidatorFn {
 
 export function customMailValidator(): ValidatorFn {
   const basicMailFormat =
-    /^[a-zA-Z0-9_%+-]+(?:[.-][a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    /^[a-zA-Z0-9_%+-]+(?:[.-][a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{5,}$/;
 
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
