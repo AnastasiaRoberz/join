@@ -6,7 +6,7 @@
         {{ contact.firstname }} {{ contact.surname }}
       </p>
 
-      @if (responsiveService.isTablet() && menuOpen()) {
+      @if (!responsiveService.isTablet() || menuOpen()) {
         <div class="btn-wrapper" [class.is-tablet]="responsiveService.isTablet()">
           <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
           <button appBtn preset="deleteIcon" (click)="supabase.deleteContact(contact.id)"></button>
