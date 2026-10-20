@@ -19,14 +19,14 @@
   font-size: $font-medium;
   width: 42px;
   height: 42px;
-  padding: calcClamp(8, 16, 1440, 768) 0;
+  padding: 8px 0;
   margin-left: 24px;
   line-height: 0.75;
 }
 
 hr {
   width: 100%;
-  margin: calcClamp(0, 8, 1440, 768) 0;
+  margin: calcClamp(0, 4, 1440, 768) 0;
   border: none;
   border-top: 1px solid $color-grey-100;
   border-radius: 3px;
@@ -48,6 +48,7 @@ hr {
 .group-wrapper {
   @include flex-center(column);
   width: 100%;
+  margin-bottom: calcClamp(16, 24);
 }
 
 .contact {
