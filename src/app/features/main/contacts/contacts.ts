@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog';
@@ -30,6 +30,22 @@ export class Contacts {
   selectedId = signal<number | undefined | null>(null);
 
   /**
+   * The rendered details component, read as its DOM element so it can be animated.
+   * `undefined` while no contact is selected.
+   */
+  contactDetails = viewChild(ContactDetails, { read: ElementRef });
+
+  constructor() {
+    // Slide the details in from the right whenever they appear
+    // or when a different contact is selected.
+    effect(() => {
+      this.selectedId();
+      const details = this.contactDetails()?.nativeElement as HTMLElement | undefined; // due to undefined when not selected
+      if (details) this.slideIn(details);
+    });
+  }
+
+  /**
    * Selects a contact and opens its details.
    * Called by the list via `(contactSelected)` when a contact is clicked.
    *
@@ -46,5 +62,20 @@ export class Contacts {
    */
   closeDetails(): void {
     this.selectedId.set(null);
+  }
+
+  /**
+   * slide-in animation on the given element.
+   *
+   * @param element - element to animate.
+   */
+  slideIn(details: HTMLElement): void {
+    details.animate(
+      [
+        { transform: 'translateX(100%)', opacity: 0 },
+        { transform: 'translateX(0)', opacity: 1 },
+      ],
+      { duration: 300, easing: 'ease-out' },
+    );
   }
 }
