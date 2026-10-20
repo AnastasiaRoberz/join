@@ -15,8 +15,12 @@
 }
 
 .group-letter {
+  @include flex-center;
   font-size: $font-medium;
-  padding: 16px 32px;
+  width: 42px;
+  height: 42px;
+  padding: 16px 0;
+  margin-left: 24px;
   line-height: 0.75;
 }
 
