@@ -1,7 +1,8 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
+
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -34,6 +35,20 @@ export class ContactDetails {
    * Required: the component is only rendered once a contact is selected.
    */
   selectedId = input.required<number>();
+
+    /** Emits after the contact was deleted, so the container can close the details. */
+  contactDeleted = output<void>();
+
+  /**
+   * Deletes the given contact and then notifies the container,
+   * which returns to the contact list.
+   *
+   * @param id - Id of the contact to delete.
+   */
+    async deleteContact(id: number | undefined): Promise<void> {
+    await this.supabase.deleteContact(id);
+    this.contactDeleted.emit();
+  }
 
   /**
    * The full contact object that matches `selectedId`,
