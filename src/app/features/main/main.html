@@ -3,6 +3,9 @@
   <app-sidebar></app-sidebar>
   <div class="pages scroll-container">
     <router-outlet />
+    @if (dialogService.isOpen()) {
+      <app-dialog></app-dialog>
+    }
   </div>
   <app-footer></app-footer>
 </div>
