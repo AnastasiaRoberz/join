@@ -45,14 +45,15 @@ export function customMailValidator(): ValidatorFn {
 
 export function uniqueMailValidator(
   supabaseService: SupabaseService,
-  currentContactId?: number,
+  getCurrentContactId?: () => number | undefined,
 ): AsyncValidatorFn {
   return async (control: AbstractControl): Promise<ValidationErrors | null> => {
     const value = control.value;
     if (!value) return null;
 
+    const currentId = getCurrentContactId ? getCurrentContactId() : undefined;
     let query = supabaseService.supabase.from('contacts').select('id').eq('mail', value);
-    if (currentContactId) query = query.neq('id', currentContactId);
+    if (currentId) query = query.neq('id', currentId);
     const { data, error } = await query.single();
 
     return data ? { uniqueEmail: true } : null;

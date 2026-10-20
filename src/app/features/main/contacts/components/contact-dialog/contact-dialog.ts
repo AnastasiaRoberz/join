@@ -38,7 +38,7 @@ export class ContactDialog {
       '',
       {
         validators: [Validators.required, generalCustomValidators(), customMailValidator()],
-        asyncValidators: [uniqueMailValidator(this.supabase)],
+        asyncValidators: [uniqueMailValidator(this.supabase, () => this.contact()?.id)],
       },
     ],
     phone: [

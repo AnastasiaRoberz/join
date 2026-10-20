@@ -12,9 +12,9 @@ export class ErrorService {
 
     invalidChars: () => 'Your name can only contain letters, a . or a -.',
     minNames: () => 'Please enter your firstname and your surname.',
-    invalidMail: () => `Please enter a valid email adress.`,
-    uniqueEmail: () => 'There is already a contact with that email adress',
-    email: () => `Please enter a valid email adress.`,
+    invalidMail: () => `Please enter a valid email address.`,
+    uniqueEmail: () => 'There is already a contact with that email address.',
+    email: () => `Please enter a valid email address.`,
     invalidPhone: () => `Please enter a valid phone number.`,
   };
 
