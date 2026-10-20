@@ -1,0 +1,10 @@
+<div class="overlay-content">
+  @switch (dialogService.dialogType()) {
+    @case ('contact') {
+      <app-contact-dialog />
+    }
+    @case ('task') {
+      <app-task-details />
+    }
+  }
+</div>
