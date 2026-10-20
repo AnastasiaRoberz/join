@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { Contact } from '../../interfaces/contact';
+import { ContactInterface } from '../../interfaces/contact.interface';
 
 @Component({
   imports: [],
@@ -8,7 +8,7 @@ import { Contact } from '../../interfaces/contact';
   templateUrl: './user-avatar.html',
 })
 export class UserAvatar {
-  user = input<Contact | null>(null);
+  user = input<ContactInterface | null>(null);
   size = input<'small' | 'medium' | 'large'>('medium');
 
   initials = computed(() => {
