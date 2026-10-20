@@ -85,7 +85,9 @@ export class ContactService {
     const newContact = await this.supabaseService.addData(contact, 'contacts');
     if (newContact) {
       this.contacts.update((list) => [...list, newContact]);
+      return newContact; //returns new added contact
     }
+    return null; //when no new added contact/ error: null
   }
 
   /**
