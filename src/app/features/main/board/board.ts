@@ -7,4 +7,6 @@ import { Overlay } from './overlay/overlay';
   styleUrl: './board.scss',
   templateUrl: './board.html',
 })
-export class Board {}
+export class Board {
+  taskService = inject(TaskService);
+}

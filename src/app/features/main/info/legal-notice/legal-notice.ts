@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { NavigationService } from '../../../../services/navigation-service';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   imports: [],

@@ -8,7 +8,7 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { ErrorService } from '../../services/error-service';
+import { ErrorService } from '../../services/error.service';
 import { NgControl } from '@angular/forms';
 
 let nextId = 0;

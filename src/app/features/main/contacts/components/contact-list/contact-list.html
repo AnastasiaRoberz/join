@@ -6,7 +6,7 @@
 </button>
 
 <div class="contact-list scroll-container">
-  @for (group of supabase.getGroupedContacts(); track $index) {
+  @for (group of contactService.groupedContacts(); track $index) {
     <p class="group-letter">{{ group.letter }}</p>
     <hr />
     <div class="group-wrapper">

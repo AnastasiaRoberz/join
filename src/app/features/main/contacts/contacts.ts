@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
-import { DialogService } from '../../../services/dialog';
+import { DialogService } from '../../../services/dialog.service';
 import { ContactDialog } from './components/contact-dialog/contact-dialog';
 
 /**

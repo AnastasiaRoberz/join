@@ -1,9 +1,9 @@
 import { Service, signal } from '@angular/core';
-import { Feedback } from '../interfaces/feedback';
+import { FeedbackInterface } from '../interfaces/feedback.interface';
 
 @Service()
 export class FeedbackService {
-  readonly feedbackState = signal<Feedback>({
+  readonly feedbackState = signal<FeedbackInterface>({
     message: '',
     type: 'success',
     visible: false,
