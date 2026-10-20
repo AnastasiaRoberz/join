@@ -9,6 +9,11 @@
   font-size: $font-medium;
 }
 
+.fixed-content {
+  @include flex-start(column);
+  gap: 24px;
+}
+
 .header {
   display: flex;
   justify-content: space-between;

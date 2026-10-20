@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Overlay } from './overlay/overlay';
+import { TaskService } from '../../../services/task.service';
 
 @Component({
   imports: [Overlay],
