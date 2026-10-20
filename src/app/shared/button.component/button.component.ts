@@ -40,7 +40,6 @@ export class Buttons {
   type = computed(() => this.inputType() ?? this.btnConfig()?.type ?? 'button');
 
   hostClasses = computed(() => {
-    console.log(this.variant(), this.size());
     return `btn btn-${this.variant()}${this.size() ? ` btn-${this.size()}` : ''}`;
   });
 }
