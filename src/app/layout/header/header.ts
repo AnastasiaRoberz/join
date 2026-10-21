@@ -1,4 +1,12 @@
-import { Component, computed, ElementRef, HostListener, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 import { ResponsiveService } from '../../services/responsive.service';
@@ -12,6 +20,7 @@ import { UserAvatar } from '../../shared/user-avatar/user-avatar';
 })
 export class Header {
   private elementRef = inject(ElementRef);
+  private menuRef = viewChild<ElementRef>('menuRef');
   navService = inject(NavigationService);
   responsiveService = inject(ResponsiveService);
   menuOpen = signal<boolean>(false);
@@ -27,7 +36,9 @@ export class Header {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.menuOpen()) return;
-    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+
+    const menuElement = this.menuRef()?.nativeElement;
+    if (menuElement && !menuElement.contains(event.target as Node)) {
       this.menuOpen.set(false);
     }
   }
