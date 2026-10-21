@@ -2,22 +2,25 @@
 
 :host {
   @include flex-center;
+  gap: 16px;
+  color: $main-color;
+  border-radius: 8px;
+  padding: 4px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $checkbox-hover;
+  }
+}
+
+label {
+  @include flex-center;
   width: 24px;
   height: 24px;
-  color: $main-color;
-  border-radius: 50%;
-
-  label {
-    @include flex-center;
-    cursor: pointer;
-  }
+  cursor: pointer;
 
   svg {
     width: 24px;
     height: 24px;
-  }
-
-  &:hover {
-    background-color: $checkbox-hover;
   }
 }

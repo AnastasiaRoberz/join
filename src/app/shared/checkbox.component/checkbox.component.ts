@@ -6,6 +6,7 @@ import {
   effect,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
@@ -23,12 +24,17 @@ export class CheckboxComponent {
   errorService = inject(ErrorService);
 
   ngControl = contentChild(NgControl);
-  inputId = input<string>(`app-checkbox-${nextId++}`);
-  taskId = input<number>();
+  text = input<string | null>(null);
+  checkedInput = input<boolean>(false, { alias: 'checked' });
+  checkedChange = output<boolean>();
 
   checked = signal<boolean>(false);
 
   constructor() {
+    effect(() => {
+      this.checked.set(this.checkedInput());
+    });
+
     effect((onCleanUp) => {
       const ctrl = this.ngControl()?.control;
       if (ctrl) {
@@ -45,7 +51,7 @@ export class CheckboxComponent {
     const target = event.target as HTMLInputElement;
     if (target) {
       this.checked.set(target.checked);
-      console.log(target.checked);
+      this.checkedChange.emit(target.checked);
     }
   }
 
