@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
-import { CursorTooltipDirective } from '../../services/cursor-tooltip.directive';
+import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
 
 @Component({
   imports: [UserAvatar, CursorTooltipDirective],
@@ -13,7 +13,8 @@ import { CursorTooltipDirective } from '../../services/cursor-tooltip.directive'
   },
 })
 export class AvatarGroupComponent {
-  users = input<ContactInterface[]>([]);
+  users = input<Partial<ContactInterface>[]>([]);
+
   size = input<'small' | 'medium'>('small');
   maxUsers = input<number>(3);
 
@@ -21,7 +22,7 @@ export class AvatarGroupComponent {
   remainingUsers = computed(() => {
     return this.users()
       .slice(this.maxUsers())
-      .map((user) => `${user.firstname} ${user.surname}`)
+      .map((user) => `${user?.firstname} ${user?.surname}`)
       .join('\n');
   });
   remainingUsersCount = computed(() => this.users().length - this.maxUsers());

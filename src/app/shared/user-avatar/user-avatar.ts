@@ -32,7 +32,7 @@ export class UserAvatar {
     }
 
     const firstLetter = firstname.charAt(0);
-    const secondLetter = this.user()?.surname.charAt(0);
+    const secondLetter = this.user()?.surname?.charAt(0);
     return `${firstLetter}${secondLetter}`;
   });
 }
