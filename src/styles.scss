@@ -91,3 +91,21 @@ input {
 
   user-select: none;
 }
+
+// PRIORITY ICONS
+.icon-priority {
+  width: 17px;
+  height: 17px;
+
+  &.icon-urgent {
+    color: $prio-urgent;
+  }
+
+  &.icon-medium {
+    color: $prio-medium;
+  }
+
+  &.icon-low {
+    color: $prio-low;
+  }
+}
