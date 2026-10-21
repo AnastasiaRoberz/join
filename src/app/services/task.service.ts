@@ -95,8 +95,8 @@ export class TaskService {
    * @param taskData - The updated task entity including its unique `id`
    * @returns A promise that resolves after the remote update and local signal modification
    */
-  async updateTask(taskData: TaskInterface) {
-    const success = await this.supabaseService.updateData(taskData.id, taskData, 'tasks');
+  async updateTask(id: number, taskData: Partial<TaskInterface>): Promise<void> {
+    const success = await this.supabaseService.updateData(id, taskData, 'tasks');
 
     if (success) {
       this.tasks.update((list) =>
@@ -110,6 +110,28 @@ export class TaskService {
               }
             : task,
         ),
+      );
+    }
+  }
+
+  async updateSubtask(
+    subtaskId: number,
+    taskId: number,
+    subtaskData: Partial<SubtaskInterface>,
+  ): Promise<void> {
+    const success = await this.supabaseService.updateData(subtaskId, subtaskData, 'subtasks');
+
+    if (success) {
+      this.tasks.update((list) =>
+        list.map((task) => {
+          if (task.id !== taskId) return task;
+          return {
+            ...task,
+            subtasks: task.subtasks?.map((subtask) =>
+              subtask.id === subtaskId ? { ...subtask, ...subtaskData } : subtask,
+            ),
+          };
+        }),
       );
     }
   }
