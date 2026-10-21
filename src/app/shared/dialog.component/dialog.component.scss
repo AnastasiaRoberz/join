@@ -13,11 +13,13 @@
 }
 
 .overlay-content {
+  @include flex-start;
   width: 525px;
-  height: 100%;
-  max-height: min(95dvh, 850px);
+  height: auto;
+  max-height: min(95dvh, 950px);
   min-height: 0;
   background-color: white;
   border-radius: 30px;
   padding: 48px 40px;
+  box-shadow: $overlay-shadow;
 }
