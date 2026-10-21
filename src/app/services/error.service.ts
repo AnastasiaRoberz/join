@@ -4,13 +4,47 @@ import { ValidationErrors } from '@angular/forms';
 @Service()
 export class ErrorService {
   messages: Record<string, (field: string, err: any) => string> = {
-    required: (field) => `Your ${field.toLowerCase()} is required.`,
-    email: (field) => `Please enter a valid ${field.toLowerCase()}.`,
-    invalidEmail: () => `Please enter a valid email address.`,
-    onlyLetters: (field) => `Your ${field.toLowerCase()} can only contain letters.`,
-    invalidPhone: () => `Please enter a valid phone number.`,
-    minNames: () => 'Please enter your firstname and your surname.',
-    whitespace: (field) => `Your ${field} connot consist only of spaces.`,
+    // --- General Custom Validators ---
+    onlyWhitespace: (field) => `${field} can't be only spaces.`,
+
+    invisibleCharacters: () => `Invisible or unsupported characters.`,
+
+    forbiddenCharacters: () => `Not allowed: < > { } \\ `,
+
+    invalidEdgeCharacter: (field) => `${field} can't start or end with . or -`,
+
+    consecutiveSpecials: () => `No double spaces, periods or hyphens.`,
+
+    // --- Name Validators ---
+    invalidNameChars: () => `Only letters, spaces, - and ' allowed.`,
+
+    maxLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
+      `Max ${errData?.requiredLength ?? 75} characters.`,
+
+    missingFullName: () => `Please enter first and last name.`,
+
+    invalidPartStructure: () => `Each name part needs a letter.`,
+
+    // --- Mail Validators ---
+    invalidMailFormat: () => `Enter a valid email (name@domain.com).`,
+
+    invalidMailDomain: () => `Invalid domain after the @.`,
+
+    uniqueEmail: () => `Email already in use.`,
+
+    // --- Phone Validators ---
+    invalidPhoneChars: () => `Only digits, spaces, + - / ( ) allowed.`,
+
+    minPhoneDigits: (_field, errData?: { required: number; actual: number }) =>
+      `At least ${errData?.required ?? 6} digits needed.`,
+
+    maxPhoneDigits: (_field, errData?: { required: number; actual: number }) =>
+      `Max ${errData?.required ?? 15} digits.`,
+
+    invalidPhoneBrackets: () => `The parentheses do not match / close.`,
+
+    // --- Angular Standard Validator (falls du required nutzt) ---
+    required: (field) => `Your ${field} is required.`,
   };
 
   getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {

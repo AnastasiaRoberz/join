@@ -1,10 +1,8 @@
 @if (selectedContact(); as contact) {
-  <div class="detail-header">
+  <div class="detail-header" [class.detail-header__long]="isLongName()">
     <app-user-avatar [user]="contact" size="large"></app-user-avatar>
     <div class="name-wrapper">
-      <p class="name" [title]="contact.firstname + ' ' + contact.surname">
-        {{ contact.firstname }} {{ contact.surname }}
-      </p>
+      <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
 
       @if (!responsiveService.isTablet() || menuOpen()) {
         <div class="btn-wrapper" [class.is-tablet]="responsiveService.isTablet()">

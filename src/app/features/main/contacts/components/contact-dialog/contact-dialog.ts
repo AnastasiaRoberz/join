@@ -4,7 +4,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
-import { CustomValidators } from '../../../../../utils/custom-validators';
+import {
+  customMailValidator,
+  customNameValidator,
+  customPhoneValidator,
+  generalCustomValidators,
+  uniqueMailValidator,
+} from '../../../../../utils/custom-validators';
 import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ContactService } from '../../../../../services/contact.service';
@@ -32,32 +38,20 @@ export class ContactDialog {
     name: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.onlyLetters(),
-          CustomValidators.twoNames(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customNameValidator()],
       },
     ],
     mail: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.customEmail(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customMailValidator()],
+        asyncValidators: [uniqueMailValidator(this.supabase, () => this.contact()?.id)],
       },
     ],
     phone: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.phone(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customPhoneValidator()],
       },
     ],
   });
@@ -86,8 +80,8 @@ export class ContactDialog {
     const contactInfos = {
       firstname: firstname,
       surname: surname,
-      mail: mail ?? '',
-      phone: phone ?? '',
+      mail: mail?.trim() ?? '',
+      phone: phone?.trim() ?? '',
     };
 
     const existingContact = this.contact();

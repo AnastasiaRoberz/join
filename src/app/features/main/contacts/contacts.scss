@@ -37,6 +37,7 @@ app-contact-details {
       width: 32px;
       height: 32px;
     }
+    overflow-x: hidden; // no scrollbar for animation of contact details sliding in
   }
 
   &__title {
