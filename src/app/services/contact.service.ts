@@ -85,9 +85,9 @@ export class ContactService {
     const newContact = await this.supabaseService.addData(contact, 'contacts');
     if (newContact) {
       this.contacts.update((list) => [...list, newContact]);
-      return newContact; //returns new added contact
+      return newContact; // Returns the full contact object including the server-generated id
     }
-    return null; //when no new added contact/ error: null
+    return null; // Returns null if the insert failed
   }
 
   /**
@@ -112,10 +112,12 @@ export class ContactService {
    * @param id - The ID of the contact to delete
    * @returns A promise that resolves when the contact has been removed from DB and state
    */
-  async deleteContact(id: number) {
+  async deleteContact(id: number): Promise<boolean> {
     const success = await this.supabaseService.deleteData(id, 'contacts');
     if (success) {
       this.contacts.update((list) => list.filter((contact) => contact.id !== id));
+      return true;
     }
+    return false;
   }
 }
