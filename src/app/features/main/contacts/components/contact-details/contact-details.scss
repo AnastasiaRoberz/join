@@ -8,7 +8,7 @@
 
 .detail-header {
   @include flex-start;
-  gap: calcClamp(24, 54, 1440, 768);
+  gap: calcClamp(16, 54, 1440, 1290);
   max-width: 100%; // never wider than the component
 
   .name-wrapper {
@@ -19,10 +19,18 @@
   }
 
   .name {
-    font-size: calcClamp(36, 47);
+    font-size: calcClamp(32, 47, 1440, 1290);
     max-width: 100%; // never wider than the wrapper
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
+  }
+
+  // long names design for icon and name position and size
+  &__long {
+    gap: calcClamp(16, 50, 1440, 1025);
+
+    .name {
+      font-size: calcClamp(28, 36, 1440, 1290);
+    }
   }
 
   .btn-wrapper {
@@ -60,8 +68,41 @@
   }
 }
 
+@media screen and (min-width: 769px) and (max-width: 1290px) {
+  .detail-header {
+    // long names design for icon and name position and size
+    &__long {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .name {
+        font-size: calcClamp(16, 32, 1290, 769);
+      }
+    }
+  }
+}
+
+@include tablet {
+  .detail-header {
+    // long names design for icon and name position and size
+    &__long {
+      .name {
+        font-size: calcClamp(36, 47, 1024, 769);
+      }
+    }
+  }
+}
+
 @include mobile {
   .detail-header {
+    // long names design for icon and name position and size
+    &__long {
+      .name {
+        font-size: calcClamp(20, 47, 768, 320);
+      }
+    }
+
     .btn-wrapper {
       position: absolute;
       right: 0;
