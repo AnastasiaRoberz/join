@@ -1,25 +1,50 @@
 import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 
+/**
+ * Manages the state of the contact dialog (open/closed, which contact is being edited)
+ * and coordinates post-creation selection and scroll behavior via signals.
+ */
 @Service()
 export class DialogService {
+  /** Whether the contact dialog is currently open. */
   isOpen = signal<boolean>(false);
-  selectedContact = signal<ContactInterface | null>(null);
-  pendingSelectedId = signal<number | null>(null); //User-Id from new added contact, used for method selectContact
 
+  /** The contact currently being edited, or null when creating a new one. */
+  selectedContact = signal<ContactInterface | null>(null);
+
+  /**
+   * Holds the id of a newly created contact until the Contacts container picks it up.
+   * The container reads this in an effect(), sets it as selectedId, then resets it to null.
+   */
+  pendingSelectedId = signal<number | null>(null);
+
+  /**
+   * True while a newly created contact should be scrolled to.
+   * Set to true in selectContact(), reset to false in ContactList after scrolling.
+   */
+  isNewContact = signal<boolean>(false);
+
+  /** Opens the dialog. Pass a contact to edit it, or null to create a new one. */
   openDialog(contact: ContactInterface | null): void {
     this.selectedContact.set(contact);
     this.isOpen.set(true);
   }
 
+  /** Closes the dialog and clears the selected contact. */
   closeDialog(): void {
     this.selectedContact.set(null);
     this.isOpen.set(false);
   }
 
-  //no return (:void); dialog calls selected Contact with id (e.g. selectContact(42))
-  //--> selectecId as a signal gets this id and passes it on to contacts.ts: constructor
+  /**
+   * Called after a new contact is created. Stores the new contact's id so the
+   * Contacts container can select it, and flags it as a new contact for auto-scrolling.
+   *
+   * @param id - The database id of the newly created contact
+   */
   selectContact(id: number): void {
     this.pendingSelectedId.set(id);
+    this.isNewContact.set(true);
   }
 }
