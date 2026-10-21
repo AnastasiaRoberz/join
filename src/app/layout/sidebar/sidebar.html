@@ -1,33 +1,26 @@
-<section class="sidebar">
-  <div class="sidebar__wrapper">
-    <div class="sidebar__wrapper--logo">
-      <svg class="nav-logo">
-        <use href="./assets/icons/icons.svg#logo"></use>
-      </svg>
-    </div>
-    <nav class="sidebar__wrapper--nav">
-      <ul>
-        @for (item of navList; track item.section) {
-          <li>
-            <a [routerLink]="'/' + item.section" routerLinkActive="active">
-              <div class="link-wrapper">
-                <svg class="nav-icon">
-                  <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
-                </svg>
-                <p>{{ item.label }}</p>
-              </div>
-            </a>
-          </li>
-        }
-      </ul>
-    </nav>
-  </div>
-  <div class="sidebar__imprint">
-    <a routerLink="/privacy-policy" routerLinkActive="active" class="sidebar__imprint--privacy"
-      >Privacy Policy</a
-    >
-    <a routerLink="/legal-notice" routerLinkActive="active" class="sidebar__imprint--legal"
-      >Legal Notice</a
-    >
-  </div>
-</section>
+<div class="sidebar-wrapper">
+  @if (!responsiveService.isTablet()) {
+    <svg class="nav-logo">
+      <use href="./assets/icons/icons.svg#logo"></use>
+    </svg>
+  }
+
+  <nav>
+    <ul>
+      @for (item of navList; track item.section) {
+        <li>
+          <a [routerLink]="'/' + item.section" routerLinkActive="active">
+            <svg class="nav-icon">
+              <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
+            </svg>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+</div>
+
+@if (!responsiveService.isTablet()) {
+  <footer app-footer></footer>
+}

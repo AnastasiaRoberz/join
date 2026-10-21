@@ -19,7 +19,7 @@ input {
 
 .scroll-container {
   overflow-y: auto;
-  // scrollbar-gutter: stable;
+  scrollbar-gutter: stable;
   overscroll-behavior-y: contain;
 
   &::-webkit-scrollbar {
@@ -70,7 +70,6 @@ input {
 
     &::-webkit-scrollbar-thumb {
       border: 9px solid transparent;
-      background-color: $color-grey-500;
     }
   }
 }

@@ -3,5 +3,4 @@ export interface ButtonInterface {
   variant: 'primary' | 'secondary' | 'add' | 'txtIcon' | 'icon';
   size: 'small' | 'medium' | 'large' | null;
   icon: string | null;
-  type: 'button' | 'submit';
 }

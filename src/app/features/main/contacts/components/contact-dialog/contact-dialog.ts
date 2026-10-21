@@ -5,17 +5,24 @@ import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { CustomValidators } from '../../../../../utils/custom-validators';
+import { ResponsiveService } from '../../../../../services/responsive.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ContactService } from '../../../../../services/contact.service';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar],
+  imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.is-tablet]': 'responsiveService.isTablet()',
+  },
 })
 export class ContactDialog {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
   fb = inject(FormBuilder);
   isSubmitting = signal<boolean>(false);
 
@@ -87,7 +94,12 @@ export class ContactDialog {
     if (existingContact) {
       await this.contactService.updateContact(existingContact.id, contactInfos);
     } else {
-      await this.contactService.addContact(contactInfos);
+      // Wait for Supabase to return the created contact including its server-generated id
+      const newContact = await this.contactService.addContact(contactInfos);
+      if (newContact) {
+        // Pass the new contact's id to DialogService to trigger auto-selection and scroll
+        this.dialogService.selectContact(newContact.id);
+      }
     }
 
     this.closeDialog();

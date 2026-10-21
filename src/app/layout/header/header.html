@@ -1,24 +1,32 @@
-<header class="header">
-  <svg class="header__logo">
+@if (responsiveService.isMobile()) {
+  <svg class="logo">
     <use href="./assets/icons/icons.svg#logo"></use>
   </svg>
-  <p class="header__title">Kanban Project Management Tool</p>
-  <div class="header__nav">
-    @if (!(navService.currentUrl() === '/help')) {
-      <a routerLink="/help" class="header__nav--help">
-        <svg class="help-icon">
-          <use href="./assets/icons/icons.svg#help"></use>
-        </svg>
-      </a>
-    }
-    <button class="header__nav--avatar" (click)="toggleMenu()">G</button>
-  </div>
+} @else {
+  <p class="title">Kanban Project Management Tool</p>
+}
 
-  <nav class="header__menu" [class.header__menu--open]="menuOpen()">
+<div class="nav">
+  @if (!(navService.currentUrl() === '/help' || responsiveService.isMobile())) {
+    <a routerLink="/help">
+      <svg class="help-icon">
+        <use href="./assets/icons/icons.svg#help"></use>
+      </svg>
+    </a>
+  }
+  <button (click)="toggleMenu()">
+    <app-user-avatar [user]="null" size="header" />
+  </button>
+</div>
+
+@if (menuOpen()) {
+  <nav>
     <ul>
-      <li class="help-mobile" (click)="closeMenu()">
-        <a routerLink="/help">Help</a>
-      </li>
+      @if (responsiveService.isMobile()) {
+        <li class="help-mobile" (click)="closeMenu()">
+          <a routerLink="/help">Help</a>
+        </li>
+      }
       <li (click)="closeMenu()">
         <a routerLink="/legal-notice">Legal Notice</a>
       </li>
@@ -30,4 +38,4 @@
       </li>
     </ul>
   </nav>
-</header>
+}
