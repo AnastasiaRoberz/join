@@ -1,0 +1,17 @@
+@for (user of visibleUsers(); track user.id) {
+  <app-user-avatar
+    [user]="user"
+    [size]="size()"
+    class="group-item"
+    [appCursorTooltip]="user.firstname + ' ' + user.surname"
+  />
+}
+@if (remainingUsersCount() > 0) {
+  <div
+    class="group-item remaining-count"
+    [class]="'size-' + size()"
+    [appCursorTooltip]="remainingUsers()"
+  >
+    <span>+{{ remainingUsersCount() }}</span>
+  </div>
+}

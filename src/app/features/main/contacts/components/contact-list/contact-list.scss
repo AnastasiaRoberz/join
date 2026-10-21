@@ -84,6 +84,14 @@ hr {
   text-overflow: ellipsis;
 }
 
+.mail {
+  color: $mail;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .btn {
   width: calc(100% - 24px);
 }
