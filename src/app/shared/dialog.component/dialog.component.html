@@ -1,4 +1,4 @@
-<div class="overlay-content">
+<div class="overlay-content" (click)="$event.stopPropagation()">
   @switch (dialogService.dialogType()) {
     @case ('contact') {
       <app-contact-dialog />

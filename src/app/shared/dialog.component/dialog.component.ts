@@ -8,6 +8,9 @@ import { TaskDetails } from '../../features/main/board/task-details/task-details
   selector: 'app-dialog',
   styleUrl: './dialog.component.scss',
   templateUrl: './dialog.component.html',
+  host: {
+    '(click)': 'dialogService.closeDialog()',
+  },
 })
 export class DialogComponent {
   dialogService = inject(DialogService);
