@@ -2,5 +2,8 @@
   <svg>
     <use [attr.href]="iconHref()"></use>
   </svg>
-  <ng-content />
+  <input type="checkbox" />
 </label>
+@if (text()) {
+  <span>{{ text() }}</span>
+}
