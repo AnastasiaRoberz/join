@@ -5,7 +5,7 @@
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  padding: calcClamp(0, 32, 1440, 768) 0 calcClamp(0, 10, 1440, 768) calcClamp(0, 24, 1440, 768);
+  padding: calcClamp(16, 32, 768, 320) 0 calcClamp(6, 12, 768, 320) calcClamp(12, 24, 768, 320);
   gap: 24px;
 }
 
@@ -35,14 +35,9 @@ hr {
 .contact-list {
   @include flex-start(column);
   justify-content: flex-start;
-  padding-right: 24px;
+  padding-right: calcClamp(0, 8, 768, 320);
   height: 100%;
   width: 100%;
-
-  @include mobile {
-    padding-inline: 12px;
-    padding-block: 24px;
-  }
 }
 
 .group-wrapper {
