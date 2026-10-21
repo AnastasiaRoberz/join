@@ -21,11 +21,13 @@ import { ResponsiveService } from '../../../services/responsive.service';
   templateUrl: './contacts.html',
   host: {
     '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.breakpoint-slogan]': 'breakpointSlogan()',
   },
 })
 export class Contacts {
   responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
+  breakpointSlogan = this.responsiveService.isMaxWidth(1290);
 
   /**
    * Id of the contact currently selected in the list.

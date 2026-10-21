@@ -62,7 +62,8 @@ app-contact-details {
     width: 100%;
     max-width: 100%;
   }
-
+}
+:host.breakpoint-slogan {
   .details__title {
     flex-direction: column;
     align-items: flex-start;
