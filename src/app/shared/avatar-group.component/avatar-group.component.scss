@@ -1,0 +1,27 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-center;
+}
+
+.group-item {
+  cursor: pointer;
+  &:not(:first-child) {
+    &.size-small {
+      margin-left: -8px;
+    }
+    &.size-medium {
+      margin-left: -12px;
+    }
+  }
+}
+
+.remaining-count {
+  @include flex-center;
+  background-color: red;
+  height: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  border: 1px solid $color-white;
+  background-color: $icon-bg;
+}
