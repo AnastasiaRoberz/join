@@ -51,6 +51,7 @@ app-contact-details {
     }
 
     hr {
+      border: none;
       border-left: 3px solid $text-underline;
       width: 3px;
       height: 100%;
@@ -73,9 +74,8 @@ app-contact-details {
     hr {
       order: 1;
       border-left: none;
-      height: 3px;
+      border-top: 3px solid $text-underline;
       width: 90px;
-      background-color: $text-underline;
       margin-top: 8px;
     }
   }
