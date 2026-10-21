@@ -7,8 +7,22 @@
       <div class="btn-wrapper" [class.btn-wrapper--open]="menuOpen()">
         <!-- Desktop: shown inline next to each other. Mobile: the popup menu -->
         <div class="menu">
-          <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
-          <button appBtn preset="deleteIcon" (click)="supabase.deleteContact(contact.id)"></button>
+          <button class="btn btn-txtIcon" (click)="dialogService.openDialog(contact)">
+            <svg class="btn-icon">
+              <use href="./assets/icons/icons.svg#edit"></use>
+            </svg>
+            <span class="btn-label" data-text="Edit">Edit</span>
+          </button>
+          <button
+            class="btn btn-txtIcon"
+            data-text="Delete"
+            (click)="deleteContact(contact.id)"
+          >
+            <svg class="btn-icon">
+              <use href="./assets/icons/icons.svg#delete"></use>
+            </svg>
+            <span class="btn-label" data-text="Delete">Delete</span>
+          </button>
         </div>
 
         <!-- Mobile only: opens the menu -->

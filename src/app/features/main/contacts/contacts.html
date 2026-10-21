@@ -23,7 +23,7 @@
       </button>
     </div>
     @if (selectedId(); as id) {
-      <app-contact-details [selectedId]="id" />
+      <app-contact-details [selectedId]="id" (contactDeleted)="closeDetails()" />
     }
   </div>
 </section>
