@@ -20,7 +20,7 @@
 </div>
 
 @if (menuOpen()) {
-  <nav>
+  <nav #menuRef>
     <ul>
       @if (responsiveService.isMobile()) {
         <li class="help-mobile" (click)="closeMenu()">
