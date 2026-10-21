@@ -5,48 +5,43 @@ import { ValidationErrors } from '@angular/forms';
 export class ErrorService {
   messages: Record<string, (field: string, err: any) => string> = {
     // --- General Custom Validators ---
-    onlyWhitespace: (field) => `Your ${field} cannot consist only of spaces.`,
+    onlyWhitespace: (field) => `${field} can't be only spaces.`,
 
-    invisibleCharacters: (field) => `Your ${field} contains invisible or unsupported characters.`,
+    invisibleCharacters: () => `Invisible or unsupported characters.`,
 
-    forbiddenCharacters: (field) =>
-      `Your ${field} contains invalid special characters (such as <, >, {, }, or \\).`,
+    forbiddenCharacters: () => `Not allowed: < > { } \\ `,
 
-    invalidEdgeCharacter: (field) => `Your ${field} cannot start or end with a period or hyphen.`,
+    invalidEdgeCharacter: (field) => `${field} can't start or end with . or -`,
 
-    consecutiveSpecials: (field) =>
-      `Your ${field} cannot contain consecutive spaces, periods, or hyphens.`,
+    consecutiveSpecials: () => `No double spaces, periods or hyphens.`,
 
     // --- Name Validators ---
-    invalidNameChars: (field) =>
-      `Your ${field} can only contain letters, spaces, hyphens, and apostrophes.`,
+    invalidNameChars: () => `Only letters, spaces, - and ' allowed.`,
 
-    maxLength: (field, errData?: { requiredLength: number; actualLength: number }) =>
-      `Your ${field} cannot exceed ${errData?.requiredLength ?? 75} characters.`,
+    maxLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
+      `Max ${errData?.requiredLength ?? 75} characters.`,
 
-    missingFullName: () => `Please enter both a first name and a last name.`,
+    missingFullName: () => `Please enter first and last name.`,
 
-    invalidPartStructure: () => `Each part of the name must contain at least one letter.`,
+    invalidPartStructure: () => `Each name part needs a letter.`,
 
     // --- Mail Validators ---
-    invalidMailFormat: () => `Please enter a valid email address (e.g. name@domain.com).`,
+    invalidMailFormat: () => `Enter a valid email (name@domain.com).`,
 
-    invalidMailDomain: () => `The domain part of your email address is not valid.`,
+    invalidMailDomain: () => `Invalid domain after the @.`,
 
-    uniqueEmail: () => `This email address is already in use.`,
+    uniqueEmail: () => `Email already in use.`,
 
     // --- Phone Validators ---
-    invalidPhoneChars: () =>
-      `Please enter a valid phone number. Allowed characters are numbers, spaces, +, -, /, and brackets.`,
+    invalidPhoneChars: () => `Only digits, spaces, + - / ( ) allowed.`,
 
     minPhoneDigits: (_field, errData?: { required: number; actual: number }) =>
-      `Phone number must contain at least ${errData?.required ?? 6} digits.`,
+      `At least ${errData?.required ?? 6} digits needed.`,
 
     maxPhoneDigits: (_field, errData?: { required: number; actual: number }) =>
-      `Phone number cannot exceed ${errData?.required ?? 15} digits.`,
+      `Max ${errData?.required ?? 15} digits.`,
 
-    invalidPhoneBrackets: () =>
-      `The parentheses in your phone number are not properly matched or closed.`,
+    invalidPhoneBrackets: () => `The parentheses do not match / close.`,
 
     // --- Angular Standard Validator (falls du required nutzt) ---
     required: (field) => `Your ${field} is required.`,
