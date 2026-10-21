@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { ContactService } from '../../../../../services/contact.service';
@@ -25,6 +25,9 @@ import { ContactService } from '../../../../../services/contact.service';
 export class ContactDetails {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
+
+  /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
+  contactDeleted = output<void>();
 
   /** Whether the mobile Edit/Delete menu is open. */
   menuOpen = signal(false);
@@ -58,5 +61,17 @@ export class ContactDetails {
   /** Closes the mobile menu. */
   closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  /**
+   * Deletes the contact from the database and notifies the container.
+   * The container listens to `contactDeleted` and clears the selection,
+   * which triggers the scroll-to-top in ContactList.
+   *
+   * @param id - The id of the contact to delete
+   */
+  async deleteContact(id: number): Promise<void> {
+    await this.contactService.deleteContact(id);
+    this.contactDeleted.emit();
   }
 }

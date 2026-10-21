@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog.service';
@@ -28,6 +28,16 @@ export class Contacts {
    * and on mobile the list is shown.
    */
   selectedId = signal<number | undefined | null>(null);
+
+  constructor() {
+    effect(() => {
+      const id = this.dialogService.pendingSelectedId(); //reads signal
+      if (id !== null) {
+        this.selectedId.set(id); //selects contact with this id
+        this.dialogService.pendingSelectedId.set(null); //resets signal
+      }
+    });
+  }
 
   /**
    * Selects a contact and opens its details.

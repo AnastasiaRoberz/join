@@ -87,7 +87,12 @@ export class ContactDialog {
     if (existingContact) {
       await this.contactService.updateContact(existingContact.id, contactInfos);
     } else {
-      await this.contactService.addContact(contactInfos);
+      // Wait for Supabase to return the created contact including its server-generated id
+      const newContact = await this.contactService.addContact(contactInfos);
+      if (newContact) {
+        // Pass the new contact's id to DialogService to trigger auto-selection and scroll
+        this.dialogService.selectContact(newContact.id);
+      }
     }
 
     this.closeDialog();
