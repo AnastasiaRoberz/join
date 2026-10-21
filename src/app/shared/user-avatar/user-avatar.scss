@@ -28,6 +28,16 @@
     box-shadow: $avatar-shadow;
   }
 
+  // added for contact details
+  &.size-details {
+    width: calcClamp(80, 100, 1440, 769);
+    height: calcClamp(80, 100, 1440, 769);
+    border-width: 3px;
+    font-size: calcClamp(40, 47, 1440, 769);
+    font-weight: 500;
+    box-shadow: $avatar-shadow;
+  }
+
   &.size-header {
     width: 56px;
     height: 56px;
