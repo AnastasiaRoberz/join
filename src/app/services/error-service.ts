@@ -9,7 +9,7 @@ export class ErrorService {
 
     invisibleCharacters: () => `Invisible or unsupported characters.`,
 
-    forbiddenCharacters: () => `Not allowed: < > { } \ `,
+    forbiddenCharacters: () => `Not allowed: < > { } \\ `,
 
     invalidEdgeCharacter: (field) => `${field} can't start or end with . or -`,
 
@@ -18,7 +18,7 @@ export class ErrorService {
     // --- Name Validators ---
     invalidNameChars: () => `Only letters, spaces, - and ' allowed.`,
 
-    maxLength: (field, errData?: { requiredLength: number; actualLength: number }) =>
+    maxLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
       `Max ${errData?.requiredLength ?? 75} characters.`,
 
     missingFullName: () => `Please enter first and last name.`,
