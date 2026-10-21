@@ -14,7 +14,9 @@
 
 .overlay-content {
   width: 525px;
-  max-height: 95dvh;
+  height: 100%;
+  max-height: min(95dvh, 850px);
+  min-height: 0;
   background-color: white;
   border-radius: 30px;
   padding: 48px 40px;
