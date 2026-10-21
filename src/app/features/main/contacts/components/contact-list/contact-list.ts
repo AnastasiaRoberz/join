@@ -73,15 +73,6 @@ export class ContactList {
       const id = this.selectedId();
       const isNewContact = this.dialogService.isNewContact();
 
-      console.log(
-        'effect feuert - id:',
-        id,
-        '| isNewContact:',
-        isNewContact,
-        '| previousId:',
-        previousId,
-      );
-
       // Wait for Angular to finish rendering the DOM before scrolling
       setTimeout(() => {
         if (id) {
