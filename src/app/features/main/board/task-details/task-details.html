@@ -16,11 +16,11 @@
       </tr>
       <tr class="spacer"></tr>
       <tr>
-        <th>Priority</th>
+        <th>Priority:</th>
         <td class="priority">
           <span>{{ capitalizeFirstLetter(task.priority) }}</span>
-          <svg>
-            <use [attr.href]="`./assets/icons/icons.svg#' + ${task.priority}"></use>
+          <svg [class]="'icon-priority icon-' + task.priority">
+            <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
           </svg>
         </td>
       </tr>
@@ -30,8 +30,9 @@
   <div class="content scroll-container">
     <ul>
       <span>Assigned To:</span>
+      <!-- <app-avatar-group [users]="task.assigned_users" size="medium" /> -->
       @for (user of task.assigned_users; track user.id) {
-        <li>
+        <li class="user-item">
           <app-user-avatar [user]="user" size="medium" />
           <span>{{ user.firstname }} {{ user.surname }}</span>
         </li>
@@ -43,10 +44,12 @@
         <span>Subtasks</span>
         @for (subtask of task.subtasks; track subtask.id) {
           <li class="subtask">
-            <app-checkbox>
-              <input type="checkbox" />
-            </app-checkbox>
-            <span>{{ subtask.title }}</span>
+            <app-checkbox
+              [text]="subtask.title"
+              [checked]="subtask.is_done"
+              (checkedChange)="toggleSubtaskStatus(subtask.id, task.id, $event)"
+            />
+            <!-- <span>{{ subtask.title }}</span> -->
           </li>
         }
       </ul>
