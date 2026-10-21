@@ -65,12 +65,11 @@
   @include flex-start(column);
   gap: 16px;
   color: $text-dark;
-  max-width: 100%; // instead of min-width: 0
+  width: 100%;
 
   .mail {
-    max-width: 100%; // never wider than the wrapper
-    overflow: hidden;
-    text-overflow: ellipsis;
+    width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 

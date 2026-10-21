@@ -43,15 +43,6 @@ button {
   font-size: calcClamp(16, 27);
 }
 
-.mail {
-  color: $mail;
-  width: 100%;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .highlighted-txt {
   color: $text-lightblue;
 }

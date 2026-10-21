@@ -24,10 +24,6 @@
   background-color: $color-white;
   position: relative;
 
-  @include mobile {
-    height: 40px;
-  }
-
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
   &:has(textarea:not(:placeholder-shown)) {
@@ -36,17 +32,26 @@
     label {
       transform: translateY(-180%);
       color: $input-focus-label;
+
+      &.is-mobile {
+        display: none;
+      }
     }
   }
 
   &:has(.ng-invalid:is(.ng-touched)) {
     border-color: $error;
+
+    label {
+      color: $error;
+    }
   }
 }
 
 label {
+  font-size: calcClamp(16, 20, 768, 320);
   position: absolute;
-  left: calcClamp(12, 20, 768, 320);
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: $input-default-label;
@@ -55,8 +60,8 @@ label {
   padding: 0 8px;
   transition: all 150ms ease-in-out;
 
-  @include mobile {
-    font-size: 13px;
+  &.is-mobile {
+    padding: 0;
   }
 }
 
@@ -68,14 +73,14 @@ label {
 }
 
 .error-msg {
-  font-size: calcClamp(12, 16, 940, 400);
+  font-size: calcClamp(12, 16, 768, 320);
   color: $error;
   position: absolute;
   right: 0;
   bottom: -8px;
   transform: translateY(100%);
 
-  @include mobile(940px) {
-    transform: translateY(80%);
+  &.is-mobile {
+    bottom: -1px;
   }
 }
