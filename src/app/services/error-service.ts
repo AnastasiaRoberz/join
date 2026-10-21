@@ -7,16 +7,16 @@ export class ErrorService {
     // --- General Custom Validators ---
     onlyWhitespace: (field) => `${field} can't be only spaces.`,
 
-    invisibleCharacters: (field) => `Invisible or unsupported characters.`,
+    invisibleCharacters: () => `Invisible or unsupported characters.`,
 
-    forbiddenCharacters: (field) => `Not allowed: < > { } \ `,
+    forbiddenCharacters: () => `Not allowed: < > { } \ `,
 
     invalidEdgeCharacter: (field) => `${field} can't start or end with . or -`,
 
-    consecutiveSpecials: (field) => `No double spaces, periods or hyphens.`,
+    consecutiveSpecials: () => `No double spaces, periods or hyphens.`,
 
     // --- Name Validators ---
-    invalidNameChars: (field) => `Only letters, spaces, - and ' allowed.`,
+    invalidNameChars: () => `Only letters, spaces, - and ' allowed.`,
 
     maxLength: (field, errData?: { requiredLength: number; actualLength: number }) =>
       `Max ${errData?.requiredLength ?? 75} characters.`,
