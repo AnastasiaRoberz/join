@@ -2,7 +2,7 @@ import { Component, computed, inject, input, output, signal } from '@angular/cor
 import { SupabaseService } from '../../../../../services/supabase';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
-
+import { ConfirmService } from '../../../../../services/confirm.service';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -26,6 +26,7 @@ import { DialogService } from '../../../../../services/dialog';
 export class ContactDetails {
   supabase = inject(SupabaseService);
   dialogService = inject(DialogService);
+  confirmService = inject(ConfirmService);
 
   /** Whether the mobile Edit/Delete menu is open. */
   menuOpen = signal(false);
@@ -36,16 +37,22 @@ export class ContactDetails {
    */
   selectedId = input.required<number>();
 
-    /** Emits after the contact was deleted, so the container can close the details. */
+  /** Emits after the contact was deleted, so the container can close the details. */
   contactDeleted = output<void>();
 
   /**
-   * Deletes the given contact and then notifies the container,
-   * which returns to the contact list.
+   * Asks the user for confirmation, then deletes the given contact and notifies
+   * the container, which returns to the contact list. Does nothing on cancel.
    *
    * @param id - Id of the contact to delete.
    */
-    async deleteContact(id: number | undefined): Promise<void> {
+  async deleteContact(id: number | undefined): Promise<void> {
+    const contact = this.selectedContact();
+    if (!contact) return;
+
+    const name = `${contact.firstname} ${contact.surname}`;
+    if (!(await this.confirmService.askDelete('contact', name))) return;
+
     await this.supabase.deleteContact(id);
     this.contactDeleted.emit();
   }

@@ -1,0 +1,24 @@
+@if (confirmService.request(); as request) {
+  <div class="confirm" (click)="confirmService.answer(false)">
+    <div class="confirm__box" (click)="$event.stopPropagation()">
+      <h3 class="confirm__title">{{ request.title }}</h3>
+      <p class="confirm__text">{{ request.message }}</p>
+      <div class="confirm__buttons">
+        <button
+          type="button"
+          class="btn btn-small btn-secondary"
+          (click)="confirmService.answer(false)"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-small btn-primary"
+          (click)="confirmService.answer(true)"
+        >
+          {{ request.confirmLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

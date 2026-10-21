@@ -6,6 +6,8 @@ import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog';
 import { CustomValidators } from '../../../../../utils/custom-validators';
+import { ConfirmService } from '../../../../../services/confirm.service';
+
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar],
@@ -17,6 +19,7 @@ export class ContactDialog {
   supabase = inject(SupabaseService);
   fb = inject(FormBuilder);
   dialogService = inject(DialogService);
+  confirmService = inject(ConfirmService);
   isSubmitting = signal<boolean>(false);
 
   contact = input<Contact | null>(null);
@@ -107,19 +110,14 @@ export class ContactDialog {
   }
 
   async deleteAndClose() {
-    if (this.isSubmitting()) return;
+    const contact = this.contact();
+    if (this.isSubmitting() || !contact) return;
+
+    const name = `${contact.firstname} ${contact.surname}`;
+    if (!(await this.confirmService.askDelete('contact', name))) return;
 
     this.isSubmitting.set(true);
-    const id = this.contact()?.id;
-    if (!id) return;
-
-    await this.supabase.deleteContact(id);
+    await this.supabase.deleteContact(contact.id);
     this.closeDialog();
     this.isSubmitting.set(false);
   }
-
-  closeDialog(): void {
-    this.dialogService.closeDialog();
-    this.contactForm.reset();
-  }
-}
