@@ -17,17 +17,17 @@ export class DialogService {
   /** The contact currently being edited, or null when creating a new one. */
   selectedItem = signal<any | null>(null);
 
-  // /**
-  //  * Holds the id of a newly created contact until the Contacts container picks it up.
-  //  * The container reads this in an effect(), sets it as selectedId, then resets it to null.
-  //  */
-  // pendingSelectedId = signal<number | null>(null);
+  /**
+   * Holds the id of a newly created contact until the Contacts container picks it up.
+   * The container reads this in an effect(), sets it as selectedId, then resets it to null.
+   */
+  pendingSelectedId = signal<number | null>(null);
 
-  // /**
-  //  * True while a newly created contact should be scrolled to.
-  //  * Set to true in selectContact(), reset to false in ContactList after scrolling.
-  //  */
-  // isNewContact = signal<boolean>(false);
+  /**
+   * True while a newly created contact should be scrolled to.
+   * Set to true in selectContact(), reset to false in ContactList after scrolling.
+   */
+  isNewContact = signal<boolean>(false);
 
   /** Opens the dialog. Pass a contact to edit it, or null to create a new one. */
   openDialog<T>(type: DialogContentType, item: T | null = null): void {

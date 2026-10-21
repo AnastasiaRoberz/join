@@ -1,11 +1,8 @@
-<div class="main-page">
-  <header app-header></header>
-  <app-sidebar></app-sidebar>
-  <div class="pages scroll-container">
-    <router-outlet />
-    @if (dialogService.isOpen()) {
-      <app-dialog></app-dialog>
-    }
-  </div>
+<header app-header></header>
+<div class="pages">
+  <router-outlet />
+  @if (dialogService.isOpen()) {
+    <app-dialog></app-dialog>
+  }
 </div>
 <app-sidebar></app-sidebar>
