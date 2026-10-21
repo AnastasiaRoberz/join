@@ -8,7 +8,11 @@
 
       @if (!responsiveService.isTablet() || menuOpen()) {
         <div class="btn-wrapper" [class.is-tablet]="responsiveService.isTablet()">
-          <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
+          <button
+            appBtn
+            preset="editIcon"
+            (click)="dialogService.openDialog('contact', contact)"
+          ></button>
           <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
         </div>
       }
