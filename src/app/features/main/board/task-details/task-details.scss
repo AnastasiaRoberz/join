@@ -1,7 +1,7 @@
 @use '../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-center(column);
+  @include flex-start(column);
   align-items: flex-start;
   gap: 24px;
   width: 100%;
@@ -42,20 +42,12 @@ table {
   th {
     white-space: nowrap;
     font-weight: 400;
-  }
-
-  td {
-    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .priority {
     @include flex-start;
     gap: 10px;
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
   }
 }
 
@@ -70,16 +62,15 @@ table {
 ul {
   @include flex-start(column);
   justify-content: flex-start;
-  gap: 4px;
+  gap: 16px;
 
   li {
     @include flex-start;
     gap: 16px;
-    padding: 8px 16px;
   }
 
-  .subtask {
-    padding: 4px 16px;
+  .user-item {
+    padding-left: 16px;
   }
 }
 
