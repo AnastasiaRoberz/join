@@ -69,3 +69,21 @@ a {
     }
   }
 }
+
+.cursor-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: pre-line;
+  line-height: 1.2;
+  text-align: left;
+
+  background-color: $main-color;
+  color: $text-light;
+  font-size: 0.75rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: $avatar-shadow;
+
+  user-select: none;
+}
