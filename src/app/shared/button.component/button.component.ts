@@ -16,30 +16,30 @@ export type BtnSize = 'small' | 'medium' | 'large' | null;
   templateUrl: './button.component.html',
   host: {
     '[class]': 'hostClasses()',
-    '[attr.type]': 'type()',
+    '[attr.type]': 'btnType()',
   },
 })
 export class Buttons {
   preset = input<BtnPreset | null>(null);
 
-  inputLabel = input<string | null>(null);
-  inputVariant = input<BtnVariant | null>(null);
-  inputSize = input<BtnSize | null>(null);
-  inputIcon = input<string | null>(null);
-  inputType = input<'button' | 'submit' | 'reset' | null>(null);
+  label = input<string | null>(null);
+  variant = input<BtnVariant | null>(null);
+  size = input<BtnSize | null>(null);
+  icon = input<string | null>(null);
+  type = input<'button' | 'submit' | 'reset' | null>(null);
 
   btnConfig = computed(() => {
     const btnPreset = this.preset();
     return btnPreset ? BUTTON_STYLES[btnPreset] : null;
   });
 
-  label = computed(() => this.inputLabel() ?? this.btnConfig()?.label ?? null);
-  variant = computed(() => this.inputVariant() ?? this.btnConfig()?.variant ?? 'primary');
-  size = computed(() => this.inputSize() ?? this.btnConfig()?.size ?? null);
-  icon = computed(() => this.inputIcon() ?? this.btnConfig()?.icon ?? null);
-  type = computed(() => this.inputType() ?? this.btnConfig()?.type ?? 'button');
+  btnLabel = computed(() => this.label() ?? this.btnConfig()?.label ?? null);
+  btnVariant = computed(() => this.variant() ?? this.btnConfig()?.variant ?? 'primary');
+  btnSize = computed(() => this.size() ?? this.btnConfig()?.size ?? null);
+  btnIcon = computed(() => this.icon() ?? this.btnConfig()?.icon ?? null);
+  btnType = computed(() => this.type() ?? 'button');
 
   hostClasses = computed(() => {
-    return `btn btn-${this.variant()}${this.size() ? ` btn-${this.size()}` : ''}`;
+    return `btn btn-${this.btnVariant()}${this.btnSize() ? ` btn-${this.btnSize()}` : ''}`;
   });
 }
