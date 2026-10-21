@@ -2,6 +2,8 @@ import { Component, computed, inject, input, output, signal } from '@angular/cor
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { ContactService } from '../../../../../services/contact.service';
+import { ResponsiveService } from '../../../../../services/responsive.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -13,7 +15,7 @@ import { ContactService } from '../../../../../services/contact.service';
  * <app-contact-details [selectedId]="id" />
  */
 @Component({
-  imports: [UserAvatar],
+  imports: [UserAvatar, Buttons],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
@@ -25,12 +27,13 @@ import { ContactService } from '../../../../../services/contact.service';
 export class ContactDetails {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
   contactDeleted = output<void>();
 
   /** Whether the mobile Edit/Delete menu is open. */
-  menuOpen = signal(false);
+  menuOpen = signal<boolean>(false);
 
   /**
    * Id of the contact to display, passed in by the Contacts container.

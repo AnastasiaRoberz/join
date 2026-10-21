@@ -1,11 +1,12 @@
-import { inject, Service } from '@angular/core';
+import { inject, Injector, Service, Signal } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
 @Service()
 export class ResponsiveService {
-  private breakpointObserver = inject(BreakpointObserver);
+  breakpointObserver = inject(BreakpointObserver);
+  injector = inject(Injector);
 
   customBreakpoints = {
     mobile: '(max-width: 768px)',
@@ -41,4 +42,16 @@ export class ResponsiveService {
       .pipe(map((result) => result.matches)),
     { initialValue: false },
   );
+
+  isMaxWidth(maxWidth: number): Signal<boolean> {
+    return toSignal(
+      this.breakpointObserver
+        .observe(`(max-width: ${maxWidth}px)`)
+        .pipe(map((result) => result.matches)),
+      {
+        initialValue: false,
+        injector: this.injector,
+      },
+    );
+  }
 }

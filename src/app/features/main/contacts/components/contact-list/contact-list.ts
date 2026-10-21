@@ -12,6 +12,8 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { ContactService } from '../../../../../services/contact.service';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
+import { Buttons } from '../../../../../shared/button.component/button.component';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.
@@ -26,10 +28,13 @@ import { ContactInterface } from '../../../../../interfaces/contact.interface';
  *   (contactSelected)="selectContact($event)" />
  */
 @Component({
-  imports: [UserAvatar],
+  imports: [UserAvatar, Buttons],
   selector: 'app-contact-list',
   styleUrl: './contact-list.scss',
   templateUrl: './contact-list.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class ContactList {
   /**
@@ -38,6 +43,7 @@ export class ContactList {
    */
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   /**
    * Id of the contact currently shown in the detail pane.

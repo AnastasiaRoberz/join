@@ -1,144 +1,115 @@
 @use '../../../../public/assets/styles/' as *;
 
-.sidebar {
-  background-color: $sidebar-main-theme;
+:host {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-between;
   height: 100%;
   padding-block: 64px;
+  background-color: $sidebar-main-theme;
   color: $text-muted;
+  container-type: inline-size;
+}
 
-  @include mobile {
-    display: none;
+.sidebar-wrapper {
+  @include flex-center(column);
+  width: 100%;
+  gap: 114px;
+
+  .nav-logo {
+    width: 100px;
+    height: 122px;
+  }
+}
+
+nav {
+  @include flex-center(column);
+  width: 100%;
+
+  .nav-icon {
+    width: 30px;
+    height: 30px;
   }
 
-  &__wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 114px;
+  ul {
+    @include flex-center(column);
+    gap: 15px;
 
-    &--logo {
-      width: 100px;
-      height: 121px;
-
-      .nav-logo {
-        width: 101px;
-        height: 122px;
-      }
-    }
-
-    &--nav {
+    li {
+      @include flex-start;
       width: 100%;
-      height: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
 
-      .nav-icon {
-        width: 30px;
-        height: 30px;
-        color: $text-muted;
-      }
-
-      ul {
+      a {
+        @include flex-start;
+        gap: 8px;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 15px;
+        padding: 8px 0;
+        color: $sidebar-txt-default;
+        position: relative;
+        z-index: 2;
 
-        li {
-          width: 100%;
-          height: 46px;
-          @include flex-center;
+        &::before {
+          content: '';
+          width: 100cqw;
+          height: 100%;
+          background-color: inherit;
+          position: absolute;
+          left: 50%;
+          translate: -50% 0;
+          z-index: -1;
+        }
 
-          a {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        &:hover {
+          background-color: $sidebar-bg-hover;
+          color: $sidebar-txt-hover;
+        }
 
-            .link-wrapper {
-              width: 120px;
-              display: flex;
-              justify-content: flex-start;
-              align-items: center;
-              gap: 8px;
-
-              p {
-                color: $text-muted;
-              }
-            }
-
-            &.active {
-              background-color: $sidebar-bg-active;
-
-              .link-wrapper {
-                p,
-                .nav-icon {
-                  color: $text-light;
-                }
-              }
-            }
-          }
-
-          &:hover {
-            background-color: $sidebar-bg-hover;
-          }
-
-          &:active {
-            background-color: $sidebar-bg-active;
-
-            a .link-wrapper {
-              p,
-              .nav-icon {
-                color: $text-light;
-              }
-            }
-          }
+        &.active,
+        &:active {
+          background-color: $sidebar-bg-active;
+          color: $text-light;
         }
       }
     }
   }
+}
 
-  &__imprint {
+:host.is-tablet {
+  padding-block: 0;
+  padding: 2px;
+
+  height: auto;
+  width: 100%;
+
+  ul {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 0;
     width: 100%;
-    height: 317px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 4px;
 
-    @include widescreen {
-      margin-top: 0;
-      margin-bottom: auto;
+    .nav-icon {
+      width: 24px;
+      height: 24px;
     }
 
-    a {
-      width: 100%;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      padding-left: calcClamp(40, 52, 1300, 770);
-      color: $text-muted;
+    li {
+      width: auto;
 
-      &.active {
-        background-color: $sidebar-bg-active;
-        color: $text-light;
-      }
+      a {
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        min-width: 0;
+        width: calcClamp(70, 80, 370, 320);
+        height: calcClamp(70, 76, 370, 320);
+        font-size: calcClamp(13, 16, 370, 320);
+        border-radius: 8px;
+        white-space: nowrap;
 
-      &:hover {
-        color: $text-lightblue;
-      }
-
-      &:active {
-        background-color: $sidebar-bg-active;
-        color: $text-light;
+        &::before {
+          display: none;
+        }
       }
     }
   }
