@@ -25,6 +25,7 @@ app-contact-details {
   background: $color-grey-background;
   padding: calcClamp(48, 110, 1440, 768) calcClamp(16, 88, 1440, 768);
   gap: calcClamp(48, 32, 1440, 768);
+  overflow-x: hidden; // no scrollbar for animation of contact details sliding in
 
   &__title__container {
     display: flex;
@@ -37,7 +38,6 @@ app-contact-details {
       width: 32px;
       height: 32px;
     }
-    overflow-x: hidden; // no scrollbar for animation of contact details sliding in
   }
 
   &__title {
