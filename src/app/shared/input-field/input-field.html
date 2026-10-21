@@ -8,5 +8,5 @@
       <use [attr.href]="`./assets/icons/icons.svg#${icon()}`"></use>
     </svg>
   }
-  <span class="error-msg">{{ showError() }}</span>
+  <span class="error-msg" [class.is-mobile]="responsiveService.isMobile()">{{ showError() }}</span>
 </div>

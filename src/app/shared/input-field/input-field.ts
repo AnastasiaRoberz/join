@@ -18,6 +18,9 @@ let nextId = 0;
   selector: 'app-input-field',
   styleUrl: './input-field.scss',
   templateUrl: './input-field.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class InputField {
   errorService = inject(ErrorService);
