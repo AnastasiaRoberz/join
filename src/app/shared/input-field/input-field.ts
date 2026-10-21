@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
 import { NgControl } from '@angular/forms';
+import { ResponsiveService } from '../../services/responsive.service';
 
 let nextId = 0;
 
@@ -20,6 +21,7 @@ let nextId = 0;
 })
 export class InputField {
   errorService = inject(ErrorService);
+  responsiveService = inject(ResponsiveService);
   cdr = inject(ChangeDetectorRef);
 
   ngControl = contentChild(NgControl);
