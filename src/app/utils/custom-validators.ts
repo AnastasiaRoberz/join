@@ -1,5 +1,5 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { SupabaseService } from '../services/supabase';
+import { SupabaseService } from '../services/supabase.service';
 
 export function generalCustomValidators(): ValidatorFn {
   // Verbietet doppelte Punkte, Bindestriche oder Leerzeichen hintereinander

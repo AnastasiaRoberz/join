@@ -14,6 +14,7 @@ import {
 import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ContactService } from '../../../../../services/contact.service';
+import { SupabaseService } from '../../../../../services/supabase.service';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
@@ -26,6 +27,7 @@ import { ContactService } from '../../../../../services/contact.service';
   },
 })
 export class ContactDialog {
+  supabaseService = inject(SupabaseService);
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
@@ -45,7 +47,7 @@ export class ContactDialog {
       '',
       {
         validators: [Validators.required, generalCustomValidators(), customMailValidator()],
-        asyncValidators: [uniqueMailValidator(this.supabase, () => this.contact()?.id)],
+        asyncValidators: [uniqueMailValidator(this.supabaseService, () => this.contact()?.id)],
       },
     ],
     phone: [
