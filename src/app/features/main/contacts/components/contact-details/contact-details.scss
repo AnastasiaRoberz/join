@@ -62,6 +62,7 @@
   font-size: $font-medium;
   line-height: 0.75;
   padding: 10px 0;
+  margin-top: calcClamp(0, 33, 1200, 768);
 }
 
 .detail-info {
@@ -73,6 +74,7 @@
   .mail {
     width: 100%;
     overflow-wrap: anywhere;
+    color: $mail;
   }
 }
 
