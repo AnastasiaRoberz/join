@@ -30,7 +30,7 @@
   <div class="content scroll-container">
     <ul>
       <span>Assigned To:</span>
-      <!-- <app-avatar-group [users]="task.assigned_users" size="medium" /> -->
+
       @for (user of task.assigned_users; track user.id) {
         <li class="user-item">
           <app-user-avatar [user]="user" size="medium" />

@@ -5,10 +5,9 @@ import { CheckboxComponent } from '../../../../shared/checkbox.component/checkbo
 import { TaskService } from '../../../../services/task.service';
 import { capitalizeFirstLetter } from '../../../../utils/utils';
 import { DialogService } from '../../../../services/dialog.service';
-import { AvatarGroupComponent } from '../../../../shared/avatar-group.component/avatar-group.component';
 
 @Component({
-  imports: [Buttons, UserAvatar, CheckboxComponent, AvatarGroupComponent],
+  imports: [Buttons, UserAvatar, CheckboxComponent],
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
@@ -19,7 +18,6 @@ export class TaskDetails {
   capitalizeFirstLetter = capitalizeFirstLetter;
 
   selectedId = input<number>(1);
-
   selectedTask = computed(() => {
     return this.taskService.tasks().find((task) => task.id === this.selectedId());
   });
