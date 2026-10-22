@@ -21,9 +21,12 @@
   }
 
   .name {
-    font-size: calcClamp(32, 47, 1440, 1290);
+    min-height: 105px;
+    font-size: calcClamp(32, 47, 1440, 1025);
     max-width: 100%; // never wider than the wrapper
     overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
+    display: flex;
+    align-items: center;
   }
 
   // long names design for icon and name position and size
@@ -31,27 +34,27 @@
     gap: calcClamp(16, 50, 1440, 1025);
 
     .name {
-      font-size: calcClamp(28, 36, 1440, 1290);
+      font-size: calcClamp(20, 38, 1440, 1025);
     }
   }
+}
 
-  .btn-wrapper {
-    @include flex-start;
+.btn-wrapper {
+  @include flex-start;
+  gap: 16px;
+
+  &.is-tablet {
+    position: absolute;
+    bottom: 16px;
+    right: 8px;
+    z-index: 1; // covers the dots button while open
+    flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
-
-    &.is-tablet {
-      position: absolute;
-      bottom: 16px;
-      right: 8px;
-      z-index: 1; // covers the dots button while open
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 20px;
-      background: $color-white;
-      border-radius: 20px 20px 0 20px;
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-    }
+    padding: 20px;
+    background: $color-white;
+    border-radius: 20px 20px 0 20px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -59,6 +62,7 @@
   font-size: $font-medium;
   line-height: 0.75;
   padding: 10px 0;
+  margin-top: calcClamp(0, 33, 1200, 768);
 }
 
 .detail-info {
@@ -70,21 +74,7 @@
   .mail {
     width: 100%;
     overflow-wrap: anywhere;
-  }
-}
-
-@media screen and (min-width: 769px) and (max-width: 1290px) {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-
-      .name {
-        font-size: calcClamp(16, 32, 1290, 769);
-      }
-    }
+    color: $mail;
   }
 }
 
@@ -93,7 +83,7 @@
     // long names design for icon and name position and size
     &__long {
       .name {
-        font-size: calcClamp(36, 47, 1024, 769);
+        font-size: calcClamp(22, 36, 1024, 769);
       }
     }
   }
@@ -104,7 +94,7 @@
     // long names design for icon and name position and size
     &__long {
       .name {
-        font-size: calcClamp(20, 47, 768, 320);
+        font-size: calcClamp(20, 38, 768, 320);
       }
     }
   }

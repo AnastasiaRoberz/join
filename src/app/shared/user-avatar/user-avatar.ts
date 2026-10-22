@@ -17,7 +17,7 @@ export class UserAvatar {
   responsiveService = inject(ResponsiveService);
 
   user = input<ContactInterface | null>(null);
-  size = input<'small' | 'medium' | 'large' | 'header'>('medium');
+  size = input<'small' | 'medium' | 'large' | 'header' | 'details'>('medium');
 
   initials = computed(() => {
     if (!this.user()) return '';
