@@ -43,7 +43,7 @@
   @include flex-start;
   gap: 16px;
 
-  &.is-tablet {
+  &.is-mobile {
     // position: absolute;
     // bottom: 16px;
     // right: 8px;
@@ -58,6 +58,22 @@
     background: $color-white;
     border-radius: 20px 20px 0 20px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+
+    // when closed: outside the wrapper to the right, hidden after the slide-out
+    transform: translateX(calc(100% + 16px));
+    visibility: hidden;
+    transition:
+      transform 150ms ease-in-out,
+      visibility 0s linear 150ms; // hide only once the slide-out is done
+
+    // when open: slide in, visible right away
+    &.is-open {
+      transform: translateX(0);
+      visibility: visible;
+      transition:
+        transform 150ms ease-in-out,
+        visibility 0s;
+    }
   }
 }
 

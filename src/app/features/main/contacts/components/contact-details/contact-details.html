@@ -6,12 +6,10 @@
     </div>
   </div>
 
-  @if (!responsiveService.isTablet() || menuOpen()) {
-    <div class="btn-wrapper" [class.is-tablet]="responsiveService.isTablet()">
-      <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
-      <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
-    </div>
-  }
+  <div class="btn-wrapper" [class.is-mobile]="responsiveMobile()" [class.is-open]="menuOpen()">
+    <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
+    <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
+  </div>
 
   <p class="info-heading">Contact Information</p>
 

@@ -38,6 +38,9 @@ export class ContactDetails {
 
   /** Whether the mobile Edit/Delete menu is open. */
   menuOpen = signal<boolean>(false);
+  responsiveMobile = computed(
+    () => this.responsiveService.isMobile() || this.responsiveService.isTablet(),
+  );
 
   /**
    * Id of the contact to display, passed in by the Contacts container.
@@ -45,7 +48,7 @@ export class ContactDetails {
    */
   selectedId = input.required<number>();
 
-    /**
+  /**
    * Asks the user for confirmation, then deletes the given contact and notifies
    * the container, which returns to the contact list. Does nothing on cancel.
    *
