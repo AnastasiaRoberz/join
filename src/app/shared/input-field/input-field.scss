@@ -73,7 +73,7 @@ label {
 }
 
 .error-msg {
-  font-size: calcClamp(12, 16, 768, 320);
+  font-size: calcClamp(12, 16, 940, 400);
   color: $error;
   position: absolute;
   right: 0;

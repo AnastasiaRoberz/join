@@ -26,7 +26,7 @@ export class ErrorService {
     invalidPartStructure: () => `Each name part needs a letter.`,
 
     // --- Mail Validators ---
-    invalidMailFormat: () => `Enter a valid email (name@domain.com).`,
+    invalidMailFormat: () => `Enter a valid email.`,
 
     invalidMailDomain: () => `Invalid domain after the @.`,
 
