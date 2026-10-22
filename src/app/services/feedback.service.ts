@@ -22,6 +22,6 @@ export class FeedbackService {
 
     setTimeout(() => {
       this.feedbackState.update((prev) => ({ ...prev, visible: false }));
-    }, 4000);
+    }, 2500);
   }
 }

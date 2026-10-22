@@ -6,11 +6,26 @@
   width: 100%;
   position: fixed;
   inset: 0;
-  z-index: 10;
   padding: calcClamp(16, 112);
+  z-index: 10;
+  pointer-events: none;
 
   backdrop-filter: blur(2px);
   background-color: rgba($color: #000000, $alpha: 0.2);
+
+  //backdrop unsichtbar, wenn dialog geschlossen
+  backdrop-filter: blur(0px);
+  background-color: rgba($color: #000000, $alpha: 0);
+  transition:
+    background-color 400ms ease,
+    backdrop-filter 400ms ease;
+
+  //backdrop sichtbar, wenn dialog geöffnet
+  &.is-open {
+    pointer-events: all;
+    backdrop-filter: blur(2px);
+    background-color: rgba($color: #000000, $alpha: 0.2);
+  }
 }
 
 .dialog-content {
@@ -23,6 +38,27 @@
   overflow: hidden;
   background-color: white;
   z-index: 100;
+
+  //dialog ohne Hintergrund ungeöffnet: unsichtbar + slide-out
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(100dvw);
+  transition:
+    opacity 0.2s ease,
+    transform 0.4s ease,
+    visibility 0s linear 0.2s;
+
+  //dialog ohne HG geöffnet: sichtbar + slide-in
+  :host.is-open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transform: translateY(0);
+    transition:
+      opacity 0.2s ease,
+      transform 0.4s ease,
+      visibility 0s linear 0s;
+  }
 }
 
 .header-section {
