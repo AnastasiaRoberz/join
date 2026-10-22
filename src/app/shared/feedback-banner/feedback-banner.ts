@@ -6,6 +6,9 @@ import { FeedbackService } from '../../services/feedback.service';
   selector: 'app-feedback-banner',
   styleUrl: './feedback-banner.scss',
   templateUrl: './feedback-banner.html',
+  host: {
+    '[class.is-open]': 'feedback',
+  },
 })
 export class FeedbackBanner {
   feedbackService = inject(FeedbackService);

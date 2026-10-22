@@ -9,6 +9,7 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 20;
 
   @include mobile {
     padding-bottom: 100px;
@@ -25,7 +26,6 @@
   padding: 24px calcClamp(24, 32);
 
   opacity: 0;
-  visibility: hidden;
   transform: translateX(100dvw);
   transition:
     opacity 0.2s ease,
@@ -34,7 +34,6 @@
 
   :host.is-open & {
     opacity: 1;
-    visibility: visible;
     transform: translateX(0);
     transition:
       opacity 0.2s ease,
