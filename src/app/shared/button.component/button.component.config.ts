@@ -73,7 +73,7 @@ export const BUTTON_STYLES = {
     label: null,
     variant: 'icon',
     size: null,
-    icon: 'cancel',
+    icon: 'close',
   },
   search: {
     label: null,

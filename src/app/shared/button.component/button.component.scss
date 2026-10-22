@@ -161,6 +161,10 @@
       height: 32px;
     }
 
+    &.btn-close-mobile {
+      color: $close-btn-mobile-default;
+    }
+
     &:hover,
     &:active {
       box-shadow: none;
