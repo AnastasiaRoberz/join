@@ -1,8 +1,15 @@
 @if (confirmService.request(); as request) {
-  <div class="confirm" (click)="confirmService.answer(false)">
-    <div class="confirm__box" (click)="$event.stopPropagation()">
-      <h3 class="confirm__title">{{ request.title }}</h3>
-      <p class="confirm__text">{{ request.message }}</p>
+  <div class="confirm" role="presentation" (click)="confirmService.answer(false)">
+    <section
+      class="confirm__box"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      aria-describedby="confirm-text"
+      (click)="$event.stopPropagation()"
+    >
+      <h3 id="confirm-title" class="confirm__title">{{ request.title }}</h3>
+      <p id="confirm-text" class="confirm__text">{{ request.message }}</p>
       <div class="confirm__buttons">
         <button
           type="button"
@@ -19,6 +26,6 @@
           {{ request.confirmLabel }}
         </button>
       </div>
-    </div>
+    </section>
   </div>
 }
