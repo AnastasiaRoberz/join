@@ -15,6 +15,7 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ContactService } from '../../../../../services/contact.service';
 import { SupabaseService } from '../../../../../services/supabase.service';
+import { ConfirmService } from '../../../../../services/confirm.service';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
@@ -32,6 +33,7 @@ export class ContactDialog {
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
   fb = inject(FormBuilder);
+  confirmService = inject(ConfirmService);
   isSubmitting = signal<boolean>(false);
 
   contact = input<ContactInterface | null>(null);
@@ -114,7 +116,9 @@ export class ContactDialog {
   }
 
   async deleteAndClose() {
-    if (this.isSubmitting()) return;
+    const id = this.contact()?.id;
+    if (this.isSubmitting() || !id) return;
+    if (!(await this.confirmService.askDelete('Contact'))) return;
 
     this.isSubmitting.set(true);
     const id = this.contact()?.id;

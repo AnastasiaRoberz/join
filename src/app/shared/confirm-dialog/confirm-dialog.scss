@@ -1,0 +1,34 @@
+@use '../../../../public/assets/styles' as *;
+
+// dark, blurred background that covers the whole page
+.confirm {
+  @include flex-center;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background-color: rgba($color: #000000, $alpha: 0.2);
+  backdrop-filter: blur(2px);
+
+  &__box {
+    @include flex-start(column);
+    align-items: stretch;
+    gap: 16px;
+    width: 100%;
+    max-width: 450px;
+    margin-inline: 16px;
+    padding: 32px 40px;
+    border-radius: 30px;
+    background-color: $color-white;
+  }
+
+  &__text {
+    overflow-wrap: anywhere;
+  }
+
+    &__buttons {
+    @include flex-start;
+    justify-content: center;   
+    gap: 16px;
+    margin-top: 8px;
+  }
+}
