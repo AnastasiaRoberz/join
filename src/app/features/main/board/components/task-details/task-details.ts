@@ -1,10 +1,10 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { Buttons } from '../../../../shared/button.component/button.component';
-import { UserAvatar } from '../../../../shared/user-avatar/user-avatar';
-import { CheckboxComponent } from '../../../../shared/checkbox.component/checkbox.component';
-import { TaskService } from '../../../../services/task.service';
-import { capitalizeFirstLetter } from '../../../../utils/utils';
-import { DialogService } from '../../../../services/dialog.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
+import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
+import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
+import { TaskService } from '../../../../../services/task.service';
+import { capitalizeFirstLetter } from '../../../../../utils/utils';
+import { DialogService } from '../../../../../services/dialog.service';
 
 @Component({
   imports: [Buttons, UserAvatar, CheckboxComponent],
