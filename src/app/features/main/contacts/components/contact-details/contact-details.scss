@@ -44,9 +44,12 @@
   gap: 16px;
 
   &.is-tablet {
-    position: absolute;
-    bottom: 16px;
-    right: 8px;
+    // position: absolute;
+    // bottom: 16px;
+    // right: 8px;
+    position: fixed;
+    bottom: 106px;
+    right: 14px;
     z-index: 1; // covers the dots button while open
     flex-direction: column;
     align-items: flex-start;
@@ -111,7 +114,7 @@
   background: $btn-primary-default;
   color: $color-white;
   box-shadow: $btn-shadow;
-  z-index: 2;
+  // z-index: 2;
 
   .icon {
     width: 32px;
