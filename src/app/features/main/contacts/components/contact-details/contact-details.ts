@@ -4,7 +4,7 @@ import { DialogService } from '../../../../../services/dialog.service';
 import { ContactService } from '../../../../../services/contact.service';
 import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
-
+import { ConfirmService } from '../../../../../services/confirm.service';
 // amount of loetter as of where a name is considered long
 const longNames = 10;
 
@@ -34,6 +34,7 @@ export class ContactDetails {
 
   /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
   contactDeleted = output<void>();
+  confirmService = inject(ConfirmService);
 
   /** Whether the mobile Edit/Delete menu is open. */
   menuOpen = signal<boolean>(false);
@@ -43,6 +44,19 @@ export class ContactDetails {
    * Required: the component is only rendered once a contact is selected.
    */
   selectedId = input.required<number>();
+
+    /**
+   * Asks the user for confirmation, then deletes the given contact and notifies
+   * the container, which returns to the contact list. Does nothing on cancel.
+   *
+   * @param id - Id of the contact to delete.
+   */
+  async deleteContact(id: number): Promise<void> {
+    if (!(await this.confirmService.askDelete('Contact'))) return;
+
+    await this.contactService.deleteContact(id);
+    this.contactDeleted.emit();
+  }
 
   /**
    * The full contact object that matches `selectedId`,
@@ -74,17 +88,5 @@ export class ContactDetails {
   /** Closes the mobile menu. */
   closeMenu(): void {
     this.menuOpen.set(false);
-  }
-
-  /**
-   * Deletes the contact from the database and notifies the container.
-   * The container listens to `contactDeleted` and clears the selection,
-   * which triggers the scroll-to-top in ContactList.
-   *
-   * @param id - The id of the contact to delete
-   */
-  async deleteContact(id: number): Promise<void> {
-    await this.contactService.deleteContact(id);
-    this.contactDeleted.emit();
   }
 }
