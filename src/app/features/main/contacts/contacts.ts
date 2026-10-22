@@ -87,8 +87,8 @@ export class Contacts {
   slideIn(details: HTMLElement): void {
     details.animate(
       [
-        { transform: 'translateX(100%)', opacity: 0 },
-        { transform: 'translateX(0)', opacity: 1 },
+        { left: '100%', opacity: 0 },
+        { left: '0', opacity: 1 },
       ],
       { duration: 300, easing: 'ease-out' },
     );
