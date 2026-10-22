@@ -109,7 +109,7 @@ export class ContactDialog {
     };
   }
 
-  async deleteAndClose() {
+    async deleteAndClose() {
     const contact = this.contact();
     if (this.isSubmitting() || !contact) return;
 
@@ -121,3 +121,9 @@ export class ContactDialog {
     this.closeDialog();
     this.isSubmitting.set(false);
   }
+
+  closeDialog(): void {
+    this.dialogService.closeDialog();
+    this.contactForm.reset();
+  }
+}
