@@ -82,10 +82,12 @@ export class SupabaseService {
       .single();
 
     if (!error) {
-      this.feedbackService.showSuccess(`${capitalizeFirstLetter(table)} succesfully created.`);
+      this.feedbackService.showSuccess(
+        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
+      );
       return supabaseData;
     } else {
-      this.feedbackService.showError(`Create ${table} failed.`);
+      this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
       return null;
     }
   }
@@ -110,10 +112,12 @@ export class SupabaseService {
       .eq('id', id);
 
     if (!error) {
-      this.feedbackService.showSuccess(`${capitalizeFirstLetter(table)} succesfully updated.`);
+      this.feedbackService.showSuccess(
+        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
+      );
       return true;
     } else {
-      this.feedbackService.showError(`Update ${table} failed.`);
+      this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
@@ -129,10 +133,12 @@ export class SupabaseService {
     const { error } = await this.supabase.from(table).delete().eq('id', id);
 
     if (!error) {
-      this.feedbackService.showSuccess(`${capitalizeFirstLetter(table)} succesfully deleted.`);
+      this.feedbackService.showSuccess(
+        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
+      );
       return true;
     } else {
-      this.feedbackService.showError(`Delete ${table} failed.`);
+      this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
