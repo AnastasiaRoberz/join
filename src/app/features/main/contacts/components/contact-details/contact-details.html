@@ -3,13 +3,6 @@
     <app-user-avatar [user]="contact" size="details"></app-user-avatar>
     <div class="name-wrapper">
       <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
-
-      <!-- @if (!responsiveService.isTablet() || menuOpen()) {
-        <div class="btn-wrapper" [class.is-tablet]="responsiveService.isTablet()">
-          <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
-          <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
-        </div>
-      } -->
     </div>
   </div>
 
