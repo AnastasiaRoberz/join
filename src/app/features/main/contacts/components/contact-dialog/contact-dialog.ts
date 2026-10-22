@@ -8,7 +8,6 @@ import { DialogService } from '../../../../../services/dialog';
 import { CustomValidators } from '../../../../../utils/custom-validators';
 import { ConfirmService } from '../../../../../services/confirm.service';
 
-
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar],
   selector: 'app-contact-dialog',
@@ -109,15 +108,13 @@ export class ContactDialog {
     };
   }
 
-    async deleteAndClose() {
-    const contact = this.contact();
-    if (this.isSubmitting() || !contact) return;
-
-    const name = `${contact.firstname} ${contact.surname}`;
-    if (!(await this.confirmService.askDelete('contact', name))) return;
+  async deleteAndClose() {
+    const id = this.contact()?.id;
+    if (this.isSubmitting() || !id) return;
+    if (!(await this.confirmService.askDelete('Contact'))) return;
 
     this.isSubmitting.set(true);
-    await this.supabase.deleteContact(contact.id);
+    await this.supabase.deleteContact(id);
     this.closeDialog();
     this.isSubmitting.set(false);
   }

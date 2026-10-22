@@ -40,18 +40,14 @@ export class ContactDetails {
   /** Emits after the contact was deleted, so the container can close the details. */
   contactDeleted = output<void>();
 
-  /**
+    /**
    * Asks the user for confirmation, then deletes the given contact and notifies
    * the container, which returns to the contact list. Does nothing on cancel.
    *
    * @param id - Id of the contact to delete.
    */
   async deleteContact(id: number | undefined): Promise<void> {
-    const contact = this.selectedContact();
-    if (!contact) return;
-
-    const name = `${contact.firstname} ${contact.surname}`;
-    if (!(await this.confirmService.askDelete('contact', name))) return;
+    if (!(await this.confirmService.askDelete('Contact'))) return;
 
     await this.supabase.deleteContact(id);
     this.contactDeleted.emit();

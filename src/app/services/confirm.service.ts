@@ -23,16 +23,15 @@ export class ConfirmService {
   }
 
   /**
-   * Shortcut for the standard "Do you really want to delete ...?" question.
+   * Shortcut for the standard delete question: "Delete <type>" and "This cannot be undone!".
    *
-   * @param type - What is deleted, e.g. `'contact'` or `'task'`
-   * @param name - Name of the item that is deleted
+   * @param type - What is deleted, e.g. `'Contact'` or `'Task'`
    * @returns A promise that resolves to `true` (confirmed) or `false` (cancelled)
    */
-  askDelete(type: string, name: string): Promise<boolean> {
+  askDelete(type: string): Promise<boolean> {
     return this.ask({
       title: `Delete ${type}?`,
-      message: `Do you really want to delete ${name}? This cannot be undone.`,
+      message: 'This cannot be undone!',
       confirmLabel: 'Delete',
     });
   }

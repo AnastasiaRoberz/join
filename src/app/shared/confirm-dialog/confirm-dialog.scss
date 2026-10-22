@@ -25,9 +25,9 @@
     overflow-wrap: anywhere;
   }
 
-  &__buttons {
+    &__buttons {
     @include flex-start;
-    justify-content: flex-end;
+    justify-content: center;   
     gap: 16px;
     margin-top: 8px;
   }
