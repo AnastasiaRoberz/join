@@ -23,7 +23,7 @@ export class DialogService {
    * True while a newly created contact should be scrolled to.
    * Set to true in selectContact(), reset to false in ContactList after scrolling.
    */
-  isNewContact = signal<boolean>(false);
+  scrollToContact = signal<boolean>(false);
 
   /** Opens the dialog. Pass a contact to edit it, or null to create a new one. */
   openDialog(contact: ContactInterface | null): void {
@@ -45,6 +45,11 @@ export class DialogService {
    */
   selectContact(id: number): void {
     this.pendingSelectedId.set(id);
-    this.isNewContact.set(true);
+    this.scrollToContact.set(true);
+  }
+
+  selectUpdatedContact(id: number): void {
+    this.pendingSelectedId.set(id);
+    this.scrollToContact.set(true);
   }
 }

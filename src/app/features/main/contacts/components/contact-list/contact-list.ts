@@ -77,14 +77,14 @@ export class ContactList {
      */
     effect(() => {
       const id = this.selectedId();
-      const isNewContact = this.dialogService.isNewContact();
+      const shouldScroll = this.dialogService.scrollToContact();
 
       // Wait for Angular to finish rendering the DOM before scrolling
       setTimeout(() => {
         if (id) {
           previousId = id;
 
-          if (isNewContact) {
+          if (shouldScroll) {
             // Flatten grouped contacts into a single array in the same order as the DOM
             const allContacts = this.contactService
               .groupedContacts()
@@ -96,7 +96,7 @@ export class ContactList {
             button?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             // Reset flag after scrolling so subsequent selections don't trigger this branch
-            this.dialogService.isNewContact.set(false);
+            this.dialogService.scrollToContact.set(false);
           }
         } else if (!id && previousId) {
           // A contact was deleted → scroll back to the top of the list

@@ -91,6 +91,7 @@ export class ContactDialog {
     const existingContact = this.contact();
     if (existingContact) {
       await this.contactService.updateContact(existingContact.id, contactInfos);
+      this.dialogService.selectUpdatedContact(existingContact.id);
     } else {
       // Wait for Supabase to return the created contact including its server-generated id
       const newContact = await this.contactService.addContact(contactInfos);
