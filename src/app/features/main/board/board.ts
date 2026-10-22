@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { BoardHeader } from './components/board-header/board-header';
 
 @Component({
-  imports: [],
+  imports: [BoardHeader],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',

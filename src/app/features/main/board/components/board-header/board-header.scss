@@ -1,0 +1,87 @@
+@use '../../../../../../../public/assets/styles' as *;
+
+.board-header {
+  @include flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 80px 88px 80px 64px;
+  background-color: $color-grey-background;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 32px;
+    width: 100%;
+    height: 100%;
+
+    .search {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+      width: 312px;
+      height: 48px;
+      padding: 8px 16px;
+      border: 1px solid #686868;
+      border-radius: 10px;
+      background: $color-white;
+
+      &:hover {
+        border-color: $color-grey-100;
+      }
+
+      input {
+        flex: 1;
+        min-width: 0;
+        border: none;
+        outline: none;
+        font-size: 20px;
+        cursor: text;
+      }
+
+      &__divider {
+        width: 1px;
+        height: 31px;
+        background: #686868;
+      }
+
+      &__icon {
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: $color-grey-50;
+        }
+      }
+    }
+
+    .is-desktop {
+      height: 48px;
+    }
+
+    .is-tablet {
+      height: 48px;
+    }
+
+    .is-mobile {
+      position: relative;
+      border-radius: 10px;
+      bottom: 0;
+      right: 0;
+
+      .icon {
+        height: 100px;
+      }
+    }
+  }
+}
+
+.header-mobile {
+  @include flex-start(column);
+
+  .board-header__actions {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+}
