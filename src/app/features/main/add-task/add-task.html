@@ -1,57 +1,71 @@
 <div class="content">
   <h2>Add Task</h2>
-  <div class="task-container">
-    <div class="taskWrap taskLeft">
-      <div class="taskWrap__inputBox">
-        <label>Title<span class="required">*</span></label>
-        <div class="taskWrap__withHint">
-          <input type="text" placeholder="Enter a Title" />
-          <span class="hint-msg">This field is required</span>
+  <form [formGroup]="taskForm">
+    <div class="task-container">
+      <div class="taskWrap taskLeft">
+        <div class="taskWrap__inputBox">
+          <label>Title<span class="required">*</span></label>
+          <div class="taskWrap__withHint">
+            <input type="text" formControlName="title" placeholder="Enter a Title" />
+            <span class="hint-msg">This field is required</span>
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label>Description</label>
+          <textarea formControlName="description" placeholder="Enter a Description"></textarea>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label>Due date<span class="required">*</span></label>
+          <div class="taskWrap__withHint">
+            <input
+              type="text"
+              formControlName="date"
+              placeholder="dd/mm/yyyy"
+              (input)="formatDateInput($event)"
+            />
+            <input
+              #datePickerRef
+              class="date-input"
+              type="date"
+              (change)="onDateSelected($event)"
+            />
+            <button type="button" class="date-btn" (click)="openDatePicker()">X</button>
+            <span class="hint-msg">This field is required</span>
+          </div>
         </div>
       </div>
-      <div class="taskWrap__inputBox">
-        <label>Description</label>
-        <textarea name="" id="" placeholder="Enter a Description"></textarea>
-      </div>
-      <div class="taskWrap__inputBox">
-        <label>Due date<span class="required">*</span></label>
-        <div class="taskWrap__withHint">
-          <input type="date" />
-          <span class="hint-msg">This field is required</span>
+      <div class="taskWrap">
+        <div class="taskWrap__btnBox">
+          <label for="">Priority</label>
+          <div class="taskWrap__btnBox--buttons">
+            <button priority="urgent"></button>
+            <button priority="medium"></button>
+            <button priority="low"></button>
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label for="">Assigned to</label>
+          <select formControlName="assigned"></select>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label>Category<span class="required">*</span></label>
+          <div class="taskWrap__withHint">
+            <select formControlName="category"></select>
+            <span class="hint-msg">This field is required</span>
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label for="">Subtasks</label>
+          <input type="text" formControlName="subtask" placeholder="Add new subtask" />
         </div>
       </div>
     </div>
-    <div class="taskWrap">
-      <div class="taskWrap__btnBox">
-        <label for="">Priority</label>
-        <div class="taskWrap__btnBox--buttons">
-          <button priority="urgent"></button>
-          <button priority="medium"></button>
-          <button priority="low"></button>
-        </div>
-      </div>
-      <div class="taskWrap__inputBox">
-        <label for="">Assigned to</label>
-        <select name="" id=""></select>
-      </div>
-      <div class="taskWrap__inputBox">
-        <label>Category<span class="required">*</span></label>
-        <div class="taskWrap__withHint">
-          <select name="" id=""></select>
-          <span class="hint-msg">This field is required</span>
-        </div>
-      </div>
-      <div class="taskWrap__inputBox">
-        <label for="">Subtasks</label>
-        <input type="text" placeholder="Add new subtask" />
+    <div class="task-footer">
+      <span><span class="required">*</span>This field is required</span>
+      <div class="task-footer__buttons">
+        <button appBtn preset="secondary" inputLabel="Clear" inputIcon="cancel"></button>
+        <button appBtn preset="primary" inputLabel="Create Task" inputIcon="check"></button>
       </div>
     </div>
-  </div>
-  <div class="task-footer">
-    <span><span class="required">*</span>This field is required</span>
-    <div class="task-footer__buttons">
-      <button appBtn preset="secondary" inputLabel="Clear" inputIcon="cancel"></button>
-      <button appBtn preset="primary" inputLabel="Create Task" inputIcon="check"></button>
-    </div>
-  </div>
+  </form>
 </div>
