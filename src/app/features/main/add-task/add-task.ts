@@ -19,12 +19,17 @@ export class AddTask {
     subtask: new FormControl(''),
   });
 
+  //prio selected with prio-btn, null when nothing selected
   selectedPrio = signal<Priority | null>(null);
 
+  //#region  --------- Date-Picker Input-Field -------------
+
+  //date-picker from date-input-field
   pickerOpen = false;
 
   @ViewChild('datePickerRef') datePickerRef!: ElementRef<HTMLInputElement>; //nie undefined, keine if-Prüfung nötig
 
+  //svg-calendar-btn opens date-picker from hidden date-input-field (toggle)
   openDatePicker() {
     if (this.pickerOpen) {
       this.pickerOpen = false;
@@ -34,6 +39,7 @@ export class AddTask {
     this.datePickerRef.nativeElement.showPicker();
   }
 
+  //
   onDateSelected(event: Event) {
     const input = event.target as HTMLInputElement; //Auslöser vom Event als HTML-Input
     const raw = input.value;
@@ -45,6 +51,7 @@ export class AddTask {
     }
   }
 
+  //format numbers put in text-input-field as date: dd/mm/yyyy (10 symbols)
   formatDateInput(event: Event) {
     const input = event.target as HTMLInputElement;
 
@@ -61,7 +68,16 @@ export class AddTask {
     this.taskForm.controls.date.setValue(value, { emitEvent: false });
   }
 
+  //#endregion
+
   onPrioritySelected(prio: Priority): void {
     this.selectedPrio.set(prio);
   }
+
+  // onSubmit(): void {
+  //   const task = {
+  //     ...this.taskForm.value,
+  //     priority: this.selectedPrio(),
+  //   };
+  // }
 }
