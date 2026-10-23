@@ -2,7 +2,8 @@
   <div class="detail-header" [class.detail-header__long]="isLongName()">
     <app-user-avatar [user]="contact" size="details"></app-user-avatar>
     <div class="name-wrapper">
-      <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
+      <!-- <p class="name">{{ contact.title }} {{ contact.firstname }} {{ contact.surname }}</p> -->
+      <p class="name">{{ fullName(contact) }}</p>
     </div>
   </div>
 

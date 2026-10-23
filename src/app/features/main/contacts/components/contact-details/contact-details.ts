@@ -5,6 +5,7 @@ import { ContactService } from '../../../../../services/contact.service';
 import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ConfirmService } from '../../../../../services/confirm.service';
+import { fullName } from '../../../../../utils/name-utils';
 // amount of loetter as of where a name is considered long
 const longNames = 10;
 
@@ -35,6 +36,8 @@ export class ContactDetails {
   /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
   contactDeleted = output<void>();
   confirmService = inject(ConfirmService);
+
+  protected fullName = fullName;
 
   /** Whether the mobile Edit/Delete menu is open. */
   menuOpen = signal<boolean>(false);
