@@ -37,6 +37,7 @@ export class ContactDetails {
   contactDeleted = output<void>();
   confirmService = inject(ConfirmService);
 
+  // adding fullName for easier diplay of title + name
   protected fullName = fullName;
 
   /** Whether the mobile Edit/Delete menu is open. */

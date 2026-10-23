@@ -46,6 +46,7 @@ export class ContactList {
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
 
+  // importing fullName for netter display purposes
   protected fullName = fullName;
 
   /**

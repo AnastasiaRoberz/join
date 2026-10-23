@@ -66,8 +66,7 @@ export class ContactDialog {
       const currentContact = this.contact();
       if (currentContact) {
         this.contactForm.setValue({
-          name: fullName(currentContact),
-          // name: currentContact.firstname + ' ' + currentContact.surname,
+          name: fullName(currentContact), // starting to use fullName for display purposes
           mail: currentContact.mail,
           phone: currentContact.phone,
         });
@@ -82,14 +81,11 @@ export class ContactDialog {
 
     this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();
-    // const { irstname, surname } = this.splitName(name ?? '');
-    const { title, firstname, surname } = splitName(name ?? '');
+    const { title, firstname, surname } = splitName(name ?? ''); // added title and using external splitName from name-utils
     const contactInfos = {
       title,
       firstname,
       surname,
-      // firstname: firstname,
-      // surname: surname,
       mail: mail?.trim() ?? '',
       phone: phone?.trim() ?? '',
     };
@@ -111,18 +107,7 @@ export class ContactDialog {
     this.isSubmitting.set(false);
   }
 
-  // now coming from name-utils.ts
-
-  // splitName(name: string) {
-  //   const lastSpaceIndex = name.lastIndexOf(' ');
-
-  //   if (lastSpaceIndex === -1) return { firstname: name, surname: '' };
-
-  //   return {
-  //     firstname: name.substring(0, lastSpaceIndex).trim(),
-  //     surname: name.substring(lastSpaceIndex + 1).trim(),
-  //   };
-  // }
+  // splitMame now moved to name-utils.ts
 
   async deleteAndClose() {
     const id = this.contact()?.id;
