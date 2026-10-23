@@ -29,7 +29,11 @@
               type="date"
               (change)="onDateSelected($event)"
             />
-            <button type="button" class="date-btn" (click)="openDatePicker()">X</button>
+            <button type="button" class="date-btn" (click)="openDatePicker()">
+              <svg class="date-icon">
+                <use href="./assets/icons/icons.svg#calendar"></use>
+              </svg>
+            </button>
             <span class="hint-msg">This field is required</span>
           </div>
         </div>
