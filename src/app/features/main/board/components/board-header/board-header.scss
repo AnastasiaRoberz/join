@@ -4,10 +4,34 @@
   @include flex-start;
   justify-content: space-between;
   gap: 24px;
-  padding: 80px 88px 80px 64px;
+  padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
   background-color: $color-grey-background;
 
-  &__actions {
+  &__mobile {
+    flex-direction: column;
+  }
+
+  &-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    h2 {
+      align-self: center;
+    }
+
+    .is-mobile {
+      position: relative;
+      border-radius: 10px;
+      bottom: 0;
+      right: 0;
+      height: 40px;
+      width: 40px;
+      padding: 0;
+    }
+  }
+
+  &-actions {
     display: flex;
     justify-content: flex-end;
     gap: 32px;
@@ -19,7 +43,9 @@
       justify-content: flex-end;
       align-items: center;
       gap: 16px;
-      width: 312px;
+      //   width: 312px;
+
+      max-width: 100%;
       height: 48px;
       padding: 8px 16px;
       border: 1px solid #686868;
@@ -56,32 +82,8 @@
       }
     }
 
-    .is-desktop {
-      height: 48px;
-    }
-
     .is-tablet {
       height: 48px;
     }
-
-    .is-mobile {
-      position: relative;
-      border-radius: 10px;
-      bottom: 0;
-      right: 0;
-
-      .icon {
-        height: 100px;
-      }
-    }
-  }
-}
-
-.header-mobile {
-  @include flex-start(column);
-
-  .board-header__actions {
-    flex-direction: column-reverse;
-    align-items: flex-end;
   }
 }
