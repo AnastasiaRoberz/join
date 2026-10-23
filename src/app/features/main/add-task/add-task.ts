@@ -19,9 +19,16 @@ export class AddTask {
     subtask: new FormControl(''),
   });
 
+  pickerOpen = false;
+
   @ViewChild('datePickerRef') datePickerRef!: ElementRef<HTMLInputElement>; //nie undefined, keine if-Prüfung nötig
 
   openDatePicker() {
+    if (this.pickerOpen) {
+      this.pickerOpen = false;
+      return;
+    }
+    this.pickerOpen = true;
     this.datePickerRef.nativeElement.showPicker();
   }
 
