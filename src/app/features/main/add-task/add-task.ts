@@ -1,6 +1,6 @@
 import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
-import { PriorityBtn } from '../../../shared/priority-btn/priority-btn';
+import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -18,6 +18,8 @@ export class AddTask {
     category: new FormControl('', Validators.required),
     subtask: new FormControl(''),
   });
+
+  selectedPrio = signal<Priority | null>(null);
 
   pickerOpen = false;
 
@@ -57,5 +59,9 @@ export class AddTask {
     value = value.slice(0, 10);
     input.value = value;
     this.taskForm.controls.date.setValue(value, { emitEvent: false });
+  }
+
+  onPrioritySelected(prio: Priority): void {
+    this.selectedPrio.set(prio);
   }
 }

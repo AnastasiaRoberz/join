@@ -1,6 +1,8 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, HostBinding, HostListener, input, output } from '@angular/core';
 
 // example: <button priority="urgent"></button>
+
+export type Priority = 'urgent' | 'medium' | 'low';
 
 @Component({
   imports: [],
@@ -10,7 +12,18 @@ import { Component, computed, input } from '@angular/core';
 })
 export class PriorityBtn {
   // bei Nutzung Komponente muss einer der folgenden Strings angegeben werden (siehe example):
-  priority = input.required<'urgent' | 'medium' | 'low'>();
+  priority = input.required<Priority>();
+
+  isActive = input<boolean>(false);
+
+  prioSelected = output<Priority>();
+
+  // HostBinding: fügt dem Host-Element (<button>) die CSS-Klasse 'active' hinzu
+  // wenn isActive() === true
+  @HostBinding('class.active')
+  get activeClass() {
+    return this.isActive();
+  }
 
   //über computed signal wird Inhalt gesetuert + entsprechendes Styling
   preset = computed(() => {
@@ -21,4 +34,9 @@ export class PriorityBtn {
     };
     return presets[this.priority()];
   });
+
+  @HostListener('click')
+  onClick(): void {
+    this.prioSelected.emit(this.priority());
+  }
 }

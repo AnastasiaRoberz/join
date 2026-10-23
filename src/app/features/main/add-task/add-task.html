@@ -42,9 +42,21 @@
         <div class="taskWrap__btnBox">
           <label for="">Priority</label>
           <div class="taskWrap__btnBox--buttons">
-            <button priority="urgent"></button>
-            <button priority="medium"></button>
-            <button priority="low"></button>
+            <button
+              priority="urgent"
+              [isActive]="selectedPrio() === 'urgent'"
+              (prioSelected)="onPrioritySelected($event)"
+            ></button>
+            <button
+              priority="medium"
+              [isActive]="selectedPrio() === 'medium'"
+              (prioSelected)="onPrioritySelected($event)"
+            ></button>
+            <button
+              priority="low"
+              [isActive]="selectedPrio() === 'low'"
+              (prioSelected)="onPrioritySelected($event)"
+            ></button>
           </div>
         </div>
         <div class="taskWrap__inputBox">
