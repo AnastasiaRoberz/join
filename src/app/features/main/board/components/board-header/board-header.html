@@ -1,6 +1,8 @@
 <header class="board-header" [class.board-header__mobile]="responsiveService.isMobile()">
+  <!-- div needed for mobile design with button -->
   <div class="board-header-title" [class.board-header-title__mobile]="responsiveService.isMobile()">
     <h2>Board</h2>
+    <!-- add button in mobile -->
     @if (responsiveService.isMobile()) {
       <button
         appBtn
@@ -20,7 +22,7 @@
         <use href="./assets/icons/icons.svg#search"></use>
       </svg>
     </label>
-
+    <!-- add button in tablet + desktop -->
     @if (!responsiveService.isMobile()) {
       <button
         appBtn
