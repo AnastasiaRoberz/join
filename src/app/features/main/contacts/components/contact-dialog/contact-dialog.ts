@@ -16,6 +16,7 @@ import { Buttons } from '../../../../../shared/button.component/button.component
 import { ContactService } from '../../../../../services/contact.service';
 import { SupabaseService } from '../../../../../services/supabase.service';
 import { ConfirmService } from '../../../../../services/confirm.service';
+import { fullName, splitName } from '../../../../../utils/name-utils';
 
 @Component({
   imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
@@ -65,7 +66,8 @@ export class ContactDialog {
       const currentContact = this.contact();
       if (currentContact) {
         this.contactForm.setValue({
-          name: currentContact.firstname + ' ' + currentContact.surname,
+          name: fullName(currentContact),
+          // name: currentContact.firstname + ' ' + currentContact.surname,
           mail: currentContact.mail,
           phone: currentContact.phone,
         });
@@ -80,10 +82,14 @@ export class ContactDialog {
 
     this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();
-    const { firstname, surname } = this.splitName(name ?? '');
+    // const { irstname, surname } = this.splitName(name ?? '');
+    const { title, firstname, surname } = splitName(name ?? '');
     const contactInfos = {
-      firstname: firstname,
-      surname: surname,
+      title,
+      firstname,
+      surname,
+      // firstname: firstname,
+      // surname: surname,
       mail: mail?.trim() ?? '',
       phone: phone?.trim() ?? '',
     };
@@ -105,16 +111,18 @@ export class ContactDialog {
     this.isSubmitting.set(false);
   }
 
-  splitName(name: string) {
-    const lastSpaceIndex = name.lastIndexOf(' ');
+  // now coming from name-utils.ts
 
-    if (lastSpaceIndex === -1) return { firstname: name, surname: '' };
+  // splitName(name: string) {
+  //   const lastSpaceIndex = name.lastIndexOf(' ');
 
-    return {
-      firstname: name.substring(0, lastSpaceIndex).trim(),
-      surname: name.substring(lastSpaceIndex + 1).trim(),
-    };
-  }
+  //   if (lastSpaceIndex === -1) return { firstname: name, surname: '' };
+
+  //   return {
+  //     firstname: name.substring(0, lastSpaceIndex).trim(),
+  //     surname: name.substring(lastSpaceIndex + 1).trim(),
+  //   };
+  // }
 
   async deleteAndClose() {
     const id = this.contact()?.id;
