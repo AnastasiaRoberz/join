@@ -23,15 +23,16 @@ export class UserAvatar {
     if (!this.user()) return '';
 
     // Liste gängiger akademischer Titel und Anreden (Groß-/Kleinschreibung und Punkte beachten)
-    const titleRegex =
-      /^(prof\.?|dr\.?|med\.?|dent\.?|habil\.?|rer\.?|nat\.?|ing\.?|iur\.?|jur\.?|theol\.?|phil\.?|mba|bsc|msc|ba|ma|dipl\.?(-ing\.?)?)\s+/i;
+    // const titleRegex =
+    //   /^(prof\.?|dr\.?|med\.?|dent\.?|habil\.?|rer\.?|nat\.?|ing\.?|iur\.?|jur\.?|theol\.?|phil\.?|mba|bsc|msc|ba|ma|dipl\.?(-ing\.?)?)\s+/i;
 
-    let firstname = (this.user()?.firstname ?? '').trim();
-    while (titleRegex.test(firstname)) {
-      firstname = firstname.replace(titleRegex, '').trim();
-    }
+    // let firstname = (this.user()?.firstname ?? '').trim();
+    // while (titleRegex.test(firstname)) {
+    //   firstname = firstname.replace(titleRegex, '').trim();
+    // }
 
-    const firstLetter = firstname.charAt(0);
+    // const firstLetter = firstname.charAt(0);
+    const firstLetter = this.user()?.firstname.charAt(0);
     const secondLetter = this.user()?.surname.charAt(0);
     return `${firstLetter}${secondLetter}`;
   });
