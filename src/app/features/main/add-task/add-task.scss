@@ -5,7 +5,7 @@
   height: 100%;
   padding-inline: 96px 136px;
   padding-block: 124px 66px;
-  // background-color: antiquewhite;
+  background-color: $main-bg;
 }
 
 .content {
@@ -17,7 +17,7 @@
 }
 
 .required {
-  color: #ff8190;
+  color: $hint;
   text-align: start;
 }
 
@@ -27,6 +27,7 @@
   width: 100%;
   display: flex;
   gap: 96px;
+  color: $text-dark;
 }
 
 .task-footer {
@@ -37,12 +38,10 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  // background-color: #ff819049;
 
   &__buttons {
     display: flex;
     gap: 16px;
-    // background-color: #6868683d;
   }
 }
 
@@ -79,11 +78,20 @@
     width: 100%;
     height: 48px;
     padding: 12px 16px;
-    border: 1px solid #686868;
+    border: 1px solid $color-grey-100;
     border-radius: 10px;
     font-family: Inter;
     font-size: 20px;
-    color: #686868;
+    outline: none;
+    background-color: $color-white;
+
+    placeholder {
+      color: $input-placeholder;
+    }
+
+    &:focus {
+      border: 1px solid $input-focus-border;
+    }
   }
 
   textarea {
@@ -112,11 +120,12 @@
   .date-icon {
     width: 100%;
     height: 100%;
+    color: $text-dark;
   }
 
   .hint-msg {
     font-size: calcClamp(12, 16, 768, 400);
-    color: #ff8190;
+    color: $hint;
   }
 
   &__inputBox {

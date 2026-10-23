@@ -11,6 +11,7 @@ $color-grey-200: #cdcdcd;
 $color-grey-300: #d9d9d9;
 $color-grey-400: #a8a8a8;
 $color-grey-500: #e7e7e7;
+$color-grey-600: #686868;
 $color-bluish-grey: #0c2e621f;
 
 // Blues
@@ -22,6 +23,7 @@ $color-navy-800: #2a3647;
 $color-navy-900: #091931;
 
 // Feedback & Priorities
+$color-red-400: #ff8190;
 $color-red-500: #e60026;
 $color-orange-500: #ff3d00;
 $color-amber-500: #ffa800;
@@ -31,6 +33,7 @@ $color-green-500: #7ae229;
 // SEMANTIC TOKENS
 // ==========================================
 $main-color: $color-navy-800;
+$main-bg: $color-grey-background;
 
 // TEXT
 $text-normal: $color-black;
@@ -87,6 +90,7 @@ $sidebar-txt-default: $color-grey-200;
 $sidebar-txt-active: $color-white;
 
 // FEEDBACK & STATES
+$hint: $color-red-400;
 $error: $color-red-500;
 $mail: $color-blue-500;
 
@@ -101,6 +105,7 @@ $input-default-label: $color-grey-100;
 $input-icon: $color-grey-300;
 $input-focus-border: $color-cyan-700;
 $input-focus-label: $color-cyan-700;
+$input-placeholder: $color-grey-600;
 
 // AVATAR ICON
 $icon-bg: $color-grey-300;
