@@ -20,7 +20,7 @@
     height: 20px;
   }
 
-  &:hover {
+  &:hover:not(.active):not(:active) {
     box-shadow: 0 4px 4px 0 #00000040;
   }
 
@@ -28,6 +28,10 @@
   &.active {
     color: $text-light;
     font-weight: 700;
+  }
+
+  &:active:hover,
+  &.active:hover {
     box-shadow: none;
   }
 }
