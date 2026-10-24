@@ -13,7 +13,12 @@
       >{{ label() }}</label
     >
   }
-  <ng-content select="input, textarea, select" />
+
+  @if (type() === 'input') {
+    <input type="text" [id]="id()" [value]="value" (input)="onInput($event)" (blur)="onTouched()" />
+  } @else if (type() === 'textarea') {
+    <textarea [id]="id()" [value]="value" (input)="onInput($event)" (blur)="onTouched()"></textarea>
+  }
 
   @if (icon()) {
     <svg class="input-icon">

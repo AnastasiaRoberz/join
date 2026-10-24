@@ -6,16 +6,18 @@
   width: 100%;
 }
 
-::ng-deep input,
-::ng-deep textarea {
+input,
+textarea {
   border: none;
   outline: none;
   background: none;
   flex: 1;
 }
 
-::ng-deep textarea {
-  height: 120px;
+textarea {
+  field-sizing: content;
+  min-height: 120px;
+  max-height: 240px;
 }
 
 .input-container {
