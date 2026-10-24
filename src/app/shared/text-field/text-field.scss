@@ -16,7 +16,7 @@ textarea {
 
 textarea {
   field-sizing: content;
-  min-height: 120px;
+  min-height: 96px;
   max-height: 240px;
 }
 
@@ -24,7 +24,7 @@ textarea {
   @include flex-center;
   width: 100%;
   padding: calcClamp(8, 12, 768, 320) calcClamp(12, 20, 768, 320);
-  border: 1px solid $icon;
+  border: 1px solid $input-default-border;
   border-radius: 10px;
   background-color: $color-white;
   position: relative;
@@ -42,6 +42,10 @@ textarea {
         display: none;
       }
     }
+  }
+
+  &:has(input) {
+    height: 48px;
   }
 
   &:has(.ng-invalid:is(.ng-touched)) {

@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
-import { ControlValueAccessor, NgControl, ɵInternalFormsSharedModule } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
 
 let nextId = 0;
 
 @Component({
-  imports: [ɵInternalFormsSharedModule],
+  imports: [ReactiveFormsModule],
   selector: 'app-text-field',
   styleUrl: './text-field.scss',
   templateUrl: './text-field.html',
@@ -47,12 +47,12 @@ export class TextField implements ControlValueAccessor {
     });
   }
 
-  writeValue(val: string): void {
-    this.value = val ?? '';
+  writeValue(value: string): void {
+    this.value = value ?? '';
     this.cdr.markForCheck();
   }
 
-  registerOnChange(fn: (val: string) => void): void {
+  registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
@@ -61,9 +61,9 @@ export class TextField implements ControlValueAccessor {
   }
 
   onInput(event: Event): void {
-    const val = (event.target as HTMLInputElement | HTMLTextAreaElement).value;
-    this.value = val;
-    this.onChange(val);
+    const value = (event.target as HTMLInputElement | HTMLTextAreaElement).value;
+    this.value = value;
+    this.onChange(value);
   }
 
   showError(): string | null {
