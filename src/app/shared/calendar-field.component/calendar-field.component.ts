@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, input, ViewChild } from '@angular/core';
 import { FlatpickrDirective } from '../../directives/flatpickr.directive';
 import { ResponsiveService } from '../../services/responsive.service';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
@@ -42,8 +42,19 @@ export class CalendarFieldComponent implements ControlValueAccessor {
     });
   }
 
+  @ViewChild('picker') picker!: FlatpickrDirective;
   writeValue(value: string): void {
     this.value = value ?? '';
+    if (this.picker) {
+      this.picker.setDate(this.value);
+    }
+    this.cdr.markForCheck();
+  }
+
+  onDateSelect(dateStr: string): void {
+    this.value = dateStr;
+    this.onChange(dateStr);
+    this.onTouched();
     this.cdr.markForCheck();
   }
 
@@ -53,12 +64,6 @@ export class CalendarFieldComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-  }
-
-  onInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.value = value;
-    this.onChange(value);
   }
 
   showError(): string | null {

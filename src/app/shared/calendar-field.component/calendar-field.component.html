@@ -7,11 +7,12 @@
     type="text"
     [id]="id()"
     [value]="value"
-    (input)="onInput($event)"
     (blur)="onTouched()"
     #picker="appFlatpickr"
     appFlatpickr
-    placeholder="DD.MM.YYYY"
+    (dateChanged)="onDateSelect($event)"
+    placeholder="DD/MM/YYYY"
+    autocomplete="off"
   />
   <button class="calendar-btn" (click)="picker.toggle()">
     <svg class="input-icon">
