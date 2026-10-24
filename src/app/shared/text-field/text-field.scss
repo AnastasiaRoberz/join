@@ -2,17 +2,20 @@
 
 :host {
   @include flex-start(column);
-  gap: 16px;
+  gap: 8px;
   width: 100%;
 }
 
 ::ng-deep input,
-::ng-deep textarea,
-::ng-deep select {
+::ng-deep textarea {
   border: none;
   outline: none;
   background: none;
   flex: 1;
+}
+
+::ng-deep textarea {
+  height: 120px;
 }
 
 .input-container {
@@ -29,7 +32,7 @@
   &:has(textarea:not(:placeholder-shown)) {
     border-color: $input-focus-border;
 
-    label {
+    label.inner {
       transform: translateY(-180%);
       color: $input-focus-label;
 
@@ -48,13 +51,13 @@
   }
 }
 
-label {
+label.inner {
   font-size: calcClamp(16, 20, 768, 320);
   position: absolute;
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  color: $input-default-label;
+  color: $main-color;
   pointer-events: none;
   background-color: white;
   padding: 0 8px;
