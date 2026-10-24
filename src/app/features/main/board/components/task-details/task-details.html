@@ -59,6 +59,6 @@
   <div class="button-wrapper">
     <button appBtn preset="deleteIcon"></button>
     <hr />
-    <button appBtn preset="editIcon"></button>
+    <button appBtn preset="editIcon" (click)="dialogService.openDialog('task-edit', task)"></button>
   </div>
 }
