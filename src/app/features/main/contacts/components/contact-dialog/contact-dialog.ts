@@ -74,7 +74,7 @@ export class ContactDialog {
   }
 
   async saveContact() {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting() || !this.contactForm.valid) return;
 
     this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();
