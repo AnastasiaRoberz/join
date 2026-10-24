@@ -13,8 +13,7 @@
 }
 
 .overlay-content {
-  @include flex-start(column);
-  align-items: flex-start;
+  @include flex-start(column, both);
   width: 525px;
   max-height: min(95dvh, 950px);
   min-height: 0;
