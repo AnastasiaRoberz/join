@@ -6,14 +6,15 @@
 ></button>
 
 <form [formGroup]="taskForm" (ngSumbit)="saveTask()" class="scroll-container">
-  <app-text-field [id]="'title'" formControlName="title" labelPos="top" label="Title" />
+  <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
   <app-text-field
-    [id]="'description'"
+    id="description"
     formControlName="description"
     labelPos="top"
     label="Description"
     type="textarea"
   />
+  <app-calendar-field id="due-date" formControlName="dueDate" label="Due Date" />
 
   <button appBtn type="submit" preset="check">Ok</button>
 </form>

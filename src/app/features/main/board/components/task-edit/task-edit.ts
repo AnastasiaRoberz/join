@@ -5,9 +5,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ContactService } from '../../../../../services/contact.service';
+import { CalendarFieldComponent } from '../../../../../shared/calendar-field.component/calendar-field.component';
 
 @Component({
-  imports: [TextField, ReactiveFormsModule, Buttons, TextField],
+  imports: [TextField, ReactiveFormsModule, Buttons, TextField, CalendarFieldComponent],
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',
   templateUrl: './task-edit.html',
