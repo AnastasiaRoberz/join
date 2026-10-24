@@ -5,7 +5,7 @@
   (click)="dialogService.openDialog('task', task())"
 ></button>
 
-<form [formGroup]="taskForm" (ngSumbit)="saveTask()" class="scroll-container">
+<form [formGroup]="taskForm" (ngSubmit)="saveTask()" class="scroll-container">
   <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
   <app-text-field
     id="description"
