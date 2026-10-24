@@ -47,5 +47,8 @@ export class TaskEdit {
     });
   }
 
-  saveTask() {}
+  saveTask() {
+    if (!this.taskForm.valid) return;
+    const rawValue = this.taskForm.getRawValue();
+  }
 }
