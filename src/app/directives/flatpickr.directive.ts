@@ -1,5 +1,4 @@
 import { Directive, ElementRef, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
-import { NgControl } from '@angular/forms';
 import flatpickr from 'flatpickr';
 
 @Directive({
