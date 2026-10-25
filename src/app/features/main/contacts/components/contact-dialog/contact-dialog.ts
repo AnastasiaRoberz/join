@@ -1,56 +1,61 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase';
-import { Contact } from '../../../../../interfaces/contact';
+import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputField } from '../../../../../shared/input-field/input-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
-import { DialogService } from '../../../../../services/dialog';
-import { CustomValidators } from '../../../../../utils/custom-validators';
+import { DialogService } from '../../../../../services/dialog.service';
+import {
+  customMailValidator,
+  customNameValidator,
+  customPhoneValidator,
+  generalCustomValidators,
+  uniqueMailValidator,
+} from '../../../../../utils/custom-validators';
+import { ResponsiveService } from '../../../../../services/responsive.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
+import { ContactService } from '../../../../../services/contact.service';
+import { SupabaseService } from '../../../../../services/supabase.service';
+import { ConfirmService } from '../../../../../services/confirm.service';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar],
+  imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.is-tablet]': 'responsiveService.isTablet()',
+  },
 })
 export class ContactDialog {
-  supabase = inject(SupabaseService);
-  fb = inject(FormBuilder);
+  supabaseService = inject(SupabaseService);
+  contactService = inject(ContactService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
+  fb = inject(FormBuilder);
+  confirmService = inject(ConfirmService);
   isSubmitting = signal<boolean>(false);
 
-  contact = input<Contact | null>(null);
+  contact = input<ContactInterface | null>(null);
 
   contactForm = this.fb.group({
     name: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.onlyLetters(),
-          CustomValidators.twoNames(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customNameValidator()],
       },
     ],
     mail: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.customEmail(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customMailValidator()],
+        asyncValidators: [uniqueMailValidator(this.supabaseService, () => this.contact()?.id)],
       },
     ],
     phone: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.phone(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customPhoneValidator()],
       },
     ],
   });
@@ -62,7 +67,7 @@ export class ContactDialog {
         this.contactForm.setValue({
           name: currentContact.firstname + ' ' + currentContact.surname,
           mail: currentContact.mail,
-          phone: currentContact.phone ?? '',
+          phone: currentContact.phone,
         });
       } else {
         this.contactForm.reset();
@@ -79,18 +84,23 @@ export class ContactDialog {
     const contactInfos = {
       firstname: firstname,
       surname: surname,
-      mail: mail ?? '',
-      phone: phone ?? '',
+      mail: mail?.trim() ?? '',
+      phone: phone?.trim() ?? '',
     };
 
     const existingContact = this.contact();
     if (existingContact) {
-      await this.supabase.updateContact(existingContact.id ?? null, contactInfos);
+      await this.contactService.updateContact(existingContact.id, contactInfos);
+      this.dialogService.selectUpdatedContact(existingContact.id);
     } else {
-      await this.supabase.addContact(contactInfos);
+      // Wait for Supabase to return the created contact including its server-generated id
+      const newContact = await this.contactService.addContact(contactInfos);
+      if (newContact) {
+        // Pass the new contact's id to DialogService to trigger auto-selection and scroll
+        this.dialogService.selectContact(newContact.id);
+      }
     }
 
-    await this.supabase.getAllContacts();
     this.closeDialog();
     this.isSubmitting.set(false);
   }
@@ -107,13 +117,14 @@ export class ContactDialog {
   }
 
   async deleteAndClose() {
-    if (this.isSubmitting()) return;
+    const id = this.contact()?.id;
+    if (this.isSubmitting() || !id) return;
+    if (!(await this.confirmService.askDelete('Contact'))) return;
 
     this.isSubmitting.set(true);
-    const id = this.contact()?.id;
     if (!id) return;
 
-    await this.supabase.deleteContact(id);
+    await this.contactService.deleteContact(id);
     this.closeDialog();
     this.isSubmitting.set(false);
   }

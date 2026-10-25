@@ -1,6 +1,6 @@
 <div class="input-container">
   @if (label()) {
-    <label [attr.for]="id()">{{ label() }}</label>
+    <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()">{{ label() }}</label>
   }
   <ng-content select="input, textarea, select" />
   @if (icon()) {
@@ -8,5 +8,5 @@
       <use [attr.href]="`./assets/icons/icons.svg#${icon()}`"></use>
     </svg>
   }
-  <span class="error-msg">{{ showError() }}</span>
+  <span class="error-msg" [class.is-mobile]="responsiveService.isMobile()">{{ showError() }}</span>
 </div>

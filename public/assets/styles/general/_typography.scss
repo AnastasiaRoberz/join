@@ -32,7 +32,6 @@ p {
 button {
   font-family: 'Inter';
   font-size: 1rem;
-  line-height: 150%;
 }
 // * ------------ *
 
@@ -42,15 +41,6 @@ button {
 // * --- texts --- *
 .subheading {
   font-size: calcClamp(16, 27);
-}
-
-.mail {
-  color: $mail;
-  width: 100%;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .highlighted-txt {

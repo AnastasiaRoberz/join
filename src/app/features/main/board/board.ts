@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { Task } from '../../../interfaces/task';
-import { TaskCard } from '../../../shared/task-card/task-card';
+import { BoardHeader } from './components/board-header/board-header';
 
 @Component({
-  imports: [TaskCard],
+  imports: [BoardHeader],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
