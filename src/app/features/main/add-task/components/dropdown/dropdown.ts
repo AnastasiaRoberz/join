@@ -1,5 +1,7 @@
 import { Component, ElementRef, HostListener, inject, input, output } from '@angular/core';
 import { ContactService } from '../../../../../services/contact.service';
+import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
+import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 
 export interface CategoryOption {
   value: string;
@@ -7,7 +9,7 @@ export interface CategoryOption {
 }
 
 @Component({
-  imports: [],
+  imports: [CheckboxComponent, UserAvatar],
   selector: 'app-dropdown',
   styleUrl: './dropdown.scss',
   templateUrl: './dropdown.html',
