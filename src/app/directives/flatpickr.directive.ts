@@ -1,22 +1,69 @@
 import { Directive, ElementRef, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
 import flatpickr from 'flatpickr';
 
+/**
+ * Attribute directive that wraps a native `<input>` element with a customized Flatpickr
+ * date picker instance.
+ *
+ * Key features:
+ * - Positions the calendar popup relative to the parent `.input-container` (`position: 'auto center'`).
+ * - Supports flexible manual date entry with or without delimiters (e.g., `8.6.27`, `08/06/2027`, `080627`).
+ * - Automatically jumps to the currently selected date (or today's month if empty) whenever opened.
+ * - Adjusts `minDate` dynamically when loading existing past dates (e.g., when editing older tasks).
+ *
+ * @example
+ * ```html
+ * <input
+ *   type="text"
+ *   #picker="appFlatpickr"
+ *   appFlatpickr
+ *   (dateChanged)="onDateSelect($event)"
+ * />
+ * <button type="button" (click)="picker.toggle()">Open Calendar</button>
+ * ```
+ */
 @Directive({
   selector: '[appFlatpickr]',
-  standalone: true,
   exportAs: 'appFlatpickr',
 })
 export class FlatpickrDirective implements OnInit, OnDestroy {
-  element = inject(ElementRef<HTMLInputElement>);
-  pickerInstance?: flatpickr.Instance;
+  /** Reference to the host `<input>` element to which Flatpickr is attached. */
+  private element = inject(ElementRef<HTMLInputElement>);
 
+  /** Underlying Flatpickr instance created during `ngOnInit`. */
+  private pickerInstance?: flatpickr.Instance;
+
+  /** SVG markup used for both the previous and next month navigation arrows. */
+  private readonly arrowSvg = `
+    <svg>
+      <use href="./assets/icons/icons.svg#arrow-down"></use>
+    </svg>
+  `;
+
+  // ---------------------------------------------------------------------------
+  // Outputs & Reactive State
+  // ---------------------------------------------------------------------------
+
+  /** Emits the formatted date string (`DD/MM/YYYY`) whenever the user selects or types a valid date. */
   dateChanged = output<string>();
+
+  /** Tracks whether the Flatpickr calendar popup is currently open. */
   isOpen = signal<boolean>(false);
 
+  // ---------------------------------------------------------------------------
+  // Lifecycle Hooks
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Initializes the Flatpickr instance on the host input element with custom positioning,
+   * flexible date parsing, and lifecycle callbacks.
+   */
   ngOnInit(): void {
+    const parentContainer = this.element.nativeElement.parentElement ?? undefined;
+
     this.pickerInstance = flatpickr(this.element.nativeElement, {
-      positionElement: this.element.nativeElement.parentElement,
-      ignoredFocusElements: this.element.nativeElement.parentElement,
+      positionElement: parentContainer,
+      ignoredFocusElements: parentContainer ? [parentContainer] : [],
       position: 'auto center',
       monthSelectorType: 'static',
       dateFormat: 'd/m/Y',
@@ -24,48 +71,58 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
       weekNumbers: true,
       disableMobile: true,
       allowInput: true,
-      // clickOpens: false,
-      nextArrow: /*html*/ `
-        <svg>
-          <use href="./assets/icons/icons.svg#arrow-down"></use>
-      </svg>
-      `,
-      prevArrow: /*html*/ `
-        <svg>
-          <use href="./assets/icons/icons.svg#arrow-down"></use>
-      </svg>
-      `,
-      parseDate: (dateStr: string) => {
-        return this.parseFlexibleDate(dateStr.trim());
-      },
-      onOpen: (selectedDates, dateStr, instance) => {
+      nextArrow: this.arrowSvg,
+      prevArrow: this.arrowSvg,
+      parseDate: (dateStr: string) => this.parseFlexibleDate(dateStr.trim()),
+      onOpen: (_selectedDates, _dateStr, instance) => {
         this.isOpen.set(true);
         const targetDate = instance.selectedDates[0] ?? new Date();
         instance.jumpToDate(targetDate, false);
       },
       onClose: () => this.isOpen.set(false),
-      onChange: (selectedDates, dateStr, instance) => this.dateChanged.emit(dateStr),
+      onChange: (_selectedDates, dateStr) => this.dateChanged.emit(dateStr),
     });
   }
 
+  /**
+   * Cleans up and destroys the Flatpickr instance when the directive is destroyed.
+   */
+  ngOnDestroy(): void {
+    this.pickerInstance?.destroy();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Public Control Methods
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Toggles the visibility of the Flatpickr calendar popup.
+   */
   toggle(): void {
-    if (!this.isOpen()) {
-      this.pickerInstance?.open();
-    } else {
+    if (this.isOpen()) {
       this.pickerInstance?.close();
+    } else {
+      this.pickerInstance?.open();
     }
   }
 
+  /**
+   * Programmatically sets the selected date on the Flatpickr instance without firing `onChange`.
+   * If the provided date lies in the past (e.g., when editing an existing overdue task),
+   * `minDate` is relaxed to allow displaying that date.
+   *
+   * @param value - Date string in either ISO (`YYYY-MM-DD`) or display (`DD/MM/YYYY`) format.
+   */
   setDate(value: string): void {
     if (!value || !this.pickerInstance) return;
 
-    const parsedDate = value.includes('-')
-      ? flatpickr.parseDate(value, 'Y-m-d')
-      : flatpickr.parseDate(value, 'd/m/Y');
+    const format = value.includes('-') ? 'Y-m-d' : 'd/m/Y';
+    const parsedDate = flatpickr.parseDate(value, format);
 
     if (parsedDate && !isNaN(parsedDate.getTime())) {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
+
       if (parsedDate < today) {
         this.pickerInstance.set('minDate', parsedDate);
       }
@@ -73,75 +130,81 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.pickerInstance?.destroy();
-  }
+  // ---------------------------------------------------------------------------
+  // Private Date Parsing Helpers
+  // ---------------------------------------------------------------------------
 
+  /**
+   * Parses user-typed date strings in both delimited (`08/06/2027`, `8.6.27`, `8-6-2027`)
+   * and compact numeric (`8627`, `080627`, `08062027`) formats.
+   *
+   * @param inputStr - Trimmed raw string entered by the user.
+   * @returns A valid `Date` object, or `new Date(NaN)` if the input cannot be parsed.
+   */
   private parseFlexibleDate(inputStr: string): Date {
     if (!inputStr) return new Date(NaN);
 
-    let day = 0;
-    let month = 0;
-    let year = 0;
+    let parsed: [number, number, number] | null = null;
 
-    // Fall 1: Mit Trennzeichen (z. B. 8.6.27, 08/06/2027, 8-6-2027)
     if (/[\.\/\-]/.test(inputStr)) {
-      const parts = inputStr.split(/[\.\/\-]/).map((p) => parseInt(p, 10));
-      if (parts.length === 3 && !parts.some(isNaN)) {
-        [day, month, year] = parts;
-      }
-    }
-    // Fall 2: Reine Zahlenfolge ohne Trennzeichen (z. B. 8627, 08062027)
-    else if (/^\d{4,8}$/.test(inputStr)) {
-      let rest = '';
-
-      // Prüfen, ob das Jahr 4-stellig oder 2-stellig am Ende steht
-      // Wenn die Gesamtlänge >= 7 ist (z. B. 8062027 oder 08062027), ist das Jahr 4-stellig
-      // Wenn 6 Stellen vorliegen und die letzten 4 plausibel als Jahr sind (>= 2000):
-      if (inputStr.length >= 7) {
-        year = parseInt(inputStr.slice(-4), 10);
-        rest = inputStr.slice(0, -4);
-      } else if (inputStr.length === 6 && parseInt(inputStr.slice(-4), 10) >= 2000) {
-        // z. B. "862027" -> Jahr 2027, rest "86"
-        year = parseInt(inputStr.slice(-4), 10);
-        rest = inputStr.slice(0, -4);
-      } else {
-        // 2-stelliges Jahr am Ende (z. B. 8627 -> 27, 080627 -> 27)
-        year = parseInt(inputStr.slice(-2), 10);
-        rest = inputStr.slice(0, -2);
-      }
-
-      // Tag und Monat aus dem verbleibenden Anfang extrahieren
-      if (rest.length === 2) {
-        // z. B. "86" -> Tag 8, Monat 6
-        day = parseInt(rest[0], 10);
-        month = parseInt(rest[1], 10);
-      } else if (rest.length === 3) {
-        // z. B. "086" -> Tag 08, Monat 6 | oder "806" -> Tag 8, Monat 06
-        if (rest.startsWith('0')) {
-          day = parseInt(rest.slice(0, 2), 10);
-          month = parseInt(rest.slice(2), 10);
-        } else {
-          day = parseInt(rest.slice(0, 1), 10);
-          month = parseInt(rest.slice(1), 10);
-        }
-      } else if (rest.length === 4) {
-        // z. B. "0806" -> Tag 08, Monat 06
-        day = parseInt(rest.slice(0, 2), 10);
-        month = parseInt(rest.slice(2, 4), 10);
-      }
+      parsed = this.parseDelimitedDate(inputStr);
+    } else if (/^\d{4,8}$/.test(inputStr)) {
+      parsed = this.parseCompactNumericDate(inputStr);
     }
 
-    // 2-stelliges Jahr in das 2000er-Jahrhundert überführen (z. B. 27 -> 2027)
+    if (!parsed) return new Date(NaN);
+
+    let [day, month, year] = parsed;
     if (year < 100) {
       year += 2000;
     }
 
-    // Validierung: Plausibler Bereich
-    if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100) {
-      return new Date(year, month - 1, day);
+    const isValidRange =
+      day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100;
+
+    return isValidRange ? new Date(year, month - 1, day) : new Date(NaN);
+  }
+
+  /**
+   * Extracts `[day, month, year]` from a date string separated by `.`, `/`, or `-`.
+   *
+   * @param inputStr - Delimited date string (e.g., `8.6.27` or `08/06/2027`).
+   * @returns Tuple of `[day, month, year]` or `null` if invalid.
+   */
+  private parseDelimitedDate(inputStr: string): [number, number, number] | null {
+    const parts = inputStr.split(/[\.\/\-]/).map((part) => parseInt(part, 10));
+    if (parts.length === 3 && !parts.some(isNaN)) {
+      return [parts[0], parts[1], parts[2]];
+    }
+    return null;
+  }
+
+  /**
+   * Extracts `[day, month, year]` from a continuous digit sequence of 4 to 8 digits
+   * (e.g., `8627` -> `8/6/27`, `08062027` -> `08/06/2027`).
+   *
+   * @param inputStr - Numeric string of 4 to 8 digits.
+   * @returns Tuple of `[day, month, year]` or `null` if invalid.
+   */
+  private parseCompactNumericDate(inputStr: string): [number, number, number] | null {
+    const hasFourDigitYear =
+      inputStr.length >= 7 || (inputStr.length === 6 && parseInt(inputStr.slice(-4), 10) >= 2000);
+
+    const yearDigits = hasFourDigitYear ? -4 : -2;
+    const year = parseInt(inputStr.slice(yearDigits), 10);
+    const rest = inputStr.slice(0, yearDigits);
+
+    if (rest.length === 2) {
+      return [parseInt(rest[0], 10), parseInt(rest[1], 10), year];
+    }
+    if (rest.length === 3) {
+      const splitIdx = rest.startsWith('0') ? 2 : 1;
+      return [parseInt(rest.slice(0, splitIdx), 10), parseInt(rest.slice(splitIdx), 10), year];
+    }
+    if (rest.length === 4) {
+      return [parseInt(rest.slice(0, 2), 10), parseInt(rest.slice(2, 4), 10), year];
     }
 
-    return new Date(NaN);
+    return null;
   }
 }
