@@ -38,6 +38,10 @@
 }
 
 .dropdown__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
   padding: 12px 16px;
   color: $text-normal;
   font-family: 'Inter';
@@ -45,13 +49,21 @@
   font-size: 1.25rem;
   transition: all 170ms ease-in-out;
   cursor: pointer;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 
   &:hover {
     background-color: $input-select-hover;
     border-radius: 10px;
     transition: all 170ms ease-in-out;
+  }
+
+  &--name {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
