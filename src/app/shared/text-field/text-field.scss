@@ -32,8 +32,6 @@ textarea {
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
   &:has(textarea:not(:placeholder-shown)) {
-    border-color: $input-focus-border;
-
     label.inner {
       transform: translateY(-180%);
       color: $input-focus-label;
@@ -42,6 +40,10 @@ textarea {
         display: none;
       }
     }
+  }
+
+  &:focus-within {
+    border-color: $input-focus-border;
   }
 
   &:has(input) {
