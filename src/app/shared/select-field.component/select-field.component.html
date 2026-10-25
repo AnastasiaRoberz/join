@@ -12,6 +12,8 @@
     [(expanded)]="popupExpanded"
     [preserveContent]="false"
     (click)="openPopup()"
+    (input)="onSearchInput($event)"
+    #inputField
   />
   <button type="button" (click)="togglePopup()" (mousedown)="$event.preventDefault()">
     <svg class="input-icon" [class.is-open]="popupExpanded()">
@@ -39,22 +41,27 @@
   [cdkConnectedOverlayOpen]="popupExpanded()"
   [cdkConnectedOverlayPositions]="positions()"
   [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.getBoundingClientRect().width"
-  (overlayOutsideClick)="popupExpanded.set(false)"
+  (overlayOutsideClick)="closePopup()"
 >
   <ng-template ngComboboxPopup [combobox]="combobox">
     <ul
       #listbox="ngListbox"
       ngListbox
+      ngComboboxWidget
       [multi]="true"
+      selectionMode="explicit"
+      [(value)]="selectedIds"
+      [activeDescendant]="listbox.activeDescendant()"
       class="dropdown scroll-container"
       [class.is-open]="popupExpanded()"
     >
-      @for (contact of options(); track contact.id) {
+      @for (contact of filteredOptions(); track contact.id) {
         <li
+          #opt="ngOption"
           ngOption
           [value]="contact.id"
           [class.selected]="isAssigned(contact.id)"
-          (click)="toggleAssignment(contact.id, !isAssigned(contact.id))"
+          [class.is-active]="opt.active()"
         >
           <app-user-avatar [user]="contact" size="medium" />
           <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
@@ -63,6 +70,10 @@
             (checkedChange)="toggleAssignment(contact.id, $event)"
             (click)="$event.stopPropagation()"
           />
+        </li>
+      } @empty {
+        <li class="no-results">
+          <span>No contacts found.</span>
         </li>
       }
     </ul>

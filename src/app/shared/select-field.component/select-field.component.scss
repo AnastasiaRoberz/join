@@ -67,11 +67,16 @@ label {
     border-radius: 10px;
     cursor: pointer;
 
+    &.is-active {
+      background-color: $btn-icon-hover;
+    }
+
     &.selected {
       background-color: $dropdown-item-active;
       color: $text-light;
 
-      &:hover {
+      &:hover,
+      &.is-active {
         background-color: $dropdown-item-active-hover;
       }
     }
@@ -118,4 +123,10 @@ label {
       color: $main-color;
     }
   }
+}
+
+.no-results {
+  @include flex-center;
+  padding: 12px 16px;
+  cursor: default;
 }

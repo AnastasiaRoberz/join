@@ -1,7 +1,8 @@
 import {
-  afterRenderEffect,
   Component,
   computed,
+  effect,
+  ElementRef,
   inject,
   input,
   model,
@@ -15,11 +16,21 @@ import { CheckboxComponent } from '../checkbox.component/checkbox.component';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import { CdkOverlayOrigin, ConnectedPosition, Overlay, OverlayModule } from '@angular/cdk/overlay';
+import { filterInput } from '../../utils/utils';
 
 let nextId = 0;
 
 @Component({
-  imports: [UserAvatar, CheckboxComponent, Combobox, ComboboxPopup, Listbox, Option, OverlayModule],
+  imports: [
+    UserAvatar,
+    CheckboxComponent,
+    Combobox,
+    ComboboxPopup,
+    Listbox,
+    Option,
+    OverlayModule,
+    ComboboxWidget,
+  ],
   selector: 'app-select-field',
   styleUrl: './select-field.component.scss',
   templateUrl: './select-field.component.html',
@@ -31,6 +42,30 @@ export class SelectFieldComponent {
   id = input<string>(`app-select-${nextId++}`);
   label = input<string>();
   options = input<ContactInterface[]>([]);
+  searchTerm = signal<string>('');
+  filteredOptions = computed(() => {
+    return filterInput(this.options(), this.searchTerm(), (contact) => [
+      contact.firstname,
+      contact.surname,
+    ]);
+  });
+
+  inputField = viewChild<ElementRef<HTMLInputElement>>('inputField');
+
+  constructor() {
+    effect(() => {
+      if (!this.popupExpanded()) {
+        this.searchTerm.set('');
+        const element = this.inputField()?.nativeElement;
+        if (element) element.value = '';
+      }
+    });
+  }
+
+  onSearchInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+  }
 
   selectedIds = model<number[]>([]);
   assignedContacts = computed(() => {
@@ -63,16 +98,21 @@ export class SelectFieldComponent {
 
   togglePopup(): void {
     if (!this.popupExpanded()) {
-      this.updateOverlayDirection();
-      this.popupExpanded.set(true);
+      this.openPopup();
     } else {
-      this.popupExpanded.set(false);
+      this.closePopup();
     }
   }
 
   openPopup(): void {
     this.updateOverlayDirection();
     this.popupExpanded.set(true);
+    this.searchTerm.set('');
+  }
+
+  closePopup(): void {
+    this.popupExpanded.set(false);
+    this.searchTerm.set('');
   }
 
   isAssigned(contactId: number): boolean {
