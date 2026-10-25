@@ -1,0 +1,26 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-center;
+  gap: 16px;
+  color: $main-color;
+  border-radius: 8px;
+  padding: 4px 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $checkbox-hover;
+  }
+}
+
+label {
+  @include flex-center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}

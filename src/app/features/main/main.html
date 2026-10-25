@@ -1,8 +1,7 @@
-<div class="main-page">
-  <app-header></app-header>
-  <app-sidebar></app-sidebar>
-  <div class="pages scroll-container">
-    <router-outlet />
-  </div>
-  <app-footer></app-footer>
+<header app-header></header>
+<div class="pages">
+  <router-outlet />
 </div>
+<app-sidebar></app-sidebar>
+
+<app-confirm-dialog />

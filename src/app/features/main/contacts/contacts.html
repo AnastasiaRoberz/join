@@ -1,36 +1,36 @@
-<section class="contacts" [class.contacts--detail-open]="selectedId() !== null">
-  <!-- class "&--detail-open" is added when an id is present-->
-  <div class="contacts__list">
-    <!-- container’s current selectedId value is handed to the list’s selectedId input.
+<!-- class "&--detail-open" is added when an id is present-->
+<!-- container’s current selectedId value is handed to the list’s selectedId input.
      contactSelected calls selectContact(). $event is the value  -->
-    <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
-  </div>
+@if (!(responsiveService.isMobile() && selectedId())) {
+  <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
+}
 
-  <div class="contacts__detail">
-    <div class="contacts__title__container">
-      <header class="contacts__title">
+@if (!responsiveService.isMobile() || selectedId()) {
+  <div class="details">
+    <div class="details__title__container">
+      <div class="details__title">
         <h2>Contacts</h2>
-        <div class="contacts__slogan">
-          <span class="contacts__divider"></span>
-          <p class="subheading">Better with a team</p>
-        </div>
-      </header>
+        <hr />
+        <p class="subheading">Better with a team</p>
+      </div>
       <!-- Back arrow: only visible on mobile (contacts.scss) -->
-      <button class="contacts__back" type="button" (click)="closeDetails()">
-        <svg class="contacts__back__arrow">
-          <use href="./assets/icons/icons.svg#arrow"></use>
-        </svg>
-      </button>
+      @if (responsiveService.isMobile()) {
+        <button class="btn btn-icon" type="button" (click)="closeDetails()">
+          <svg class="icon">
+            <use href="./assets/icons/icons.svg#arrow"></use>
+          </svg>
+        </button>
+      }
     </div>
     @if (selectedId(); as id) {
-      <app-contact-details [selectedId]="id" />
+      <app-contact-details [selectedId]="id" (contactDeleted)="closeDetails()" />
     }
   </div>
-</section>
+}
 
 <app-contact-dialog
   class="dialog"
   [class.is-open]="dialogService.isOpen()"
   [contact]="dialogService.selectedContact()"
   (click)="dialogService.closeDialog()"
-></app-contact-dialog>
+/>

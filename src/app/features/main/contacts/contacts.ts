@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
-import { DialogService } from '../../../services/dialog';
+import { DialogService } from '../../../services/dialog.service';
 import { ContactDialog } from './components/contact-dialog/contact-dialog';
+import { ResponsiveService } from '../../../services/responsive.service';
 
 /**
  * Container component for the Contacts page.
@@ -18,9 +19,15 @@ import { ContactDialog } from './components/contact-dialog/contact-dialog';
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.breakpoint-slogan]': 'breakpointSlogan()',
+  },
 })
 export class Contacts {
+  responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
+  breakpointSlogan = this.responsiveService.isMaxWidth(1290);
 
   /**
    * Id of the contact currently selected in the list.
@@ -28,6 +35,30 @@ export class Contacts {
    * and on mobile the list is shown.
    */
   selectedId = signal<number | undefined | null>(null);
+
+  /**
+   * The rendered details component, read as its DOM element so it can be animated.
+   * `undefined` while no contact is selected.
+   */
+  contactDetails = viewChild(ContactDetails, { read: ElementRef });
+
+  constructor() {
+    effect(() => {
+      const id = this.dialogService.pendingSelectedId(); //reads signal
+      if (id !== null) {
+        this.selectedId.set(id); //selects contact with this id
+        this.dialogService.pendingSelectedId.set(null); //resets signal
+      }
+    });
+
+    // Slide the details in from the right whenever they appear
+    // or when a different contact is selected.
+    effect(() => {
+      this.selectedId();
+      const details = this.contactDetails()?.nativeElement as HTMLElement | undefined; // due to undefined when not selected
+      if (details) this.slideIn(details);
+    });
+  }
 
   /**
    * Selects a contact and opens its details.
@@ -46,5 +77,20 @@ export class Contacts {
    */
   closeDetails(): void {
     this.selectedId.set(null);
+  }
+
+  /**
+   * slide-in animation on the given element.
+   *
+   * @param element - element to animate.
+   */
+  slideIn(details: HTMLElement): void {
+    details.animate(
+      [
+        { left: '100%', opacity: 0 },
+        { left: '0', opacity: 1 },
+      ],
+      { duration: 300, easing: 'ease-out' },
+    );
   }
 }

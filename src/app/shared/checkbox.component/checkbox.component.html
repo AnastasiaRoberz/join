@@ -1,0 +1,9 @@
+<label (change)="onInputChange($event)">
+  <svg>
+    <use [attr.href]="iconHref()"></use>
+  </svg>
+  <input type="checkbox" />
+</label>
+@if (text()) {
+  <span>{{ text() }}</span>
+}

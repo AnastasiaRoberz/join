@@ -12,6 +12,7 @@
     box-shadow: $btn-shadow-placeholder;
     text-decoration: none;
     cursor: pointer;
+    white-space: nowrap;
 
     &:hover,
     &:active {
@@ -22,18 +23,24 @@
       width: 24px;
       height: 24px;
     }
+
+    &:disabled {
+      cursor: none;
+      pointer-events: none;
+      background-color: $btn-disabled;
+    }
   }
 
   // BUTTONS SIZES
   &.btn-medium {
     font-size: $font-default;
-    padding: 16px 24px;
+    padding: calcClamp(10, 16, 768, 320);
     border-radius: 8px;
   }
 
   &.btn-large {
     font-size: $font-medium;
-    padding: 16px;
+    padding: calcClamp(10, 16, 768, 320);
     border-radius: 10px;
   }
 
@@ -55,7 +62,6 @@
   &.btn-secondary {
     background-color: transparent;
     border: 1px solid $btn-secondary-default;
-    padding: 16px;
 
     &:hover {
       border: 1px solid $btn-secondary-hover;
@@ -88,6 +94,26 @@
       background-color: $btn-add-active;
       box-shadow: $btn-shadow-placeholder;
     }
+
+    &.is-mobile {
+      @include flex-center;
+      position: absolute;
+      bottom: 32px;
+      right: 16px;
+      height: 56px;
+      width: 56px;
+      border-radius: 50%;
+      box-shadow: $btn-shadow;
+
+      .icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .btn-label {
+        display: none;
+      }
+    }
   }
 
   &.btn-txtIcon {
@@ -117,6 +143,7 @@
     &:hover {
       font-weight: 700;
       box-shadow: none;
+      color: $btn-txtIcon-hover;
     }
   }
 
@@ -132,6 +159,10 @@
     .icon {
       width: 32px;
       height: 32px;
+    }
+
+    &.btn-close-mobile {
+      color: $close-btn-mobile-default;
     }
 
     &:hover,

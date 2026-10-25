@@ -1,12 +1,12 @@
-<button class="btn btn-medium btn-add" (click)="dialogService.openDialog(null)">
-  <span class="btn__text"> Add new Contact </span>
-  <svg class="icon">
-    <use href="./assets/icons/icons.svg#add-contact"></use>
-  </svg>
-</button>
+<button
+  appBtn
+  preset="addContact"
+  [class.is-mobile]="responsiveService.isMobile()"
+  (click)="dialogService.openDialog(null)"
+></button>
 
 <div class="contact-list scroll-container">
-  @for (group of supabase.getGroupedContacts(); track $index) {
+  @for (group of contactService.groupedContacts(); track $index) {
     <p class="group-letter">{{ group.letter }}</p>
     <hr />
     <div class="group-wrapper">
@@ -14,6 +14,7 @@
         <!-- Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container. -->
         <!-- (click) sends id to contacts.ts -->
         <button
+          #contactBtn
           class="contact"
           type="button"
           [class.contact--active]="contact.id === selectedId()"

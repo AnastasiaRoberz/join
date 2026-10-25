@@ -18,14 +18,12 @@ export const BUTTON_STYLES = {
     variant: 'primary',
     size: 'large',
     icon: null,
-    type: 'button',
   },
   secondary: {
     label: '',
     variant: 'secondary',
     size: 'large',
     icon: null,
-    type: 'button',
   },
 
   // * --- GLOBALS ---*
@@ -34,14 +32,12 @@ export const BUTTON_STYLES = {
     variant: 'secondary',
     size: 'large',
     icon: 'cancel',
-    type: 'button',
   },
   check: {
     label: '',
     variant: 'primary',
     size: 'large',
     icon: 'check',
-    type: 'button',
   },
 
   // * --- SPECIFIC BUTTONS --- *
@@ -50,14 +46,12 @@ export const BUTTON_STYLES = {
     variant: 'add',
     size: 'large',
     icon: 'add-contact',
-    type: 'button',
   },
   addTask: {
     label: 'Add Task',
     variant: 'add',
     size: 'large',
     icon: 'plus',
-    type: 'button',
   },
 
   // * --- TEXT WITH ICON --- *
@@ -66,14 +60,12 @@ export const BUTTON_STYLES = {
     variant: 'txtIcon',
     size: null,
     icon: 'edit',
-    type: 'button',
   },
   deleteIcon: {
     label: 'Delete',
     variant: 'txtIcon',
     size: null,
     icon: 'delete',
-    type: 'button',
   },
 
   // * --- ICON --- *
@@ -81,22 +73,19 @@ export const BUTTON_STYLES = {
     label: null,
     variant: 'icon',
     size: null,
-    icon: 'cancel',
-    type: 'button',
+    icon: 'close',
   },
   search: {
     label: null,
     variant: 'icon',
     size: null,
     icon: 'search',
-    type: 'button',
   },
   addTaskIcon: {
     label: null,
     variant: 'add',
     size: 'small',
     icon: 'plus',
-    type: 'button',
   },
 
   // * --- ICONS --- *

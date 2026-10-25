@@ -18,15 +18,11 @@
 .input-container {
   @include flex-center;
   width: 100%;
-  padding: 12px 21px;
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 20, 768, 320);
   border: 1px solid $icon;
   border-radius: 10px;
   background-color: $color-white;
   position: relative;
-
-  @include mobile {
-    height: 40px;
-  }
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
@@ -34,29 +30,38 @@
     border-color: $input-focus-border;
 
     label {
-      transform: translateY(-120%);
+      transform: translateY(-180%);
       color: $input-focus-label;
+
+      &.is-mobile {
+        display: none;
+      }
     }
   }
 
   &:has(.ng-invalid:is(.ng-touched)) {
     border-color: $error;
+
+    label {
+      color: $error;
+    }
   }
 }
 
 label {
+  font-size: calcClamp(16, 20, 768, 320);
   position: absolute;
-  left: 21px;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: $input-default-label;
   pointer-events: none;
   background-color: white;
-  padding: 8px;
+  padding: 0 8px;
   transition: all 150ms ease-in-out;
 
-  @include mobile {
-    font-size: 13px;
+  &.is-mobile {
+    padding: 0;
   }
 }
 
@@ -75,7 +80,7 @@ label {
   bottom: -8px;
   transform: translateY(100%);
 
-  @include mobile(940px) {
-    transform: translateY(80%);
+  &.is-mobile {
+    bottom: -1px;
   }
 }

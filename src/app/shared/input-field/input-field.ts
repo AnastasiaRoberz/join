@@ -7,8 +7,9 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { ErrorService } from '../../services/error-service';
+import { ErrorService } from '../../services/error.service';
 import { NgControl } from '@angular/forms';
+import { ResponsiveService } from '../../services/responsive.service';
 
 let nextId = 0;
 
@@ -17,9 +18,13 @@ let nextId = 0;
   selector: 'app-input-field',
   styleUrl: './input-field.scss',
   templateUrl: './input-field.html',
+  host: {
+    '[class.is-mobile]': 'responsiveService.isMobile()',
+  },
 })
 export class InputField {
   errorService = inject(ErrorService);
+  responsiveService = inject(ResponsiveService);
   cdr = inject(ChangeDetectorRef);
 
   ngControl = contentChild(NgControl);
