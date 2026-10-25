@@ -8,7 +8,13 @@
 
     @if (mode() === 'assigned') {
       @for (contact of contactService.contacts(); track contact.id) {
-        <div class="dropdown__option">{{ contact.firstname }} {{ contact.surname }}</div>
+        <div class="dropdown__option">
+          <div class="dropdown__option--name">
+            <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
+            {{ contact.firstname }} {{ contact.surname }}
+          </div>
+          <app-checkbox></app-checkbox>
+        </div>
       }
     }
   </div>
