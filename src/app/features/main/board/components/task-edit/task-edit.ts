@@ -62,7 +62,6 @@ export class TaskEdit {
   onAssignedChange(ids: number[]): void {
     this.taskForm.controls.assignedTo.setValue(ids);
     this.taskForm.controls.assignedTo.markAsDirty();
-    console.log(this.task());
   }
 
   async saveTask() {
