@@ -21,6 +21,7 @@ export class AddTask {
   });
 
   categoryOpen = signal(false);
+  assignedOpen = signal(false);
 
   //prio selected with prio-btn, null when nothing selected
   selectedPrio = signal<Priority | null>(null);
@@ -79,6 +80,10 @@ export class AddTask {
 
   toggleCategory() {
     this.categoryOpen.update((v) => !v);
+  }
+
+  toggleAssigned() {
+    this.assignedOpen.update((v) => !v);
   }
 
   onCategorySelected(value: string) {
