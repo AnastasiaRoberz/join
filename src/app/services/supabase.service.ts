@@ -76,16 +76,19 @@ export class SupabaseService {
    * @param table - The target database table name
    * @returns A promise resolving to the freshly created database row (including server-generated values like `id`), or `null` on failure
    */
-  async addData<T extends Record<string, any>>(data: T, table: string): Promise<any | null> {
-    const { data: supabaseData, error } = await this.supabase
+  async addData<T extends Record<string, any>>(data: T | T[], table: string): Promise<any | null> {
+    const isArray = Array.isArray(data);
+
+    let query = this.supabase
       .from(table)
-      .insert(data)
-      .select()
-      .single();
+      .insert(data as any)
+      .select();
+    if (!isArray) query = query.single() as any;
+    const { data: result, error } = await query;
 
     if (!error) {
       this.feedbackService.showSuccess(`${capitalizeFirstLetter(table)} succesfully created.`);
-      return supabaseData;
+      return result;
     } else {
       this.feedbackService.showError(`Create ${table} failed.`);
       return null;
@@ -137,5 +140,9 @@ export class SupabaseService {
       this.feedbackService.showError(`Delete ${table} failed.`);
       return false;
     }
+  }
+
+  async deleteAssignment(taskId: number) {
+    const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
   }
 }
