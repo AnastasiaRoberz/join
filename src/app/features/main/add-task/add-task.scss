@@ -101,7 +101,7 @@
     resize: none;
   }
 
-  .category-input {
+  .dropdown-input {
     z-index: 1;
 
     &::placeholder {
@@ -114,6 +114,10 @@
       outline: none;
       border-color: $input-default-border;
     }
+  }
+
+  .assigned-input {
+    z-index: 3;
   }
 
   .assigned-dropdown {
@@ -188,6 +192,14 @@
     border-bottom-right-radius: 10px;
   }
 
+  .assigned-arrow {
+    z-index: 4;
+  }
+
+  .category-arrow {
+    z-index: 1;
+  }
+
   .dropdown__chevron {
     width: 8px;
     height: 5px;
@@ -195,7 +207,6 @@
     right: 16px;
     pointer-events: none;
     transition: transform 0.2s ease;
-    z-index: 1;
     color: $text-normal;
 
     &.rotated {

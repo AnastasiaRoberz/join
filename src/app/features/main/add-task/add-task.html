@@ -65,11 +65,12 @@
             <div class="dropdown__trigger" [class.open]="assignedOpen()" (click)="toggleAssigned()">
               <input
                 type="text"
+                class="dropdown-input assigned-input"
                 formControlName="assigned"
-                placeholder="Select contacts to assign"
+                placeholder="Select Contacts to assign"
                 [class.open]="assignedOpen()"
               />
-              <svg class="dropdown__chevron" [class.rotated]="assignedOpen()">
+              <svg class="dropdown__chevron assigned-arrow" [class.rotated]="assignedOpen()">
                 <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
               </svg>
             </div>
@@ -88,13 +89,13 @@
           <div class="taskWrap__withHint">
             <div class="dropdown__trigger" [class.open]="categoryOpen()" (click)="toggleCategory()">
               <input
-                class="category-input"
+                class="dropdown-input"
                 type="text"
                 readonly
                 formControlName="category"
                 placeholder="Select Task Category"
               />
-              <svg class="dropdown__chevron" [class.rotated]="categoryOpen()">
+              <svg class="dropdown__chevron category-arrow" [class.rotated]="categoryOpen()">
                 <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
               </svg>
             </div>
