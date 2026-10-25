@@ -78,9 +78,21 @@
               <app-dropdown
                 class="assigned-dropdown"
                 mode="assigned"
-                (categorySelected)="onCategorySelected($event)"
+                [selectedContacts]="assignedContacts()"
+                (contactsSelected)="onContactsSelected($event)"
                 (closeDropdown)="assignedOpen.set(false)"
+                (click)="$event.stopPropagation()"
               ></app-dropdown>
+            }
+            @if (assignedContacts().length > 0) {
+              <div class="contacts-wrapper">
+                @for (contact of assignedContacts().slice(0, 4); track contact.id) {
+                  <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
+                }
+                @if (assignedContacts().length > 4) {
+                  <div class="avatar-overflow">+{{ assignedContacts().length - 4 }}</div>
+                }
+              </div>
             }
           </div>
         </div>

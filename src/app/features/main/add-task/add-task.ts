@@ -3,9 +3,11 @@ import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Dropdown } from './components/dropdown/dropdown';
+import { ContactInterface } from '../../../interfaces/contact.interface';
+import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
 
 @Component({
-  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule],
+  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
@@ -22,6 +24,8 @@ export class AddTask {
 
   categoryOpen = signal(false);
   assignedOpen = signal(false);
+
+  assignedContacts = signal<ContactInterface[]>([]);
 
   //prio selected with prio-btn, null when nothing selected
   selectedPrio = signal<Priority | null>(null);
@@ -89,6 +93,10 @@ export class AddTask {
   onCategorySelected(value: string) {
     this.taskForm.get('category')?.setValue(value);
     this.categoryOpen.set(false);
+  }
+
+  onContactsSelected(contacts: ContactInterface[]) {
+    this.assignedContacts.set(contacts);
   }
 
   // onSubmit(): void {
