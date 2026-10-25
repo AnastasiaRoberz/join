@@ -13,7 +13,7 @@ import { CursorTooltipDirective } from '../../services/cursor-tooltip.directive'
   },
 })
 export class AvatarGroupComponent {
-  users = input<ContactInterface[]>([]);
+  users = input<Partial<ContactInterface>[]>([]);
 
   size = input<'small' | 'medium'>('small');
   maxUsers = input<number>(3);
