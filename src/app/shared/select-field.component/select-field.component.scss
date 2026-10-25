@@ -64,10 +64,6 @@ input {
     border-radius: 10px;
     cursor: pointer;
 
-    &.is-active {
-      background-color: $btn-icon-hover;
-    }
-
     &.selected {
       background-color: $dropdown-item-active;
       color: $text-light;
