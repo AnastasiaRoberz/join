@@ -1,0 +1,195 @@
+@use '../../styles/' as *;
+
+// 1. CONTAINER & BASIS-FUNKTION
+.flatpickr-calendar {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+
+  &.open {
+    @include flex-center(column);
+    gap: 4px;
+    width: auto !important;
+    background-color: $color-white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 14px 3px #00000024;
+    padding: 8px;
+    font-family: inherit;
+    user-select: none;
+  }
+}
+
+.flatpickr-months {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .flatpickr-month {
+    @include flex-center;
+    flex: 1;
+  }
+
+  .flatpickr-current-month {
+    @include flex-center;
+    gap: 8px;
+    font-size: $font-medium;
+    font-weight: 700;
+    color: $main-color;
+
+    .cur-year {
+      color: inherit;
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 50px;
+      font-size: inherit;
+      cursor: default;
+
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    .arrowUp,
+    .arrowDown {
+      display: none;
+    }
+  }
+
+  .flatpickr-prev-month,
+  .flatpickr-next-month {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: background-color 0.15s ease;
+    visibility: visible;
+
+    &:hover {
+      background-color: $color-grey-50;
+    }
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    &.flatpickr-disabled {
+      visibility: hidden;
+    }
+  }
+
+  .flatpickr-prev-month svg {
+    transform: rotate(90deg);
+  }
+
+  .flatpickr-next-month svg {
+    transform: rotate(-90deg);
+  }
+}
+
+.flatpickr-innerContainer {
+  @include flex-center;
+  align-items: stretch;
+  width: 100%;
+}
+
+.flatpickr-rContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.flatpickr-weekdays {
+  width: 100%;
+
+  .flatpickr-weekdaycontainer {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+  }
+
+  span.flatpickr-weekday {
+    font-size: calcClamp(13, 16, 768, 320);
+    font-weight: 600;
+    color: $main-color;
+    width: 40px;
+  }
+}
+
+.flatpickr-days {
+  width: 100%;
+
+  .dayContainer {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    place-items: center;
+  }
+}
+
+.flatpickr-day {
+  @include flex-center;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  font-size: calcClamp(13, 16, 768, 320);
+  color: $text-dark;
+  cursor: pointer;
+  transition: all 0.1s ease;
+
+  &:hover:not(.selected) {
+    background-color: $color-grey-50;
+  }
+
+  &.today {
+    border: 1px solid $main-color;
+    font-weight: 500;
+  }
+
+  &.selected {
+    background-color: $main-color;
+    color: $color-white;
+    font-weight: 500;
+  }
+
+  &.prevMonthDay,
+  &.nextMonthDay {
+    color: $color-grey-300;
+  }
+
+  &.flatpickr-disabled {
+    color: $color-grey-100;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.flatpickr-weekwrapper {
+  @include flex-center(column);
+  align-items: stretch;
+  padding-right: 8px;
+  height: 100%;
+  border-right: 1px solid $color-grey-100;
+
+  .flatpickr-weeks {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    width: 100%;
+
+    .flatpickr-day {
+      color: $color-grey-400;
+      font-size: 12px;
+      cursor: default;
+      pointer-events: none;
+      width: 100%;
+      height: 36px;
+    }
+  }
+}
