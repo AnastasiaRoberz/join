@@ -15,40 +15,57 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pickerInstance = flatpickr(this.element.nativeElement, {
+      positionElement: this.element.nativeElement.parentElement,
+      position: 'auto center',
+      monthSelectorType: 'static',
       dateFormat: 'd/m/Y',
       minDate: 'today',
+      weekNumbers: true,
       disableMobile: true,
       allowInput: true,
-      clickOpens: false,
+      // clickOpens: false,
+      nextArrow: /*html*/ `
+        <svg>
+          <use href="./assets/icons/icons.svg#arrow-down"></use>
+      </svg>
+      `,
+      prevArrow: /*html*/ `
+        <svg>
+          <use href="./assets/icons/icons.svg#arrow-down"></use>
+      </svg>
+      `,
       parseDate: (dateStr: string) => {
-        const parsedDate = this.parseFlexibleDate(dateStr.trim());
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (parsedDate < today) {
-          return new Date(NaN);
-        }
-
-        return parsedDate;
+        return this.parseFlexibleDate(dateStr.trim());
       },
-      onChange: (selectedDates, dateStr) => {
-        this.dateChanged.emit(dateStr);
-      },
-      onOpen: () => this.isOpen.set(true),
-      onClose: () => this.isOpen.set(false),
+      onChange: (selectedDates, dateStr, instance) => this.dateChanged.emit(dateStr),
     });
   }
 
   toggle(): void {
     if (!this.isOpen()) {
       this.pickerInstance?.open();
+      this.isOpen.set(true);
     } else {
       this.pickerInstance?.close();
+      this.isOpen.set(false);
     }
   }
 
   setDate(value: string): void {
-    this.pickerInstance?.setDate(value, false);
+    if (!value || !this.pickerInstance) return;
+
+    const parsedDate = value.includes('-')
+      ? flatpickr.parseDate(value, 'Y-m-d')
+      : flatpickr.parseDate(value, 'd/m/Y');
+
+    if (parsedDate && !isNaN(parsedDate.getTime())) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (parsedDate < today) {
+        this.pickerInstance.set('minDate', parsedDate);
+      }
+      this.pickerInstance.setDate(parsedDate, false);
+    }
   }
 
   ngOnDestroy(): void {
