@@ -61,7 +61,27 @@
         </div>
         <div class="taskWrap__inputBox">
           <label for="">Assigned to</label>
-          <input type="text" formControlName="assigned" placeholder="Select contacts to assign" />
+          <div class="taskWrap">
+            <div class="dropdown__trigger" [class.open]="assignedOpen()" (click)="toggleAssigned()">
+              <input
+                type="text"
+                formControlName="assigned"
+                placeholder="Select contacts to assign"
+                [class.open]="assignedOpen()"
+              />
+              <svg class="dropdown__chevron" [class.rotated]="assignedOpen()">
+                <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
+              </svg>
+            </div>
+            @if (assignedOpen()) {
+              <app-dropdown
+                class="assigned-dropdown"
+                mode="assigned"
+                (categorySelected)="onCategorySelected($event)"
+                (closeDropdown)="assignedOpen.set(false)"
+              ></app-dropdown>
+            }
+          </div>
         </div>
         <div class="taskWrap__inputBox">
           <label>Category<span class="required">*</span></label>
