@@ -61,12 +61,17 @@
         </div>
         <div class="taskWrap__inputBox">
           <label for="">Assigned to</label>
-          <select formControlName="assigned"></select>
+          <input type="text" formControlName="assigned" placeholder="Select contacts to assign" />
         </div>
         <div class="taskWrap__inputBox">
           <label>Category<span class="required">*</span></label>
           <div class="taskWrap__withHint">
-            <select formControlName="category"></select>
+            <select formControlName="category">
+              <option value="" disabled selected hidden>Select Task Category</option>
+              @for (cat of categories; track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
             <span class="hint-msg">This field is required</span>
           </div>
         </div>

@@ -19,6 +19,8 @@ export class AddTask {
     subtask: new FormControl(''),
   });
 
+  categories = ['Technical Task', 'User Story'];
+
   //prio selected with prio-btn, null when nothing selected
   selectedPrio = signal<Priority | null>(null);
 
