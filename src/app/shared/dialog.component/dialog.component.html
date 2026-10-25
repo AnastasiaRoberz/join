@@ -7,7 +7,7 @@
       <app-task-details />
     }
     @case ('task-edit') {
-      <app-task-edit />
+      <app-task-edit [task]="dialogService.selectedItem()" />
     }
   }
 </div>
