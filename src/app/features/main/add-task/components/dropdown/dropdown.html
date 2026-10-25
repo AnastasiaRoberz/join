@@ -1,0 +1,9 @@
+<div class="dropdown__panel">
+  @if (mode() === 'category') {
+    @for (cat of categories; track cat.value) {
+      <div class="dropdown__option" (click)="selectCategory(cat)">{{ cat.label }}</div>
+    }
+  }
+
+  @if (mode() === 'assigned') {}
+</div>
