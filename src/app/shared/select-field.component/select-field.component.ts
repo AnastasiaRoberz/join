@@ -1,85 +1,172 @@
 import {
   Component,
   computed,
+  contentChild,
   effect,
   ElementRef,
   inject,
   input,
   model,
   signal,
+  TemplateRef,
   viewChild,
 } from '@angular/core';
-import { ResponsiveService } from '../../services/responsive.service';
-import { ContactInterface } from '../../interfaces/contact.interface';
-import { UserAvatar } from '../user-avatar/user-avatar';
-import { CheckboxComponent } from '../checkbox.component/checkbox.component';
+import { NgTemplateOutlet } from '@angular/common';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
-import { CdkOverlayOrigin, ConnectedPosition, Overlay, OverlayModule } from '@angular/cdk/overlay';
+import { CdkOverlayOrigin, ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
+import { ResponsiveService } from '../../services/responsive.service';
 import { filterInput } from '../../utils/utils';
 
 let nextId = 0;
 
+/**
+ * Generic, accessible select and autocomplete combobox component built on top of
+ * `@angular/aria/combobox`, `@angular/aria/listbox`, and `@angular/cdk/overlay`.
+ *
+ * Supports three primary usage modes:
+ * 1. **Multi-Select with Custom Template** (e.g., assigning contacts with avatars, checkboxes, and a footer).
+ * 2. **Single-Select Dropdown** (e.g., selecting a task category).
+ * 3. **Search / Autocomplete Input** (e.g., filtering tasks only after typing via `[openOnClick]="false"`).
+ *
+ * @example
+ * ### 1. Simple Single-Select (Strings)
+ * ```html
+ * <app-select-field
+ *   label="Category"
+ *   placeholder="Select task category"
+ *   [options]="['Technical Task', 'User Story']"
+ *   [(value)]="selectedCategory"
+ * />
+ * ```
+ *
+ * @example
+ * ### 2. Multi-Select with Custom Option Template & Footer
+ * ```html
+ * <app-select-field
+ *   label="Assigned to"
+ *   placeholder="Select contacts to assign"
+ *   [options]="contacts()"
+ *   [multi]="true"
+ *   [(value)]="selectedContactIds"
+ *   [getSearchStrings]="contactSearchStrings"
+ * >
+ *   <ng-template #optionTemplate let-contact let-selected="selected">
+ *     <app-user-avatar [user]="contact" size="medium" />
+ *     <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+ *     <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
+ *   </ng-template>
+ *
+ *   <div footer class="assigned-users">...</div>
+ * </app-select-field>
+ * ```
+ *
+ * @typeParam T - The data type of the option items passed to `[options]`.
+ */
 @Component({
   imports: [
-    UserAvatar,
-    CheckboxComponent,
     Combobox,
     ComboboxPopup,
+    ComboboxWidget,
     Listbox,
     Option,
     OverlayModule,
-    ComboboxWidget,
+    NgTemplateOutlet,
   ],
   selector: 'app-select-field',
   styleUrl: './select-field.component.scss',
   templateUrl: './select-field.component.html',
 })
-export class SelectFieldComponent {
+export class SelectFieldComponent<T = any> {
+  /** Service used to adapt label styling to mobile/desktop viewports. */
   responsiveService = inject(ResponsiveService);
-  private overlay = inject(Overlay);
 
+  // ---------------------------------------------------------------------------
+  // Inputs & Two-Way Models
+  // ---------------------------------------------------------------------------
+
+  /** Unique HTML id attribute for the underlying input element. */
   id = input<string>(`app-select-${nextId++}`);
-  label = input<string>();
-  options = input<ContactInterface[]>([]);
-  searchTerm = signal<string>('');
-  filteredOptions = computed(() => {
-    return filterInput(this.options(), this.searchTerm(), (contact) => [
-      contact.firstname,
-      contact.surname,
-    ]);
-  });
 
+  /** Optional label text displayed above the select input. */
+  label = input<string>();
+
+  /** Placeholder text shown inside the input when no value is displayed. */
+  placeholder = input<string>('Select an option');
+
+  /** Fallback message displayed inside the dropdown when filtering yields no matches. */
+  emptyText = input<string>('No results found.');
+
+  /** Full list of selectable items of type `T`. */
+  options = input<T[]>([]);
+
+  /** Whether multiple options can be selected simultaneously (`true`) or only one (`false`). */
+  multi = input<boolean>(false);
+
+  /**
+   * Whether clicking the input field immediately opens the dropdown popup.
+   * Set to `false` for pure search/autocomplete fields that should only open once the user types.
+   */
+  openOnClick = input<boolean>(true);
+
+  /**
+   * Two-way bound selection value.
+   * - In `multi` mode: holds an array of selected keys (e.g., `number[]`).
+   * - In single-select mode: holds the single selected key/value (e.g., `string | number | null`).
+   */
+  value = model<any>();
+
+  /**
+   * Extracts a unique primitive identifier from an option item for selection comparison and tracking.
+   * Defaults to `item.id` if present on an object, or the item itself for primitives.
+   */
+  valueKey = input<(item: T) => any>((item: any) =>
+    item && typeof item === 'object' && 'id' in item ? item.id : item,
+  );
+
+  /**
+   * Formats an option item into a human-readable string for default option rendering
+   * and for displaying the selected value inside the input in single-select mode.
+   */
+  labelFn = input<(item: T) => string>((item: any) =>
+    typeof item === 'string' ? item : (item?.name ?? ''),
+  );
+
+  /**
+   * Extracts the array of searchable strings from an option item used by `filterInput()`.
+   * Each string is checked via case-insensitive `startsWith` matching against `searchTerm()`.
+   */
+  getSearchStrings = input<(item: T) => string[]>((item: any) => [
+    typeof item === 'string' ? item : (item?.name ?? ''),
+  ]);
+
+  // ---------------------------------------------------------------------------
+  // Content & View Queries
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Optional custom `<ng-template #optionTemplate let-item let-selected="selected">`
+   * projected by the parent component to customize how each dropdown row is rendered.
+   */
+  optionTemplate = contentChild<TemplateRef<{ $implicit: T; selected: boolean }>>('optionTemplate');
+
+  /** Reference to the native text input element used to clear/sync its DOM value on close. */
   inputField = viewChild<ElementRef<HTMLInputElement>>('inputField');
 
-  constructor() {
-    effect(() => {
-      if (!this.popupExpanded()) {
-        this.searchTerm.set('');
-        const element = this.inputField()?.nativeElement;
-        if (element) element.value = '';
-      }
-    });
-  }
-
-  onSearchInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.searchTerm.set(input.value);
-  }
-
-  selectedIds = model<number[]>([]);
-  assignedContacts = computed(() => {
-    const ids = new Set(this.selectedIds());
-    return this.options().filter((contact) => ids.has(contact.id));
-  });
-
-  /** The combobox listbox popup. */
-  readonly listbox = viewChild(Listbox);
-
-  /** Whether the popup is expanded. */
-  readonly popupExpanded = signal(false);
+  /** Reference to the CDK overlay origin container used for dropdown positioning and width calculation. */
   readonly trigger = viewChild<CdkOverlayOrigin>('trigger');
 
+  // ---------------------------------------------------------------------------
+  // Internal State & Computed Signals
+  // ---------------------------------------------------------------------------
+
+  /** Current search query typed into the combobox input. */
+  searchTerm = signal<string>('');
+
+  /** Whether the CDK overlay dropdown popup is currently open. */
+  popupExpanded = signal<boolean>(false);
+
+  /** Preferred CDK overlay positions, dynamically ordered based on available viewport space. */
   private readonly positionAbove: ConnectedPosition = {
     originX: 'start',
     originY: 'top',
@@ -96,39 +183,140 @@ export class SelectFieldComponent {
 
   positions = signal<ConnectedPosition[]>([this.positionBelow, this.positionAbove]);
 
-  togglePopup(): void {
-    if (!this.popupExpanded()) {
-      this.openPopup();
-    } else {
-      this.closePopup();
+  /** Options filtered reactively by the current `searchTerm()` using `getSearchStrings()`. */
+  filteredOptions = computed(() =>
+    filterInput(this.options(), this.searchTerm(), this.getSearchStrings()),
+  );
+
+  /**
+   * Normalized array representation of `value()` required by `@angular/aria/listbox`,
+   * which always operates on an array regardless of single or multi-select mode.
+   */
+  listboxValue = computed<any[]>(() => {
+    const current = this.value();
+    if (current == null || current === '') return [];
+    return Array.isArray(current) ? current : [current];
+  });
+
+  /**
+   * Text value displayed inside the `<input>` element:
+   * - In `multi` mode: displays the active `searchTerm()`.
+   * - In single-select mode: displays `searchTerm()` while actively searching, or the formatted label of the selected option.
+   */
+  displayValue = computed(() => {
+    if (this.multi()) {
+      return this.searchTerm();
     }
-  }
+    if (this.popupExpanded() && this.searchTerm()) {
+      return this.searchTerm();
+    }
+    const currentVal = this.value();
+    if (currentVal == null || currentVal === '') return '';
+    const matchedOption = this.options().find((opt) => this.valueKey()(opt) === currentVal);
+    return this.labelFn()(matchedOption ?? currentVal);
+  });
 
-  openPopup(): void {
-    this.updateOverlayDirection();
-    this.popupExpanded.set(true);
-    this.searchTerm.set('');
-  }
-
-  closePopup(): void {
-    this.popupExpanded.set(false);
-    this.searchTerm.set('');
-  }
-
-  isAssigned(contactId: number): boolean {
-    return this.selectedIds().includes(contactId);
-  }
-
-  toggleAssignment(contactId: number, checked: boolean): void {
-    this.selectedIds.update((currentIds) => {
-      if (checked) {
-        return currentIds.includes(contactId) ? currentIds : [...currentIds, contactId];
-      } else {
-        return currentIds.filter((id) => id !== contactId);
+  /**
+   * Initializes an effect that resets the search term and restores the input display value
+   * whenever the dropdown popup closes (whether via arrow click, Escape key, or outside click).
+   */
+  constructor() {
+    effect(() => {
+      if (!this.popupExpanded()) {
+        this.searchTerm.set('');
+        const element = this.inputField()?.nativeElement;
+        if (element) element.value = this.displayValue();
       }
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // User Interaction & Popup Control Methods
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Updates `searchTerm` as the user types and automatically opens the dropdown
+   * if it was closed (e.g., when `[openOnClick]="false"`).
+   *
+   * @param event - The DOM `input` event from the text field.
+   */
+  onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchTerm.set(value);
+
+    if (!this.popupExpanded() && value.trim().length > 0) {
+      this.openPopup();
+    }
+  }
+
+  /**
+   * Opens the dropdown when clicking into the input field, provided `openOnClick()` is enabled.
+   */
+  onInputClick(): void {
+    if (this.openOnClick()) {
+      this.openPopup();
+    }
+  }
+
+  /**
+   * Toggles the visibility of the dropdown popup when clicking the arrow button.
+   */
+  togglePopup(): void {
+    if (this.popupExpanded()) {
+      this.closePopup();
+    } else {
+      this.openPopup();
+    }
+  }
+
+  /**
+   * Recalculates available viewport space above/below the input and opens the dropdown popup.
+   */
+  openPopup(): void {
+    this.updateOverlayDirection();
+    this.popupExpanded.set(true);
+  }
+
+  /**
+   * Closes the dropdown popup. The constructor effect will automatically reset `searchTerm`.
+   */
+  closePopup(): void {
+    this.popupExpanded.set(false);
+  }
+
+  /**
+   * Checks whether a given option item is currently part of the selection.
+   *
+   * @param item - The option item to check.
+   * @returns `true` if the item's key is included in `listboxValue()`, otherwise `false`.
+   */
+  isSelected(item: T): boolean {
+    return this.listboxValue().includes(this.valueKey()(item));
+  }
+
+  /**
+   * Handles selection changes emitted by `ngListbox` (via keyboard Enter/Space or row click).
+   * Unwraps the single item in single-select mode and closes the popup.
+   *
+   * @param selected - Array of selected keys emitted by `ngListbox`.
+   */
+  onValueChange(selected: any[]): void {
+    if (this.multi()) {
+      this.value.set(selected);
+    } else {
+      this.value.set(selected[0] ?? null);
+      this.closePopup();
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Private Helpers
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Determines whether the dropdown should open downwards or upwards depending on
+   * the remaining viewport space below the trigger element.
+   */
   private updateOverlayDirection(): void {
     const el = this.trigger()?.elementRef.nativeElement;
     if (!el) return;
@@ -143,8 +331,4 @@ export class SelectFieldComponent {
       this.positions.set([this.positionBelow, this.positionAbove]);
     }
   }
-
-  readonly scrollStrategy = this.overlay.scrollStrategies.reposition({
-    autoClose: false,
-  });
 }

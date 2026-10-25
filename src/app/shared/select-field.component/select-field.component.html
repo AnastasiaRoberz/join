@@ -6,15 +6,17 @@
   <input
     type="text"
     [id]="id()"
-    placeholder="Select contacts to assign"
+    [placeholder]="placeholder()"
+    [value]="displayValue()"
     #combobox="ngCombobox"
     ngCombobox
     [(expanded)]="popupExpanded"
     [preserveContent]="false"
-    (click)="openPopup()"
+    (click)="onInputClick()"
     (input)="onSearchInput($event)"
     #inputField
   />
+
   <button type="button" (click)="togglePopup()" (mousedown)="$event.preventDefault()">
     <svg class="input-icon" [class.is-open]="popupExpanded()">
       <use href="./assets/icons/icons.svg#arrow-down"></use>
@@ -22,18 +24,8 @@
   </button>
 </div>
 
-<div class="assigned-users">
-  @for (contact of assignedContacts(); track contact.id) {
-    <div class="avatar-wrapper">
-      <app-user-avatar [user]="contact" size="medium" />
-      <button type="button" class="btn-delete-user" (click)="toggleAssignment(contact.id, false)">
-        <svg>
-          <use href="./assets/icons/icons.svg#delete"></use>
-        </svg>
-      </button>
-    </div>
-  }
-</div>
+<!-- Optional slot for footer content (e.g., assigned user avatar badges) -->
+<ng-content select="[footer]" />
 
 <ng-template
   cdkConnectedOverlay
@@ -45,35 +37,39 @@
 >
   <ng-template ngComboboxPopup [combobox]="combobox">
     <ul
+      ngComboboxWidget
       #listbox="ngListbox"
       ngListbox
-      ngComboboxWidget
-      [multi]="true"
+      [multi]="multi()"
       selectionMode="explicit"
-      [(value)]="selectedIds"
+      [value]="listboxValue()"
+      (valueChange)="onValueChange($event)"
       [activeDescendant]="listbox.activeDescendant()"
       class="dropdown scroll-container"
       [class.is-open]="popupExpanded()"
     >
-      @for (contact of filteredOptions(); track contact.id) {
+      @for (option of filteredOptions(); track valueKey()(option)) {
         <li
           #opt="ngOption"
           ngOption
-          [value]="contact.id"
-          [class.selected]="isAssigned(contact.id)"
+          [value]="valueKey()(option)"
+          [class.selected]="isSelected(option)"
           [class.is-active]="opt.active()"
         >
-          <app-user-avatar [user]="contact" size="medium" />
-          <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
-          <app-checkbox
-            [checked]="isAssigned(contact.id)"
-            (checkedChange)="toggleAssignment(contact.id, $event)"
-            (click)="$event.stopPropagation()"
-          />
+          @if (optionTemplate()) {
+            <ng-container
+              *ngTemplateOutlet="
+                optionTemplate()!;
+                context: { $implicit: option, selected: isSelected(option) }
+              "
+            />
+          } @else {
+            <span class="name">{{ labelFn()(option) }}</span>
+          }
         </li>
       } @empty {
         <li class="no-results">
-          <span>No contacts found.</span>
+          <span>{{ emptyText() }}</span>
         </li>
       }
     </ul>

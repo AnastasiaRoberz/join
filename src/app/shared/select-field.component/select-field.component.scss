@@ -5,11 +5,8 @@
   width: 100%;
 }
 
-input {
-  border: none;
-  outline: none;
-  background: none;
-  flex: 1;
+label {
+  margin-bottom: 8px;
 }
 
 .input-container {
@@ -28,8 +25,11 @@ input {
   }
 }
 
-label {
-  margin-bottom: 8px;
+input {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
 }
 
 .input-icon {
@@ -50,11 +50,8 @@ label {
   max-height: 302px;
   width: 100%;
   box-shadow: 0px 0px 14px 3px #00000024;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  background-color: white;
+  border-radius: 10px;
+  background-color: $color-white;
   z-index: 2;
   overflow-x: hidden;
   margin: 2px 0;
@@ -87,41 +84,6 @@ label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-}
-
-.assigned-users {
-  @include flex-start(row, both);
-  gap: 8px;
-  margin-top: 8px;
-
-  .avatar-wrapper {
-    position: relative;
-    cursor: pointer;
-
-    &:hover {
-      .btn-delete-user {
-        @include flex-center;
-      }
-    }
-  }
-
-  .btn-delete-user {
-    display: none;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(1px);
-
-    svg {
-      width: 24px;
-      height: 24px;
-      color: $main-color;
-    }
   }
 }
 
