@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, inject, input, output } from '@angular/core';
+import { ContactService } from '../../../../../services/contact.service';
 
 export interface CategoryOption {
   value: string;
@@ -15,6 +16,7 @@ export class Dropdown {
   mode = input<'category' | 'assigned'>('category');
   categorySelected = output<string>();
   closeDropdown = output<void>();
+  contactService = inject(ContactService);
 
   private elementRef = inject(ElementRef);
 
