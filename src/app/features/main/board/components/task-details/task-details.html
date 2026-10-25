@@ -12,7 +12,7 @@
     <table>
       <tr>
         <th>Due date:</th>
-        <td>{{ task.due_date }}</td>
+        <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
       </tr>
       <tr class="spacer"></tr>
       <tr>
@@ -49,7 +49,6 @@
               [checked]="subtask.is_done"
               (checkedChange)="toggleSubtaskStatus(subtask.id, task.id, $event)"
             />
-            <!-- <span>{{ subtask.title }}</span> -->
           </li>
         }
       </ul>
@@ -59,6 +58,6 @@
   <div class="button-wrapper">
     <button appBtn preset="deleteIcon"></button>
     <hr />
-    <button appBtn preset="editIcon"></button>
+    <button appBtn preset="editIcon" (click)="dialogService.openDialog('task-edit', task)"></button>
   </div>
 }

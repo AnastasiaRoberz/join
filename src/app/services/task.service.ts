@@ -33,9 +33,6 @@ export class TaskService {
       'tasks',
       '*, subtasks(*), task-assignment(contacts(id, firstname, surname, badge_color))',
     );
-
-    console.log(taskData);
-
     if (!taskData) return;
 
     const mappedTasks = taskData.map((task: any) => ({
@@ -190,12 +187,19 @@ export class TaskService {
    * @param userId - The contact ID to assign
    * @returns A promise that resolves after the assignment is persisted and tasks are reloaded
    */
-  async assignUser(taskId: number, userId: number) {
-    const data = {
-      task_id: taskId,
-      contact_id: userId,
-    };
-    await this.supabaseService.addData(data, 'task-assignment');
+  async setTaskAssignment(taskId: number, contactIds: number[]): Promise<void> {
+    await this.supabaseService.deleteAssignment(taskId);
+
+    if (contactIds.length > 0) {
+      const newData = contactIds.map((contactId) => ({
+        task_id: taskId,
+        contact_id: contactId,
+      }));
+      console.log(newData);
+
+      await this.supabaseService.addData(newData, 'task-assignment');
+    }
+
     await this.getAllTasks();
   }
   //#endregion

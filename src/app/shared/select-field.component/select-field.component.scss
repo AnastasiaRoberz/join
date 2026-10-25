@@ -1,0 +1,90 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  width: 100%;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+.input-container {
+  @include flex-center;
+  width: 100%;
+  height: 48px;
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 20, 768, 320);
+  border: 1px solid $input-default-border;
+  border-radius: 10px;
+  background-color: $color-white;
+  position: relative;
+  z-index: 3;
+
+  &:focus-within {
+    border-color: $input-focus-border;
+  }
+}
+
+input {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
+}
+
+.input-icon {
+  width: 24px;
+  height: 24px;
+  color: $input-icon;
+  cursor: pointer;
+
+  &.is-open {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown {
+  @include flex-start(column, both);
+  gap: 2px;
+  padding: 2px;
+  max-height: 302px;
+  width: 100%;
+  box-shadow: 0px 0px 14px 3px #00000024;
+  border-radius: 10px;
+  background-color: $color-white;
+  z-index: 2;
+  overflow-x: hidden;
+  margin: 2px 0;
+
+  li {
+    @include flex-center;
+    gap: 16px;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &.selected {
+      background-color: $dropdown-item-active;
+      color: $text-light;
+
+      &:hover,
+      &.is-active {
+        background-color: $dropdown-item-active-hover;
+      }
+    }
+  }
+
+  .name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.no-results {
+  @include flex-center;
+  padding: 12px 16px;
+  cursor: default;
+}

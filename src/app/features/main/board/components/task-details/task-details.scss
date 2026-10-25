@@ -1,4 +1,4 @@
-@use '../../../../../../public/assets/styles' as *;
+@use '../../../../../../../public/assets/styles/' as *;
 
 :host {
   @include flex-start(column);
@@ -56,7 +56,7 @@ table {
   @include flex-start(column);
   justify-content: flex-start;
   gap: 24px;
-  width: calc(100% + 32px);
+
   height: 100%;
 }
 

@@ -1,0 +1,57 @@
+<button
+  appBtn
+  preset="close"
+  class="btn-close"
+  (click)="dialogService.openDialog('task', task())"
+></button>
+
+<form [formGroup]="taskForm" (ngSubmit)="saveTask()" class="scroll-container" cdkScrollable>
+  <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
+
+  <app-text-field
+    id="description"
+    formControlName="description"
+    labelPos="top"
+    label="Description"
+    type="textarea"
+  />
+
+  <app-calendar-field id="due-date" formControlName="dueDate" label="Due Date" />
+
+  <app-select-field
+    id="assigned-to"
+    label="Assigned to"
+    placeholder="Select contacts to assign"
+    emptyText="No contacts found."
+    [options]="contactService.sortedContacts()"
+    [multi]="true"
+    [value]="selectedContactIds()"
+    (valueChange)="onAssignmentChange($event)"
+    [getSearchStrings]="contactSearchStrings"
+  >
+    <ng-template #optionTemplate let-contact let-selected="selected">
+      <app-user-avatar [user]="contact" size="medium" />
+      <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+      <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
+    </ng-template>
+
+    <div footer class="assigned-users">
+      @for (contact of selectedContacts(); track contact.id) {
+        <div class="avatar-wrapper">
+          <app-user-avatar [user]="contact" size="medium" />
+          <button
+            type="button"
+            class="btn-delete-user"
+            (click)="toggleAssignment(contact.id, false)"
+          >
+            <svg>
+              <use href="./assets/icons/icons.svg#delete"></use>
+            </svg>
+          </button>
+        </div>
+      }
+    </div>
+  </app-select-field>
+
+  <button appBtn type="submit" preset="check">Ok</button>
+</form>
