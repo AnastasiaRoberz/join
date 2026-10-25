@@ -189,13 +189,23 @@ export class SelectFieldComponent<T = any> {
   );
 
   /**
-   * Normalized array representation of `value()` required by `@angular/aria/listbox`,
-   * which always operates on an array regardless of single or multi-select mode.
+   * Normalized array of all currently selected keys from `value()`,
+   * regardless of whether those options are currently visible in `filteredOptions()`.
    */
-  listboxValue = computed<any[]>(() => {
+  selectedKeys = computed<any[]>(() => {
     const current = this.value();
     if (current == null || current === '') return [];
     return Array.isArray(current) ? current : [current];
+  });
+
+  /**
+   * Subset of `selectedKeys()` that are currently rendered in `filteredOptions()`.
+   * Passed to `ngListbox [value]` so `@angular/aria/listbox` does not strip out
+   * selected items that are temporarily hidden while the user types a search filter.
+   */
+  listboxValue = computed<any[]>(() => {
+    const visibleKeys = new Set(this.filteredOptions().map((opt) => this.valueKey()(opt)));
+    return this.selectedKeys().filter((key) => visibleKeys.has(key));
   });
 
   /**
@@ -288,21 +298,25 @@ export class SelectFieldComponent<T = any> {
    * Checks whether a given option item is currently part of the selection.
    *
    * @param item - The option item to check.
-   * @returns `true` if the item's key is included in `listboxValue()`, otherwise `false`.
+   * @returns `true` if the item's key is included in `selectedKeys()`, otherwise `false`.
    */
   isSelected(item: T): boolean {
-    return this.listboxValue().includes(this.valueKey()(item));
+    return this.selectedKeys().includes(this.valueKey()(item));
   }
 
   /**
    * Handles selection changes emitted by `ngListbox` (via keyboard Enter/Space or row click).
-   * Unwraps the single item in single-select mode and closes the popup.
+   * - In `multi` mode: merges the updated visible selection with any previously selected keys
+   *   that are currently hidden by the active search filter.
+   * - In single-select mode: unwraps the single selected item and closes the popup.
    *
-   * @param selected - Array of selected keys emitted by `ngListbox`.
+   * @param selected - Array of selected visible keys emitted by `ngListbox`.
    */
   onValueChange(selected: any[]): void {
     if (this.multi()) {
-      this.value.set(selected);
+      const visibleKeys = new Set(this.filteredOptions().map((opt) => this.valueKey()(opt)));
+      const hiddenSelectedKeys = this.selectedKeys().filter((key) => !visibleKeys.has(key));
+      this.value.set([...hiddenSelectedKeys, ...selected]);
     } else {
       this.value.set(selected[0] ?? null);
       this.closePopup();
