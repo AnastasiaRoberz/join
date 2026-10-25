@@ -1,0 +1,64 @@
+@if (label()) {
+  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()">{{ label() }}</label>
+}
+
+<div class="input-container" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+  <input
+    type="text"
+    [id]="id()"
+    placeholder="Select contacts to assign"
+    #combobox="ngCombobox"
+    ngCombobox
+    [(expanded)]="popupExpanded"
+    [preserveContent]="false"
+    (click)="openPopup()"
+  />
+  <button type="button" (click)="togglePopup()" (mousedown)="$event.preventDefault()">
+    <svg class="input-icon" [class.is-open]="popupExpanded()">
+      <use href="./assets/icons/icons.svg#arrow-down"></use>
+    </svg>
+  </button>
+</div>
+
+<div class="assigned-users">
+  @for (contact of assignedContacts(); track contact.id) {
+    <div class="avatar-wrapper">
+      <app-user-avatar [user]="contact" size="medium" />
+      <button type="button" class="btn-delete-user" (click)="toggleAssignment(contact.id, false)">
+        <svg>
+          <use href="./assets/icons/icons.svg#delete"></use>
+        </svg>
+      </button>
+    </div>
+  }
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="popupExpanded()"
+  [cdkConnectedOverlayPositions]="positions()"
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.getBoundingClientRect().width"
+  (overlayOutsideClick)="popupExpanded.set(false)"
+>
+  <ng-template ngComboboxPopup [combobox]="combobox">
+    <ul
+      #listbox="ngListbox"
+      ngListbox
+      [multi]="true"
+      class="dropdown scroll-container"
+      [class.is-open]="popupExpanded()"
+    >
+      @for (contact of options(); track contact.id) {
+        <li ngOption [value]="contact.id">
+          <app-user-avatar [user]="contact" size="medium" />
+          <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+          <app-checkbox
+            [checked]="isAssigned(contact.id)"
+            (checkedChange)="toggleAssignment(contact.id, $event)"
+          />
+        </li>
+      }
+    </ul>
+  </ng-template>
+</ng-template>
