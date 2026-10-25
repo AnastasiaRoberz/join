@@ -22,8 +22,6 @@
 }
 
 .task-container {
-  // background-color: pink;
-  // height: 100%;
   width: 100%;
   display: flex;
   gap: 96px;
@@ -122,6 +120,24 @@
 
   .assigned-dropdown {
     z-index: 2;
+  }
+
+  .avatar-overflow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $color-grey-400;
+    color: $text-light;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .contacts-wrapper {
+    width: 100%;
+    display: flex;
+    gap: 8px;
   }
 
   .date-input {
