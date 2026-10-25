@@ -19,12 +19,17 @@ let nextId = 0;
   selector: 'app-checkbox',
   styleUrl: './checkbox.component.scss',
   templateUrl: './checkbox.component.html',
+  host: {
+    '[class.onlyIcon]': '!text()',
+    '[class.selected]': 'checked()',
+  },
 })
 export class CheckboxComponent {
   errorService = inject(ErrorService);
 
   ngControl = contentChild(NgControl);
   text = input<string | null>(null);
+  id = input<string>(`app-checkbox-${nextId++}`);
   checkedInput = input<boolean>(false, { alias: 'checked' });
   checkedChange = output<boolean>();
 
