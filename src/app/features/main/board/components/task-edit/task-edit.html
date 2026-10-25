@@ -5,7 +5,7 @@
   (click)="dialogService.openDialog('task', task())"
 ></button>
 
-<form [formGroup]="taskForm" (ngSubmit)="saveTask()" class="scroll-container">
+<form [formGroup]="taskForm" (ngSubmit)="saveTask()" class="scroll-container" cdkScrollable>
   <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
   <app-text-field
     id="description"
@@ -15,6 +15,14 @@
     type="textarea"
   />
   <app-calendar-field id="due-date" formControlName="dueDate" label="Due Date" />
+
+  <app-select-field
+    id="assigned-to"
+    label="Assigned to"
+    [options]="contactService.sortedContacts()"
+    [selectedIds]="taskForm.controls.assignedTo.value ?? []"
+    (selectedIdsChange)="onAssignedChange($event)"
+  />
 
   <button appBtn type="submit" preset="check">Ok</button>
 </form>
