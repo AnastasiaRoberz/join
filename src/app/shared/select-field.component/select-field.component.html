@@ -50,12 +50,18 @@
       [class.is-open]="popupExpanded()"
     >
       @for (contact of options(); track contact.id) {
-        <li ngOption [value]="contact.id">
+        <li
+          ngOption
+          [value]="contact.id"
+          [class.selected]="isAssigned(contact.id)"
+          (click)="toggleAssignment(contact.id, !isAssigned(contact.id))"
+        >
           <app-user-avatar [user]="contact" size="medium" />
           <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
           <app-checkbox
             [checked]="isAssigned(contact.id)"
             (checkedChange)="toggleAssignment(contact.id, $event)"
+            (click)="$event.stopPropagation()"
           />
         </li>
       }

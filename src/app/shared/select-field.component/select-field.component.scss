@@ -45,29 +45,36 @@ label {
 
 .dropdown {
   @include flex-start(column, both);
-  max-height: 290px;
+  gap: 2px;
+  padding: 2px;
+  max-height: 302px;
   width: 100%;
   box-shadow: 0px 0px 14px 3px #00000024;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   background-color: white;
   z-index: 2;
   overflow-x: hidden;
-
-  &.is-open {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+  margin: 2px 0;
 
   li {
     @include flex-center;
     gap: 16px;
-    width: calc(100% + 24px);
+    width: 100%;
     padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    &.selected {
+      background-color: $dropdown-item-active;
+      color: $text-light;
+
+      &:hover {
+        background-color: $dropdown-item-active-hover;
+      }
+    }
   }
 
   .name {

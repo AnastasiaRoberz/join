@@ -19,16 +19,7 @@ import { CdkOverlayOrigin, ConnectedPosition, Overlay, OverlayModule } from '@an
 let nextId = 0;
 
 @Component({
-  imports: [
-    UserAvatar,
-    CheckboxComponent,
-    Combobox,
-    ComboboxPopup,
-    ComboboxWidget,
-    Listbox,
-    Option,
-    OverlayModule,
-  ],
+  imports: [UserAvatar, CheckboxComponent, Combobox, ComboboxPopup, Listbox, Option, OverlayModule],
   selector: 'app-select-field',
   styleUrl: './select-field.component.scss',
   templateUrl: './select-field.component.html',
@@ -67,13 +58,6 @@ export class SelectFieldComponent {
     overlayX: 'start',
     overlayY: 'top',
   };
-
-  constructor() {
-    // Scrolls to the active item when the active option changes.
-    // afterRenderEffect(() => {
-    //   this.listbox()?.scrollActiveItemIntoView();
-    // });
-  }
 
   positions = signal<ConnectedPosition[]>([this.positionBelow, this.positionAbove]);
 
