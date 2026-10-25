@@ -2,9 +2,10 @@ import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Dropdown } from './components/dropdown/dropdown';
 
 @Component({
-  imports: [Buttons, PriorityBtn, ReactiveFormsModule],
+  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
@@ -19,7 +20,7 @@ export class AddTask {
     subtask: new FormControl(''),
   });
 
-  categories = ['Technical Task', 'User Story'];
+  categoryOpen = signal(false);
 
   //prio selected with prio-btn, null when nothing selected
   selectedPrio = signal<Priority | null>(null);
@@ -74,6 +75,15 @@ export class AddTask {
 
   onPrioritySelected(prio: Priority): void {
     this.selectedPrio.set(prio);
+  }
+
+  toggleCategory() {
+    this.categoryOpen.update((v) => !v);
+  }
+
+  onCategorySelected(value: string) {
+    this.taskForm.get('category')?.setValue(value);
+    this.categoryOpen.set(false);
   }
 
   // onSubmit(): void {
