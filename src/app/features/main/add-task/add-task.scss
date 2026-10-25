@@ -184,11 +184,14 @@
   }
 
   .dropdown__chevron {
+    width: 8px;
+    height: 5px;
     position: absolute;
     right: 16px;
     pointer-events: none;
     transition: transform 0.2s ease;
     z-index: 3;
+    color: $text-normal;
 
     &.rotated {
       transform: rotate(180deg);
