@@ -16,6 +16,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.pickerInstance = flatpickr(this.element.nativeElement, {
       positionElement: this.element.nativeElement.parentElement,
+      ignoredFocusElements: this.element.nativeElement.parentElement,
       position: 'auto center',
       monthSelectorType: 'static',
       dateFormat: 'd/m/Y',
@@ -37,6 +38,12 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
       parseDate: (dateStr: string) => {
         return this.parseFlexibleDate(dateStr.trim());
       },
+      onOpen: (selectedDates, dateStr, instance) => {
+        this.isOpen.set(true);
+        const targetDate = instance.selectedDates[0] ?? new Date();
+        instance.jumpToDate(targetDate, false);
+      },
+      onClose: () => this.isOpen.set(false),
       onChange: (selectedDates, dateStr, instance) => this.dateChanged.emit(dateStr),
     });
   }
@@ -44,10 +51,8 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
   toggle(): void {
     if (!this.isOpen()) {
       this.pickerInstance?.open();
-      this.isOpen.set(true);
     } else {
       this.pickerInstance?.close();
-      this.isOpen.set(false);
     }
   }
 
