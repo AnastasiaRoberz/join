@@ -1,16 +1,18 @@
 <section class="board-column">
   <header class="board-column__header">
     <h3 class="board-column__title">{{ status() }}</h3>
-    <a
-      class="btn btn-icon"
-      routerLink="/add-task"
-      [queryParams]="{ status: status() }"
-      [attr.aria-label]="'Add task to ' + status()"
-    >
-      <svg class="icon">
-        <use href="./assets/icons/icons.svg#plus-square"></use>
-      </svg>
-    </a>
+    @if (status() !== 'Done') {
+      <a
+        class="btn btn-icon"
+        routerLink="/add-task"
+        [queryParams]="{ status: status() }"
+        [attr.aria-label]="'Add task to ' + status()"
+      >
+        <svg class="icon">
+          <use href="./assets/icons/icons.svg#plus-square"></use>
+        </svg>
+      </a>
+    }
   </header>
 
   <div class="board-column__tasks">

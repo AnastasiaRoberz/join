@@ -11,9 +11,11 @@
   align-items: stretch;
   gap: calcClamp(12, 16);
 
+  // same height with and without the add button, so all columns start on one line
   &__header {
     @include flex-start;
     justify-content: space-between;
+    min-height: 24px;
   }
 
   &__title {

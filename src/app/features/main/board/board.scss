@@ -2,11 +2,16 @@
 
 :host {
   display: block;
-  min-height: 100%;
+  height: 100%;
+}
+
+// the board page scrolls itself, so the navigation stays at the bottom
+.board-page {
+  height: 100%;
   background: $color-grey-background;
 }
 
-// four columns next to each other, on mobile below each other
+// 4 columns next to each other, on smaller screens the columns wrap earlier
 .board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -14,7 +19,11 @@
   gap: calcClamp(12, 24);
   padding: 0 calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
 
-  @include mobile {
+  @include tablet(1280px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mobile(600px) {
     grid-template-columns: minmax(0, 1fr);
   }
 }
