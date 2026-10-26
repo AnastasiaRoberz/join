@@ -3,7 +3,7 @@
 :host {
   width: 100%;
   height: 100%;
-  padding-inline: calcClamp(16, 96, 1440, 769) calcClamp(16, 136, 1440, 769);
+  padding-inline: calcClamp(16, 96, 1440, 950);
   padding-block: 124px 66px;
   background-color: $main-bg;
 }
@@ -27,8 +27,12 @@ form {
 .task-container {
   width: 100%;
   display: flex;
-  gap: 96px;
+  gap: calcClamp(70, 96, 1300, 769);
   color: $text-dark;
+
+  @include mobile {
+    flex-direction: column;
+  }
 }
 
 .task-footer {
@@ -52,11 +56,15 @@ form {
   &::after {
     content: '';
     position: absolute;
-    left: calc(100% + 48px);
+    left: calc(100% + calcClamp(35, 48, 1300, 769));
     top: 0;
     height: 100%;
     width: 1px;
     background-color: $input-placeholder;
+
+    @include mobile {
+      display: none;
+    }
   }
 }
 

@@ -2,8 +2,8 @@
 
 // allgemeines btn-Styling mit svg, hover + active
 :host {
-  width: 136px;
-  height: 56px;
+  width: calcClamp(121, 136, 1300, 430);
+  height: calcClamp(41, 56, 1300, 430);
   border-radius: 10px;
   padding: 16px 10px;
   display: flex;
@@ -12,12 +12,12 @@
   gap: 8px;
   box-shadow: 0 0 4px 0 #00000066;
   background-color: $color-white;
-  font-size: 20px;
+  font-size: calcClamp(16, 20, 1300, 430);
   line-height: 120%;
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: calcClamp(16, 20, 1300, 430);
+    aspect-ratio: 1 / 1;
   }
 
   &:hover:not(.active):not(:active) {
