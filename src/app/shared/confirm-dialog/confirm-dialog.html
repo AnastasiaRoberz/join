@@ -11,18 +11,10 @@
       <h3 id="confirm-title" class="confirm__title">{{ request.title }}</h3>
       <p id="confirm-text" class="confirm__text">{{ request.message }}</p>
       <div class="confirm__buttons">
-        <button
-          type="button"
-          class="btn btn-small btn-secondary"
-          (click)="confirmService.answer(false)"
-        >
+        <button appBtn preset="x" size="small" (click)="confirmService.answer(false)">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-small btn-primary"
-          (click)="confirmService.answer(true)"
-        >
+        <button appBtn preset="check" size="small" (click)="confirmService.answer(true)">
           {{ request.confirmLabel }}
         </button>
       </div>
