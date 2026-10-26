@@ -3,9 +3,11 @@
 html {
   font-family: 'Inter';
   font-size: 16px;
+  font-family: 'Inter';
+  font-weight: 400;
+  color: $text-normal;
 }
 
-// * --- h-TAGS --- *
 h2 {
   font-size: calcClamp(40, 61);
   font-weight: 700;
@@ -21,19 +23,6 @@ h4 {
   font-size: 20px;
   font-weight: 700;
 }
-// * -------------- *
-
-// * --- GENERAL TAGS --- *
-* {
-  font-family: 'Inter';
-  font-size: 1rem;
-}
-
-p {
-  font-weight: 400;
-  color: $text-normal;
-}
-// * ------------ *
 
 /* ------------------------------------------------
             * --- CLASSES --- * 
