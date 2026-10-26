@@ -21,17 +21,11 @@
     <app-user-avatar class="avatar" [user]="contact()" size="large" />
 
     <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-      <app-text-field label="Name" formControlName="name" icon="person" [id]="'name'">
-        <input type="text" placeholder=" " id="name" autocomplete="off" />
-      </app-text-field>
+      <app-text-field label="Name" formControlName="name" icon="person" [id]="'name'" />
 
-      <app-text-field label="Mail" formControlName="mail" icon="mail" [id]="'mail'">
-        <input type="text" placeholder=" " id="mail" autocomplete="off" />
-      </app-text-field>
+      <app-text-field label="Mail" formControlName="mail" icon="mail" [id]="'mail'" />
 
-      <app-text-field label="Phone" formControlName="phone" icon="phone" [id]="'phone'">
-        <input type="text" placeholder="" id="phone" autocomplete="off" />
-      </app-text-field>
+      <app-text-field label="Phone" formControlName="phone" icon="phone" [id]="'phone'" />
 
       <div class="buttons-wrapper">
         @if (contact()) {
@@ -40,7 +34,7 @@
             appBtn
             preset="check"
             type="submit"
-            [disabled]="!contactForm.valid || !isSubmitting"
+            [disabled]="!contactForm.valid || isSubmitting()"
           >
             Save
           </button>
@@ -53,7 +47,7 @@
             appBtn
             preset="check"
             type="submit"
-            [disabled]="!contactForm.valid || !isSubmitting"
+            [disabled]="!contactForm.valid || isSubmitting()"
           >
             Create contact
           </button>

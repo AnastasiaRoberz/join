@@ -102,7 +102,7 @@ export class TaskService {
     if (success) {
       this.tasks.update((list) =>
         list.map((task) =>
-          task.id === taskData.id
+          task.id === id
             ? {
                 ...task,
                 ...taskData,

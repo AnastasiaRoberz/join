@@ -66,7 +66,7 @@ export class AvatarGroupComponent {
   remainingUsersCount = computed(() => Math.max(0, this.users().length - this.fittingUsers()));
 
   onDelete(id?: number, event?: MouseEvent) {
-    event?.stopPropagation;
+    event?.stopPropagation();
     if (id) this.userDeletedId.emit(id);
   }
 }
