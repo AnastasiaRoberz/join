@@ -21,6 +21,7 @@
       align-self: center;
     }
 
+    // mobile add button
     // design for button, as design in component is not helpful here
     // component has: prosition: absolute, bottom & right definitions, padding
     .is-mobile {
@@ -31,6 +32,15 @@
       height: 40px;
       width: 40px;
       padding: 0;
+      box-shadow: none;
+
+      &:hover {
+        background-color: $color-cyan-700;
+      }
+
+      &:active {
+        background-color: $color-navy-900;
+      }
     }
   }
 
@@ -88,12 +98,12 @@
       }
     }
 
-    // desktop button height
+    // desktop add button height
     button {
       height: 48px;
     }
 
-    // tablket button size
+    // tablet  add button size
     .is-tablet {
       border-radius: 10px;
       height: 48px;

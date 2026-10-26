@@ -95,9 +95,9 @@
       box-shadow: $btn-shadow-placeholder;
     }
 
+    // tablet add button style added for board header + in general
     &.is-tablet {
       @include flex-center;
-      box-shadow: $btn-shadow;
 
       .icon {
         width: 32px;
