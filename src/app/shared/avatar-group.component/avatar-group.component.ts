@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, signal } from '@angular/core';
 import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
@@ -9,21 +9,58 @@ import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directiv
   styleUrl: './avatar-group.component.scss',
   templateUrl: './avatar-group.component.html',
   host: {
-    '[class]': '`${size}`',
+    '[class]': 'size()',
+    '[class.no-overlap]': '!overlapLayout()',
   },
 })
 export class AvatarGroupComponent {
-  users = input<Partial<ContactInterface>[]>([]);
+  element = inject(ElementRef<HTMLElement>);
+  resizeObserver?: ResizeObserver;
 
+  containerWidth = signal<number>(0);
+
+  users = input<Partial<ContactInterface>[]>([]);
   size = input<'small' | 'medium'>('small');
   maxUsers = input<number>(3);
+  overlapLayout = input<boolean>(true);
+  gap = input<number>(8);
 
-  visibleUsers = computed(() => this.users().slice(0, this.maxUsers()));
+  ngOnInit(): void {
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        this.containerWidth.set(entry.contentRect.width);
+      }
+    });
+    this.resizeObserver.observe(this.element.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+  }
+
+  fittingUsers = computed(() => {
+    if (this.overlapLayout()) return this.maxUsers();
+
+    const total = this.users().length;
+    const width = this.containerWidth();
+    if (width <= 0) return this.maxUsers();
+
+    const itemWidth = this.size() === 'small' ? 32 : 42;
+    const gap = this.gap();
+
+    const maxFitting = Math.max(1, Math.floor((width + gap) / (itemWidth + gap)));
+    if (total <= maxFitting) return total;
+
+    return Math.max(1, maxFitting - 1);
+  });
+
+  visibleUsers = computed(() => this.users().slice(0, this.fittingUsers()));
+
   remainingUsers = computed(() => {
     return this.users()
-      .slice(this.maxUsers())
+      .slice(this.fittingUsers())
       .map((user) => `${user?.firstname} ${user?.surname}`)
       .join('\n');
   });
-  remainingUsersCount = computed(() => this.users().length - this.maxUsers());
+  remainingUsersCount = computed(() => Math.max(0, this.users().length - this.fittingUsers()));
 }

@@ -1,7 +1,17 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-center;
+  @include flex-start;
+  width: 100%;
+  margin-top: 8px;
+
+  &.no-overlap {
+    gap: 8px;
+
+    .group-item:not(:first-child) {
+      margin-left: 0;
+    }
+  }
 }
 
 .group-item {
@@ -18,10 +28,14 @@
 
 .remaining-count {
   @include flex-center;
-  background-color: red;
-  height: 100%;
-  aspect-ratio: 1/1;
+  height: 32px;
+  width: 32px;
   border-radius: 50%;
   border: 1px solid $color-white;
   background-color: $icon-bg;
+
+  &.size-medium {
+    height: 42px;
+    width: 42px;
+  }
 }
