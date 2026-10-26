@@ -3,7 +3,7 @@ import { DialogComponent } from '../../../../../shared/dialog.component/dialog.c
 import { AddTask } from '../../../add-task/add-task';
 
 @Component({
-  imports: [DialogComponent, AddTask],
+  imports: [],
   selector: 'app-add-task-dialog',
   styleUrl: './add-task-dialog.scss',
   templateUrl: './add-task-dialog.html',
