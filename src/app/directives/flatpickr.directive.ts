@@ -68,6 +68,9 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
       monthSelectorType: 'static',
       dateFormat: 'd/m/Y',
       minDate: 'today',
+      locale: {
+        firstDayOfWeek: 1,
+      },
       weekNumbers: true,
       disableMobile: true,
       allowInput: true,
