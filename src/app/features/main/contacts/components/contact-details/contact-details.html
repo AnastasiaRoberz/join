@@ -6,8 +6,16 @@
     </div>
   </div>
 
-  <div class="btn-wrapper" [class.is-mobile]="responsiveMobile()" [class.is-open]="menuOpen()">
-    <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
+  <div
+    class="btn-wrapper"
+    [class.is-tablet]="responsiveService.isTablet()"
+    [class.is-open]="menuOpen()"
+  >
+    <button
+      appBtn
+      preset="editIcon"
+      (click)="dialogService.openDialog('contact', contact)"
+    ></button>
     <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
   </div>
 

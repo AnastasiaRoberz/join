@@ -14,13 +14,16 @@
   </div>
 
   <div class="board-header-actions">
-    <label class="search" [class.search__mobile]="responsiveService.isMobile()">
-      <input type="text" placeholder="Find Task" />
-      <span class="search__divider"></span>
-      <svg class="search__icon">
-        <use href="./assets/icons/icons.svg#search"></use>
-      </svg>
-    </label>
+    <app-select-field
+      variant="search"
+      placeholder="Find Task"
+      emptyText="No tasks found."
+      [options]="taskService.sortedTasks()"
+      [labelFn]="taskLabelFn"
+      [getSearchStrings]="taskTitleSearch"
+      [getIncludeStrings]="taskDescriptionSearch"
+      (valueChange)="onTaskSelected($event)"
+    />
     <!-- add button in tablet + desktop -->
     @if (!responsiveService.isMobile()) {
       <button

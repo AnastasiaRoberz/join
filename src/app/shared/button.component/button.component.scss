@@ -162,17 +162,12 @@
   }
 
   &.btn-icon {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     color: $main-color;
 
     .btn-label {
       display: none;
-    }
-
-    .icon {
-      width: 32px;
-      height: 32px;
     }
 
     &.btn-close-mobile {
