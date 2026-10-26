@@ -6,6 +6,8 @@ import { Dropdown } from './components/dropdown/dropdown';
 import { ContactInterface } from '../../../interfaces/contact.interface';
 import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
 import { ResponsiveService } from '../../../services/responsive.service';
+import { TaskService } from '../../../services/task.service';
+import { TaskInterface } from '../../../interfaces/task.interface';
 
 @Component({
   imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar],
@@ -24,6 +26,7 @@ export class AddTask {
   });
 
   responsiveService = inject(ResponsiveService);
+  taskService = inject(TaskService);
 
   categoryOpen = signal(false);
   assignedOpen = signal(false);
@@ -102,10 +105,22 @@ export class AddTask {
     this.assignedContacts.set(contacts);
   }
 
-  // onSubmit(): void {
-  //   const task = {
-  //     ...this.taskForm.value,
-  //     priority: this.selectedPrio(),
-  //   };
-  // }
+  async onSubmit(): Promise<void> {
+    if (this.taskForm.invalid || !this.selectedPrio()) return; //abbrechen wenn Formular ungültig/ keine prio gewählt
+
+    const [day, month, year] = this.taskForm.value.date!.split('/'); // split / vom Date, linken array befüllen
+    const dateValue = new Date(+year, +month - 1, +day); //+ wandelt string in number um, -1 für Date: JS-Monate beginnen mit 0
+    const task: Omit<TaskInterface, 'id'> = {
+      title: this.taskForm.value.title!,
+      description: this.taskForm.value.description ?? '',
+      due_date: dateValue,
+      priority: this.selectedPrio()!,
+      category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
+      status: 'To do',
+      subtasks: [],
+      assigned_users: this.assignedContacts(),
+    };
+
+    await this.taskService.addTask(task);
+  }
 }
