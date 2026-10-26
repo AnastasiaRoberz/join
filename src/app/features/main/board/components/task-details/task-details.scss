@@ -13,6 +13,7 @@
 .fixed-content {
   @include flex-start(column);
   gap: 24px;
+  flex-shrink: 0;
 }
 
 .header {
@@ -52,18 +53,22 @@ table {
   }
 }
 
-.content {
-  @include flex-start(column);
-  justify-content: flex-start;
+.scrollable-content {
+  display: grid;
+  // grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-template-rows: fit-content(50%) 1fr;
   gap: 24px;
-
-  height: 100%;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 ul {
-  @include flex-start(column);
-  justify-content: flex-start;
+  @include flex-start(column, both);
   gap: 16px;
+  align-self: start;
+  max-height: 100%;
+  min-height: 0;
 
   li {
     @include flex-start;
@@ -80,6 +85,7 @@ ul {
   justify-content: flex-end;
   width: 100%;
   gap: 8px;
+  flex-shrink: 0;
 
   hr {
     width: 1px;
