@@ -59,20 +59,32 @@ li {
   @include flex-start;
   width: 100%;
   padding: 4px 16px;
+  width: 100%;
+
+  .li-wrapper {
+    @include flex-center;
+    width: 100%;
+  }
 
   &:has(input) {
     border-bottom: 1px solid $input-edit-underline;
+  }
+
+  &:hover {
+    .subtask-btn-wrapper {
+      visibility: visible;
+    }
   }
 }
 
 .subtask-btn-wrapper {
   @include flex-center;
   gap: 4px;
+  visibility: hidden;
 
   .btn-subtask {
     width: 24px;
     height: 24px;
-    visibility: hidden;
 
     svg {
       height: 24px;
@@ -85,13 +97,5 @@ li {
     border: none;
     border-left: 1px solid $devider;
     height: 24px;
-    visibility: hidden;
-  }
-
-  &:hover {
-    .btn-subtask,
-    hr {
-      visibility: visible;
-    }
   }
 }
