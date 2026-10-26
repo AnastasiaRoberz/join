@@ -1,0 +1,64 @@
+<label for="subtasks" [class.is-mobile]="responsiveService.isMobile()">Subtasks</label>
+
+<div class="input-container">
+  <input type="text" id="subtasks" />
+  <div class="input-btn-wrapper">
+    <button type="button" class="btn-cancel" (click)="clearInput()">
+      <svg>
+        <use href="./assets/icons/icons.svg#close"></use>
+      </svg>
+    </button>
+    <hr />
+    <button type="button" class="btn-save" (click)="saveSubtask()">
+      <svg>
+        <use href="./assets/icons/icons.svg#check"></use>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<ul>
+  @for (subtask of subtasks(); track subtask.id) {
+    <li class="li-wrapper">
+      <span>{{ subtask.title }}</span>
+      <div class="subtask-btn-wrapper">
+        <button type="button" class="btn-subtask" (click)="editSubtask()">
+          <svg>
+            <use href="./assets/icons/icons.svg#edit"></use>
+          </svg>
+        </button>
+        <hr />
+        <button
+          type="button"
+          class="btn-subtask"
+          (click)="taskService.deleteTask(subtask.id, 'sub')"
+        >
+          <svg>
+            <use href="./assets/icons/icons.svg#delete"></use>
+          </svg>
+        </button>
+      </div>
+    </li>
+
+    <li class="li-wrapper">
+      <input type="text" />
+      <div class="subtask-btn-wrapper">
+        <button
+          type="button"
+          class="btn-subtask"
+          (click)="taskService.deleteTask(subtask.id, 'sub')"
+        >
+          <svg>
+            <use href="./assets/icons/icons.svg#delete"></use>
+          </svg>
+        </button>
+        <hr />
+        <button type="button" class="btn-subtask" (click)="updateSubtask()">
+          <svg>
+            <use href="./assets/icons/icons.svg#check"></use>
+          </svg>
+        </button>
+      </div>
+    </li>
+  }
+</ul>
