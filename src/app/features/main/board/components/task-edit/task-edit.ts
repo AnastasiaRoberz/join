@@ -12,6 +12,7 @@ import { CalendarFieldComponent } from '../../../../../shared/calendar-field.com
 import { SelectFieldComponent } from '../../../../../shared/select-field.component/select-field.component';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
+import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.component/subtask-field.component';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -30,6 +31,7 @@ import { CheckboxComponent } from '../../../../../shared/checkbox.component/chec
     SelectFieldComponent,
     UserAvatar,
     CheckboxComponent,
+    SubtaskFieldComponent,
   ],
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',
