@@ -3,7 +3,7 @@
 .board-header {
   @include flex-start;
   justify-content: space-between;
-  gap: 24px;
+  gap: calcClamp(40, 24, 768, 320);
   padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
   background-color: $color-grey-background;
 
@@ -21,6 +21,7 @@
       align-self: center;
     }
 
+    // mobile add button
     // design for button, as design in component is not helpful here
     // component has: prosition: absolute, bottom & right definitions, padding
     .is-mobile {
@@ -31,6 +32,15 @@
       height: 40px;
       width: 40px;
       padding: 0;
+      box-shadow: none;
+
+      &:hover {
+        background-color: $color-cyan-700;
+      }
+
+      &:active {
+        background-color: $color-navy-900;
+      }
     }
   }
 
@@ -52,6 +62,10 @@
       border: 1px solid #686868;
       border-radius: 10px;
       background: $color-white;
+
+      &__mobile {
+        width: 100%;
+      }
 
       &:hover {
         border-color: $color-grey-100;
@@ -83,9 +97,17 @@
         }
       }
     }
-    // add button height when larger, than mobile
-    .is-tablet {
+
+    // desktop add button height
+    button {
       height: 48px;
+    }
+
+    // tablet  add button size
+    .is-tablet {
+      border-radius: 10px;
+      height: 48px;
+      width: 48px;
     }
   }
 }

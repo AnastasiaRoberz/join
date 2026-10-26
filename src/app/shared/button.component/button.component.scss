@@ -95,6 +95,20 @@
       box-shadow: $btn-shadow-placeholder;
     }
 
+    // tablet add button style added for board header + in general
+    &.is-tablet {
+      @include flex-center;
+
+      .icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .btn-label {
+        display: none;
+      }
+    }
+
     &.is-mobile {
       @include flex-center;
       position: absolute;
