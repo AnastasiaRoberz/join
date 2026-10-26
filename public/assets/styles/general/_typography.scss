@@ -24,14 +24,14 @@ h4 {
 // * -------------- *
 
 // * --- GENERAL TAGS --- *
+* {
+  font-family: 'Inter';
+  font-size: 1rem;
+}
+
 p {
   font-weight: 400;
   color: $text-normal;
-}
-
-button {
-  font-family: 'Inter';
-  font-size: 1rem;
 }
 // * ------------ *
 

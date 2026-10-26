@@ -1,7 +1,7 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputField } from '../../../../../shared/input-field/input-field';
+import { TextField } from '../../../../../shared/text-field/text-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import {
@@ -19,7 +19,7 @@ import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName, splitName } from '../../../../../utils/name-utils';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
+  imports: [ReactiveFormsModule, TextField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
@@ -77,7 +77,7 @@ export class ContactDialog {
   }
 
   async saveContact() {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting() || !this.contactForm.valid) return;
 
     this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();

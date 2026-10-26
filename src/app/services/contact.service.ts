@@ -50,10 +50,12 @@ export class ContactService {
    *
    * @returns An array of objects each containing an uppercase `letter` and its matching `contacts` array
    */
+  sortedContacts = computed(() => {
+    return [...this.contacts()].sort((a, b) => a.firstname.localeCompare(b.firstname));
+  });
+
   groupedContacts = computed(() => {
-    const sortedContacts = [...this.contacts()].sort((a, b) =>
-      a.firstname.localeCompare(b.firstname),
-    );
+    const sortedContacts = this.sortedContacts();
 
     const groups: { [key: string]: ContactInterface[] } = {};
 

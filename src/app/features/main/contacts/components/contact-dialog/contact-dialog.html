@@ -22,17 +22,17 @@
       <app-user-avatar class="avatar" [user]="contact()" size="large" />
 
       <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-        <app-input-field label="Name" icon="person" [id]="'name'">
+        <app-text-field label="Name" icon="person" [id]="'name'">
           <input type="text" formControlName="name" placeholder=" " id="name" autocomplete="off" />
-        </app-input-field>
+        </app-text-field>
 
-        <app-input-field label="Mail" icon="mail" [id]="'mail'">
+        <app-text-field label="Mail" icon="mail" [id]="'mail'">
           <input type="text" formControlName="mail" placeholder=" " id="mail" autocomplete="off" />
-        </app-input-field>
+        </app-text-field>
 
-        <app-input-field label="Phone" icon="phone" [id]="'phone'">
+        <app-text-field label="Phone" icon="phone" [id]="'phone'">
           <input type="text" formControlName="phone" placeholder="" id="phone" autocomplete="off" />
-        </app-input-field>
+        </app-text-field>
 
         <div class="buttons-wrapper">
           @if (contact()) {

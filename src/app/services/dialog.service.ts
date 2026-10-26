@@ -1,5 +1,8 @@
 import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
+import { TaskInterface } from '../interfaces/task.interface';
+
+export type DialogContentType = 'contact' | 'task' | 'task-edit' | null;
 
 /**
  * Manages the state of the contact dialog (open/closed, which contact is being edited)
@@ -9,9 +12,10 @@ import { ContactInterface } from '../interfaces/contact.interface';
 export class DialogService {
   /** Whether the contact dialog is currently open. */
   isOpen = signal<boolean>(false);
+  dialogType = signal<DialogContentType>(null);
 
   /** The contact currently being edited, or null when creating a new one. */
-  selectedContact = signal<ContactInterface | null>(null);
+  selectedItem = signal<any | null>(null);
 
   /**
    * Holds the id of a newly created contact until the Contacts container picks it up.
@@ -26,14 +30,16 @@ export class DialogService {
   scrollToContact = signal<boolean>(false);
 
   /** Opens the dialog. Pass a contact to edit it, or null to create a new one. */
-  openDialog(contact: ContactInterface | null): void {
-    this.selectedContact.set(contact);
+  openDialog<T>(type: DialogContentType, item: T | null = null): void {
+    this.dialogType.set(type);
+    this.selectedItem.set(item);
     this.isOpen.set(true);
   }
 
   /** Closes the dialog and clears the selected contact. */
   closeDialog(): void {
-    this.selectedContact.set(null);
+    this.dialogType.set(null);
+    this.selectedItem.set(null);
     this.isOpen.set(false);
   }
 

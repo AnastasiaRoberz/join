@@ -1,0 +1,29 @@
+@if (label() && labelPos() === 'top') {
+  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()" [class]="labelPos()">{{
+    label()
+  }}</label>
+}
+
+<div class="input-container">
+  @if (label() && labelPos() === 'inner') {
+    <label
+      [attr.for]="id()"
+      [class.is-mobile]="responsiveService.isMobile()"
+      [class]="labelPos()"
+      >{{ label() }}</label
+    >
+  }
+
+  @if (type() === 'input') {
+    <input type="text" [id]="id()" [value]="value" (input)="onInput($event)" (blur)="onTouched()" />
+  } @else if (type() === 'textarea') {
+    <textarea [id]="id()" [value]="value" (input)="onInput($event)" (blur)="onTouched()"></textarea>
+  }
+
+  @if (icon()) {
+    <svg class="input-icon">
+      <use [attr.href]="`./assets/icons/icons.svg#${icon()}`"></use>
+    </svg>
+  }
+  <span class="error-msg" [class.is-mobile]="responsiveService.isMobile()">{{ showError() }}</span>
+</div>

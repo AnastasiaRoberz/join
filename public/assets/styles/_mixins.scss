@@ -5,15 +5,17 @@
   align-items: center;
 }
 
-@mixin flex-start($direction: row) {
+@mixin flex-start($direction: row, $alignment: single) {
   display: flex;
   flex-direction: $direction;
 
-  @if ($direction == 'row') {
+  @if ($alignment == 'both') {
+    justify-content: flex-start;
+    align-items: flex-start;
+  } @else if ($direction == 'row') {
     justify-content: flex-start;
     align-items: center;
-  }
-  @if ($direction == 'column') {
+  } @else if ($direction == 'column') {
     justify-content: center;
     align-items: flex-start;
   }

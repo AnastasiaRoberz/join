@@ -1,10 +1,21 @@
 @for (user of visibleUsers(); track user.id) {
-  <app-user-avatar
-    [user]="user"
-    [size]="size()"
-    class="group-item"
-    [appCursorTooltip]="user.firstname + ' ' + user.surname"
-  />
+  @if (overlapLayout()) {
+    <app-user-avatar
+      [user]="user"
+      [size]="size()"
+      class="group-item"
+      [appCursorTooltip]="user.firstname + ' ' + user.surname"
+    />
+  } @else {
+    <div class="avatar-wrapper" [appCursorTooltip]="user.firstname + ' ' + user.surname">
+      <app-user-avatar [user]="user" [size]="size()" class="group-item" />
+      <button type="button" class="btn-delete-user" (click)="onDelete(user.id, $event)">
+        <svg>
+          <use href="./assets/icons/icons.svg#delete"></use>
+        </svg>
+      </button>
+    </div>
+  }
 }
 @if (remainingUsersCount() > 0) {
   <div
