@@ -45,6 +45,16 @@ export class TaskDetails {
     return this.taskService.tasks().find((task) => task.id === targetId);
   });
 
+  sortedSubtasks = computed(() => {
+    const currentSubtasks = this.selectedTask()?.subtasks ?? [];
+    return [...currentSubtasks].sort((a, b) => {
+      if (a.is_done !== b.is_done) {
+        return a.is_done ? 1 : -1;
+      }
+      return b.id - a.id;
+    });
+  });
+
   // ---------------------------------------------------------------------------
   // Public Methods
   // ---------------------------------------------------------------------------

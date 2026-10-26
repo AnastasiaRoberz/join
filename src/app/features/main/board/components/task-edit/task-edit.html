@@ -53,5 +53,7 @@
     </div>
   </app-select-field>
 
+  <app-subtask-field [subtasks]="task()?.subtasks ?? []" [taskId]="task().id" />
+
   <button appBtn type="submit" preset="check">Ok</button>
 </form>
