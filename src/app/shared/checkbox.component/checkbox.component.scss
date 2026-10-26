@@ -17,6 +17,12 @@ input[type='checkbox'] {
   &:hover {
     background-color: $checkbox-hover;
   }
+
+  &.selected {
+    span {
+      text-decoration: line-through;
+    }
+  }
 }
 
 label {
@@ -28,12 +34,6 @@ label {
   svg {
     width: 24px;
     height: 24px;
-  }
-}
-
-&.selected {
-  span {
-    text-decoration: line-through;
   }
 }
 
