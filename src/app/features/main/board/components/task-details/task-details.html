@@ -39,10 +39,10 @@
       }
     </ul>
 
-    @if (task.subtasks && task.subtasks.length > 0) {
+    @if (sortedSubtasks().length > 0) {
       <ul>
         <span>Subtasks</span>
-        @for (subtask of task.subtasks; track subtask.id) {
+        @for (subtask of sortedSubtasks(); track subtask.id) {
           <li class="subtask">
             <app-checkbox
               [text]="subtask.title"
