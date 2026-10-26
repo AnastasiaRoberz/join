@@ -168,13 +168,17 @@ export class TaskService {
    * @param taskId - The ID of the parent task this subtask belongs to
    * @returns A promise that resolves when the subtask is created and state refreshed
    */
-  async addSubtask(subtaskData: Omit<SubtaskInterface, 'id'>, taskId: number) {
+  async addSubtask(
+    subtaskData: Omit<SubtaskInterface, 'id'>,
+    taskId: number,
+  ): Promise<SubtaskInterface> {
     const subtask = {
       ...subtaskData,
       task_id: taskId,
     };
-    await this.supabaseService.addData(subtask, 'subtasks');
+    const newSubtask = await this.supabaseService.addData(subtask, 'subtasks');
     await this.getAllTasks();
+    return newSubtask;
   }
   //#endregion
 
