@@ -26,12 +26,12 @@ export class AddTask {
   /**
    * Reactive form of the task. `title`, `date` and `category` are required.
    * The date is stored as text in the format `dd/mm/yyyy`.
+   * Contact assignment is handled separately via the `assignedContacts` signal.
    */
   taskForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
-    assigned: new FormControl(''),
     category: new FormControl('', Validators.required),
     subtask: new FormControl(''),
   });
@@ -58,7 +58,7 @@ export class AddTask {
 
   /**
    * Flag used by `openDatePicker()` to toggle the native date picker.
-   * Note: it is not reset when the picker closes by itself.
+   * Reset via the `blur` event on the hidden date input when the picker closes.
    */
   pickerOpen = false;
 
@@ -108,13 +108,16 @@ export class AddTask {
    */
   formatDateInput(event: Event) {
     const input = event.target as HTMLInputElement;
+    const isDeleting = (event as InputEvent).inputType?.startsWith('delete');
 
     let value = input.value.replace(/\D/g, ''); //alles, außer Ziffern, ersetzen
-    if (value.length > 2) {
-      value = value.slice(0, 2) + '/' + value.slice(2);
-    }
-    if (value.length > 5) {
-      value = value.slice(0, 5) + '/' + value.slice(5);
+    if (!isDeleting) {
+      if (value.length > 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2);
+      }
+      if (value.length > 5) {
+        value = value.slice(0, 5) + '/' + value.slice(5);
+      }
     }
 
     value = value.slice(0, 10);
