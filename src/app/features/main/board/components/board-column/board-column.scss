@@ -1,0 +1,39 @@
+@use '../../../../../../../public/assets/styles' as *;
+
+// min-width: 0 lets the column shrink, so long words in a card cannot push it wider
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.board-column {
+  @include flex-start(column);
+  align-items: stretch;
+  gap: calcClamp(12, 16);
+
+  &__header {
+    @include flex-start;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: $font-medium;
+    color: $text-dark;
+  }
+
+  &__tasks {
+    @include flex-start(column);
+    align-items: stretch;
+    gap: calcClamp(12, 16);
+  }
+
+  // dashed grey box that is shown instead of the cards if the column is empty
+  &__empty {
+    padding: calcClamp(8, 14);
+    border: 1px dashed $color-grey-400;
+    border-radius: 10px;
+    background-color: $color-grey-500;
+    color: $color-grey-400;
+    text-align: center;
+  }
+}

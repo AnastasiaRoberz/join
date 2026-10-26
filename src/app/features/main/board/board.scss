@@ -1,0 +1,20 @@
+@use '../../../../../public/assets/styles' as *;
+
+:host {
+  display: block;
+  min-height: 100%;
+  background: $color-grey-background;
+}
+
+// four columns next to each other, on mobile below each other
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: calcClamp(12, 24);
+  padding: 0 calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
+
+  @include mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
