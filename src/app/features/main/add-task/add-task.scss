@@ -14,6 +14,10 @@
   display: flex;
   flex-direction: column;
   gap: 48px;
+
+  @include widescreen {
+    max-height: 800px;
+  }
 }
 
 form {
@@ -68,6 +72,11 @@ form {
   }
 }
 
+.required {
+  color: $hint;
+  text-align: start;
+}
+
 .taskWrap {
   flex: 1;
   min-width: 0;
@@ -82,11 +91,6 @@ form {
     display: flex;
     flex-direction: column;
     gap: 8px;
-
-    .required {
-      color: $hint;
-      text-align: start;
-    }
 
     .date-input {
       width: 50%;
