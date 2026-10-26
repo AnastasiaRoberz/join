@@ -36,7 +36,7 @@ textarea {
       transform: translateY(-150%);
       color: $input-focus-label;
 
-      &.is-mobile {
+      @include mobile {
         display: none;
       }
     }
@@ -71,7 +71,7 @@ label.inner {
   padding: 0 8px;
   transition: all 150ms ease-in-out;
 
-  &.is-mobile {
+  @include mobile {
     padding: 0;
   }
 }
@@ -91,7 +91,7 @@ label.inner {
   bottom: -8px;
   transform: translateY(100%);
 
-  &.is-mobile {
+  @include mobile {
     bottom: -1px;
   }
 }

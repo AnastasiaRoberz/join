@@ -11,6 +11,11 @@ app-contact-list {
   width: calcClamp(300, 424, 1440, 850);
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
   z-index: 3;
+
+  @include mobile {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 app-contact-details {
@@ -56,27 +61,19 @@ app-contact-details {
       width: 3px;
       height: 100%;
     }
-  }
-}
 
-:host.is-mobile {
-  app-contact-list {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-:host.breakpoint-slogan {
-  .details__title {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    @include responsive(1290) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
 
-    hr {
-      order: 1;
-      border-left: none;
-      border-top: 3px solid $text-underline;
-      width: 90px;
-      margin-top: 8px;
+      hr {
+        order: 1;
+        border-left: none;
+        border-top: 3px solid $text-underline;
+        width: 90px;
+        margin-top: 8px;
+      }
     }
   }
 }

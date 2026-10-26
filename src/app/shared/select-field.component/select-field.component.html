@@ -1,5 +1,5 @@
 @if (label()) {
-  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()">{{ label() }}</label>
+  <label [attr.for]="id()">{{ label() }}</label>
 }
 
 <div class="input-container" cdkOverlayOrigin #trigger="cdkOverlayOrigin">

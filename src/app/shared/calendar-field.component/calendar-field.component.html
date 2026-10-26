@@ -1,5 +1,5 @@
 @if (label()) {
-  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()">{{ label() }}</label>
+  <label [attr.for]="id()">{{ label() }}</label>
 }
 
 <div class="input-container">
@@ -20,5 +20,5 @@
     </svg>
   </button>
 
-  <span class="error-msg" [class.is-mobile]="responsiveService.isMobile()">{{ showError() }}</span>
+  <span class="error-msg">{{ showError() }}</span>
 </div>

@@ -4,12 +4,7 @@
     <h2>Board</h2>
     <!-- add button in mobile -->
     @if (responsiveService.isMobile()) {
-      <button
-        appBtn
-        preset="addTask"
-        [class.is-mobile]="responsiveService.isMobile()"
-        type="button"
-      ></button>
+      <button appBtn preset="addTask" type="button"></button>
     }
   </div>
 
@@ -36,3 +31,16 @@
     }
   </div>
 </header>
+
+<!-- <h2>Board</h2>
+<app-select-field
+  variant="search"
+  placeholder="Find Task"
+  emptyText="No tasks found."
+  [options]="taskService.sortedTasks()"
+  [labelFn]="taskLabelFn"
+  [getSearchStrings]="taskTitleSearch"
+  [getIncludeStrings]="taskDescriptionSearch"
+  (valueChange)="onTaskSelected($event)"
+/>
+<button appBtn preset="addTask"></button> -->

@@ -6,11 +6,7 @@
     </div>
   </div>
 
-  <div
-    class="btn-wrapper"
-    [class.is-tablet]="responsiveService.isTablet()"
-    [class.is-open]="menuOpen()"
-  >
+  <div class="btn-wrapper" [class.is-open]="menuOpen()">
     <button
       appBtn
       preset="editIcon"

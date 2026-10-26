@@ -43,13 +43,13 @@ export const BUTTON_STYLES = {
   // * --- SPECIFIC BUTTONS --- *
   addContact: {
     label: 'Add new Contact',
-    variant: 'add',
+    variant: 'add contact',
     size: 'large',
     icon: 'add-contact',
   },
   addTask: {
     label: 'Add Task',
-    variant: 'add',
+    variant: 'add task',
     size: 'large',
     icon: 'plus',
   },
@@ -81,12 +81,12 @@ export const BUTTON_STYLES = {
     size: null,
     icon: 'search',
   },
-  addTaskIcon: {
-    label: null,
-    variant: 'add',
-    size: 'small',
-    icon: 'plus',
-  },
+  // addTaskIcon: {
+  //   label: null,
+  //   variant: 'add',
+  //   size: 'small',
+  //   icon: 'plus',
+  // },
 
   // * --- ICONS --- *
 } as const satisfies Record<string, ButtonInterface>;

@@ -10,9 +10,6 @@ let nextId = 0;
   selector: 'app-text-field',
   styleUrl: './text-field.scss',
   templateUrl: './text-field.html',
-  host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
-  },
 })
 export class TextField implements ControlValueAccessor {
   errorService = inject(ErrorService);

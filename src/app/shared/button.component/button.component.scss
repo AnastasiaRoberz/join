@@ -13,6 +13,7 @@
     text-decoration: none;
     cursor: pointer;
     white-space: nowrap;
+    font-family: 'Inter';
 
     &:hover,
     &:active {
@@ -22,6 +23,7 @@
     .icon {
       width: 24px;
       height: 24px;
+      flex-shrink: 0;
     }
 
     &:disabled {
@@ -48,6 +50,14 @@
     font-size: $font-medium;
     padding: calcClamp(10, 16, 768, 320);
     border-radius: 10px;
+
+    &.task {
+      padding: 8px 16px;
+
+      @include tablet {
+        padding: 0;
+      }
+    }
   }
 
   // BUTTONS COLORS
@@ -101,37 +111,40 @@
       box-shadow: $btn-shadow-placeholder;
     }
 
-    // tablet add button style added for board header + in general
-    &.is-tablet {
-      @include flex-center;
+    @include tablet {
+      height: 100%;
+      aspect-ratio: 1/1;
 
-      .icon {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-      }
       .btn-label {
         display: none;
       }
     }
 
-    &.is-mobile {
-      @include flex-center;
-      position: absolute;
-      bottom: 32px;
-      right: 16px;
-      height: 56px;
-      width: 56px;
-      border-radius: 50%;
-      box-shadow: $btn-shadow;
-
-      .icon {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
+    &.contact {
+      @include mobile {
+        position: absolute;
+        bottom: 32px;
+        right: 16px;
+        height: 56px;
+        width: 56px;
+        border-radius: 50%;
+        box-shadow: $btn-shadow;
       }
-      .btn-label {
-        display: none;
+    }
+
+    &.task {
+      @include mobile {
+        position: relative;
+        bottom: 0;
+        right: 0;
+        height: 40px;
+        width: 40px;
+        padding: 0;
+        box-shadow: none;
+
+        &:active {
+          box-shadow: none;
+        }
       }
     }
   }

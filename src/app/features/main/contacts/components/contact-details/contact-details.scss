@@ -22,7 +22,7 @@
 
   .name {
     min-height: 105px;
-    font-size: calcClamp(32, 47, 1440, 1025);
+    font-size: calcClamp(20, 47);
     max-width: 100%; // never wider than the wrapper
     overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
     display: flex;
@@ -43,7 +43,7 @@
   @include flex-start;
   gap: 16px;
 
-  &.is-tablet {
+  @include tablet {
     // position: absolute;
     // bottom: 16px;
     // right: 8px;
@@ -94,28 +94,6 @@
     width: 100%;
     overflow-wrap: anywhere;
     color: $mail;
-  }
-}
-
-@include tablet {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(22, 36, 1024, 769);
-      }
-    }
-  }
-}
-
-@include mobile {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(20, 38, 768, 320);
-      }
-    }
   }
 }
 

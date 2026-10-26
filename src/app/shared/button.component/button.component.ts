@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { BtnPreset, BUTTON_STYLES } from './button.component.config';
 
-export type BtnVariant = 'primary' | 'secondary' | 'add' | 'txtIcon' | 'icon';
+export type BtnVariant = 'primary' | 'secondary' | 'add contact' | 'add task' | 'txtIcon' | 'icon';
 export type BtnSize = 'small' | 'medium' | 'large' | null;
 
 /*
