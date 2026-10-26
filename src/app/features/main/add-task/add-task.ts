@@ -9,6 +9,13 @@ import { ResponsiveService } from '../../../services/responsive.service';
 import { TaskService } from '../../../services/task.service';
 import { TaskInterface } from '../../../interfaces/task.interface';
 
+/**
+ * Form component for creating a new task.
+ *
+ * Collects title, description, due date, priority, category and assigned contacts.
+ * On submit, the task is saved via `TaskService`, the selected contacts are linked
+ * to it, and the form is reset.
+ */
 @Component({
   imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar],
   selector: 'article[app-add-task]',
@@ -16,6 +23,10 @@ import { TaskInterface } from '../../../interfaces/task.interface';
   templateUrl: './add-task.html',
 })
 export class AddTask {
+  /**
+   * Reactive form of the task. `title`, `date` and `category` are required.
+   * The date is stored as text in the format `dd/mm/yyyy`.
+   */
   taskForm = new FormGroup({
     title: new FormControl('', Validators.required),
     description: new FormControl(''),
@@ -25,25 +36,43 @@ export class AddTask {
     subtask: new FormControl(''),
   });
 
+  /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
+
+  /** Used to create the task and to assign contacts to it. */
   taskService = inject(TaskService);
 
+  /** Whether the category dropdown is open. */
   categoryOpen = signal(false);
+
+  /** Whether the contact dropdown is open. */
   assignedOpen = signal(false);
 
+  /** Contacts currently selected for assignment. */
   assignedContacts = signal<ContactInterface[]>([]);
 
-  //prio selected with prio-btn, null when nothing selected
+  /** Priority selected via the priority buttons, `null` if none is selected. */
   selectedPrio = signal<Priority | null>(null);
 
   //#region  --------- Date-Picker Input-Field -------------
 
-  //date-picker from date-input-field
+  /**
+   * Flag used by `openDatePicker()` to toggle the native date picker.
+   * Note: it is not reset when the picker closes by itself.
+   */
   pickerOpen = false;
 
-  @ViewChild('datePickerRef') datePickerRef!: ElementRef<HTMLInputElement>; //nie undefined, keine if-Prüfung nötig
+  /**
+   * Reference to the hidden native date input (`#datePickerRef`).
+   * Available once the view has been initialized, so it can be used in event handlers
+   * without an undefined check.
+   */
+  @ViewChild('datePickerRef') datePickerRef!: ElementRef<HTMLInputElement>;
 
-  //svg-calendar-btn opens date-picker from hidden date-input-field (toggle)
+  /**
+   * Opens the native date picker of the hidden date input when the calendar button
+   * is clicked. If `pickerOpen` is already `true`, it only resets the flag instead.
+   */
   openDatePicker() {
     if (this.pickerOpen) {
       this.pickerOpen = false;
@@ -53,7 +82,12 @@ export class AddTask {
     this.datePickerRef.nativeElement.showPicker();
   }
 
-  //
+  /**
+   * Handles a date chosen in the native date picker. Converts the value from
+   * `yyyy-mm-dd` to `dd/mm/yyyy` and writes it into the `date` form control.
+   *
+   * @param event - The change event of the hidden date input
+   */
   onDateSelected(event: Event) {
     const input = event.target as HTMLInputElement; //Auslöser vom Event als HTML-Input
     const raw = input.value;
@@ -65,7 +99,13 @@ export class AddTask {
     }
   }
 
-  //format numbers put in text-input-field as date: dd/mm/yyyy (10 symbols)
+  /**
+   * Formats the text input while typing as `dd/mm/yyyy`: removes all non-digit
+   * characters, inserts the slashes and limits the value to 10 characters.
+   * Updates the `date` form control without emitting a value change.
+   *
+   * @param event - The input event of the date text field
+   */
   formatDateInput(event: Event) {
     const input = event.target as HTMLInputElement;
 
@@ -84,32 +124,57 @@ export class AddTask {
 
   //#endregion
 
+  /**
+   * Stores the priority chosen via a priority button.
+   *
+   * @param prio - The selected priority
+   */
   onPrioritySelected(prio: Priority): void {
     this.selectedPrio.set(prio);
   }
 
+  /** Opens or closes the category dropdown. */
   toggleCategory() {
     this.categoryOpen.update((v) => !v);
   }
 
+  /** Opens or closes the contact dropdown. */
   toggleAssigned() {
     this.assignedOpen.update((v) => !v);
   }
 
+  /**
+   * Writes the chosen category into the form and closes the category dropdown.
+   *
+   * @param value - The selected category
+   */
   onCategorySelected(value: string) {
     this.taskForm.get('category')?.setValue(value);
     this.categoryOpen.set(false);
   }
 
+  /**
+   * Stores the updated contact selection coming from the dropdown.
+   *
+   * @param contacts - The currently selected contacts
+   */
   onContactsSelected(contacts: ContactInterface[]) {
     this.assignedContacts.set(contacts);
   }
 
+  /**
+   * Submits the form. Aborts if the form is invalid or no priority is selected.
+   * Otherwise it converts the date to `yyyy-mm-dd` (database format), creates the task
+   * with status `'To do'`, assigns the selected contacts one by one via the
+   * task-assignment table, and finally resets the form and all signals.
+   *
+   * @returns A promise that resolves when the task and its assignments are saved
+   */
   async onSubmit(): Promise<void> {
-    if (this.taskForm.invalid || !this.selectedPrio()) return; //abbrechen wenn Formular ungültig/ keine prio gewählt
+    if (this.taskForm.invalid || !this.selectedPrio()) return;
 
-    const [day, month, year] = this.taskForm.value.date!.split('/'); // split / vom Date, linken array befüllen
-    const dateValue = `${year}-${month}-${day}`; // date string für supabase
+    const [day, month, year] = this.taskForm.value.date!.split('/');
+    const dateValue = `${year}-${month}-${day}`;
     const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
@@ -126,7 +191,6 @@ export class AddTask {
         await this.taskService.assignUser(newTaskId, contact.id);
       }
 
-      //nach submit Formular zurücksetzen
       this.taskForm.reset();
       this.selectedPrio.set(null);
       this.assignedContacts.set([]);
