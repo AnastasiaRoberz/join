@@ -16,7 +16,7 @@ import { ResponsiveService } from '../../services/responsive.service';
 export class UserAvatar {
   responsiveService = inject(ResponsiveService);
 
-  user = input<ContactInterface | null>(null);
+  user = input<Partial<ContactInterface> | null>(null);
   size = input<'small' | 'medium' | 'large' | 'header' | 'details'>('medium');
 
   initials = computed(() => {
