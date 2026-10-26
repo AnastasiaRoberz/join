@@ -109,18 +109,27 @@ export class AddTask {
     if (this.taskForm.invalid || !this.selectedPrio()) return; //abbrechen wenn Formular ungültig/ keine prio gewählt
 
     const [day, month, year] = this.taskForm.value.date!.split('/'); // split / vom Date, linken array befüllen
-    const dateValue = new Date(+year, +month - 1, +day); //+ wandelt string in number um, -1 für Date: JS-Monate beginnen mit 0
-    const task: Omit<TaskInterface, 'id'> = {
+    const dateValue = `${year}-${month}-${day}`; // date string für supabase
+    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: dateValue,
       priority: this.selectedPrio()!,
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: 'To do',
-      subtasks: [],
-      assigned_users: this.assignedContacts(),
     };
 
-    await this.taskService.addTask(task);
+    const newTaskId = await this.taskService.addTask(task);
+
+    if (newTaskId) {
+      for (const contact of this.assignedContacts()) {
+        await this.taskService.assignUser(newTaskId, contact.id);
+      }
+
+      //nach submit Formular zurücksetzen
+      this.taskForm.reset();
+      this.selectedPrio.set(null);
+      this.assignedContacts.set([]);
+    }
   }
 }
