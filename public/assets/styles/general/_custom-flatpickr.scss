@@ -102,6 +102,20 @@
   flex-direction: column;
   flex: 1;
   width: 100%;
+  position: relative;
+
+  &::before {
+    content: '';
+    background-color: $color-grey-50;
+    border-radius: 10px;
+    position: absolute;
+    top: -6px;
+    bottom: -6px;
+    left: calc(100% / 7 * 5);
+    width: calc(100% / 7 * 2);
+    pointer-events: none;
+    z-index: -1;
+  }
 }
 
 .flatpickr-weekdays {
