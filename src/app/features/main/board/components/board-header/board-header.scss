@@ -3,7 +3,7 @@
 .board-header {
   @include flex-start;
   justify-content: space-between;
-  gap: 24px;
+  gap: calcClamp(40, 24, 768, 320);
   padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
   background-color: $color-grey-background;
 
