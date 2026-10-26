@@ -55,7 +55,7 @@ export class TaskEdit {
   // ---------------------------------------------------------------------------
 
   /** The task currently being edited, passed in from the dialog container. */
-  task = input<TaskInterface>();
+  task = input.required<TaskInterface>();
 
   /** Reactive list of currently assigned contact IDs. */
   selectedContactIds = signal<number[]>([]);
