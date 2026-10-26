@@ -1,10 +1,11 @@
-import { Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Dropdown } from './components/dropdown/dropdown';
 import { ContactInterface } from '../../../interfaces/contact.interface';
 import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
+import { ResponsiveService } from '../../../services/responsive.service';
 
 @Component({
   imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar],
@@ -21,6 +22,8 @@ export class AddTask {
     category: new FormControl('', Validators.required),
     subtask: new FormControl(''),
   });
+
+  responsiveService = inject(ResponsiveService);
 
   categoryOpen = signal(false);
   assignedOpen = signal(false);
