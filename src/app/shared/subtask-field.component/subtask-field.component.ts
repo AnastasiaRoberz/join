@@ -32,7 +32,7 @@ export class SubtaskFieldComponent {
       task_id: this.taskId(),
     };
     const newSubtask = await this.taskService.addSubtask(data, this.taskId());
-    this.subtasks.update((list) => [...list, newSubtask]);
+    this.subtasks.update((list) => [newSubtask, ...list]);
     input.value = '';
   }
 
