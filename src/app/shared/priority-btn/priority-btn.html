@@ -1,0 +1,7 @@
+<!-- zur Info: hier nur Inhalt des Buttons, also span + svg (<button priority="urgent">InhaltDerKomponente</button>) -->
+<!-- Inhalt wird über TS gefüllt: je nach Prio anderer span/ svg -->
+
+<span>{{ preset().label }}</span>
+<svg>
+  <use [attr.href]="'/assets/icons/icons.svg#' + preset().icon"></use>
+</svg>

@@ -1,0 +1,23 @@
+<div class="wrapper">
+  <div class="dropdown__panel">
+    @if (mode() === 'category') {
+      @for (cat of categories; track cat.value) {
+        <div class="dropdown__option" (click)="selectCategory(cat)">{{ cat.label }}</div>
+      }
+    }
+
+    @if (mode() === 'assigned') {
+      @for (contact of contactService.contacts(); track contact.id) {
+        <div class="dropdown__option" (click)="toggleContact(contact)">
+          <div class="dropdown__option--name">
+            <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
+            {{ contact.firstname }} {{ contact.surname }}
+          </div>
+          <app-checkbox [checked]="isContactSelected()(contact)" (click)="toggleContact(contact)"
+            >" >></app-checkbox
+          >
+        </div>
+      }
+    }
+  </div>
+</div>

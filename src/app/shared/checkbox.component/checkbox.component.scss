@@ -13,6 +13,11 @@
   }
 }
 
+input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 label {
   @include flex-center;
   width: 24px;

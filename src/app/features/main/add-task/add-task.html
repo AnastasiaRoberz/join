@@ -1,1 +1,138 @@
-<p>add-task works!</p>
+<div class="content">
+  <h2>Add Task</h2>
+  <form [formGroup]="taskForm">
+    <div class="task-container">
+      <div class="taskWrap taskLeft">
+        <div class="taskWrap__inputBox">
+          <label>Title<span class="required">*</span></label>
+          <div class="taskWrap__withHint">
+            <input type="text" formControlName="title" placeholder="Enter a Title" />
+            <span class="hint-msg">This field is required</span>
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label>Description</label>
+          <textarea formControlName="description" placeholder="Enter a Description"></textarea>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label>Due date<span class="required">*</span></label>
+          <div class="taskWrap__withHint">
+            <input
+              type="text"
+              formControlName="date"
+              placeholder="dd/mm/yyyy"
+              (input)="formatDateInput($event)"
+            />
+            <input
+              #datePickerRef
+              class="date-input"
+              type="date"
+              (change)="onDateSelected($event)"
+            />
+            <button type="button" class="date-btn" (click)="openDatePicker()">
+              <svg class="date-icon">
+                <use href="./assets/icons/icons.svg#calendar"></use>
+              </svg>
+            </button>
+            <span class="hint-msg">This field is required</span>
+          </div>
+        </div>
+      </div>
+      <div class="taskWrap">
+        <div class="taskWrap__btnBox">
+          <label for="">Priority</label>
+          <div class="taskWrap__btnBox--buttons">
+            <button
+              priority="urgent"
+              [isActive]="selectedPrio() === 'urgent'"
+              (prioSelected)="onPrioritySelected($event)"
+            ></button>
+            <button
+              priority="medium"
+              [isActive]="selectedPrio() === 'medium'"
+              (prioSelected)="onPrioritySelected($event)"
+            ></button>
+            <button
+              priority="low"
+              [isActive]="selectedPrio() === 'low'"
+              (prioSelected)="onPrioritySelected($event)"
+            ></button>
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label for="">Assigned to</label>
+          <div class="taskWrap">
+            <div class="dropdown__trigger" [class.open]="assignedOpen()" (click)="toggleAssigned()">
+              <input
+                type="text"
+                class="dropdown-input assigned-input"
+                formControlName="assigned"
+                placeholder="Select Contacts to assign"
+                [class.open]="assignedOpen()"
+              />
+              <svg class="dropdown__chevron assigned-arrow" [class.rotated]="assignedOpen()">
+                <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
+              </svg>
+            </div>
+            @if (assignedOpen()) {
+              <app-dropdown
+                class="assigned-dropdown"
+                mode="assigned"
+                [selectedContacts]="assignedContacts()"
+                (contactsSelected)="onContactsSelected($event)"
+                (closeDropdown)="assignedOpen.set(false)"
+                (click)="$event.stopPropagation()"
+              ></app-dropdown>
+            }
+            @if (assignedContacts().length > 0) {
+              <div class="contacts-wrapper">
+                @for (contact of assignedContacts().slice(0, 4); track contact.id) {
+                  <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
+                }
+                @if (assignedContacts().length > 4) {
+                  <div class="avatar-overflow">+{{ assignedContacts().length - 4 }}</div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label>Category<span class="required">*</span></label>
+          <div class="taskWrap__withHint">
+            <div class="dropdown__trigger" [class.open]="categoryOpen()" (click)="toggleCategory()">
+              <input
+                class="dropdown-input"
+                type="text"
+                readonly
+                formControlName="category"
+                placeholder="Select Task Category"
+              />
+              <svg class="dropdown__chevron category-arrow" [class.rotated]="categoryOpen()">
+                <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
+              </svg>
+            </div>
+            @if (categoryOpen()) {
+              <app-dropdown
+                mode="category"
+                (categorySelected)="onCategorySelected($event)"
+                (closeDropdown)="categoryOpen.set(false)"
+              ></app-dropdown>
+            }
+            <span class="hint-msg">This field is required</span>
+          </div>
+        </div>
+        <div class="taskWrap__inputBox">
+          <label for="">Subtasks</label>
+          <input type="text" formControlName="subtask" placeholder="Add new Subtask" />
+        </div>
+      </div>
+    </div>
+    <div class="task-footer">
+      <span><span class="required">*</span>This field is required</span>
+      <div class="task-footer__buttons">
+        <button appBtn preset="secondary" label="Clear" icon="cancel"></button>
+        <button appBtn preset="primary" label="Create Task" icon="check"></button>
+      </div>
+    </div>
+  </form>
+</div>
