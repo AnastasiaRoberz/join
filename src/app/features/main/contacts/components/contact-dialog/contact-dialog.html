@@ -1,66 +1,64 @@
-<div class="dialog-content" (click)="$event.stopPropagation()">
-  <div class="header-section">
-    @if (responsiveService.isMobile()) {
-      <button appBtn preset="close" class="btn-close-mobile" (click)="closeDialog()"></button>
+<div class="header-section">
+  @if (responsiveService.isMobile()) {
+    <button appBtn preset="close" class="btn-close-mobile" (click)="closeDialog()"></button>
+  }
+  <div class="header">
+    @if (contact()) {
+      <h2>Edit contact</h2>
+    } @else {
+      <h2>Add contact</h2>
+      <span class="subheading">Tasks are better with a team!</span>
     }
-    <div class="header">
-      @if (contact()) {
-        <h2>Edit contact</h2>
-      } @else {
-        <h2>Add contact</h2>
-        <span class="subheading">Tasks are better with a team!</span>
-      }
-    </div>
   </div>
+</div>
 
-  <div class="content-section">
-    @if (!responsiveService.isMobile()) {
-      <button appBtn preset="close" (click)="closeDialog()"></button>
-    }
+<div class="content-section">
+  @if (!responsiveService.isMobile()) {
+    <button appBtn preset="close" (click)="closeDialog()"></button>
+  }
 
-    <div class="input-wrapper">
-      <app-user-avatar class="avatar" [user]="contact()" size="large" />
+  <div class="input-wrapper">
+    <app-user-avatar class="avatar" [user]="contact()" size="large" />
 
-      <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-        <app-text-field label="Name" icon="person" [id]="'name'">
-          <input type="text" formControlName="name" placeholder=" " id="name" autocomplete="off" />
-        </app-text-field>
+    <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
+      <app-text-field label="Name" formControlName="name" icon="person" [id]="'name'">
+        <input type="text" placeholder=" " id="name" autocomplete="off" />
+      </app-text-field>
 
-        <app-text-field label="Mail" icon="mail" [id]="'mail'">
-          <input type="text" formControlName="mail" placeholder=" " id="mail" autocomplete="off" />
-        </app-text-field>
+      <app-text-field label="Mail" formControlName="mail" icon="mail" [id]="'mail'">
+        <input type="text" placeholder=" " id="mail" autocomplete="off" />
+      </app-text-field>
 
-        <app-text-field label="Phone" icon="phone" [id]="'phone'">
-          <input type="text" formControlName="phone" placeholder="" id="phone" autocomplete="off" />
-        </app-text-field>
+      <app-text-field label="Phone" formControlName="phone" icon="phone" [id]="'phone'">
+        <input type="text" placeholder="" id="phone" autocomplete="off" />
+      </app-text-field>
 
-        <div class="buttons-wrapper">
-          @if (contact()) {
-            <button appBtn preset="secondary" (click)="deleteAndClose()">Delete</button>
-            <button
-              appBtn
-              preset="check"
-              type="submit"
-              [disabled]="!contactForm.valid || !isSubmitting"
-            >
-              Save
-            </button>
-          } @else {
-            @if (!responsiveService.isMobile()) {
-              <button appBtn preset="x" (click)="closeDialog()">Cancel</button>
-            }
-
-            <button
-              appBtn
-              preset="check"
-              type="submit"
-              [disabled]="!contactForm.valid || !isSubmitting"
-            >
-              Create contact
-            </button>
+      <div class="buttons-wrapper">
+        @if (contact()) {
+          <button appBtn preset="secondary" (click)="deleteAndClose()">Delete</button>
+          <button
+            appBtn
+            preset="check"
+            type="submit"
+            [disabled]="!contactForm.valid || !isSubmitting"
+          >
+            Save
+          </button>
+        } @else {
+          @if (!responsiveService.isMobile()) {
+            <button appBtn preset="x" (click)="closeDialog()">Cancel</button>
           }
-        </div>
-      </form>
-    </div>
+
+          <button
+            appBtn
+            preset="check"
+            type="submit"
+            [disabled]="!contactForm.valid || !isSubmitting"
+          >
+            Create contact
+          </button>
+        }
+      </div>
+    </form>
   </div>
 </div>

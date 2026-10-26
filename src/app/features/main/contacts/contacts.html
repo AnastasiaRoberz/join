@@ -27,11 +27,3 @@
     }
   </div>
 }
-
-@if (dialogService.isOpen()) {
-  <app-contact-dialog
-    class="dialog"
-    [contact]="dialogService.selectedItem()"
-    (click)="dialogService.closeDialog()"
-  />
-}

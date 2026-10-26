@@ -29,8 +29,13 @@ export class DialogService {
    */
   scrollToContact = signal<boolean>(false);
 
+  closeTimeout?: ReturnType<typeof setTimeout>;
+
   /** Opens the dialog. Pass a contact to edit it, or null to create a new one. */
   openDialog<T>(type: DialogContentType, item: T | null = null): void {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+    }
     this.dialogType.set(type);
     this.selectedItem.set(item);
     this.isOpen.set(true);
@@ -38,9 +43,12 @@ export class DialogService {
 
   /** Closes the dialog and clears the selected contact. */
   closeDialog(): void {
-    this.dialogType.set(null);
-    this.selectedItem.set(null);
     this.isOpen.set(false);
+
+    this.closeTimeout = setTimeout(() => {
+      this.dialogType.set(null);
+      this.selectedItem.set(null);
+    }, 400);
   }
 
   /**
@@ -50,11 +58,6 @@ export class DialogService {
    * @param id - The database id of the newly created contact
    */
   selectContact(id: number): void {
-    this.pendingSelectedId.set(id);
-    this.scrollToContact.set(true);
-  }
-
-  selectUpdatedContact(id: number): void {
     this.pendingSelectedId.set(id);
     this.scrollToContact.set(true);
   }
