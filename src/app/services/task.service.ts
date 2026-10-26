@@ -1,4 +1,4 @@
-import { inject, Service, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { TaskInterface } from '../interfaces/task.interface';
 import { SubtaskInterface } from '../interfaces/subtask.interface';
@@ -69,6 +69,10 @@ export class TaskService {
     } as TaskInterface;
     return completeTask;
   }
+
+  sortedTasks = computed(() => {
+    return [...this.tasks()].sort((a, b) => a.title.localeCompare(b.title));
+  });
 
   /**
    * Inserts a new task entity into the database and triggers a full reload to establish
