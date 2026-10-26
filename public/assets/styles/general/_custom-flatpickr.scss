@@ -193,3 +193,30 @@
     }
   }
 }
+
+.flatpickr-today-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  outline: 1px solid transparent;
+  box-shadow: $btn-shadow-placeholder;
+  background-color: transparent;
+  border: 1px solid $btn-secondary-default;
+  cursor: pointer;
+
+  &:hover {
+    border: 1px solid $btn-secondary-hover;
+    outline: 1px solid $btn-secondary-hover;
+    color: $btn-secondary-hover;
+    box-shadow: $btn-shadow;
+  }
+
+  &:active {
+    border: 1px solid $btn-secondary-active;
+    color: $btn-secondary-active;
+    box-shadow: $btn-shadow;
+  }
+}
