@@ -1,7 +1,14 @@
 <label for="subtasks" [class.is-mobile]="responsiveService.isMobile()">Subtasks</label>
 
 <div class="input-container">
-  <input #mainInput type="text" id="subtasks" autocomplete="off" />
+  <input
+    #mainInput
+    type="text"
+    id="subtasks"
+    autocomplete="off"
+    (keydown.enter)="$event.preventDefault(); saveSubtask(mainInput)"
+    (keydown.escape)="clearInput(mainInput)"
+  />
   <div class="input-btn-wrapper">
     <button type="button" class="btn-cancel" (click)="clearInput(mainInput)">
       <svg>
@@ -21,7 +28,7 @@
   @for (subtask of sortedSubtasks(); track subtask.id) {
     <li>
       @if (editingSubtaskId() !== subtask.id) {
-        <div class="li-wrapper">
+        <div class="li-wrapper" (dblclick)="editSubtask(subtask.id)">
           <span>{{ subtask.title }}</span>
           <div class="subtask-btn-wrapper">
             <button type="button" class="btn-subtask" (click)="editSubtask(subtask.id)">
@@ -39,7 +46,14 @@
         </div>
       } @else {
         <div class="li-wrapper">
-          <input #editInput type="text" [value]="subtask.title" autocomplete="off" />
+          <input
+            #editInput
+            type="text"
+            [value]="subtask.title"
+            autocomplete="off"
+            (keydown.enter)="$event.preventDefault(); updateSubtask(editInput, subtask.id)"
+            (keydown.escape)="editingSubtaskId.set(null)"
+          />
           <div class="subtask-btn-wrapper">
             <button type="button" class="btn-subtask" (click)="deleteSubtask(subtask.id)">
               <svg>

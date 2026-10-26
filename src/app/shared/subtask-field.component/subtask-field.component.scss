@@ -64,6 +64,7 @@ li {
   .li-wrapper {
     @include flex-center;
     width: 100%;
+    cursor: pointer;
   }
 
   &:has(input) {
