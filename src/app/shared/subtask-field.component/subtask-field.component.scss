@@ -37,6 +37,10 @@ span {
     gap: 4px;
     visibility: hidden;
 
+    button {
+      @include flex-center;
+    }
+
     svg {
       height: 24px;
       width: 24px;

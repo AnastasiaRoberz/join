@@ -4,10 +4,11 @@
   @include flex-start(column);
   align-items: flex-start;
   gap: 24px;
-  width: 100%;
+  width: 525px;
+  max-height: min(95dvh, 1024px);
   min-height: 0;
-  height: 100%;
   font-size: $font-medium;
+  padding: 48px 40px;
 }
 
 .fixed-content {

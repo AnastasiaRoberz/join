@@ -19,7 +19,7 @@
       variant="search"
       placeholder="Find Task"
       emptyText="No tasks found."
-      [options]="taskService.tasks()"
+      [options]="taskService.sortedTasks()"
       [labelFn]="taskLabelFn"
       [getSearchStrings]="taskTitleSearch"
       [getIncludeStrings]="taskDescriptionSearch"

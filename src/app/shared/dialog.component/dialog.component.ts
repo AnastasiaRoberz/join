@@ -11,6 +11,7 @@ import { TaskEdit } from '../../features/main/board/components/task-edit/task-ed
   templateUrl: './dialog.component.html',
   host: {
     '(click)': 'dialogService.closeDialog()',
+    '[class.is-open]': 'dialogService.isOpen()',
   },
 })
 export class DialogComponent {

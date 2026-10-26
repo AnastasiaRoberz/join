@@ -15,9 +15,24 @@
   }
 
   @if (type() === 'input') {
-    <input type="text" [id]="id()" [value]="value" (input)="onInput($event)" (blur)="onTouched()" />
+    <input
+      type="text"
+      [id]="id()"
+      [value]="value"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+      placeholder=" "
+      autocomplete="off"
+    />
   } @else if (type() === 'textarea') {
-    <textarea [id]="id()" [value]="value" (input)="onInput($event)" (blur)="onTouched()"></textarea>
+    <textarea
+      [id]="id()"
+      [value]="value"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+      placeholder=" "
+      autocomplete="off"
+    ></textarea>
   }
 
   @if (icon()) {

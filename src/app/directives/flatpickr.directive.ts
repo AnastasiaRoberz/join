@@ -1,5 +1,7 @@
 import { Directive, ElementRef, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
 import flatpickr from 'flatpickr';
+// @ts-ignore
+import ShortcutButtonsPlugin from 'shortcut-buttons-flatpickr';
 
 /**
  * Attribute directive that wraps a native `<input>` element with a customized Flatpickr
@@ -77,6 +79,14 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
       nextArrow: this.arrowSvg,
       prevArrow: this.arrowSvg,
       parseDate: (dateStr: string) => this.parseFlexibleDate(dateStr.trim()),
+      onReady: (_selectedDates, _dateStr, instance) => {
+        const todayBtn = document.createElement('button');
+        todayBtn.type = 'button';
+        todayBtn.textContent = 'Today';
+        todayBtn.className = 'flatpickr-today-btn';
+        todayBtn.onclick = () => instance.setDate(new Date(), true);
+        instance.calendarContainer.appendChild(todayBtn);
+      },
       onOpen: (_selectedDates, _dateStr, instance) => {
         this.isOpen.set(true);
         const targetDate = instance.selectedDates[0] ?? new Date();

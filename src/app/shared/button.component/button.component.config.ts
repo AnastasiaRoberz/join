@@ -31,7 +31,7 @@ export const BUTTON_STYLES = {
     label: '',
     variant: 'secondary',
     size: 'large',
-    icon: 'cancel',
+    icon: 'x',
   },
   check: {
     label: '',
@@ -73,7 +73,7 @@ export const BUTTON_STYLES = {
     label: null,
     variant: 'icon',
     size: null,
-    icon: 'close',
+    icon: 'x',
   },
   search: {
     label: null,
