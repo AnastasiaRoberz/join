@@ -1,3 +1,4 @@
+import { ContactInterface } from './contact.interface';
 import { SubtaskInterface } from './subtask.interface';
 
 export interface TaskInterface {
@@ -9,5 +10,6 @@ export interface TaskInterface {
   category: 'User Story' | 'Technical Task';
   status: 'To do' | 'In progress' | 'Await feedback' | 'Done';
   subtasks?: SubtaskInterface[];
-  assigned_users: { id: number; firstname: string; surname: string; badge_Color: string }[];
+  // assigned_users: { id: number; firstname: string; surname: string; badge_Color: string }[];
+  assigned_users: ContactInterface[];
 }
