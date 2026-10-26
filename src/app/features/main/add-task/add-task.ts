@@ -71,13 +71,9 @@ export class AddTask {
 
   /**
    * Opens the native date picker of the hidden date input when the calendar button
-   * is clicked. If `pickerOpen` is already `true`, it only resets the flag instead.
+   * is clicked.
    */
   openDatePicker() {
-    if (this.pickerOpen) {
-      this.pickerOpen = false;
-      return;
-    }
     this.pickerOpen = true;
     this.datePickerRef.nativeElement.showPicker();
   }
