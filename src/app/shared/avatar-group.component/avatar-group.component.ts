@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, input, signal } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, output, signal } from '@angular/core';
 import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
@@ -24,6 +24,7 @@ export class AvatarGroupComponent {
   maxUsers = input<number>(3);
   overlapLayout = input<boolean>(true);
   gap = input<number>(8);
+  userDeletedId = output<number>();
 
   ngOnInit(): void {
     this.resizeObserver = new ResizeObserver((entries) => {
@@ -63,4 +64,9 @@ export class AvatarGroupComponent {
       .join('\n');
   });
   remainingUsersCount = computed(() => Math.max(0, this.users().length - this.fittingUsers()));
+
+  onDelete(id?: number, event?: MouseEvent) {
+    event?.stopPropagation;
+    if (id) this.userDeletedId.emit(id);
+  }
 }
