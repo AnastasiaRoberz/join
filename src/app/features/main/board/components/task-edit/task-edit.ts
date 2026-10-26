@@ -13,6 +13,7 @@ import { SelectFieldComponent } from '../../../../../shared/select-field.compone
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
 import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.component/subtask-field.component';
+import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -32,6 +33,7 @@ import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.compo
     UserAvatar,
     CheckboxComponent,
     SubtaskFieldComponent,
+    AvatarGroupComponent,
   ],
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',

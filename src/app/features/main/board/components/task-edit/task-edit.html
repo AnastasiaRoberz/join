@@ -34,23 +34,7 @@
       <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
       <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
     </ng-template>
-
-    <div footer class="assigned-users">
-      @for (contact of selectedContacts(); track contact.id) {
-        <div class="avatar-wrapper">
-          <app-user-avatar [user]="contact" size="medium" />
-          <button
-            type="button"
-            class="btn-delete-user"
-            (click)="toggleAssignment(contact.id, false)"
-          >
-            <svg>
-              <use href="./assets/icons/icons.svg#delete"></use>
-            </svg>
-          </button>
-        </div>
-      }
-    </div>
+    <app-avatar-group footer [users]="selectedContacts()" size="medium" [overlapLayout]="false" />
   </app-select-field>
 
   <app-subtask-field [subtasks]="task()?.subtasks ?? []" [taskId]="task().id" />
