@@ -112,16 +112,13 @@
     }
 
     @include tablet {
-      height: 100%;
-      aspect-ratio: 1/1;
-
       .btn-label {
         display: none;
       }
     }
 
     &.contact {
-      @include mobile {
+      @include tablet {
         position: absolute;
         bottom: 32px;
         right: 16px;
@@ -129,6 +126,7 @@
         width: 56px;
         border-radius: 50%;
         box-shadow: $btn-shadow;
+        padding: 0;
       }
     }
 
