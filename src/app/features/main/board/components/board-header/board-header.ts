@@ -9,6 +9,8 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
   templateUrl: './board-header.html',
   host: {
     '[class.is-mobile]': 'responsiveService.isMobile()',
+    '[class.is-tablet]': 'responsiveService.isTablet()',
+    '[class.is-desktop]': 'responsiveService.isDesktop()',
   },
 })
 export class BoardHeader {

@@ -53,6 +53,10 @@
       border-radius: 10px;
       background: $color-white;
 
+      &__mobile {
+        width: 100%;
+      }
+
       &:hover {
         border-color: $color-grey-100;
       }
@@ -83,9 +87,17 @@
         }
       }
     }
-    // add button height when larger, than mobile
-    .is-tablet {
+
+    // desktop button height
+    button {
       height: 48px;
+    }
+
+    // tablket button size
+    .is-tablet {
+      border-radius: 10px;
+      height: 48px;
+      width: 48px;
     }
   }
 }

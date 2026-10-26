@@ -7,7 +7,7 @@
       <button
         appBtn
         preset="addTask"
-        size="small"
+        /* size="small" */
         [class.is-mobile]="responsiveService.isMobile()"
         type="button"
       ></button>
@@ -15,7 +15,7 @@
   </div>
 
   <div class="board-header-actions">
-    <label class="search">
+    <label class="search" [class.search__mobile]="responsiveService.isMobile()">
       <input type="text" placeholder="Find Task" />
       <span class="search__divider"></span>
       <svg class="search__icon">
@@ -27,7 +27,7 @@
       <button
         appBtn
         preset="addTask"
-        [class.is-tablet]="!responsiveService.isMobile()"
+        [class.is-tablet]="responsiveService.isTablet()"
         type="button"
       ></button>
     }
