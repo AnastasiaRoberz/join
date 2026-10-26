@@ -90,7 +90,7 @@ export class SupabaseService {
       this.feedbackService.showSuccess(
         `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
       );
-      return supabaseData;
+      return data;
     } else {
       this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
       return null;

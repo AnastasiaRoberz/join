@@ -19,24 +19,21 @@ input[type='checkbox'] {
   }
 }
 
+label {
+  @include flex-center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
 
-
-  label {
-    @include flex-center;
+  svg {
     width: 24px;
     height: 24px;
-    cursor: pointer;
-
-    svg {
-      width: 24px;
-      height: 24px;
-    }
   }
+}
 
-  &.selected {
-    span {
-      text-decoration: line-through;
-    }
+&.selected {
+  span {
+    text-decoration: line-through;
   }
 }
 
