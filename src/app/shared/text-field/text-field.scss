@@ -33,7 +33,7 @@ textarea {
   &:has(input:not(:placeholder-shown)),
   &:has(textarea:not(:placeholder-shown)) {
     label.inner {
-      transform: translateY(-180%);
+      transform: translateY(-150%);
       color: $input-focus-label;
 
       &.is-mobile {
