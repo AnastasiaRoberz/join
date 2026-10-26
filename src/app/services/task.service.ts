@@ -120,7 +120,12 @@ export class TaskService {
     taskId: number,
     subtaskData: Partial<SubtaskInterface>,
   ): Promise<void> {
-    const success = await this.supabaseService.updateData(subtaskId, subtaskData, 'subtasks');
+    const success = await this.supabaseService.updateData(
+      subtaskId,
+      subtaskData,
+      'subtasks',
+      false,
+    );
 
     if (success) {
       this.tasks.update((list) =>
@@ -148,7 +153,8 @@ export class TaskService {
    */
   async deleteTask(id: number, task: 'main' | 'sub') {
     const table = task === 'main' ? 'tasks' : 'subtasks';
-    const success = await this.supabaseService.deleteData(id, table);
+    const showFeedback = task === 'sub' ? false : true;
+    const success = await this.supabaseService.deleteData(id, table, showFeedback);
 
     if (success) {
       if (task === 'main') {
@@ -180,7 +186,7 @@ export class TaskService {
       ...subtaskData,
       task_id: taskId,
     };
-    const newSubtask = await this.supabaseService.addData(subtask, 'subtasks');
+    const newSubtask = await this.supabaseService.addData(subtask, 'subtasks', false);
     await this.getAllTasks();
     return newSubtask;
   }
@@ -205,7 +211,7 @@ export class TaskService {
       }));
       console.log(newData);
 
-      await this.supabaseService.addData(newData, 'task-assignment');
+      await this.supabaseService.addData(newData, 'task-assignment', false);
     }
 
     await this.getAllTasks();
