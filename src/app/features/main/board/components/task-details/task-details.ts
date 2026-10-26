@@ -32,16 +32,18 @@ export class TaskDetails {
   // Inputs & Computed State
   // ---------------------------------------------------------------------------
 
-  /** ID of the task to display in the detail view. */
+  /** Fallback task ID if no task object was passed via `DialogService.openDialog()`. */
   selectedId = input<number>(1);
 
   /**
-   * Reactively resolves the full task object from `TaskService` matching `selectedId()`.
+   * Reactively resolves the full task object from `TaskService` matching the task
+   * stored in `dialogService.selectedItem()` (or falls back to `selectedId()`).
    * Automatically reflects live changes when subtasks or task details are updated.
    */
-  selectedTask = computed(() =>
-    this.taskService.tasks().find((task) => task.id === this.selectedId()),
-  );
+  selectedTask = computed(() => {
+    const targetId = this.dialogService.selectedItem()?.id ?? this.selectedId();
+    return this.taskService.tasks().find((task) => task.id === targetId);
+  });
 
   // ---------------------------------------------------------------------------
   // Public Methods
