@@ -25,6 +25,7 @@ export class TextField implements ControlValueAccessor {
   id = input<string>(`app-input-${nextId++}`);
   labelPos = input<string>('inner');
   type = input<'input' | 'textarea'>('input');
+  placeholder = input<string>(' ');
 
   value: string = '';
 

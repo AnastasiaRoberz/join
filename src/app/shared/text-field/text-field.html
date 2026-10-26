@@ -21,7 +21,7 @@
       [value]="value"
       (input)="onInput($event)"
       (blur)="onTouched()"
-      placeholder=" "
+      [placeholder]="placeholder()"
       autocomplete="off"
     />
   } @else if (type() === 'textarea') {
@@ -30,7 +30,7 @@
       [value]="value"
       (input)="onInput($event)"
       (blur)="onTouched()"
-      placeholder=" "
+      [placeholder]="placeholder()"
       autocomplete="off"
     ></textarea>
   }

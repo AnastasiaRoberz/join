@@ -60,10 +60,10 @@ ul {
 }
 
 li {
-  @include flex-start;
-  width: 100%;
-  padding: 4px 16px;
-  width: 100%;
+  padding: 4px 16px 4px 0;
+  width: calc(100% - 36px);
+  margin-left: 36px;
+  cursor: default;
 
   .li-wrapper {
     @include flex-center;

@@ -32,6 +32,12 @@
   }
 
   // BUTTONS SIZES
+  &.btn-small {
+    font-size: $font-default;
+    padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
+    border-radius: 8px;
+  }
+
   &.btn-medium {
     font-size: $font-default;
     padding: calcClamp(10, 16, 768, 320);
@@ -141,6 +147,7 @@
       align-items: center;
       justify-content: center;
       order: 1;
+      font-size: 1rem;
 
       &::after {
         content: attr(data-text);
