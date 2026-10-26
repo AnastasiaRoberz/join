@@ -24,8 +24,8 @@ export class UserAvatar {
 
     // titleRegex now lives in name-utils.ts
 
-    const firstLetter = this.user()?.firstname.charAt(0);
-    const secondLetter = this.user()?.surname.charAt(0);
+    const firstLetter = this.user()?.firstname?.charAt(0);
+    const secondLetter = this.user()?.surname?.charAt(0);
     return `${firstLetter}${secondLetter}`;
   });
 }
