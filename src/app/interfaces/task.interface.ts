@@ -5,7 +5,7 @@ export interface TaskInterface {
   id: number;
   title: string;
   description: string;
-  due_date: Date;
+  due_date: string;
   priority: 'urgent' | 'medium' | 'low';
   category: 'User Story' | 'Technical Task';
   status: 'To do' | 'In progress' | 'Await feedback' | 'Done';
