@@ -123,6 +123,12 @@ export class AddTask {
 
   //#endregion
 
+  /**
+   * Returns `true` if the given form control is invalid and has been
+   * touched or dirtied by the user. Used by the template to show error hints.
+   *
+   * @param controlName - The name of the form control to check
+   */
   showError(controlName: string): boolean {
     const control = this.taskForm.get(controlName);
     return !!control && control.invalid && (control.touched || control.dirty);
@@ -166,6 +172,10 @@ export class AddTask {
     this.assignedContacts.set(contacts);
   }
 
+  /**
+   * Resets the form and all related signals to their initial state.
+   * Called by the Clear button and at the end of a successful submit.
+   */
   onClear(): void {
     this.taskForm.reset();
     this.selectedPrio.set(null);
@@ -175,10 +185,11 @@ export class AddTask {
   }
 
   /**
-   * Submits the form. Aborts if the form is invalid or no priority is selected.
+   * Submits the form. If the form is invalid or no priority is selected,
+   * all fields are marked as touched to reveal error hints and the method aborts.
    * Otherwise it converts the date to `yyyy-mm-dd` (database format), creates the task
    * with status `'To do'`, assigns the selected contacts one by one via the
-   * task-assignment table, and finally resets the form and all signals.
+   * task-assignment table, and finally resets the form via `onClear`.
    *
    * @returns A promise that resolves when the task and its assignments are saved
    */
