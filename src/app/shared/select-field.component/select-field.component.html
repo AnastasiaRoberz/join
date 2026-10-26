@@ -17,11 +17,27 @@
     #inputField
   />
 
-  <button type="button" (click)="togglePopup()" (mousedown)="$event.preventDefault()">
-    <svg class="input-icon" [class.is-open]="popupExpanded()">
-      <use href="./assets/icons/icons.svg#arrow-down"></use>
-    </svg>
-  </button>
+  @if (variant() === 'search') {
+    <div class="search-suffix">
+      <hr class="divider" />
+      <button
+        class="btn-search"
+        type="button"
+        (click)="togglePopup()"
+        (mousedown)="$event.preventDefault()"
+      >
+        <svg class="search-icon">
+          <use href="./assets/icons/icons.svg#search"></use>
+        </svg>
+      </button>
+    </div>
+  } @else {
+    <button type="button" (click)="togglePopup()" (mousedown)="$event.preventDefault()">
+      <svg class="input-icon" [class.is-open]="popupExpanded()">
+        <use href="./assets/icons/icons.svg#arrow-down"></use>
+      </svg>
+    </button>
+  }
 </div>
 
 <!-- Optional slot for footer content (e.g., assigned user avatar badges) -->
@@ -44,6 +60,7 @@
       selectionMode="explicit"
       [value]="listboxValue()"
       (valueChange)="onValueChange($event)"
+      (mousedown)="$event.preventDefault()"
       [activeDescendant]="listbox.activeDescendant()"
       class="dropdown scroll-container"
       [class.is-open]="popupExpanded()"

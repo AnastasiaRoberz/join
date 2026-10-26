@@ -27,7 +27,7 @@ let nextId = 0;
  * Supports three primary usage modes:
  * 1. **Multi-Select with Custom Template** (e.g., assigning contacts with avatars, checkboxes, and a footer).
  * 2. **Single-Select Dropdown** (e.g., selecting a task category).
- * 3. **Search / Autocomplete Input** (e.g., filtering tasks only after typing via `[openOnClick]="false"`).
+ * 3. **Search / Autocomplete Input** (`variant="search"`, e.g., finding tasks with a divider and magnifying glass icon).
  *
  * @example
  * ### 1. Simple Single-Select (Strings)
@@ -59,6 +59,21 @@ let nextId = 0;
  *
  *   <div footer class="assigned-users">...</div>
  * </app-select-field>
+ * ```
+ *
+ * @example
+ * ### 3. Task Searchbar (`variant="search"`)
+ * ```html
+ * <app-select-field
+ *   variant="search"
+ *   placeholder="Find Task"
+ *   emptyText="No tasks found."
+ *   [options]="taskService.tasks()"
+ *   [labelFn]="taskLabelFn"
+ *   [getSearchStrings]="taskTitleSearch"
+ *   [getIncludeStrings]="taskDescriptionSearch"
+ *   (valueChange)="onTaskSelected($event)"
+ * />
  * ```
  *
  * @typeParam T - The data type of the option items passed to `[options]`.
@@ -100,19 +115,27 @@ export class SelectFieldComponent<T = any> {
   /** Full list of selectable items of type `T`. */
   options = input<T[]>([]);
 
+  /**
+   * Visual and behavioral variant of the component:
+   * - `'select'` (default): Standard dropdown with a rotating arrow icon that opens on click.
+   * - `'search'`: Searchbar with a vertical divider and magnifying glass icon that opens only
+   *   when typing and clears the input field after a result is selected.
+   */
+  variant = input<'select' | 'search'>('select');
+
   /** Whether multiple options can be selected simultaneously (`true`) or only one (`false`). */
   multi = input<boolean>(false);
 
   /**
    * Whether clicking the input field immediately opens the dropdown popup.
-   * Set to `false` for pure search/autocomplete fields that should only open once the user types.
+   * Automatically ignored when `variant()` is `'search'`.
    */
   openOnClick = input<boolean>(true);
 
   /**
    * Two-way bound selection value.
    * - In `multi` mode: holds an array of selected keys (e.g., `number[]`).
-   * - In single-select mode: holds the single selected key/value (e.g., `string | number | null`).
+   * - In single-select / search mode: holds the single selected key/value (e.g., `string | number | null`).
    */
   value = model<any>();
 
@@ -133,12 +156,18 @@ export class SelectFieldComponent<T = any> {
   );
 
   /**
-   * Extracts the array of searchable strings from an option item used by `filterInput()`.
-   * Each string is checked via case-insensitive `startsWith` matching against `searchTerm()`.
+   * Extracts the array of searchable strings from an option item that should be matched
+   * via case-insensitive `startsWith()` against `searchTerm()` (e.g., contact names or task titles).
    */
-  getSearchStrings = input<(item: T) => string[]>((item: any) => [
+  getSearchStrings = input<(item: T) => (string | undefined | null)[]>((item: any) => [
     typeof item === 'string' ? item : (item?.name ?? ''),
   ]);
+
+  /**
+   * Optional extractor for additional strings on an option item that should be matched
+   * via case-insensitive `includes()` against `searchTerm()` (e.g., task descriptions).
+   */
+  getIncludeStrings = input<((item: T) => (string | undefined | null)[]) | undefined>(undefined);
 
   // ---------------------------------------------------------------------------
   // Content & View Queries
@@ -183,9 +212,17 @@ export class SelectFieldComponent<T = any> {
 
   positions = signal<ConnectedPosition[]>([this.positionBelow, this.positionAbove]);
 
-  /** Options filtered reactively by the current `searchTerm()` using `getSearchStrings()`. */
+  /**
+   * Options filtered reactively by the current `searchTerm()` using `getSearchStrings()` (`startsWith`)
+   * and optional `getIncludeStrings()` (`includes`).
+   */
   filteredOptions = computed(() =>
-    filterInput(this.options(), this.searchTerm(), this.getSearchStrings()),
+    filterInput(
+      this.options(),
+      this.searchTerm(),
+      this.getSearchStrings(),
+      this.getIncludeStrings(),
+    ),
   );
 
   /**
@@ -200,21 +237,23 @@ export class SelectFieldComponent<T = any> {
 
   /**
    * Subset of `selectedKeys()` that are currently rendered in `filteredOptions()`.
-   * Passed to `ngListbox [value]` so `@angular/aria/listbox` does not strip out
-   * selected items that are temporarily hidden while the user types a search filter.
+   * - In `'search'` variant: always returns `[]` so results act as action triggers that can be re-selected at any time.
+   * - In `'select'` variant: prevents `@angular/aria/listbox` from stripping out selected items hidden by the search filter.
    */
   listboxValue = computed<any[]>(() => {
+    if (this.variant() === 'search') return [];
+
     const visibleKeys = new Set(this.filteredOptions().map((opt) => this.valueKey()(opt)));
     return this.selectedKeys().filter((key) => visibleKeys.has(key));
   });
 
   /**
    * Text value displayed inside the `<input>` element:
-   * - In `multi` mode: displays the active `searchTerm()`.
+   * - In `multi` or `'search'` mode: displays only the active `searchTerm()`.
    * - In single-select mode: displays `searchTerm()` while actively searching, or the formatted label of the selected option.
    */
   displayValue = computed(() => {
-    if (this.multi()) {
+    if (this.multi() || this.variant() === 'search') {
       return this.searchTerm();
     }
     if (this.popupExpanded() && this.searchTerm()) {
@@ -228,7 +267,7 @@ export class SelectFieldComponent<T = any> {
 
   /**
    * Initializes an effect that resets the search term and restores the input display value
-   * whenever the dropdown popup closes (whether via arrow click, Escape key, or outside click).
+   * whenever the dropdown popup closes (whether via arrow click, Escape key, selection, or outside click).
    */
   constructor() {
     effect(() => {
@@ -246,7 +285,7 @@ export class SelectFieldComponent<T = any> {
 
   /**
    * Updates `searchTerm` as the user types and automatically opens the dropdown
-   * if it was closed (e.g., when `[openOnClick]="false"`).
+   * if it was closed (e.g., in `'search'` mode or when `[openOnClick]="false"`).
    *
    * @param event - The DOM `input` event from the text field.
    */
@@ -260,10 +299,11 @@ export class SelectFieldComponent<T = any> {
   }
 
   /**
-   * Opens the dropdown when clicking into the input field, provided `openOnClick()` is enabled.
+   * Opens the dropdown when clicking into the input field, unless `variant()` is `'search'`
+   * or `openOnClick()` is explicitly disabled.
    */
   onInputClick(): void {
-    if (this.openOnClick()) {
+    if (this.variant() !== 'search' && this.openOnClick()) {
       this.openPopup();
     }
   }
@@ -296,11 +336,13 @@ export class SelectFieldComponent<T = any> {
 
   /**
    * Checks whether a given option item is currently part of the selection.
+   * Always returns `false` in `'search'` mode since search results are transient actions.
    *
    * @param item - The option item to check.
    * @returns `true` if the item's key is included in `selectedKeys()`, otherwise `false`.
    */
   isSelected(item: T): boolean {
+    if (this.variant() === 'search') return false;
     return this.selectedKeys().includes(this.valueKey()(item));
   }
 
@@ -308,7 +350,9 @@ export class SelectFieldComponent<T = any> {
    * Handles selection changes emitted by `ngListbox` (via keyboard Enter/Space or row click).
    * - In `multi` mode: merges the updated visible selection with any previously selected keys
    *   that are currently hidden by the active search filter.
-   * - In single-select mode: unwraps the single selected item and closes the popup.
+   * - In `'search'` mode: emits the selected key, resets `value` to `null` so the same item
+   *   can be selected again later, and closes the popup.
+   * - In single-select mode: emits the selected key and closes the popup.
    *
    * @param selected - Array of selected visible keys emitted by `ngListbox`.
    */
@@ -317,6 +361,13 @@ export class SelectFieldComponent<T = any> {
       const visibleKeys = new Set(this.filteredOptions().map((opt) => this.valueKey()(opt)));
       const hiddenSelectedKeys = this.selectedKeys().filter((key) => !visibleKeys.has(key));
       this.value.set([...hiddenSelectedKeys, ...selected]);
+    } else if (this.variant() === 'search') {
+      const picked = selected[0] ?? null;
+      if (picked != null) {
+        this.value.set(picked);
+        queueMicrotask(() => this.value.set(null));
+      }
+      this.closePopup();
     } else {
       this.value.set(selected[0] ?? null);
       this.closePopup();
