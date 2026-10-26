@@ -123,6 +123,11 @@ export class AddTask {
 
   //#endregion
 
+  showError(controlName: string): boolean {
+    const control = this.taskForm.get(controlName);
+    return !!control && control.invalid && (control.touched || control.dirty);
+  }
+
   /**
    * Stores the priority chosen via a priority button.
    *
@@ -161,6 +166,14 @@ export class AddTask {
     this.assignedContacts.set(contacts);
   }
 
+  onClear(): void {
+    this.taskForm.reset();
+    this.selectedPrio.set(null);
+    this.assignedContacts.set([]);
+    this.categoryOpen.set(false);
+    this.assignedOpen.set(false);
+  }
+
   /**
    * Submits the form. Aborts if the form is invalid or no priority is selected.
    * Otherwise it converts the date to `yyyy-mm-dd` (database format), creates the task
@@ -170,7 +183,10 @@ export class AddTask {
    * @returns A promise that resolves when the task and its assignments are saved
    */
   async onSubmit(): Promise<void> {
-    if (this.taskForm.invalid || !this.selectedPrio()) return;
+    if (this.taskForm.invalid || !this.selectedPrio()) {
+      this.taskForm.markAllAsTouched();
+      return;
+    }
 
     const [day, month, year] = this.taskForm.value.date!.split('/');
     const dateValue = `${year}-${month}-${day}`;
@@ -190,9 +206,7 @@ export class AddTask {
         await this.taskService.assignUser(newTaskId, contact.id);
       }
 
-      this.taskForm.reset();
-      this.selectedPrio.set(null);
-      this.assignedContacts.set([]);
+      this.onClear();
     }
   }
 }

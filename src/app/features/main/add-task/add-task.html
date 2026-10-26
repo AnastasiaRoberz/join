@@ -7,7 +7,9 @@
           <label>Title<span class="required">*</span></label>
           <div class="taskWrap__withHint">
             <input type="text" formControlName="title" placeholder="Enter a Title" />
-            <span class="hint-msg">This field is required</span>
+            @if (showError('title')) {
+              <span class="hint-msg">This field is required</span>
+            }
           </div>
         </div>
         <div class="taskWrap__inputBox">
@@ -35,7 +37,9 @@
                 <use href="./assets/icons/icons.svg#calendar"></use>
               </svg>
             </button>
-            <span class="hint-msg">This field is required</span>
+            @if (showError('date')) {
+              <span class="hint-msg">This field is required</span>
+            }
           </div>
         </div>
       </div>
@@ -121,7 +125,9 @@
                 (closeDropdown)="categoryOpen.set(false)"
               ></app-dropdown>
             }
-            <span class="hint-msg">This field is required</span>
+            @if (showError('category')) {
+              <span class="hint-msg">This field is required</span>
+            }
           </div>
         </div>
         <div class="taskWrap__inputBox">
@@ -134,7 +140,14 @@
       <span><span class="required">*</span>This field is required</span>
       <div class="task-footer__buttons">
         <button appBtn preset="secondary" label="Clear" icon="cancel" type="button"></button>
-        <button appBtn preset="primary" label="Create Task" icon="check" type="submit"></button>
+        <button
+          appBtn
+          preset="primary"
+          label="Create Task"
+          icon="check"
+          type="submit"
+          [disabled]="taskForm.invalid || !selectedPrio()"
+        ></button>
       </div>
     </div>
   </form>
