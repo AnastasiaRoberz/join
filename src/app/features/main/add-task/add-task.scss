@@ -3,7 +3,7 @@
 :host {
   width: 100%;
   height: 100%;
-  padding-inline: 96px 136px;
+  padding-inline: calcClamp(16, 96, 1440, 769) calcClamp(16, 136, 1440, 769);
   padding-block: 124px 66px;
   background-color: $main-bg;
 }
@@ -14,6 +14,14 @@
   display: flex;
   flex-direction: column;
   gap: 48px;
+}
+
+form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .required {
@@ -36,8 +44,6 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  position: absolute;
-  bottom: 79px;
 
   &__buttons {
     display: flex;
