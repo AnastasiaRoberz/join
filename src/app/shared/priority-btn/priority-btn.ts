@@ -2,8 +2,20 @@ import { Component, computed, HostBinding, HostListener, input, output } from '@
 
 // example: <button priority="urgent"></button>
 
+/**
+ * Available priority levels of a task.
+ */
 export type Priority = 'urgent' | 'medium' | 'low';
 
+/**
+ * Selectable priority button.
+ *
+ * Uses the attribute selector `button[priority]`, so it is applied to a native
+ * `<button>` element. The label and icon are derived from the required `priority` input.
+ *
+ * @example
+ * <button priority="urgent" [isActive]="selected === 'urgent'" (prioSelected)="onSelect($event)"></button>
+ */
 @Component({
   imports: [],
   selector: 'button[priority]', //selector umbenannt, Nutzung über button und Attribut, siehe oben example
@@ -11,21 +23,34 @@ export type Priority = 'urgent' | 'medium' | 'low';
   templateUrl: './priority-btn.html',
 })
 export class PriorityBtn {
-  // bei Nutzung Komponente muss einer der folgenden Strings angegeben werden (siehe example):
+  /**
+   * The priority this button represents. Required when using the component.
+   */
   priority = input.required<Priority>();
 
+  /**
+   * Whether this button is currently selected. Controls the `active` CSS class.
+   */
   isActive = input<boolean>(false);
 
+  /**
+   * Emits the button's priority when it is clicked.
+   */
   prioSelected = output<Priority>();
 
-  // HostBinding: fügt dem Host-Element (<button>) die CSS-Klasse 'active' hinzu
-  // wenn isActive() === true
+  /**
+   * Adds the CSS class `active` to the host element while `isActive()` is `true`.
+   *
+   * @returns `true` if the button is active
+   */
   @HostBinding('class.active')
   get activeClass() {
     return this.isActive();
   }
 
-  //über computed signal wird Inhalt gesetuert + entsprechendes Styling
+  /**
+   * Label and icon for the current priority, used by the template.
+   */
   preset = computed(() => {
     const presets = {
       urgent: { label: 'Urgent', icon: 'urgent' },
@@ -35,6 +60,9 @@ export class PriorityBtn {
     return presets[this.priority()];
   });
 
+  /**
+   * Emits `prioSelected` with the button's priority on click.
+   */
   @HostListener('click')
   onClick(): void {
     this.prioSelected.emit(this.priority());

@@ -77,15 +77,21 @@ export class TaskService {
   /**
    * Inserts a new task entity into the database and triggers a full reload to establish
    * clean relational joins.
+   * Returns the new task's ID so the caller can create related records (e.g. task-assignment).
    *
-   * @param taskData - The task data payload without an `id`
-   * @returns A promise that resolves when insertion and refresh are complete
+   * @param taskData - The task data payload without `id`, `assigned_users` and `subtasks`,
+   *                   as these are managed separately via join tables
+   * @returns A promise resolving to the newly created task's `id`, or `null` on failure
    */
-  async addTask(taskData: Omit<TaskInterface, 'id'>) {
+  async addTask(
+    taskData: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'>,
+  ): Promise<number | null> {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
-      this.getAllTasks();
+      await this.getAllTasks();
+      return newTask.id;
     }
+    return null;
   }
 
   /**

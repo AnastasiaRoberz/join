@@ -27,9 +27,7 @@
   @include flex-center;
   gap: 16px;
 
-  .help-icon {
-    width: 32px;
-    height: 32px;
+  a .icon {
     padding: 2px;
 
     &:hover {

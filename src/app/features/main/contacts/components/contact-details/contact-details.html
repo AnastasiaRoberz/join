@@ -28,10 +28,12 @@
   </div>
 
   @if (responsiveService.isTablet()) {
-    <button type="button" class="btn-dots" (click)="toggleMenu($event)">
-      <svg class="icon">
-        <use href="./assets/icons/icons.svg#dots-menu"></use>
-      </svg>
-    </button>
+    <button
+      appBtn
+      preset="iconMedium"
+      icon="dots-menu"
+      class="btn-dots"
+      (click)="toggleMenu($event)"
+    ></button>
   }
 }

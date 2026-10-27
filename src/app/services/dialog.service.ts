@@ -2,7 +2,7 @@ import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskInterface } from '../interfaces/task.interface';
 
-export type DialogContentType = 'contact' | 'task' | 'task-edit' | null;
+export type DialogContentType = 'contact' | 'task' | 'task-edit' | 'add-task' | null;
 
 /**
  * Manages the state of the contact dialog (open/closed, which contact is being edited)

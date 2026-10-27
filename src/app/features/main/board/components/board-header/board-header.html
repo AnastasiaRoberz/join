@@ -4,7 +4,13 @@
     <h2>Board</h2>
     <!-- add button in mobile -->
     @if (responsiveService.isMobile()) {
-      <button appBtn preset="addTask" type="button"></button>
+      <button
+        appBtn
+        preset="addTask"
+        (click)="dialogService.openDialog('add-task')"
+        [class.is-mobile]="responsiveService.isMobile()"
+        type="button"
+      ></button>
     }
   </div>
 
@@ -24,6 +30,7 @@
       <button
         appBtn
         preset="addTask"
+        (click)="dialogService.openDialog('add-task')"
         [class.is-tablet]="responsiveService.isTablet()"
         // for mobile button style in tablet size
         type="button"

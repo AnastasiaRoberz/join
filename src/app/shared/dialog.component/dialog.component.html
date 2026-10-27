@@ -9,5 +9,8 @@
     @case ('task-edit') {
       <app-task-edit [task]="dialogService.selectedItem()" />
     }
+    @case ('add-task') {
+      <article app-add-task></article>
+    }
   }
 </div>

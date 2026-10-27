@@ -1,8 +1,18 @@
 import { Component, computed, input } from '@angular/core';
 import { BtnPreset, BUTTON_STYLES } from './button.component.config';
 
-export type BtnVariant = 'primary' | 'secondary' | 'add contact' | 'add task' | 'txtIcon' | 'icon';
-export type BtnSize = 'small' | 'medium' | 'large' | null;
+export type BtnVariant = 'primary' | 'secondary' | 'add' | 'text' | 'icon';
+export type BtnSize = 'small' | 'medium' | 'large';
+export type BtnType = 'button' | 'submit' | 'reset';
+export type IconPos = 'left' | 'right';
+
+export interface BtnInterface {
+  variant: BtnVariant;
+  size?: BtnSize;
+  icon?: string;
+  iconPos?: IconPos;
+  label?: string;
+}
 
 /*
   example: <button appBtn preset="close" (click)="closeDialog()"></button>
@@ -21,25 +31,41 @@ export type BtnSize = 'small' | 'medium' | 'large' | null;
 })
 export class Buttons {
   preset = input<BtnPreset | null>(null);
-
-  label = input<string | null>(null);
   variant = input<BtnVariant | null>(null);
   size = input<BtnSize | null>(null);
   icon = input<string | null>(null);
-  type = input<'button' | 'submit' | 'reset' | null>(null);
+  iconPos = input<IconPos | null>(null);
+  label = input<string | null>(null);
+  type = input<BtnType | null>(null);
 
-  btnConfig = computed(() => {
+  isFab = input<boolean>(false);
+
+  activePreset = computed<BtnInterface | null>(() => {
     const btnPreset = this.preset();
     return btnPreset ? BUTTON_STYLES[btnPreset] : null;
   });
 
-  btnLabel = computed(() => this.label() ?? this.btnConfig()?.label ?? null);
-  btnVariant = computed(() => this.variant() ?? this.btnConfig()?.variant ?? 'primary');
-  btnSize = computed(() => this.size() ?? this.btnConfig()?.size ?? null);
-  btnIcon = computed(() => this.icon() ?? this.btnConfig()?.icon ?? null);
-  btnType = computed(() => this.type() ?? 'button');
+  btnVariant = computed<BtnVariant>(
+    () => this.variant() ?? this.activePreset()?.variant ?? 'primary',
+  );
+  btnSize = computed<BtnSize>(() => this.size() ?? this.activePreset()?.size ?? 'large');
+  btnIcon = computed<string | null>(() => this.icon() ?? this.activePreset()?.icon ?? null);
+  btnIconPos = computed<IconPos>(() => this.iconPos() ?? this.activePreset()?.iconPos ?? 'right');
+  btnLabel = computed<string | null>(() => this.label() ?? this.activePreset()?.label ?? null);
+  btnType = computed<BtnType>(() => this.type() ?? 'button');
 
   hostClasses = computed(() => {
-    return `btn btn-${this.btnVariant()}${this.btnSize() ? ` btn-${this.btnSize()}` : ''}`;
+    const classes = ['btn', `btn--${this.btnVariant()}`];
+
+    if (this.btnSize()) {
+      classes.push(`btn--${this.btnSize()}`);
+    }
+    if (this.preset()) {
+      classes.push(`btn--${this.preset()}`);
+    }
+    if (this.isFab()) {
+      classes.push('btn--fab');
+    }
+    return classes.join(' ');
   });
 }

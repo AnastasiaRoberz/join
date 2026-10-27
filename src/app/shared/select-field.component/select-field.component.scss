@@ -53,18 +53,6 @@ input {
     background-color: $devider;
     border: none;
   }
-
-  .btn-search {
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-
-    .search-icon {
-      height: 32px;
-      width: 32px;
-      color: $main-color;
-    }
-  }
 }
 
 .dropdown {

@@ -13,9 +13,10 @@
             <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
             {{ contact.firstname }} {{ contact.surname }}
           </div>
-          <app-checkbox [checked]="isContactSelected()(contact)" (click)="toggleContact(contact)"
-            >" >></app-checkbox
-          >
+          <app-checkbox
+            [checked]="isContactSelected()(contact)"
+            (click)="toggleContact(contact)"
+          ></app-checkbox>
         </div>
       }
     }

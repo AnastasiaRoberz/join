@@ -29,8 +29,6 @@ export class SupabaseService {
    * const tasks = await supabaseService.getData('tasks', '*, subtasks(*)');
    */
   async getData(table: string, selectedData: string = '*'): Promise<any[] | null> {
-    console.log('Supabase');
-
     let { data, error } = await this.supabase.from(table).select(selectedData);
 
     if (error) {
@@ -95,7 +93,7 @@ export class SupabaseService {
         this.feedbackService.showSuccess(
           `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
         );
-      return data;
+      return result;
     } else {
       if (showError) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
       return null;

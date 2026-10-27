@@ -17,6 +17,7 @@ import { Listbox, Option } from '@angular/aria/listbox';
 import { CdkOverlayOrigin, ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
 import { ResponsiveService } from '../../services/responsive.service';
 import { filterInput } from '../../utils/utils';
+import { Buttons } from '../button.component/button.component';
 
 let nextId = 0;
 
@@ -87,6 +88,7 @@ let nextId = 0;
     Option,
     OverlayModule,
     NgTemplateOutlet,
+    Buttons,
   ],
   selector: 'app-select-field',
   styleUrl: './select-field.component.scss',

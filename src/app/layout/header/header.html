@@ -8,13 +8,9 @@
 
 <div class="nav">
   @if (!(navService.currentUrl() === '/help' || responsiveService.isMobile())) {
-    <a routerLink="/help">
-      <svg class="help-icon">
-        <use href="./assets/icons/icons.svg#help"></use>
-      </svg>
-    </a>
+    <a appBtn preset="iconMedium" icon="help" routerLink="/help"></a>
   }
-  <button (click)="toggleMenu()">
+  <button type="button" (click)="toggleMenu()">
     <app-user-avatar [user]="null" size="header" />
   </button>
 </div>

@@ -32,13 +32,6 @@ input {
   }
 }
 
-.input-icon {
-  width: 24px;
-  height: 24px;
-  color: $main-color;
-  pointer-events: none;
-}
-
 .error-msg {
   font-size: calcClamp(12, 16, 768, 320);
   color: $error;
