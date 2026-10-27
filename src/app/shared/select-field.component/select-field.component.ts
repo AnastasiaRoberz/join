@@ -376,6 +376,14 @@ export class SelectFieldComponent<T = any> {
     }
   }
 
+  deselect(key: any) {
+    if (this.multi()) {
+      this.value.set(this.selectedKeys().filter((k) => k !== key));
+    } else {
+      this.value.set(null);
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Private Helpers
   // ---------------------------------------------------------------------------

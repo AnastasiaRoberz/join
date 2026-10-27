@@ -2,9 +2,10 @@ import { Component, computed, ElementRef, inject, input, output, signal } from '
 import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
+import { Buttons } from '../button.component/button.component';
 
 @Component({
-  imports: [UserAvatar, CursorTooltipDirective],
+  imports: [UserAvatar, CursorTooltipDirective, Buttons],
   selector: 'app-avatar-group',
   styleUrl: './avatar-group.component.scss',
   templateUrl: './avatar-group.component.html',

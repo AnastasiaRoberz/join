@@ -122,4 +122,16 @@ export class ContactService {
     }
     return false;
   }
+
+  /**
+   * Extraction function passed to `<app-select-field [getSearchStrings]>`
+   * so contacts can be filtered by either first name or surname.
+   *
+   * @param contact - The contact item to extract searchable strings from.
+   * @returns An array containing the contact's first name and surname.
+   */
+  contactSearchStrings = (contact: ContactInterface): string[] => [
+    contact.firstname,
+    contact.surname,
+  ];
 }
