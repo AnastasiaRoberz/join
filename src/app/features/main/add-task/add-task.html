@@ -139,7 +139,14 @@
     <div class="task-footer">
       <span><span class="required">*</span>This field is required</span>
       <div class="task-footer__buttons">
-        <button appBtn preset="secondary" label="Clear" icon="cancel" type="button"></button>
+        <button
+          appBtn
+          preset="secondary"
+          label="Clear"
+          icon="cancel"
+          type="button"
+          (click)="onClear()"
+        ></button>
         <button
           appBtn
           preset="primary"
