@@ -1,7 +1,7 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputField } from '../../../../../shared/input-field/input-field';
+import { TextField } from '../../../../../shared/text-field/text-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import {
@@ -16,9 +16,10 @@ import { Buttons } from '../../../../../shared/button.component/button.component
 import { ContactService } from '../../../../../services/contact.service';
 import { SupabaseService } from '../../../../../services/supabase.service';
 import { ConfirmService } from '../../../../../services/confirm.service';
+import { fullName, splitName } from '../../../../../utils/name-utils';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar, Buttons],
+  imports: [ReactiveFormsModule, TextField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
@@ -65,7 +66,7 @@ export class ContactDialog {
       const currentContact = this.contact();
       if (currentContact) {
         this.contactForm.setValue({
-          name: currentContact.firstname + ' ' + currentContact.surname,
+          name: fullName(currentContact), // starting to use fullName for display purposes
           mail: currentContact.mail,
           phone: currentContact.phone,
         });
@@ -76,14 +77,15 @@ export class ContactDialog {
   }
 
   async saveContact() {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting() || !this.contactForm.valid) return;
 
     this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();
-    const { firstname, surname } = this.splitName(name ?? '');
+    const { title, firstname, surname } = splitName(name ?? ''); // added title and using external splitName from name-utils
     const contactInfos = {
-      firstname: firstname,
-      surname: surname,
+      title,
+      firstname,
+      surname,
       mail: mail?.trim() ?? '',
       phone: phone?.trim() ?? '',
     };
@@ -91,7 +93,7 @@ export class ContactDialog {
     const existingContact = this.contact();
     if (existingContact) {
       await this.contactService.updateContact(existingContact.id, contactInfos);
-      this.dialogService.selectUpdatedContact(existingContact.id);
+      this.dialogService.selectContact(existingContact.id);
     } else {
       // Wait for Supabase to return the created contact including its server-generated id
       const newContact = await this.contactService.addContact(contactInfos);
@@ -105,16 +107,7 @@ export class ContactDialog {
     this.isSubmitting.set(false);
   }
 
-  splitName(name: string) {
-    const lastSpaceIndex = name.lastIndexOf(' ');
-
-    if (lastSpaceIndex === -1) return { firstname: name, surname: '' };
-
-    return {
-      firstname: name.substring(0, lastSpaceIndex).trim(),
-      surname: name.substring(lastSpaceIndex + 1).trim(),
-    };
-  }
+  // splitMame now moved to name-utils.ts
 
   async deleteAndClose() {
     const id = this.contact()?.id;

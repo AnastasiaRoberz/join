@@ -14,6 +14,7 @@ import { ContactService } from '../../../../../services/contact.service';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ResponsiveService } from '../../../../../services/responsive.service';
+import { fullName } from '../../../../../utils/name-utils';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.
@@ -44,6 +45,9 @@ export class ContactList {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
+
+  // importing fullName for netter display purposes
+  protected fullName = fullName;
 
   /**
    * Id of the contact currently shown in the detail pane.

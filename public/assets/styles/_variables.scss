@@ -12,6 +12,7 @@ $color-grey-200: #cdcdcd;
 $color-grey-300: #d9d9d9;
 $color-grey-400: #a8a8a8;
 $color-grey-500: #e7e7e7;
+$color-grey-600: #686868;
 $color-bluish-grey: #0c2e621f;
 
 // Blues
@@ -21,8 +22,10 @@ $color-blue-500: #007cee;
 $color-navy-700: #2a3d59;
 $color-navy-800: #2a3647;
 $color-navy-900: #091931;
+$color-blue: #005dff;
 
 // Feedback & Priorities
+$color-red-400: #ff8190;
 $color-red-500: #e60026;
 $color-orange-500: #ff3d00;
 $color-amber-500: #ffa800;
@@ -38,6 +41,8 @@ $color-teal-500: #1fd7c1;
 // SEMANTIC TOKENS
 // ==========================================
 $main-color: $color-navy-800;
+$main-bg: $color-grey-background;
+$devider: $color-grey-100;
 
 // TEXT
 $text-normal: $color-black;
@@ -97,6 +102,7 @@ $sidebar-txt-hover: $color-grey-200;
 $sidebar-txt-active: $color-white;
 
 // FEEDBACK & STATES
+$hint: $color-red-400;
 $error: $color-red-500;
 $mail: $color-blue-500;
 
@@ -118,9 +124,21 @@ $input-default-label: $color-grey-100;
 $input-icon: $color-grey-300;
 $input-focus-border: $color-cyan-700;
 $input-focus-label: $color-cyan-700;
+$input-placeholder: $color-grey-600;
+$input-background: $color-white;
+$input-select-hover: $color-grey-background;
+$input-edit-underline: $color-blue;
+
+$checkbox-hover: $color-grey-50;
+
+$dropdown-item-active: $color-navy-800;
+$dropdown-item-active-hover: $color-navy-900;
 
 // AVATAR ICON
 $icon-bg: $color-grey-300;
+
+// OVERLAY
+$overlay-shadow: 0px 0px 4px 0px #00000066;
 
 // ==========================================
 // FONT SIZES

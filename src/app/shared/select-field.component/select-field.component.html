@@ -1,0 +1,94 @@
+@if (label()) {
+  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()">{{ label() }}</label>
+}
+
+<div class="input-container" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+  <input
+    type="text"
+    [id]="id()"
+    [placeholder]="placeholder()"
+    [value]="displayValue()"
+    #combobox="ngCombobox"
+    ngCombobox
+    [(expanded)]="popupExpanded"
+    [preserveContent]="false"
+    (click)="onInputClick()"
+    (input)="onSearchInput($event)"
+    #inputField
+  />
+
+  @if (variant() === 'search') {
+    <div class="search-suffix">
+      <hr class="divider" />
+      <button
+        class="btn-search"
+        type="button"
+        (click)="togglePopup()"
+        (mousedown)="$event.preventDefault()"
+      >
+        <svg class="search-icon">
+          <use href="./assets/icons/icons.svg#search"></use>
+        </svg>
+      </button>
+    </div>
+  } @else {
+    <button type="button" (click)="togglePopup()" (mousedown)="$event.preventDefault()">
+      <svg class="input-icon" [class.is-open]="popupExpanded()">
+        <use href="./assets/icons/icons.svg#arrow-down"></use>
+      </svg>
+    </button>
+  }
+</div>
+
+<!-- Optional slot for footer content (e.g., assigned user avatar badges) -->
+<ng-content select="[footer]" />
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="popupExpanded()"
+  [cdkConnectedOverlayPositions]="positions()"
+  [cdkConnectedOverlayWidth]="trigger.elementRef.nativeElement.getBoundingClientRect().width"
+  (overlayOutsideClick)="closePopup()"
+>
+  <ng-template ngComboboxPopup [combobox]="combobox">
+    <ul
+      ngComboboxWidget
+      #listbox="ngListbox"
+      ngListbox
+      [multi]="multi()"
+      selectionMode="explicit"
+      [value]="listboxValue()"
+      (valueChange)="onValueChange($event)"
+      (mousedown)="$event.preventDefault()"
+      [activeDescendant]="listbox.activeDescendant()"
+      class="dropdown scroll-container"
+      [class.is-open]="popupExpanded()"
+    >
+      @for (option of filteredOptions(); track valueKey()(option)) {
+        <li
+          #opt="ngOption"
+          ngOption
+          [value]="valueKey()(option)"
+          [class.selected]="isSelected(option)"
+          [class.is-active]="opt.active()"
+        >
+          @if (optionTemplate()) {
+            <ng-container
+              *ngTemplateOutlet="
+                optionTemplate()!;
+                context: { $implicit: option, selected: isSelected(option) }
+              "
+            />
+          } @else {
+            <span class="name">{{ labelFn()(option) }}</span>
+          }
+        </li>
+      } @empty {
+        <li class="no-results">
+          <span>{{ emptyText() }}</span>
+        </li>
+      }
+    </ul>
+  </ng-template>
+</ng-template>

@@ -2,63 +2,10 @@
 
 :host {
   @include flex-center;
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  inset: 0;
-  padding: calcClamp(16, 112);
-  z-index: 10;
-  pointer-events: none;
-
-  backdrop-filter: blur(2px);
-  background-color: rgba($color: #000000, $alpha: 0.2);
-
-  //backdrop unsichtbar, wenn dialog geschlossen
-  backdrop-filter: blur(0px);
-  background-color: rgba($color: #000000, $alpha: 0);
-  transition:
-    background-color 400ms ease,
-    backdrop-filter 400ms ease;
-
-  //backdrop sichtbar, wenn dialog geöffnet
-  &.is-open {
-    pointer-events: all;
-    backdrop-filter: blur(2px);
-    background-color: rgba($color: #000000, $alpha: 0.2);
-  }
-}
-
-.dialog-content {
-  @include flex-center;
   align-items: stretch;
   width: 100%;
   max-width: 1212px;
   max-height: 592px;
-  border-radius: 30px;
-  overflow: hidden;
-  background-color: white;
-  z-index: 100;
-
-  //dialog ohne Hintergrund ungeöffnet: unsichtbar + slide-out
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(100dvw);
-  transition:
-    opacity 0.2s ease,
-    transform 0.4s ease,
-    visibility 0s linear 0.2s;
-
-  //dialog ohne HG geöffnet: sichtbar + slide-in
-  :host.is-open & {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-    transform: translateY(0);
-    transition:
-      opacity 0.2s ease,
-      transform 0.4s ease,
-      visibility 0s linear 0s;
-  }
 }
 
 .header-section {
@@ -66,6 +13,7 @@
   background-color: $main-color;
   padding: 0 calcClamp(24, 48);
   position: relative;
+  max-width: 40%;
 }
 
 .header {
@@ -76,6 +24,7 @@
 
   h2 {
     line-height: 1;
+    text-wrap: wrap;
   }
 
   &::before {
@@ -151,9 +100,7 @@
 }
 
 :host.is-tablet {
-  .content-section {
-    gap: 0;
-  }
+  gap: 0;
 
   .avatar {
     transform: none;
@@ -165,17 +112,13 @@
 }
 
 :host.is-mobile {
-  padding: calcClamp(16, 27, 768, 320) calcClamp(16, 112);
-
-  .dialog-content {
-    height: 80%;
-    min-height: 560px;
-    margin-inline: 16px;
-    flex-direction: column;
-  }
+  height: 100%;
+  min-height: 560px;
+  flex-direction: column;
 
   .header-section {
     width: 100%;
+    max-width: 100%;
     height: 45%;
     padding: 66px calcClamp(24, 88, 940, 500);
     display: flex;

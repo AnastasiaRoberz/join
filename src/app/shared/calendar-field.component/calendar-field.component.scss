@@ -1,0 +1,53 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-start(column);
+  gap: 8px;
+  width: 100%;
+}
+
+input {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
+}
+
+.input-container {
+  @include flex-center;
+  width: 100%;
+  height: 48px;
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
+  border: 1px solid $input-default-border;
+  border-radius: 10px;
+  background-color: $color-white;
+  position: relative;
+
+  &:focus-within {
+    border-color: $input-focus-border;
+  }
+
+  &:has(.ng-invalid:is(.ng-touched)) {
+    border-color: $error;
+  }
+}
+
+.input-icon {
+  width: 24px;
+  height: 24px;
+  color: $main-color;
+  pointer-events: none;
+}
+
+.error-msg {
+  font-size: calcClamp(12, 16, 768, 320);
+  color: $error;
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  transform: translateY(100%);
+
+  &.is-mobile {
+    bottom: -1px;
+  }
+}

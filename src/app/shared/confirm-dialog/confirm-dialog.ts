@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ConfirmService } from '../../services/confirm.service';
+import { Buttons } from '../button.component/button.component';
 
 /**
  * Overlay with a question and two buttons (cancel / confirm).
@@ -9,7 +10,7 @@ import { ConfirmService } from '../../services/confirm.service';
  * <app-confirm-dialog />
  */
 @Component({
-  imports: [],
+  imports: [Buttons],
   selector: 'app-confirm-dialog',
   styleUrl: './confirm-dialog.scss',
   templateUrl: './confirm-dialog.html',

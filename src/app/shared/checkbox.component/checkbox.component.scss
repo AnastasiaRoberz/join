@@ -1,5 +1,11 @@
 @use '../../../../public/assets/styles' as *;
 
+input[type='checkbox'] {
+  display: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
 :host {
   @include flex-center;
   gap: 16px;
@@ -10,6 +16,12 @@
 
   &:hover {
     background-color: $checkbox-hover;
+  }
+
+  &.selected {
+    span {
+      text-decoration: line-through;
+    }
   }
 }
 
@@ -22,5 +34,20 @@ label {
   svg {
     width: 24px;
     height: 24px;
+  }
+}
+
+:host.onlyIcon {
+  border-radius: 50%;
+  padding: 0;
+
+  &.selected {
+    label svg {
+      color: $text-light;
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
   }
 }

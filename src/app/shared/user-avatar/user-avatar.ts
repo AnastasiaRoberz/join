@@ -22,16 +22,9 @@ export class UserAvatar {
   initials = computed(() => {
     if (!this.user()) return '';
 
-    // Liste gängiger akademischer Titel und Anreden (Groß-/Kleinschreibung und Punkte beachten)
-    const titleRegex =
-      /^(prof\.?|dr\.?|med\.?|dent\.?|habil\.?|rer\.?|nat\.?|ing\.?|iur\.?|jur\.?|theol\.?|phil\.?|mba|bsc|msc|ba|ma|dipl\.?(-ing\.?)?)\s+/i;
+    // titleRegex now lives in name-utils.ts
 
-    let firstname = (this.user()?.firstname ?? '').trim();
-    while (titleRegex.test(firstname)) {
-      firstname = firstname.replace(titleRegex, '').trim();
-    }
-
-    const firstLetter = firstname.charAt(0);
+    const firstLetter = this.user()?.firstname?.charAt(0);
     const secondLetter = this.user()?.surname?.charAt(0);
     return `${firstLetter}${secondLetter}`;
   });

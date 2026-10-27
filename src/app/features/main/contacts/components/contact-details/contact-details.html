@@ -2,12 +2,20 @@
   <div class="detail-header" [class.detail-header__long]="isLongName()">
     <app-user-avatar [user]="contact" size="details"></app-user-avatar>
     <div class="name-wrapper">
-      <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
+      <p class="name">{{ fullName(contact) }}</p>
     </div>
   </div>
 
-  <div class="btn-wrapper" [class.is-mobile]="responsiveMobile()" [class.is-open]="menuOpen()">
-    <button appBtn preset="editIcon" (click)="dialogService.openDialog(contact)"></button>
+  <div
+    class="btn-wrapper"
+    [class.is-tablet]="responsiveService.isTablet()"
+    [class.is-open]="menuOpen()"
+  >
+    <button
+      appBtn
+      preset="editIcon"
+      (click)="dialogService.openDialog('contact', contact)"
+    ></button>
     <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
   </div>
 

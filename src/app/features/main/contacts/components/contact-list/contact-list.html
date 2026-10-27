@@ -2,7 +2,7 @@
   appBtn
   preset="addContact"
   [class.is-mobile]="responsiveService.isMobile()"
-  (click)="dialogService.openDialog(null)"
+  (click)="dialogService.openDialog('contact')"
 ></button>
 
 <div class="contact-list scroll-container">
@@ -22,7 +22,7 @@
         >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
           <div class="details">
-            <p class="name">{{ contact.firstname }} {{ contact.surname }}</p>
+            <p class="name">{{ fullName(contact) }}</p>
             <p class="mail">{{ contact.mail }}</p>
           </div>
         </button>

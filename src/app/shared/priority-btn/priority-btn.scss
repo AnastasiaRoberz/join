@@ -1,0 +1,84 @@
+@use '../../../../public/assets/styles/' as *;
+
+// allgemeines btn-Styling mit svg, hover + active
+:host {
+  width: calcClamp(121, 136, 1300, 430);
+  height: calcClamp(41, 56, 1300, 430);
+  border-radius: 10px;
+  padding: 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 4px 0 #00000066;
+  background-color: $color-white;
+  font-size: calcClamp(16, 20, 1300, 430);
+  line-height: 120%;
+
+  svg {
+    width: calcClamp(16, 20, 1300, 430);
+    aspect-ratio: 1 / 1;
+  }
+
+  &:hover:not(.active):not(:active) {
+    box-shadow: 0 4px 4px 0 #00000040;
+  }
+
+  &:active,
+  &.active {
+    color: $text-light;
+    font-weight: 700;
+  }
+
+  &:active:hover,
+  &.active:hover {
+    box-shadow: none;
+  }
+}
+
+//jeweiliges Styling für jede Prio (urgent, medium, low) inkl. active-svg-farbe
+
+:host([priority='urgent']) {
+  svg {
+    color: $prio-urgent;
+  }
+
+  &:active,
+  &.active {
+    background-color: $prio-urgent;
+
+    svg {
+      color: $text-light;
+    }
+  }
+}
+
+:host([priority='medium']) {
+  svg {
+    color: $prio-medium;
+  }
+
+  &:active,
+  &.active {
+    background-color: $prio-medium;
+
+    svg {
+      color: $text-light;
+    }
+  }
+}
+
+:host([priority='low']) {
+  svg {
+    color: $prio-low;
+  }
+
+  &:active,
+  &.active {
+    background-color: $prio-low;
+
+    svg {
+      color: $text-light;
+    }
+  }
+}
