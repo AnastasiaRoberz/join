@@ -53,14 +53,6 @@
     font-size: $font-medium;
     padding: calcClamp(10, 16, 768, 320);
     border-radius: 10px;
-
-    &.task {
-      padding: 8px 16px;
-
-      @include tablet {
-        padding: 0;
-      }
-    }
   }
 
   // BUTTON COLORS

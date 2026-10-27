@@ -28,14 +28,14 @@ export const BUTTON_STYLES = {
   // * --- ADD --- *
   addContact: {
     label: 'Add new Contact',
-    variant: 'add contact',
+    variant: 'add',
     size: 'large',
     icon: 'add-contact',
     iconPos: 'right',
   },
   addTask: {
     label: 'Add Task',
-    variant: 'add task',
+    variant: 'add',
     size: 'large',
     icon: 'plus',
     iconPos: 'right',
