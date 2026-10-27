@@ -3,7 +3,6 @@
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
     <div class="task-container">
       <div class="taskWrap taskLeft">
-        <!-- <div class="taskWrap__inputBox"> -->
         <app-text-field
           id="task-title"
           formControlName="title"
@@ -12,20 +11,7 @@
           type="input"
           placeholder="Enter a Title"
         ></app-text-field>
-        <!-- <label for="task-title">Title<span class="required">*</span></label>
-          <div class="taskWrap__withHint">
-            <input
-              id="task-title"
-              type="text"
-              formControlName="title"
-              placeholder="Enter a Title"
-            />
-            @if (showError('title')) {
-              <span class="hint-msg">This field is required</span>
-            }
-          </div> -->
-        <!-- </div> -->
-        <!-- <div class="taskWrap__inputBox"> -->
+
         <app-text-field
           id="task-description"
           formControlName="description"
@@ -34,49 +20,14 @@
           type="textarea"
           placeholder="Enter a Description"
         ></app-text-field>
-        <!-- <label for="task-description">Description</label>
-          <textarea
-            id="task-description"
-            formControlName="description"
-            placeholder="Enter a Description"
-          ></textarea> -->
-        <!-- </div> -->
+
         <app-calendar-field
           id="task-date"
           label="Due date"
           formControlName="date"
         ></app-calendar-field>
-        <!-- <div class="taskWrap__inputBox">
-          <label for="task-date">Due date<span class="required">*</span></label>
-          <div class="taskWrap__withHint">
-            <input
-              id="task-date"
-              type="text"
-              formControlName="date"
-              placeholder="dd/mm/yyyy"
-              (input)="formatDateInput($event)"
-            />
-            <input
-              name="date-picker-hidden"
-              aria-hidden="true"
-              tabindex="-1"
-              #datePickerRef
-              class="date-input"
-              type="date"
-              (change)="onDateSelected($event)"
-              (blur)="pickerOpen = false"
-            />
-            <button type="button" class="date-btn" (click)="openDatePicker()">
-              <svg class="date-icon">
-                <use href="./assets/icons/icons.svg#calendar"></use>
-              </svg>
-            </button>
-            @if (showError('date')) {
-              <span class="hint-msg">This field is required</span>
-            }
-          </div>
-        </div> -->
       </div>
+
       <div class="taskWrap">
         <div class="taskWrap__btnBox">
           <p class="prio-label">Priority</p>
@@ -104,6 +55,7 @@
             ></button>
           </div>
         </div>
+
         <app-select-field
           label="Assigned to"
           placeholder="Select Contacts to assign"
@@ -129,43 +81,7 @@
             (userDeletedId)="toggleAssignment($event, false)"
           />
         </app-select-field>
-        <!-- <div class="taskWrap__inputBox">
-          <label for="task-assigned">Assigned to</label>
-          <div class="taskWrap">
-            <div class="dropdown__trigger" [class.open]="assignedOpen()" (click)="toggleAssigned()">
-              <input
-                id="task-assigned"
-                type="text"
-                class="dropdown-input assigned-input"
-                placeholder="Select Contacts to assign"
-                [class.open]="assignedOpen()"
-              />
-              <svg class="dropdown__chevron assigned-arrow" [class.rotated]="assignedOpen()">
-                <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
-              </svg>
-            </div>
-            @if (assignedOpen()) {
-              <app-dropdown
-                class="assigned-dropdown"
-                mode="assigned"
-                [selectedContacts]="assignedContacts()"
-                (contactsSelected)="onContactsSelected($event)"
-                (closeDropdown)="assignedOpen.set(false)"
-                (click)="$event.stopPropagation()"
-              ></app-dropdown>
-            }
-            @if (assignedContacts().length > 0) {
-              <div class="contacts-wrapper">
-                @for (contact of assignedContacts().slice(0, 4); track contact.id) {
-                  <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
-                }
-                @if (assignedContacts().length > 4) {
-                  <div class="avatar-overflow">+{{ assignedContacts().length - 4 }}</div>
-                }
-              </div>
-            }
-          </div>
-        </div> -->
+
         <app-select-field
           label="Category"
           [required]="true"
@@ -174,34 +90,7 @@
           [(value)]="selectedCategory"
           (valueChange)="onCategoryChange($event)"
         ></app-select-field>
-        <!-- <div class="taskWrap__inputBox">
-          <label for="task-category">Category<span class="required">*</span></label>
-          <div class="taskWrap__withHint">
-            <div class="dropdown__trigger" [class.open]="categoryOpen()" (click)="toggleCategory()">
-              <input
-                id="task-category"
-                class="dropdown-input"
-                type="text"
-                readonly
-                formControlName="category"
-                placeholder="Select Task Category"
-              />
-              <svg class="dropdown__chevron category-arrow" [class.rotated]="categoryOpen()">
-                <use href="./assets/icons/icons.svg#drop-down-arrow"></use>
-              </svg>
-            </div>
-            @if (categoryOpen()) {
-              <app-dropdown
-                mode="category"
-                (categorySelected)="onCategorySelected($event)"
-                (closeDropdown)="categoryOpen.set(false)"
-              ></app-dropdown>
-            }
-            @if (showError('category')) {
-              <span class="hint-msg">This field is required</span>
-            }
-          </div>
-        </div> -->
+
         <app-text-field
           id="task-subtasks"
           formControlName="subtask"
@@ -210,17 +99,9 @@
           type="input"
           placeholder="Add new Subtask"
         ></app-text-field>
-        <!-- <div class="taskWrap__inputBox">
-          <label for="task-subtasks">Subtasks</label>
-          <input
-            id="task-subtasks"
-            type="text"
-            formControlName="subtask"
-            placeholder="Add new Subtask"
-          />
-        </div> -->
       </div>
     </div>
+
     <div class="task-footer">
       <span><span class="required">*</span>This field is required</span>
       <div class="task-footer__buttons">
