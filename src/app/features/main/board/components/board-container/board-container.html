@@ -1,4 +1,4 @@
-<div class="board">
+<div class="board" cdkDropListGroup>
   @for (column of columns(); track column.status) {
     <app-board-column [status]="column.status" [tasks]="column.tasks" />
   }

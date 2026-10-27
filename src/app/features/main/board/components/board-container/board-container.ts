@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskService } from '../../../../../services/task.service';
 import { BoardColumn } from '../board-column/board-column';
+import { CdkDrag, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 
 /** Status of each board column, in the order the columns are shown. */
 const COLUMN_STATUSES: TaskInterface['status'][] = [
@@ -13,7 +14,7 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
 
 @Component({
   selector: 'app-board-container',
-  imports: [BoardColumn],
+  imports: [BoardColumn, CdkDropListGroup],
   templateUrl: './board-container.html',
   styleUrl: './board-container.scss',
 })
