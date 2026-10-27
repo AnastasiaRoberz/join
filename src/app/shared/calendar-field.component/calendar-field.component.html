@@ -14,11 +14,7 @@
     placeholder="dd/mm/yyyy"
     autocomplete="off"
   />
-  <button appBtn preset="iconSmall" icon="calendar" (click)="picker.toggle()">
-    <svg class="icon">
-      <use href="./assets/icons/icons.svg#calendar"></use>
-    </svg>
-  </button>
+  <button appBtn preset="iconSmall" icon="calendar" (click)="picker.toggle()"></button>
 
   <span class="error-msg" [class.is-mobile]="responsiveService.isMobile()">{{ showError() }}</span>
 </div>

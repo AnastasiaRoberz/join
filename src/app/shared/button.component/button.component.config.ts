@@ -59,6 +59,10 @@ export const BUTTON_STYLES = {
     icon: 'delete',
     iconPos: 'left',
   },
+  text: {
+    variant: 'text',
+    iconPos: 'left',
+  },
 
   // * --- ICON --- *
   iconSmall: {
