@@ -7,7 +7,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, Validators } from '@angular/forms';
 import flatpickr from 'flatpickr';
 import { FlatpickrDirective } from '../../directives/flatpickr.directive';
 import { ResponsiveService } from '../../services/responsive.service';
@@ -72,6 +72,11 @@ export class CalendarFieldComponent implements ControlValueAccessor {
 
   /** Registered `ControlValueAccessor` callback invoked when the input loses focus. */
   onTouched: () => void = () => {};
+
+  isRequired(): boolean {
+    const ctrl = this.ngControl?.control;
+    return ctrl ? ctrl.hasValidator(Validators.required) : false;
+  }
 
   /**
    * Registers this component as the `valueAccessor` for its `NgControl`,
