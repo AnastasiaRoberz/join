@@ -11,6 +11,8 @@ input {
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 .input-container {
@@ -30,6 +32,15 @@ input {
   &:has(.ng-invalid:is(.ng-touched)) {
     border-color: $error;
   }
+}
+
+label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
+.required {
+  color: $hint;
 }
 
 .input-icon {
