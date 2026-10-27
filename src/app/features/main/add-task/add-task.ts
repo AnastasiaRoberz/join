@@ -52,7 +52,7 @@ export class AddTask {
   assignedContacts = signal<ContactInterface[]>([]);
 
   /** Priority selected via the priority buttons, `null` if none is selected. */
-  selectedPrio = signal<Priority | null>(null);
+  selectedPrio = signal<Priority>('medium');
 
   //#region  --------- Date-Picker Input-Field -------------
 
@@ -178,7 +178,7 @@ export class AddTask {
    */
   onClear(): void {
     this.taskForm.reset();
-    this.selectedPrio.set(null);
+    this.selectedPrio.set('medium');
     this.assignedContacts.set([]);
     this.categoryOpen.set(false);
     this.assignedOpen.set(false);
@@ -194,7 +194,7 @@ export class AddTask {
    * @returns A promise that resolves when the task and its assignments are saved
    */
   async onSubmit(): Promise<void> {
-    if (this.taskForm.invalid || !this.selectedPrio()) {
+    if (this.taskForm.invalid) {
       this.taskForm.markAllAsTouched();
       return;
     }
@@ -205,7 +205,7 @@ export class AddTask {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: dateValue,
-      priority: this.selectedPrio()!,
+      priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: 'To do',
     };
