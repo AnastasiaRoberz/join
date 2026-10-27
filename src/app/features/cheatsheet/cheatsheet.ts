@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ButtonInterface } from '../../interfaces/button.interface';
-import { Buttons } from '../../shared/button.component/button.component';
+import { BtnInterface, Buttons } from '../../shared/button.component/button.component';
 import { BUTTON_STYLES } from '../../shared/button.component/button.component.config';
 
-type ButtonPresetEntry = ButtonInterface & { name: string };
+type ButtonPresetEntry = BtnInterface & { name: string };
 
 @Component({
   imports: [Buttons],

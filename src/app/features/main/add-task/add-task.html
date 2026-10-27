@@ -45,11 +45,13 @@
               (change)="onDateSelected($event)"
               (blur)="pickerOpen = false"
             />
-            <button type="button" class="date-btn" (click)="openDatePicker()">
-              <svg class="date-icon">
-                <use href="./assets/icons/icons.svg#calendar"></use>
-              </svg>
-            </button>
+            <button
+              appBtn
+              preset="iconSmall"
+              icon="calendar"
+              class="date-btn"
+              (click)="openDatePicker()"
+            ></button>
             @if (showError('date')) {
               <span class="hint-msg">This field is required</span>
             }

@@ -1,92 +1,79 @@
-import { ButtonInterface } from '../../interfaces/button.interface';
-
-export type BtnPreset =
-  | 'primary'
-  | 'secondary'
-  | 'x'
-  | 'check'
-  | 'addContact'
-  | 'addTask'
-  | 'editIcon'
-  | 'deleteIcon'
-  | 'close';
+import { BtnInterface } from './button.component';
 
 export const BUTTON_STYLES = {
-  // * --- DEFAULTS --- *
+  // * --- PRIMARY --- *
   primary: {
-    label: '',
     variant: 'primary',
     size: 'large',
-    icon: null,
-  },
-  secondary: {
-    label: '',
-    variant: 'secondary',
-    size: 'large',
-    icon: null,
-  },
-
-  // * --- GLOBALS ---*
-  x: {
-    label: '',
-    variant: 'secondary',
-    size: 'large',
-    icon: 'x',
   },
   check: {
-    label: '',
     variant: 'primary',
     size: 'large',
     icon: 'check',
+    iconPos: 'right',
   },
 
-  // * --- SPECIFIC BUTTONS --- *
+  // * --- SECONDARY --- *
+  secondary: {
+    variant: 'secondary',
+    size: 'large',
+  },
+  cancel: {
+    variant: 'secondary',
+    size: 'large',
+    icon: 'x',
+    iconPos: 'right',
+  },
+
+  // * --- ADD --- *
   addContact: {
     label: 'Add new Contact',
     variant: 'add',
     size: 'large',
     icon: 'add-contact',
+    iconPos: 'right',
   },
   addTask: {
     label: 'Add Task',
     variant: 'add',
     size: 'large',
     icon: 'plus',
+    iconPos: 'right',
   },
-
-  // * --- TEXT WITH ICON --- *
-  editIcon: {
-    label: 'Edit',
-    variant: 'txtIcon',
-    size: null,
-    icon: 'edit',
-  },
-  deleteIcon: {
-    label: 'Delete',
-    variant: 'txtIcon',
-    size: null,
-    icon: 'delete',
-  },
-
-  // * --- ICON --- *
-  close: {
-    label: null,
-    variant: 'icon',
-    size: null,
-    icon: 'x',
-  },
-  search: {
-    label: null,
-    variant: 'icon',
-    size: null,
-    icon: 'search',
-  },
-  addTaskIcon: {
-    label: null,
-    variant: 'add',
+  addTaskSmall: {
+    variant: 'secondary',
     size: 'small',
     icon: 'plus',
   },
 
-  // * --- ICONS --- *
-} as const satisfies Record<string, ButtonInterface>;
+  // * --- TEXT WITH ICON --- *
+  edit: {
+    label: 'Edit',
+    variant: 'text',
+    icon: 'edit',
+    iconPos: 'left',
+  },
+  delete: {
+    label: 'Delete',
+    variant: 'text',
+    icon: 'delete',
+    iconPos: 'left',
+  },
+  text: {
+    variant: 'text',
+    iconPos: 'left',
+  },
+
+  // * --- ICON --- *
+  iconSmall: {
+    variant: 'icon',
+    size: 'small',
+  },
+
+  iconMedium: {
+    variant: 'icon',
+    size: 'medium',
+  },
+} as const satisfies Record<string, BtnInterface>;
+
+export type BtnPreset = keyof typeof BUTTON_STYLES;

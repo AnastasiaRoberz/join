@@ -72,12 +72,12 @@
       Vorschau der Einträge aus <code>src/app/shared/buttons/buttons.config.ts</code>.
     </p>
     <div class="grid">
-      @for (button of buttonPresets; track button.name) {
+      <!-- @for (button of buttonPresets; track button.name) {
         <article class="card button-card">
           <div class="button-demo">
             <button
               appBtn
-              [label]="button.label"
+              [label]="button.label" ?? | null
               [variant]="button.variant"
               [size]="button.size"
               [icon]="button.icon"
@@ -92,7 +92,7 @@
             </span>
           </div>
         </article>
-      }
+      } -->
     </div>
   </section>
 </main>
