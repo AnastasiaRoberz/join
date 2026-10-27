@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
-import { ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
 
 let nextId = 0;
@@ -31,6 +31,11 @@ export class TextField implements ControlValueAccessor {
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
+
+  isRequired(): boolean {
+    const ctrl = this.ngControl?.control;
+    return ctrl ? ctrl.hasValidator(Validators.required) : false;
+  }
 
   constructor() {
     if (this.ngControl) {
