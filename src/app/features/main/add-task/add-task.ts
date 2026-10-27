@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,11 @@ import { TaskService } from '../../../services/task.service';
 import { TaskInterface } from '../../../interfaces/task.interface';
 import { TextField } from '../../../shared/text-field/text-field';
 import { CalendarFieldComponent } from '../../../shared/calendar-field.component/calendar-field.component';
+import { SelectFieldComponent } from '../../../shared/select-field.component/select-field.component';
+import { ContactService } from '../../../services/contact.service';
+import { CATEGORIES } from '../../../utils/categories-list';
+import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
+import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
 
 /**
  * Form component for creating a new task.
@@ -27,6 +32,9 @@ import { CalendarFieldComponent } from '../../../shared/calendar-field.component
     UserAvatar,
     TextField,
     CalendarFieldComponent,
+    SelectFieldComponent,
+    CheckboxComponent,
+    AvatarGroupComponent,
   ],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
@@ -42,6 +50,7 @@ export class AddTask {
     title: new FormControl('', Validators.required),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
+    assigned: new FormControl<number[]>([]),
     category: new FormControl('', Validators.required),
     subtask: new FormControl(''),
   });
@@ -49,20 +58,50 @@ export class AddTask {
   /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
 
+  contactService = inject(ContactService);
+
   /** Used to create the task and to assign contacts to it. */
   taskService = inject(TaskService);
 
-  /** Whether the category dropdown is open. */
-  categoryOpen = signal(false);
+  readonly categories = CATEGORIES;
 
-  /** Whether the contact dropdown is open. */
-  assignedOpen = signal(false);
+  // /** Whether the category dropdown is open. */
+  // categoryOpen = signal(false);
+
+  // /** Whether the contact dropdown is open. */
+  // assignedOpen = signal(false);
 
   /** Contacts currently selected for assignment. */
   assignedContacts = signal<ContactInterface[]>([]);
 
   /** Priority selected via the priority buttons, `null` if none is selected. */
   selectedPrio = signal<Priority>('medium');
+
+  selectedCategory = signal<string>('');
+
+  /** Reactive list of currently assigned contact IDs. */
+  selectedContactIds = signal<number[]>([]);
+
+  /**
+   * Full contact objects corresponding to `selectedContactIds()`,
+   * used to render the assigned user avatars in the select-field footer.
+   */
+  selectedContacts = computed(() => {
+    const ids = new Set(this.selectedContactIds());
+    return this.contactService.sortedContacts().filter((contact) => ids.has(contact.id));
+  });
+
+  /**
+   * Extraction function passed to `<app-select-field [getSearchStrings]>`
+   * so contacts can be filtered by either first name or surname.
+   *
+   * @param contact - The contact item to extract searchable strings from.
+   * @returns An array containing the contact's first name and surname.
+   */
+  contactSearchStrings = (contact: ContactInterface): string[] => [
+    contact.firstname,
+    contact.surname,
+  ];
 
   //#region  --------- Date-Picker Input-Field -------------
 
@@ -153,34 +192,70 @@ export class AddTask {
     this.selectedPrio.set(prio);
   }
 
-  /** Opens or closes the category dropdown. */
-  toggleCategory() {
-    this.categoryOpen.update((v) => !v);
-  }
+  // /** Opens or closes the category dropdown. */
+  // toggleCategory() {
+  //   this.categoryOpen.update((v) => !v);
+  // }
 
-  /** Opens or closes the contact dropdown. */
-  toggleAssigned() {
-    this.assignedOpen.update((v) => !v);
-  }
+  // /** Opens or closes the contact dropdown. */
+  // toggleAssigned() {
+  //   this.assignedOpen.update((v) => !v);
+  // }
 
-  /**
-   * Writes the chosen category into the form and closes the category dropdown.
-   *
-   * @param value - The selected category
-   */
-  onCategorySelected(value: string) {
-    this.taskForm.get('category')?.setValue(value);
-    this.categoryOpen.set(false);
+  onCategoryChange(value: string): void {
+    this.selectedCategory.set(value);
+    this.taskForm.controls.category.setValue(value);
+    this.taskForm.controls.category.markAsDirty;
   }
 
   /**
-   * Stores the updated contact selection coming from the dropdown.
+   * Updates both the `selectedContactIds` signal and the `assignedTo` form control
+   * when the selection changes via the `<app-select-field>` listbox.
    *
-   * @param contacts - The currently selected contacts
+   * @param ids - The updated array of selected contact IDs.
    */
-  onContactsSelected(contacts: ContactInterface[]) {
-    this.assignedContacts.set(contacts);
+  onAssignmentChange(ids: number[]): void {
+    this.selectedContactIds.set(ids);
+    this.taskForm.controls.assigned.setValue(ids);
+    this.taskForm.controls.assigned.markAsDirty();
   }
+
+  /**
+   * Toggles a single contact's assignment state when clicking an option's checkbox
+   * or the delete button on an avatar badge in the footer.
+   *
+   * @param contactId - The ID of the contact to assign or unassign.
+   * @param isAssigned - `true` to assign the contact, `false` to remove the assignment.
+   */
+  toggleAssignment(contactId: number, isAssigned: boolean): void {
+    const currentIds = this.selectedContactIds();
+    const updatedIds = isAssigned
+      ? currentIds.includes(contactId)
+        ? currentIds
+        : [...currentIds, contactId]
+      : currentIds.filter((id) => id !== contactId);
+
+    this.onAssignmentChange(updatedIds);
+  }
+
+  // /**
+  //  * Writes the chosen category into the form and closes the category dropdown.
+  //  *
+  //  * @param value - The selected category
+  //  */
+  // onCategorySelected(value: string) {
+  //   this.taskForm.get('category')?.setValue(value);
+  //   this.categoryOpen.set(false);
+  // }
+
+  // /**
+  //  * Stores the updated contact selection coming from the dropdown.
+  //  *
+  //  * @param contacts - The currently selected contacts
+  //  */
+  // onContactsSelected(contacts: ContactInterface[]) {
+  //   this.assignedContacts.set(contacts);
+  // }
 
   /**
    * Resets the form and all related signals to their initial state.
@@ -190,8 +265,7 @@ export class AddTask {
     this.taskForm.reset();
     this.selectedPrio.set('medium');
     this.assignedContacts.set([]);
-    this.categoryOpen.set(false);
-    this.assignedOpen.set(false);
+    this.selectedContactIds.set([]);
   }
 
   /**
@@ -223,7 +297,7 @@ export class AddTask {
     const newTaskId = await this.taskService.addTask(task);
 
     if (newTaskId) {
-      const contactIds = this.assignedContacts().map((c) => c.id);
+      const contactIds = this.selectedContactIds();
       await this.taskService.setTaskAssignment(newTaskId, contactIds);
 
       this.onClear();
