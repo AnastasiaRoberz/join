@@ -1,9 +1,4 @@
-<button
-  appBtn
-  preset="addContact"
-  [class.is-mobile]="responsiveService.isMobile()"
-  (click)="dialogService.openDialog('contact')"
-></button>
+<button appBtn preset="addContact" (click)="dialogService.openDialog('contact')"></button>
 
 <div class="contact-list scroll-container">
   @for (group of contactService.groupedContacts(); track $index) {

@@ -2,7 +2,7 @@
   <div class="fixed-content">
     <div class="header">
       <span class="task-tag">{{ task.category }}</span>
-      <button appBtn preset="close" (click)="dialogService.closeDialog()"></button>
+      <button appBtn preset="iconSmall" icon="x" (click)="dialogService.closeDialog()"></button>
     </div>
 
     <h2>{{ task.title }}</h2>
@@ -56,8 +56,8 @@
   </div>
 
   <div class="button-wrapper">
-    <button appBtn preset="deleteIcon"></button>
+    <button appBtn preset="delete"></button>
     <hr />
-    <button appBtn preset="editIcon" (click)="dialogService.openDialog('task-edit', task)"></button>
+    <button appBtn preset="edit" (click)="dialogService.openDialog('task-edit', task)"></button>
   </div>
 }

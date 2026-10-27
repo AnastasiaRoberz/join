@@ -86,7 +86,7 @@
       color: $btn-secondary-active;
     }
 
-    &.btn--small {
+    &.btn--addTaskSmall {
       border-width: 2px;
       width: 24px;
       height: 24px;
@@ -98,6 +98,7 @@
     border: none;
     box-shadow: none;
     color: $btn-icon;
+    padding: 0;
 
     .btn-label {
       display: inline-flex;
@@ -134,8 +135,10 @@
       display: none;
     }
 
-    &:hover {
-      background-color: $btn-icon;
+    &:hover,
+    &:active {
+      background-color: $btn-icon-hover;
+      box-shadow: none;
     }
 
     &.btn--small {
@@ -163,6 +166,7 @@
     color: $btn-add-txt;
     font-weight: 700;
     gap: 16px;
+    gap: 0;
 
     .icon {
       width: 32px;
@@ -180,6 +184,7 @@
   }
 
   &.btn--addContact {
+    gap: 16px;
     @include mobile {
       position: absolute;
       bottom: 32px;
@@ -197,6 +202,7 @@
   }
 
   &.btn--addTask {
+    gap: 4px;
     @include tablet {
       position: relative;
       bottom: 0;
@@ -210,8 +216,5 @@
         box-shadow: none;
       }
     }
-  }
-
-  &.btn--addTaskSmall {
   }
 }
