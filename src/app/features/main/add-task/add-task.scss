@@ -77,6 +77,15 @@ form {
   text-align: start;
 }
 
+.name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
+}
+
 .taskWrap {
   flex: 1;
   min-width: 0;
