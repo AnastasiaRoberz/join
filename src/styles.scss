@@ -1,4 +1,5 @@
-@use '../public/assets/styles/general/_buttons.scss';
+// @use '../public/assets/styles/general/_buttons.scss';
+@use '../public/assets/styles/general/_custom-flatpickr.scss';
 @use '../public/assets/styles/general/_typography.scss';
 @use '../public/assets/styles' as *;
 
@@ -14,13 +15,23 @@ a {
 }
 
 button {
+  background: none;
+  border: none;
+  outline: none;
   cursor: pointer;
+
+  &:disabled {
+    cursor: none;
+    pointer-events: none;
+    background-color: $btn-disabled;
+  }
 }
 
 .scroll-container {
   overflow-y: auto;
   scrollbar-gutter: stable;
   overscroll-behavior-y: contain;
+  width: calc(100% + 24px);
 
   &::-webkit-scrollbar {
     background: transparent;
@@ -90,4 +101,22 @@ button {
   box-shadow: $avatar-shadow;
 
   user-select: none;
+}
+
+// PRIORITY ICONS
+.icon-priority {
+  width: 17px;
+  height: 17px;
+
+  &.icon-urgent {
+    color: $prio-urgent;
+  }
+
+  &.icon-medium {
+    color: $prio-medium;
+  }
+
+  &.icon-low {
+    color: $prio-low;
+  }
 }

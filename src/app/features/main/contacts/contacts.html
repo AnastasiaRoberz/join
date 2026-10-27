@@ -27,10 +27,3 @@
     }
   </div>
 }
-
-<app-contact-dialog
-  class="dialog"
-  [class.is-open]="dialogService.isOpen()"
-  [contact]="dialogService.selectedContact()"
-  (click)="dialogService.closeDialog()"
-/>

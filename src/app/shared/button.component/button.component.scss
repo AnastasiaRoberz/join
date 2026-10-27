@@ -32,6 +32,12 @@
   }
 
   // BUTTONS SIZES
+  &.btn-small {
+    font-size: $font-default;
+    padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
+    border-radius: 8px;
+  }
+
   &.btn-medium {
     font-size: $font-default;
     padding: calcClamp(10, 16, 768, 320);
@@ -95,6 +101,20 @@
       box-shadow: $btn-shadow-placeholder;
     }
 
+    // tablet add button style added for board header + in general
+    &.is-tablet {
+      @include flex-center;
+
+      .icon {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+      }
+      .btn-label {
+        display: none;
+      }
+    }
+
     &.is-mobile {
       @include flex-center;
       position: absolute;
@@ -127,6 +147,7 @@
       align-items: center;
       justify-content: center;
       order: 1;
+      font-size: 1rem;
 
       &::after {
         content: attr(data-text);
@@ -148,17 +169,12 @@
   }
 
   &.btn-icon {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
     color: $main-color;
 
     .btn-label {
       display: none;
-    }
-
-    .icon {
-      width: 32px;
-      height: 32px;
     }
 
     &.btn-close-mobile {

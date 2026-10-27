@@ -29,6 +29,8 @@ export class SupabaseService {
    * const tasks = await supabaseService.getData('tasks', '*, subtasks(*)');
    */
   async getData(table: string, selectedData: string = '*'): Promise<any[] | null> {
+    console.log('Supabase');
+
     let { data, error } = await this.supabase.from(table).select(selectedData);
 
     if (error) {
@@ -74,20 +76,28 @@ export class SupabaseService {
    * @param table - The target database table name
    * @returns A promise resolving to the freshly created database row (including server-generated values like `id`), or `null` on failure
    */
-  async addData<T extends Record<string, any>>(data: T, table: string): Promise<any | null> {
-    const { data: supabaseData, error } = await this.supabase
+  async addData<T extends Record<string, any>>(
+    data: T | T[],
+    table: string,
+    showError: boolean = true,
+  ): Promise<any | null> {
+    const isArray = Array.isArray(data);
+
+    let query = this.supabase
       .from(table)
-      .insert(data)
-      .select()
-      .single();
+      .insert(data as any)
+      .select();
+    if (!isArray) query = query.single() as any;
+    const { data: result, error } = await query;
 
     if (!error) {
-      this.feedbackService.showSuccess(
-        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
-      );
-      return supabaseData;
+      if (showError)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
+        );
+      return data;
     } else {
-      this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
+      if (showError) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
       return null;
     }
   }
@@ -105,6 +115,7 @@ export class SupabaseService {
     id: number,
     data: Partial<T>,
     table: string,
+    showError: boolean = true,
   ): Promise<boolean> {
     const { error } = await this.supabase
       .from(table)
@@ -112,12 +123,13 @@ export class SupabaseService {
       .eq('id', id);
 
     if (!error) {
-      this.feedbackService.showSuccess(
-        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
-      );
+      if (showError)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
+        );
       return true;
     } else {
-      this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
+      if (showError) this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
@@ -129,17 +141,22 @@ export class SupabaseService {
    * @param table - The target database table name
    * @returns A promise resolving to `true` if successfully deleted, or `false` on failure
    */
-  async deleteData(id: number, table: string): Promise<boolean> {
+  async deleteData(id: number, table: string, showError: boolean = true): Promise<boolean> {
     const { error } = await this.supabase.from(table).delete().eq('id', id);
 
     if (!error) {
-      this.feedbackService.showSuccess(
-        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
-      );
+      if (showError)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
+        );
       return true;
     } else {
-      this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
+      if (showError) this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
       return false;
     }
+  }
+
+  async deleteAssignment(taskId: number) {
+    const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
   }
 }

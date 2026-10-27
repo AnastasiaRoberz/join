@@ -22,6 +22,7 @@ $color-blue-500: #007cee;
 $color-navy-700: #2a3d59;
 $color-navy-800: #2a3647;
 $color-navy-900: #091931;
+$color-blue: #005dff;
 
 // Feedback & Priorities
 $color-red-400: #ff8190;
@@ -35,6 +36,7 @@ $color-green-500: #7ae229;
 // ==========================================
 $main-color: $color-navy-800;
 $main-bg: $color-grey-background;
+$devider: $color-grey-100;
 
 // TEXT
 $text-normal: $color-black;
@@ -112,9 +114,18 @@ $input-focus-label: $color-cyan-700;
 $input-placeholder: $color-grey-600;
 $input-background: $color-white;
 $input-select-hover: $color-grey-background;
+$input-edit-underline: $color-blue;
+
+$checkbox-hover: $color-grey-50;
+
+$dropdown-item-active: $color-navy-800;
+$dropdown-item-active-hover: $color-navy-900;
 
 // AVATAR ICON
 $icon-bg: $color-grey-300;
+
+// OVERLAY
+$overlay-shadow: 0px 0px 4px 0px #00000066;
 
 // ==========================================
 // FONT SIZES

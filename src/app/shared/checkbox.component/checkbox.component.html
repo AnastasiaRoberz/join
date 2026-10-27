@@ -2,7 +2,7 @@
   <svg>
     <use [attr.href]="iconHref()"></use>
   </svg>
-  <input type="checkbox" />
+  <input type="checkbox" [id]="id()" [checked]="checked()" />
 </label>
 @if (text()) {
   <span>{{ text() }}</span>

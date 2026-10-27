@@ -1,0 +1,24 @@
+@if (label()) {
+  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()">{{ label() }}</label>
+}
+
+<div class="input-container">
+  <input
+    type="text"
+    [id]="id()"
+    [value]="value()"
+    (blur)="onTouched()"
+    #picker="appFlatpickr"
+    appFlatpickr
+    (dateChanged)="onDateSelect($event)"
+    placeholder="dd/mm/yyyy"
+    autocomplete="off"
+  />
+  <button type="button" class="calendar-btn" (click)="picker.toggle()">
+    <svg class="input-icon">
+      <use href="./assets/icons/icons.svg#calendar"></use>
+    </svg>
+  </button>
+
+  <span class="error-msg" [class.is-mobile]="responsiveService.isMobile()">{{ showError() }}</span>
+</div>

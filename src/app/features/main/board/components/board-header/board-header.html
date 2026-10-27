@@ -7,7 +7,6 @@
       <button
         appBtn
         preset="addTask"
-        size="small"
         [class.is-mobile]="responsiveService.isMobile()"
         type="button"
       ></button>
@@ -15,19 +14,23 @@
   </div>
 
   <div class="board-header-actions">
-    <label class="search">
-      <input type="text" placeholder="Find Task" />
-      <span class="search__divider"></span>
-      <svg class="search__icon">
-        <use href="./assets/icons/icons.svg#search"></use>
-      </svg>
-    </label>
+    <app-select-field
+      variant="search"
+      placeholder="Find Task"
+      emptyText="No tasks found."
+      [options]="taskService.sortedTasks()"
+      [labelFn]="taskLabelFn"
+      [getSearchStrings]="taskTitleSearch"
+      [getIncludeStrings]="taskDescriptionSearch"
+      (valueChange)="onTaskSelected($event)"
+    />
     <!-- add button in tablet + desktop -->
     @if (!responsiveService.isMobile()) {
       <button
         appBtn
         preset="addTask"
-        [class.is-tablet]="!responsiveService.isMobile()"
+        [class.is-tablet]="responsiveService.isTablet()"
+        // for mobile button style in tablet size
         type="button"
       ></button>
     }
