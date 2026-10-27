@@ -194,29 +194,25 @@ export class AddTask {
    * @returns A promise that resolves when the task and its assignments are saved
    */
   async onSubmit(): Promise<void> {
-    if (this.taskForm.invalid || !this.selectedPrio()) {
-      this.taskForm.markAllAsTouched();
-      return;
-    }
-
-    const [day, month, year] = this.taskForm.value.date!.split('/');
-    const dateValue = `${year}-${month}-${day}`;
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
-      title: this.taskForm.value.title!,
-      description: this.taskForm.value.description ?? '',
-      due_date: dateValue,
-      priority: this.selectedPrio()!,
-      category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
-      status: 'To do',
-    };
-
-    const newTaskId = await this.taskService.addTask(task);
-
-    if (newTaskId) {
-      const contactIds = this.assignedContacts().map((c) => c.id);
-      await this.taskService.setTaskAssignment(newTaskId, contactIds);
-
-      this.onClear();
-    }
+    // if (this.taskForm.invalid || !this.selectedPrio()) {
+    //   this.taskForm.markAllAsTouched();
+    //   return;
+    // }
+    // const [day, month, year] = this.taskForm.value.date!.split('/');
+    // const dateValue = `${year}-${month}-${day}`;
+    // const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
+    //   title: this.taskForm.value.title!,
+    //   description: this.taskForm.value.description ?? '',
+    //   due_date: dateValue,
+    //   priority: this.selectedPrio()!,
+    //   category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
+    //   status: 'To do',
+    // };
+    // const newTaskId = await this.taskService.addTask(task);
+    // if (newTaskId) {
+    //   const contactIds = this.assignedContacts().map((c) => c.id);
+    //   await this.taskService.setTaskAssignments(newTaskId, contactIds);
+    //   this.onClear();
+    // }
   }
 }

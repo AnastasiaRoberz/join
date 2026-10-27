@@ -12,6 +12,7 @@ import flatpickr from 'flatpickr';
 import { FlatpickrDirective } from '../../directives/flatpickr.directive';
 import { ResponsiveService } from '../../services/responsive.service';
 import { ErrorService } from '../../services/error.service';
+import { Buttons } from '../button.component/button.component';
 
 let nextId = 0;
 
@@ -33,7 +34,7 @@ let nextId = 0;
  * ```
  */
 @Component({
-  imports: [FlatpickrDirective],
+  imports: [FlatpickrDirective, Buttons],
   selector: 'app-calendar-field',
   styleUrl: './calendar-field.component.scss',
   templateUrl: './calendar-field.component.html',

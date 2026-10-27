@@ -30,6 +30,28 @@ let nextId = 0;
  * 2. **Single-Select Dropdown** (e.g., selecting a task category).
  * 3. **Search / Autocomplete Input** (`variant="search"`, e.g., finding tasks with a divider and magnifying glass icon).
  *
+ * ### Data binding
+ * `[(value)]` is a `model()`, so it supports two-way binding (`[(value)]="..."`) as well as
+ * one-way input + `(valueChange)` output usage. The value always contains option *keys*
+ * (see `valueKey`), never the option objects themselves:
+ * - `multi = true`: an array of keys (e.g. `number[]`).
+ * - `multi = false`: a single key or `null`.
+ * - `variant = 'search'`: a transient key. It is emitted once per pick and then reset to `null`
+ *   (so `(valueChange)` fires twice per pick: first with the key, then with `null`).
+ *
+ * ### Projected content
+ * - `<ng-template #optionTemplate let-item let-selected="selected">`: optional template that
+ *   replaces the default row rendering (`labelFn(item)`). `$implicit` is the option item,
+ *   `selected` tells whether it is part of the current selection.
+ * - `[footer]`: any element carrying the `footer` attribute is projected below the input
+ *   (`<ng-content select="[footer]" />`), e.g. a row of avatars for the current selection.
+ *
+ * ### Programmatic control
+ * The public method {@link SelectFieldComponent.deselect} removes a key from the selection.
+ * Typically a parent exposes the component via a template reference variable and calls it
+ * from the footer content, e.g. when an avatar-group emits the id of a removed user:
+ * `(userDeletedId)="assignedSelect.deselect($event)"` (see example 2).
+ *
  * @example
  * ### 1. Simple Single-Select (Strings)
  * ```html
@@ -45,6 +67,7 @@ let nextId = 0;
  * ### 2. Multi-Select with Custom Option Template & Footer
  * ```html
  * <app-select-field
+ *   #assignedSelect
  *   label="Assigned to"
  *   placeholder="Select contacts to assign"
  *   [options]="contacts()"
@@ -55,10 +78,18 @@ let nextId = 0;
  *   <ng-template #optionTemplate let-contact let-selected="selected">
  *     <app-user-avatar [user]="contact" size="medium" />
  *     <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
- *     <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
+ *     <!-- The checkbox only mirrors the selection state; toggling is handled by the listbox (row click / Enter / Space). -->
+ *     <app-checkbox [checked]="selected" />
  *   </ng-template>
  *
- *   <div footer class="assigned-users">...</div>
+ *   <!-- Projected into the [footer] slot; removing a user deselects the key in the select field. -->
+ *   <app-avatar-group
+ *     footer
+ *     [users]="selectedContacts()"
+ *     size="medium"
+ *     [overlapLayout]="false"
+ *     (userDeletedId)="assignedSelect.deselect($event)"
+ *   />
  * </app-select-field>
  * ```
  *
@@ -76,6 +107,8 @@ let nextId = 0;
  *   (valueChange)="onTaskSelected($event)"
  * />
  * ```
+ * In search mode `valueChange` is emitted twice per pick (the picked key, then `null`), so
+ * the handler (`onTaskSelected`) should ignore `null`.
  *
  * @typeParam T - The data type of the option items passed to `[options]`.
  */
@@ -102,7 +135,7 @@ export class SelectFieldComponent<T = any> {
   // Inputs & Two-Way Models
   // ---------------------------------------------------------------------------
 
-  /** Unique HTML id attribute for the underlying input element. */
+  /** Unique HTML id attribute for the underlying input element (also used as the `for` target of the label). */
   id = input<string>(`app-select-${nextId++}`);
 
   /** Optional label text displayed above the select input. */
@@ -138,6 +171,10 @@ export class SelectFieldComponent<T = any> {
    * Two-way bound selection value.
    * - In `multi` mode: holds an array of selected keys (e.g., `number[]`).
    * - In single-select / search mode: holds the single selected key/value (e.g., `string | number | null`).
+   * - In search mode the value is transient: it is set to the picked key and reset to `null`
+   *   right afterwards (see `onValueChange`), so `(valueChange)` emits the key and then `null`.
+   *
+   * Bind with `[(value)]="..."` for two-way binding, or listen to `(valueChange)` only.
    */
   value = model<any>();
 
@@ -197,7 +234,10 @@ export class SelectFieldComponent<T = any> {
   /** Whether the CDK overlay dropdown popup is currently open. */
   popupExpanded = signal<boolean>(false);
 
-  /** Preferred CDK overlay positions, dynamically ordered based on available viewport space. */
+  /**
+   * Overlay position that opens the dropdown above the input (overlay bottom-start attached to
+   * origin top-start). Used by `positions`, whose order is decided in `updateOverlayDirection()`.
+   */
   private readonly positionAbove: ConnectedPosition = {
     originX: 'start',
     originY: 'top',
@@ -205,6 +245,7 @@ export class SelectFieldComponent<T = any> {
     overlayY: 'bottom',
   };
 
+  /** Overlay position that opens the dropdown below the input (overlay top-start attached to origin bottom-start). */
   private readonly positionBelow: ConnectedPosition = {
     originX: 'start',
     originY: 'bottom',
@@ -212,6 +253,11 @@ export class SelectFieldComponent<T = any> {
     overlayY: 'top',
   };
 
+  /**
+   * Ordered list of preferred CDK overlay positions bound to `cdkConnectedOverlayPositions`.
+   * The first entry is tried first; the order is recalculated on every `openPopup()`
+   * (below first by default, above first when there is not enough room below).
+   */
   positions = signal<ConnectedPosition[]>([this.positionBelow, this.positionAbove]);
 
   /**
@@ -241,6 +287,14 @@ export class SelectFieldComponent<T = any> {
    * Subset of `selectedKeys()` that are currently rendered in `filteredOptions()`.
    * - In `'search'` variant: always returns `[]` so results act as action triggers that can be re-selected at any time.
    * - In `'select'` variant: prevents `@angular/aria/listbox` from stripping out selected items hidden by the search filter.
+   *
+   * Why it exists: the listbox only knows the options that are currently rendered. If `value()`
+   * were passed directly, keys of selected options that are filtered out by the search term would
+   * be unknown to the listbox and dropped from its internal value on the next change.
+   * Passing only the visible subset keeps the listbox consistent; `onValueChange()` re-adds the
+   * hidden selected keys afterwards. Bound to `[value]` of `ngListbox` in the template.
+   * In search mode an empty value ensures no row is ever shown as selected, so picking the
+   * same result again always counts as a new selection.
    */
   listboxValue = computed<any[]>(() => {
     if (this.variant() === 'search') return [];
@@ -270,6 +324,10 @@ export class SelectFieldComponent<T = any> {
   /**
    * Initializes an effect that resets the search term and restores the input display value
    * whenever the dropdown popup closes (whether via arrow click, Escape key, selection, or outside click).
+   *
+   * Because the effect also reads `displayValue()` and `inputField()`, it re-runs when the selection
+   * changes while the popup is closed. It writes the value directly to the native input, because the
+   * `[value]` binding alone does not overwrite text the user has typed into the field.
    */
   constructor() {
     effect(() => {
@@ -311,7 +369,8 @@ export class SelectFieldComponent<T = any> {
   }
 
   /**
-   * Toggles the visibility of the dropdown popup when clicking the arrow button.
+   * Toggles the visibility of the dropdown popup when clicking the arrow button
+   * (or the magnifying glass button in the `'search'` variant).
    */
   togglePopup(): void {
     if (this.popupExpanded()) {
@@ -340,6 +399,9 @@ export class SelectFieldComponent<T = any> {
    * Checks whether a given option item is currently part of the selection.
    * Always returns `false` in `'search'` mode since search results are transient actions.
    *
+   * Used by the template to apply the `.selected` class to a row and to pass `selected`
+   * into the context of a custom `#optionTemplate`.
+   *
    * @param item - The option item to check.
    * @returns `true` if the item's key is included in `selectedKeys()`, otherwise `false`.
    */
@@ -355,6 +417,14 @@ export class SelectFieldComponent<T = any> {
    * - In `'search'` mode: emits the selected key, resets `value` to `null` so the same item
    *   can be selected again later, and closes the popup.
    * - In single-select mode: emits the selected key and closes the popup.
+   *
+   * Why it exists: the listbox only receives (and reports) the keys of the currently visible
+   * options (see `listboxValue`). In multi mode, writing its result directly into `value` would
+   * silently discard selections that are hidden by the search term, so those are merged back
+   * (`[...hiddenSelectedKeys, ...selected]`). In search mode the component acts as an action
+   * trigger rather than a form field: the picked key is emitted and `value` is reset to `null`
+   * in a microtask, so no selection is retained. In single mode the popup is closed after a pick
+   * (the constructor effect then resets the search term and shows the label of the selection).
    *
    * @param selected - Array of selected visible keys emitted by `ngListbox`.
    */
@@ -373,6 +443,34 @@ export class SelectFieldComponent<T = any> {
     } else {
       this.value.set(selected[0] ?? null);
       this.closePopup();
+    }
+  }
+
+  /**
+   * Removes a key from the current selection programmatically (e.g., from the `[footer]` slot).
+   * - In `multi` mode: removes `key` from the array in `value()` and keeps all other keys.
+   * - In single-select / search mode: clears the value (`null`), regardless of `key`.
+   * The popup state is not changed.
+   *
+   * Typical usage from a parent template, via a template reference variable on the select field:
+   * ```html
+   * <app-select-field #assignedSelect [multi]="true" [(value)]="selectedIds" [options]="contacts()">
+   *   <app-avatar-group
+   *     footer
+   *     [users]="selectedContacts()"
+   *     [overlapLayout]="false"
+   *     (userDeletedId)="assignedSelect.deselect($event)"
+   *   />
+   * </app-select-field>
+   * ```
+   *
+   * @param key - The option key (as returned by `valueKey`) to remove from the selection.
+   */
+  deselect(key: any) {
+    if (this.multi()) {
+      this.value.set(this.selectedKeys().filter((k) => k !== key));
+    } else {
+      this.value.set(null);
     }
   }
 
