@@ -213,9 +213,8 @@ export class AddTask {
     const newTaskId = await this.taskService.addTask(task);
 
     if (newTaskId) {
-      for (const contact of this.assignedContacts()) {
-        await this.taskService.assignUser(newTaskId, contact.id);
-      }
+      const contactIds = this.assignedContacts().map((c) => c.id);
+      await this.taskService.setTaskAssignment(newTaskId, contactIds);
 
       this.onClear();
     }
