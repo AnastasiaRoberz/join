@@ -6,13 +6,16 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     border: 1px solid transparent;
     outline: 1px solid transparent;
     box-shadow: $btn-shadow-placeholder;
     text-decoration: none;
     cursor: pointer;
     white-space: nowrap;
+    flex-shrink: 0;
+    font-family: 'Inter';
+    transition: all 100ms ease-in-out;
 
     &:hover,
     &:active {
@@ -22,36 +25,38 @@
     .icon {
       width: 24px;
       height: 24px;
+      flex-shrink: 0;
     }
 
     &:disabled {
-      cursor: none;
+      cursor: not-allowed;
       pointer-events: none;
       background-color: $btn-disabled;
+      border-color: transparent;
     }
   }
 
   // BUTTONS SIZES
-  &.btn-small {
+  &.btn--small {
     font-size: $font-default;
     padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
     border-radius: 8px;
   }
 
-  &.btn-medium {
+  &.btn--medium {
     font-size: $font-default;
     padding: calcClamp(10, 16, 768, 320);
     border-radius: 8px;
   }
 
-  &.btn-large {
+  &.btn--large {
     font-size: $font-medium;
     padding: calcClamp(10, 16, 768, 320);
     border-radius: 10px;
   }
 
-  // BUTTONS COLORS
-  &.btn-primary {
+  // BUTTON COLORS
+  &.btn--primary {
     background-color: $btn-primary-default;
     color: $btn-primary-txt;
     font-weight: 700;
@@ -65,9 +70,10 @@
     }
   }
 
-  &.btn-secondary {
+  &.btn--secondary {
     background-color: transparent;
     border: 1px solid $btn-secondary-default;
+    color: $btn-secondary-default;
 
     &:hover {
       border: 1px solid $btn-secondary-hover;
@@ -79,9 +85,80 @@
       border: 1px solid $btn-secondary-active;
       color: $btn-secondary-active;
     }
+
+    &.btn--small {
+      border-width: 2px;
+      width: 24px;
+      height: 24px;
+    }
   }
 
-  &.btn-add {
+  &.btn--text {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: $btn-icon;
+
+    .btn-label {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+
+      &::after {
+        content: attr(data-text);
+        font-weight: 700;
+        height: 0;
+        visibility: hidden;
+        overflow: hidden;
+        user-select: none;
+        pointer-events: none;
+      }
+    }
+
+    &:hover {
+      font-weight: 700;
+      box-shadow: none;
+      color: $btn-txtIcon-hover;
+    }
+  }
+
+  &.btn--icon {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 50%;
+    color: $main-color;
+
+    .btn-label {
+      display: none;
+    }
+
+    &:hover {
+      background-color: $btn-icon;
+    }
+
+    &.btn--small {
+      width: 24px;
+      height: 24px;
+    }
+
+    &.btn--medium {
+      width: 32px;
+      height: 32px;
+
+      .icon {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .btn-close-mobile {
+      color: $close-btn-mobile-default;
+    }
+  }
+
+  &.btn--add {
     background-color: $btn-add-default;
     color: $btn-add-txt;
     font-weight: 700;
@@ -100,23 +177,10 @@
       background-color: $btn-add-active;
       box-shadow: $btn-shadow-placeholder;
     }
+  }
 
-    // tablet add button style added for board header + in general
-    &.is-tablet {
-      @include flex-center;
-
-      .icon {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-      }
-      .btn-label {
-        display: none;
-      }
-    }
-
-    &.is-mobile {
-      @include flex-center;
+  &.btn--addContact {
+    @include mobile {
       position: absolute;
       bottom: 32px;
       right: 16px;
@@ -124,66 +188,30 @@
       width: 56px;
       border-radius: 50%;
       box-shadow: $btn-shadow;
+      padding: 0;
 
-      .icon {
-        width: 32px;
-        height: 32px;
-        flex-shrink: 0;
-      }
       .btn-label {
         display: none;
       }
     }
   }
 
-  &.btn-txtIcon {
-    gap: 8px;
-    color: $btn-icon;
-    box-shadow: none;
-
-    .btn-label {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      order: 1;
-      font-size: 1rem;
-
-      &::after {
-        content: attr(data-text);
-        display: block;
-        font-weight: 700;
-        height: 0;
-        visibility: hidden;
-        overflow: hidden;
-        user-select: none;
-        pointer-events: none;
-      }
-    }
-
-    &:hover {
-      font-weight: 700;
+  &.btn--addTask {
+    @include tablet {
+      position: relative;
+      bottom: 0;
+      right: 0;
+      height: 40px;
+      width: 40px;
+      padding: 0;
       box-shadow: none;
-      color: $btn-txtIcon-hover;
+
+      &:active {
+        box-shadow: none;
+      }
     }
   }
 
-  &.btn-icon {
-    width: 24px;
-    height: 24px;
-    color: $main-color;
-
-    .btn-label {
-      display: none;
-    }
-
-    &.btn-close-mobile {
-      color: $close-btn-mobile-default;
-    }
-
-    &:hover,
-    &:active {
-      box-shadow: none;
-    }
+  &.btn--addTaskSmall {
   }
 }
