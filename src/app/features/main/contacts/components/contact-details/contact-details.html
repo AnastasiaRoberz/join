@@ -6,13 +6,13 @@
     </div>
   </div>
 
-  <div class="btn-wrapper" [class.is-open]="menuOpen()">
-    <button
-      appBtn
-      preset="editIcon"
-      (click)="dialogService.openDialog('contact', contact)"
-    ></button>
-    <button appBtn preset="deleteIcon" (click)="deleteContact(contact.id)"></button>
+  <div
+    class="btn-wrapper"
+    [class.is-tablet]="responsiveService.isTablet()"
+    [class.is-open]="menuOpen()"
+  >
+    <button appBtn preset="edit" (click)="dialogService.openDialog('contact', contact)"></button>
+    <button appBtn preset="delete" (click)="deleteContact(contact.id)"></button>
   </div>
 
   <p class="info-heading">Contact Information</p>
