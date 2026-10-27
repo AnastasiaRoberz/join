@@ -5,7 +5,6 @@ import { DialogService } from '../../../../../services/dialog.service';
 import { TaskService } from '../../../../../services/task.service';
 import { ContactService } from '../../../../../services/contact.service';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
-import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { TextField } from '../../../../../shared/text-field/text-field';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { CalendarFieldComponent } from '../../../../../shared/calendar-field.component/calendar-field.component';
@@ -14,6 +13,7 @@ import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
 import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.component/subtask-field.component';
 import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
+import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -61,6 +61,7 @@ export class TaskEdit {
 
   /** Reactive list of currently assigned contact IDs. */
   selectedContactIds = signal<number[]>([]);
+  currentSubtasks = signal<SubtaskInterface[]>([]);
 
   /**
    * Full contact objects corresponding to `selectedContactIds()`,
@@ -70,18 +71,6 @@ export class TaskEdit {
     const ids = new Set(this.selectedContactIds());
     return this.contactService.sortedContacts().filter((contact) => ids.has(contact.id));
   });
-
-  /**
-   * Extraction function passed to `<app-select-field [getSearchStrings]>`
-   * so contacts can be filtered by either first name or surname.
-   *
-   * @param contact - The contact item to extract searchable strings from.
-   * @returns An array containing the contact's first name and surname.
-   */
-  contactSearchStrings = (contact: ContactInterface): string[] => [
-    contact.firstname,
-    contact.surname,
-  ];
 
   // ---------------------------------------------------------------------------
   // Reactive Form Definition
@@ -93,8 +82,6 @@ export class TaskEdit {
     description: ['', { validators: [Validators.required] }],
     dueDate: ['', { validators: [Validators.required] }],
     priority: ['', { validators: [Validators.required] }],
-    assignedTo: this.fb.control<number[]>([]),
-    subtasks: ['', { validators: [Validators.required] }],
   });
 
   /**
@@ -104,19 +91,18 @@ export class TaskEdit {
     effect(() => {
       const currentTask = this.task();
       if (currentTask) {
-        const assignedIds = currentTask.assigned_users?.map((user) => user.id) ?? [];
-        this.selectedContactIds.set(assignedIds);
+        this.selectedContactIds.set(currentTask.assigned_users?.map((u) => u.id) ?? []);
+        this.currentSubtasks.set(currentTask.subtasks ?? []);
 
         this.taskForm.setValue({
           title: currentTask.title,
           description: currentTask.description,
           dueDate: currentTask.due_date,
           priority: currentTask.priority,
-          assignedTo: assignedIds,
-          subtasks: null,
         });
       } else {
         this.selectedContactIds.set([]);
+        this.currentSubtasks.set([]);
         this.taskForm.reset();
       }
     });
@@ -125,18 +111,6 @@ export class TaskEdit {
   // ---------------------------------------------------------------------------
   // Assignment & Form Submission Methods
   // ---------------------------------------------------------------------------
-
-  /**
-   * Updates both the `selectedContactIds` signal and the `assignedTo` form control
-   * when the selection changes via the `<app-select-field>` listbox.
-   *
-   * @param ids - The updated array of selected contact IDs.
-   */
-  onAssignmentChange(ids: number[]): void {
-    this.selectedContactIds.set(ids);
-    this.taskForm.controls.assignedTo.setValue(ids);
-    this.taskForm.controls.assignedTo.markAsDirty();
-  }
 
   /**
    * Toggles a single contact's assignment state when clicking an option's checkbox
@@ -153,7 +127,7 @@ export class TaskEdit {
         : [...currentIds, contactId]
       : currentIds.filter((id) => id !== contactId);
 
-    this.onAssignmentChange(updatedIds);
+    this.selectedContactIds.set(updatedIds);
   }
 
   /**
@@ -165,15 +139,15 @@ export class TaskEdit {
     const currentTaskId = this.task()?.id;
     const rawValue = this.taskForm.getRawValue();
 
-    if (currentTaskId) {
+    if (currentTaskId && rawValue) {
       await this.taskService.updateTask(currentTaskId, {
         title: rawValue.title!,
         description: rawValue.description!,
         due_date: rawValue.dueDate!,
       });
 
-      const newContactIds = rawValue.assignedTo ?? [];
-      await this.taskService.setTaskAssignment(currentTaskId, newContactIds);
+      await this.taskService.setTaskAssignments(currentTaskId, this.selectedContactIds());
+      await this.taskService.setTaskSubtasks(currentTaskId, this.currentSubtasks());
     }
 
     this.dialogService.openDialog('task', this.task());

@@ -66,7 +66,7 @@ export class TaskDetails {
    * @param taskId - The ID of the parent task.
    * @param isDone - The new completion state emitted by `<app-checkbox>`.
    */
-  async toggleSubtaskStatus(subtaskId: number, taskId: number, isDone: boolean): Promise<void> {
-    await this.taskService.updateSubtask(subtaskId, taskId, { is_done: isDone });
+  async toggleSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
+    await this.taskService.updateSubtaskStatus(subtaskId, isDone);
   }
 }

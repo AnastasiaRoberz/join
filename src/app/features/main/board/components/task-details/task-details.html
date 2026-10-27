@@ -47,7 +47,7 @@
             <app-checkbox
               [text]="subtask.title"
               [checked]="subtask.is_done"
-              (checkedChange)="toggleSubtaskStatus(subtask.id, task.id, $event)"
+              (checkedChange)="toggleSubtaskStatus(subtask.id, $event)"
             />
           </li>
         }

@@ -83,15 +83,11 @@ export class TaskService {
    *                   as these are managed separately via join tables
    * @returns A promise resolving to the newly created task's `id`, or `null` on failure
    */
-  async addTask(
-    taskData: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'>,
-  ): Promise<number | null> {
+  async addTask(taskData: Omit<TaskInterface, 'id'>): Promise<void> {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
       await this.getAllTasks();
-      return newTask.id;
     }
-    return null;
   }
 
   /**
@@ -121,29 +117,21 @@ export class TaskService {
     }
   }
 
-  async updateSubtask(
-    subtaskId: number,
-    taskId: number,
-    subtaskData: Partial<SubtaskInterface>,
-  ): Promise<void> {
+  async updateSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     const success = await this.supabaseService.updateData(
       subtaskId,
-      subtaskData,
+      { is_done: isDone },
       'subtasks',
-      false,
     );
 
     if (success) {
       this.tasks.update((list) =>
-        list.map((task) => {
-          if (task.id !== taskId) return task;
-          return {
-            ...task,
-            subtasks: task.subtasks?.map((subtask) =>
-              subtask.id === subtaskId ? { ...subtask, ...subtaskData } : subtask,
-            ),
-          };
-        }),
+        list.map((task) => ({
+          ...task,
+          subtasks: task.subtasks?.map((subtask) =>
+            subtask.id === subtaskId ? { ...subtask, is_done: isDone } : subtask,
+          ),
+        })),
       );
     }
   }
@@ -157,48 +145,27 @@ export class TaskService {
    *  - `'sub'`: deletes the entry from `subtasks` and filters it out of its parent's `subtasks` array
    * @returns A promise resolving after deletion and state synchronization
    */
-  async deleteTask(id: number, task: 'main' | 'sub') {
-    const table = task === 'main' ? 'tasks' : 'subtasks';
-    const showFeedback = task === 'sub' ? false : true;
-    const success = await this.supabaseService.deleteData(id, table, showFeedback);
+  async deleteTask(id: number) {
+    const success = await this.supabaseService.deleteData(id, 'tasks');
 
     if (success) {
-      if (task === 'main') {
-        this.tasks.update((list) => list.filter((task) => task.id !== id));
-      } else {
-        this.tasks.update((list) =>
-          list.map((task) => ({
-            ...task,
-            subtasks: task.subtasks?.filter((subtask) => subtask.id !== id) ?? [],
-          })),
-        );
-      }
+      this.tasks.update((list) => list.filter((task) => task.id !== id));
     }
   }
 
-  //#region SUBTASKS
-  /**
-   * Creates a subtask bound to a specific parent task via `task_id` and refreshes all tasks.
-   *
-   * @param subtaskData - The subtask payload (excluding `id`)
-   * @param taskId - The ID of the parent task this subtask belongs to
-   * @returns A promise that resolves when the subtask is created and state refreshed
-   */
-  async addSubtask(
-    subtaskData: Omit<SubtaskInterface, 'id'>,
-    taskId: number,
-  ): Promise<SubtaskInterface> {
-    const subtask = {
-      ...subtaskData,
-      task_id: taskId,
-    };
-    const newSubtask = await this.supabaseService.addData(subtask, 'subtasks', false);
+  async setTaskSubtasks(taskId: number, subtasks: Omit<SubtaskInterface, 'id'>[]): Promise<void> {
+    await this.supabaseService.deleteTaskSubtasks(taskId);
+    if (subtasks.length > 0) {
+      const data = [...subtasks].reverse().map((s) => ({
+        title: s.title,
+        is_done: s.is_done ?? false,
+        task_id: taskId,
+      }));
+      await this.supabaseService.addData(data, 'subtasks');
+    }
     await this.getAllTasks();
-    return newSubtask;
   }
-  //#endregion
 
-  //#region USER
   /**
    * Links a contact to a task by creating an entry in the `task-assignment` join table.
    * Refreshes the task list to reflect the updated assignments across the UI.
@@ -207,8 +174,8 @@ export class TaskService {
    * @param userId - The contact ID to assign
    * @returns A promise that resolves after the assignment is persisted and tasks are reloaded
    */
-  async setTaskAssignment(taskId: number, contactIds: number[]): Promise<void> {
-    await this.supabaseService.deleteAssignment(taskId);
+  async setTaskAssignments(taskId: number, contactIds: number[]): Promise<void> {
+    await this.supabaseService.deleteTaskAssignments(taskId);
 
     if (contactIds.length > 0) {
       const newData = contactIds.map((contactId) => ({
@@ -217,7 +184,7 @@ export class TaskService {
       }));
       console.log(newData);
 
-      await this.supabaseService.addData(newData, 'task-assignment', false);
+      await this.supabaseService.addData(newData, 'task-assignment');
     }
 
     await this.getAllTasks();
