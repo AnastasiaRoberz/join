@@ -2,7 +2,6 @@ import { Component, computed, ElementRef, inject, signal, ViewChild } from '@ang
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Dropdown } from './components/dropdown/dropdown';
 import { ContactInterface } from '../../../interfaces/contact.interface';
 import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
 import { ResponsiveService } from '../../../services/responsive.service';
@@ -25,7 +24,6 @@ import { AvatarGroupComponent } from '../../../shared/avatar-group.component/ava
  */
 @Component({
   imports: [
-    Dropdown,
     Buttons,
     PriorityBtn,
     ReactiveFormsModule,
@@ -192,16 +190,6 @@ export class AddTask {
     this.selectedPrio.set(prio);
   }
 
-  // /** Opens or closes the category dropdown. */
-  // toggleCategory() {
-  //   this.categoryOpen.update((v) => !v);
-  // }
-
-  // /** Opens or closes the contact dropdown. */
-  // toggleAssigned() {
-  //   this.assignedOpen.update((v) => !v);
-  // }
-
   onCategoryChange(value: string): void {
     this.selectedCategory.set(value);
     this.taskForm.controls.category.setValue(value);
@@ -237,25 +225,6 @@ export class AddTask {
 
     this.onAssignmentChange(updatedIds);
   }
-
-  // /**
-  //  * Writes the chosen category into the form and closes the category dropdown.
-  //  *
-  //  * @param value - The selected category
-  //  */
-  // onCategorySelected(value: string) {
-  //   this.taskForm.get('category')?.setValue(value);
-  //   this.categoryOpen.set(false);
-  // }
-
-  // /**
-  //  * Stores the updated contact selection coming from the dropdown.
-  //  *
-  //  * @param contacts - The currently selected contacts
-  //  */
-  // onContactsSelected(contacts: ContactInterface[]) {
-  //   this.assignedContacts.set(contacts);
-  // }
 
   /**
    * Resets the form and all related signals to their initial state.
