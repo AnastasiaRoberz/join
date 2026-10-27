@@ -9,6 +9,7 @@ import { ResponsiveService } from '../../../services/responsive.service';
 import { TaskService } from '../../../services/task.service';
 import { TaskInterface } from '../../../interfaces/task.interface';
 import { TextField } from '../../../shared/text-field/text-field';
+import { CalendarFieldComponent } from '../../../shared/calendar-field.component/calendar-field.component';
 
 /**
  * Form component for creating a new task.
@@ -18,7 +19,15 @@ import { TextField } from '../../../shared/text-field/text-field';
  * to it, and the form is reset.
  */
 @Component({
-  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar, TextField],
+  imports: [
+    Dropdown,
+    Buttons,
+    PriorityBtn,
+    ReactiveFormsModule,
+    UserAvatar,
+    TextField,
+    CalendarFieldComponent,
+  ],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',

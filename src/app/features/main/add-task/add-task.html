@@ -41,7 +41,12 @@
             placeholder="Enter a Description"
           ></textarea> -->
         <!-- </div> -->
-        <div class="taskWrap__inputBox">
+        <app-calendar-field
+          id="task-date"
+          label="Due date"
+          formControlName="date"
+        ></app-calendar-field>
+        <!-- <div class="taskWrap__inputBox">
           <label for="task-date">Due date<span class="required">*</span></label>
           <div class="taskWrap__withHint">
             <input
@@ -70,7 +75,7 @@
               <span class="hint-msg">This field is required</span>
             }
           </div>
-        </div>
+        </div> -->
       </div>
       <div class="taskWrap">
         <div class="taskWrap__btnBox">
