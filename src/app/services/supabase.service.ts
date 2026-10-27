@@ -17,6 +17,11 @@ export class SupabaseService {
 
   feedbackService = inject(FeedbackService);
 
+  private readonly allowedFeedbackTables: Record<string, string> = {
+    tasks: 'Task',
+    contacts: 'Contact',
+  };
+
   /**
    * Retrieves an array of records from a specific table.
    *
@@ -77,6 +82,7 @@ export class SupabaseService {
    */
   async addData<T extends Record<string, any>>(data: T | T[], table: string): Promise<any | null> {
     const isArray = Array.isArray(data);
+    const entityName = this.allowedFeedbackTables[table];
 
     let query = this.supabase
       .from(table)
@@ -86,12 +92,13 @@ export class SupabaseService {
     const { data: result, error } = await query;
 
     if (!error) {
-      this.feedbackService.showSuccess(
-        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
-      );
+      if (entityName)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
+        );
       return result;
     } else {
-      this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
+      if (entityName) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
       return null;
     }
   }
@@ -111,18 +118,20 @@ export class SupabaseService {
     data: Partial<T>,
     table: string,
   ): Promise<boolean> {
+    const entityName = this.allowedFeedbackTables[table];
     const { error } = await this.supabase
       .from(table)
       .update(data as any)
       .eq('id', id);
 
     if (!error) {
-      this.feedbackService.showSuccess(
-        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
-      );
+      if (entityName)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
+        );
       return true;
     } else {
-      this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
+      if (entityName) this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
@@ -136,15 +145,17 @@ export class SupabaseService {
    * @returns A promise resolving to `true` if successfully deleted, or `false` on failure
    */
   async deleteData(id: number, table: string): Promise<boolean> {
+    const entityName = this.allowedFeedbackTables[table];
     const { error } = await this.supabase.from(table).delete().eq('id', id);
 
     if (!error) {
-      this.feedbackService.showSuccess(
-        `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
-      );
+      if (entityName)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
+        );
       return true;
     } else {
-      this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
+      if (entityName) this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
