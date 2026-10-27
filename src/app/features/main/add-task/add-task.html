@@ -202,7 +202,15 @@
             }
           </div>
         </div> -->
-        <div class="taskWrap__inputBox">
+        <app-text-field
+          id="task-subtasks"
+          formControlName="subtask"
+          labelPos="top"
+          label="Subtasks"
+          type="input"
+          placeholder="Add new Subtask"
+        ></app-text-field>
+        <!-- <div class="taskWrap__inputBox">
           <label for="task-subtasks">Subtasks</label>
           <input
             id="task-subtasks"
@@ -210,7 +218,7 @@
             formControlName="subtask"
             placeholder="Add new Subtask"
           />
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="task-footer">
