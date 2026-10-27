@@ -8,6 +8,7 @@ import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { TaskService } from '../../../services/task.service';
 import { TaskInterface } from '../../../interfaces/task.interface';
+import { TextField } from '../../../shared/text-field/text-field';
 
 /**
  * Form component for creating a new task.
@@ -17,7 +18,7 @@ import { TaskInterface } from '../../../interfaces/task.interface';
  * to it, and the form is reset.
  */
 @Component({
-  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar],
+  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar, TextField],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
