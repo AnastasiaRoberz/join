@@ -3,6 +3,7 @@ import { SubtaskInterface } from './subtask.interface';
 
 export interface TaskInterface {
   id: number;
+  position: number; // position added for drag and drop (also in database)
   title: string;
   description: string;
   due_date: string;

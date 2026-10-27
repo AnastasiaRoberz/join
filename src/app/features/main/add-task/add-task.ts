@@ -201,7 +201,8 @@ export class AddTask {
 
     const [day, month, year] = this.taskForm.value.date!.split('/');
     const dateValue = `${year}-${month}-${day}`;
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
+    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'> = {
+      // added position
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: dateValue,

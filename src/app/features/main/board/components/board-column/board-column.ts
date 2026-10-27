@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskCard } from '../../../../../shared/task-card/task-card';
 import { Buttons } from '../../../../../shared/button.component/button.component';
+import { CdkDrag } from '@angular/cdk/drag-drop';
 
 /**
  * One column of the board (e.g. "To do"): title, button to add a task
@@ -13,7 +14,7 @@ import { Buttons } from '../../../../../shared/button.component/button.component
  * <app-board-column status="To do" [tasks]="todoTasks" />
  */
 @Component({
-  imports: [RouterLink, Buttons, TaskCard],
+  imports: [RouterLink, Buttons, TaskCard, CdkDrag],
   selector: 'app-board-column',
   styleUrl: './board-column.scss',
   templateUrl: './board-column.html',

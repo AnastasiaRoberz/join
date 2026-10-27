@@ -84,7 +84,7 @@ export class TaskService {
    * @returns A promise resolving to the newly created task's `id`, or `null` on failure
    */
   async addTask(
-    taskData: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'>,
+    taskData: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'>,
   ): Promise<number | null> {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
@@ -119,6 +119,35 @@ export class TaskService {
         ),
       );
     }
+  }
+
+  /**
+   * Saves the new order of a column after drag and drop.
+   * Updates the local signal first so the card doesn't jump back,
+   * then stores `status` and `position` of every task in the column.
+   *
+   * @param columnTasks - All tasks of the target column, in their new order
+   */
+  // update the local signal right away, before talking to the database
+  async saveColumn(columnTasks: TaskInterface[]): Promise<void> {
+    // check all tasks: if a task is in the moved column, take the new version
+    this.tasks.update((list) =>
+      // (new status + position), otherwise (`??`) keep the old task unchanged
+      list.map((task) => columnTasks.find((moved) => moved.id === task.id) ?? task),
+    );
+
+    // send one update per task to Supabase, all at the same time
+    const results = await Promise.all(
+      // Create one update request for each task in the column
+      columnTasks.map((task) =>
+        this.supabaseService.updateData(
+          task.id, // which task / row in the table
+          { status: task.status, position: task.position }, // only these two fields are saved
+          'tasks', // which table
+          false, // no success/error toast for each single task
+        ),
+      ),
+    );
   }
 
   async updateSubtask(

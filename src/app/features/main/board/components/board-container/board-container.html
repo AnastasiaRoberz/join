@@ -1,5 +1,15 @@
+<!-- cdkDropListGroup = linking all the columns as drag and drop lists -->
 <div class="board" cdkDropListGroup>
   @for (column of columns(); track column.status) {
-    <app-board-column [status]="column.status" [tasks]="column.tasks" />
+    <app-board-column
+      // making each column a drag and drop list
+      cdkDropList
+      // list data (tasks). In dragDrop(), used as event.container.data and event.previousContainer.data
+      [cdkDropListData]="column.tasks"
+      // ($event: which card, old index, new index) for moveItemInArray & transferArrayItem
+      (cdkDropListDropped)="dragDrop($event, column.status)"
+      [status]="column.status"
+      [tasks]="column.tasks"
+    />
   }
 </div>
