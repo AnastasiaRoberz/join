@@ -1,6 +1,12 @@
 <div class="header-section">
   @if (responsiveService.isMobile()) {
-    <button appBtn preset="close" class="btn-close-mobile" (click)="closeDialog()"></button>
+    <button
+      appBtn
+      preset="iconSmall"
+      icon="x"
+      class="btn-close-mobile"
+      (click)="closeDialog()"
+    ></button>
   }
   <div class="header">
     @if (contact()) {
@@ -14,7 +20,7 @@
 
 <div class="content-section">
   @if (!responsiveService.isMobile()) {
-    <button appBtn preset="close" (click)="closeDialog()"></button>
+    <button appBtn preset="iconSmall" icon="x" (click)="closeDialog()"></button>
   }
 
   <div class="input-wrapper">
@@ -40,7 +46,7 @@
           </button>
         } @else {
           @if (!responsiveService.isMobile()) {
-            <button appBtn preset="x" (click)="closeDialog()">Cancel</button>
+            <button appBtn preset="cancel" icon="x" (click)="closeDialog()">Cancel</button>
           }
 
           <button

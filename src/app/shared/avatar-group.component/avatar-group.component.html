@@ -9,11 +9,13 @@
   } @else {
     <div class="avatar-wrapper" [appCursorTooltip]="user.firstname + ' ' + user.surname">
       <app-user-avatar [user]="user" [size]="size()" class="group-item" />
-      <button type="button" class="btn-delete-user" (click)="onDelete(user.id, $event)">
-        <svg>
-          <use href="./assets/icons/icons.svg#delete"></use>
-        </svg>
-      </button>
+      <button
+        appBtn
+        preset="iconMedium"
+        icon="delete"
+        class="btn-delete-user"
+        (click)="onDelete(user.id, $event)"
+      ></button>
     </div>
   }
 }

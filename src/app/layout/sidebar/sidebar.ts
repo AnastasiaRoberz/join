@@ -2,9 +2,10 @@ import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ResponsiveService } from '../../services/responsive.service';
 import { Footer } from '../footer/footer';
+import { Buttons } from '../../shared/button.component/button.component';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, Footer],
+  imports: [RouterLink, RouterLinkActive, Footer, Buttons],
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
