@@ -4,6 +4,7 @@
 :host {
   display: block;
   min-width: 0;
+  min-height: 300px; // drop area stays big enough even when the column is empty
 }
 
 .board-column {

@@ -4,6 +4,8 @@
     <app-board-column
       // making each column a drag and drop list
       cdkDropList
+      // defines the drop item container
+      cdkDropListElementContainer=".board-column__tasks"
       // list data (tasks). In dragDrop(), used as event.container.data and event.previousContainer.data
       [cdkDropListData]="column.tasks"
       // ($event: which card, old index, new index) for moveItemInArray & transferArrayItem
