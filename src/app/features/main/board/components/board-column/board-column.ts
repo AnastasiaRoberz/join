@@ -2,6 +2,7 @@ import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskCard } from '../../../../../shared/task-card/task-card';
+import { Buttons } from '../../../../../shared/button.component/button.component';
 
 /**
  * One column of the board (e.g. "To do"): title, button to add a task
@@ -12,7 +13,7 @@ import { TaskCard } from '../../../../../shared/task-card/task-card';
  * <app-board-column status="To do" [tasks]="todoTasks" />
  */
 @Component({
-  imports: [RouterLink, TaskCard],
+  imports: [RouterLink, Buttons, TaskCard],
   selector: 'app-board-column',
   styleUrl: './board-column.scss',
   templateUrl: './board-column.html',

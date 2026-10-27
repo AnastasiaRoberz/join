@@ -77,30 +77,13 @@
     justify-content: space-between;
   }
 
-  // avatars overlap each other
+  // the overlap of the avatars is done by the avatar group component
   &__users {
-    @include flex-start;
-
-    app-user-avatar + app-user-avatar {
-      margin-left: -8px;
-    }
+    min-width: 0;
   }
 
+  // size and color of the icon come from the global classes icon-priority / icon-<priority>
   &__priority {
-    width: 20px;
-    height: 20px;
     flex-shrink: 0;
-
-    &--urgent {
-      color: $prio-urgent;
-    }
-
-    &--medium {
-      color: $prio-medium;
-    }
-
-    &--low {
-      color: $prio-low;
-    }
   }
 }

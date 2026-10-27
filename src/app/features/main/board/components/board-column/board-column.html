@@ -1,17 +1,15 @@
 <section class="board-column">
   <header class="board-column__header">
     <h3 class="board-column__title">{{ status() }}</h3>
-    @if (status() !== 'Done') {
+        @if (status() !== 'Done') {
       <a
-        class="btn btn-icon"
+        appBtn
+        variant="icon"
+        icon="plus-square"
         routerLink="/add-task"
         [queryParams]="{ status: status() }"
         [attr.aria-label]="'Add task to ' + status()"
-      >
-        <svg class="icon">
-          <use href="./assets/icons/icons.svg#plus-square"></use>
-        </svg>
-      </a>
+      ></a>
     }
   </header>
 

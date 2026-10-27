@@ -41,7 +41,7 @@
       class="task-card__priority"
       role="img"
       [attr.aria-label]="'Priority: ' + task().priority"
-      [class]="'task-card__priority--' + task().priority"
+      [class]="'icon-priority icon-' + task().priority"
     >
       <use [attr.href]="'/assets/icons/icons.svg#' + task().priority"></use>
     </svg>
