@@ -1,1 +1,9 @@
-<app-board-header></app-board-header>
+<div class="board-page">
+  <app-board-header></app-board-header>
+
+  <div class="board">
+    @for (column of columns(); track column.status) {
+      <app-board-column [status]="column.status" [tasks]="column.tasks" />
+    }
+  </div>
+</div>
