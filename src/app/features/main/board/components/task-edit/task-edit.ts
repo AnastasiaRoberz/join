@@ -14,6 +14,7 @@ import { CheckboxComponent } from '../../../../../shared/checkbox.component/chec
 import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.component/subtask-field.component';
 import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
 import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
+import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priority-btn';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -23,18 +24,19 @@ import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
  * - Title, description, due date and priority live in the reactive form `taskForm`.
  * - Assigned contacts (`selectedContactIds`) and subtasks (`currentSubtasks`) live in
  *   local signals, because they are not simple form controls. They are bound to the child
- *   components via two-way bindings (`[(value)]` / `[(subtasks)]`).
- *
- * ### Persistence
- * **Nothing is written to the database while the user edits.** All changes stay local
- * until the user clicks "Ok" (form submit, see {@link TaskEdit.saveTask}), which then calls
- * `TaskService.updateTask`, `TaskService.setTaskAssignments` and `TaskService.setTaskSubtasks`.
- * Closing the dialog via the "x" button discards all unsaved changes.
- *
- * ### Opening the component
- * It is rendered by `DialogComponent` when `DialogService.dialogType()` is `'task-edit'`:
- *
- * @example
+ *imports: [
+    ReactiveFormsModule,
+    ScrollingModule,
+    TextField,
+    Buttons,
+    CalendarFieldComponent,
+    SelectFieldComponent,
+    UserAvatar,
+    CheckboxComponent,
+    SubtaskFieldComponent,
+    AvatarGroupComponent,
+    PriorityBtn
+]@example
  * ```ts
  * // e.g. from TaskDetails: switch from the detail view to the edit view
  * dialogService.openDialog('task-edit', task);
@@ -55,6 +57,7 @@ import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
     CheckboxComponent,
     SubtaskFieldComponent,
     AvatarGroupComponent,
+    PriorityBtn,
   ],
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',
@@ -110,6 +113,8 @@ export class TaskEdit {
     return this.contactService.sortedContacts().filter((contact) => ids.has(contact.id));
   });
 
+  selectedPrio = signal<Priority>('medium');
+
   // ---------------------------------------------------------------------------
   // Reactive Form Definition
   // ---------------------------------------------------------------------------
@@ -123,7 +128,10 @@ export class TaskEdit {
     title: ['', { validators: [Validators.required] }],
     description: ['', { validators: [Validators.required] }],
     dueDate: ['', { validators: [Validators.required] }],
-    priority: ['', { validators: [Validators.required] }],
+    priority: this.fb.control<Priority>('medium', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
   });
 
   /**
@@ -137,6 +145,7 @@ export class TaskEdit {
       if (currentTask) {
         this.selectedContactIds.set(currentTask.assigned_users?.map((u) => u.id) ?? []);
         this.currentSubtasks.set(currentTask.subtasks ?? []);
+        this.selectedPrio.set(currentTask.priority);
 
         this.taskForm.setValue({
           title: currentTask.title,
@@ -195,12 +204,14 @@ export class TaskEdit {
     // if (!this.taskForm.valid) return;
     const currentTaskId = this.task()?.id;
     const rawValue = this.taskForm.getRawValue();
+    console.log(rawValue);
 
     if (currentTaskId && rawValue) {
       await this.taskService.updateTask(currentTaskId, {
         title: rawValue.title!,
         description: rawValue.description!,
         due_date: rawValue.dueDate!,
+        priority: rawValue.priority,
       });
 
       await this.taskService.setTaskAssignments(currentTaskId, this.selectedContactIds());
