@@ -4,7 +4,6 @@ import { PrivacyPolicy } from './features/main/info/privacy-policy/privacy-polic
 import { LegalNotice } from './features/main/info/legal-notice/legal-notice';
 import { Dashboard } from './features/main/dashboard/dashboard';
 import { Contacts } from './features/main/contacts/contacts';
-import { AddTask } from './features/main/add-task/add-task';
 import { Board } from './features/main/board/board';
 import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
@@ -26,7 +25,6 @@ export const routes: Routes = [
       //nur eingeloggt, canActivate kommt später
       { path: 'summary', component: Dashboard },
       { path: 'contacts', component: Contacts },
-      { path: 'add-task', component: AddTask },
       { path: 'board', component: Board },
       { path: 'help', component: Help },
 
