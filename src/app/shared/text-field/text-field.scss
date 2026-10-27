@@ -12,6 +12,8 @@ textarea {
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 textarea {
@@ -57,6 +59,11 @@ textarea {
       color: $error;
     }
   }
+}
+
+label.top {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
 }
 
 label.inner {
