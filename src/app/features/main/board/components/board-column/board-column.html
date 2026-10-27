@@ -1,15 +1,15 @@
 <section class="board-column">
   <header class="board-column__header">
     <h3 class="board-column__title">{{ status() }}</h3>
-        @if (status() !== 'Done') {
-      <a
+    @if (status() !== 'Done') {
+      <button
         appBtn
         variant="icon"
         icon="plus-square"
-        routerLink="/add-task"
-        [queryParams]="{ status: status() }"
+        type="button"
+        (click)="openAddTask()"
         [attr.aria-label]="'Add task to ' + status()"
-      ></a>
+      ></button>
     }
   </header>
 
