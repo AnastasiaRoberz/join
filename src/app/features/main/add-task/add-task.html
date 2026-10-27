@@ -104,7 +104,32 @@
             ></button>
           </div>
         </div>
-        <div class="taskWrap__inputBox">
+        <app-select-field
+          label="Assigned to"
+          placeholder="Select Contacts to assign"
+          emptyText="No contacts found."
+          [options]="contactService.sortedContacts()"
+          [multi]="true"
+          [(value)]="selectedContactIds"
+          [getSearchStrings]="contactSearchStrings"
+        >
+          <ng-template #optionTemplate let-contact let-selected="selected">
+            <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
+            <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+            <app-checkbox
+              [checked]="selected"
+              (checkedChange)="toggleAssignment(contact.id, $event)"
+            ></app-checkbox>
+          </ng-template>
+          <app-avatar-group
+            footer
+            [users]="selectedContacts()"
+            size="medium"
+            [overlapLayout]="false"
+            (userDeletedId)="toggleAssignment($event, false)"
+          />
+        </app-select-field>
+        <!-- <div class="taskWrap__inputBox">
           <label for="task-assigned">Assigned to</label>
           <div class="taskWrap">
             <div class="dropdown__trigger" [class.open]="assignedOpen()" (click)="toggleAssigned()">
@@ -140,8 +165,16 @@
               </div>
             }
           </div>
-        </div>
-        <div class="taskWrap__inputBox">
+        </div> -->
+        <app-select-field
+          label="Category"
+          [required]="true"
+          placeholder="Select Task Category"
+          [options]="categories"
+          [(value)]="selectedCategory"
+          (valueChange)="onCategoryChange($event)"
+        ></app-select-field>
+        <!-- <div class="taskWrap__inputBox">
           <label for="task-category">Category<span class="required">*</span></label>
           <div class="taskWrap__withHint">
             <div class="dropdown__trigger" [class.open]="categoryOpen()" (click)="toggleCategory()">
@@ -168,7 +201,7 @@
               <span class="hint-msg">This field is required</span>
             }
           </div>
-        </div>
+        </div> -->
         <div class="taskWrap__inputBox">
           <label for="task-subtasks">Subtasks</label>
           <input
