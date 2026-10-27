@@ -45,17 +45,17 @@ export class BoardContainer {
    * @param status - Status of the column the task was dropped into
    */
   dragDrop(event: CdkDragDrop<TaskInterface[]>, status: TaskInterface['status']) {
-    // copy of the tasks in the column the card was dropped into.
+    // copy of the tasks in the column the card was dropped into (cdkDropListData)
     const newColumn = [...event.container.data];
 
-    // Same status / column: task was only moved up or down
+    // Same status / column: task was only moved up or down (cdkDropListData)
     if (event.previousContainer === event.container) {
-      // moves task from its old to its new index inside the same column
+      // moves task from its old to its new index inside the same column (cdkDropListDropped)
       moveItemInArray(newColumn, event.previousIndex, event.currentIndex);
     } else {
-      // change status: copy of the tasks in the column the card came from
+      // change status: copy of the tasks in the column the card came from (cdkDropListData)
       const oldColumn = [...event.previousContainer.data];
-      // removes task from old column and inserts it at the new index (where dropped) in the new one
+      // removes task from old column and inserts it at the new index (where dropped) in the new one (cdkDropListDropped)
       transferArrayItem(oldColumn, newColumn, event.previousIndex, event.currentIndex);
     }
 

@@ -128,23 +128,22 @@ export class TaskService {
    *
    * @param columnTasks - All tasks of the target column, in their new order
    */
-  // update the local signal right away, before talking to the database
   async saveColumn(columnTasks: TaskInterface[]): Promise<void> {
     // check all tasks: if a task is in the moved column, take the new version
     this.tasks.update((list) =>
-      // (new status + position), otherwise (`??`) keep the old task unchanged
+      // (new task(s) with status + position), otherwise (`??`) keep the old task unchanged
       list.map((task) => columnTasks.find((moved) => moved.id === task.id) ?? task),
     );
 
-    // send one update per task to Supabase, all at the same time
+    // send update per task to Supabase
     const results = await Promise.all(
       // Create one update request for each task in the column
       columnTasks.map((task) =>
         this.supabaseService.updateData(
-          task.id, // which task / row in the table
+          task.id,
           { status: task.status, position: task.position }, // only these two fields are saved
-          'tasks', // which table
-          false, // no success/error toast for each single task
+          'tasks', // table "tasks"
+          false, // no success/error toast (as in Figma)
         ),
       ),
     );
