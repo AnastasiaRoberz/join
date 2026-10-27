@@ -27,7 +27,6 @@ app-contact-details {
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  background: $color-grey-background;
   padding: calcClamp(48, 120) calcClamp(16, 56);
   gap: calcClamp(48, 32);
   overflow-x: hidden; // no scrollbar for animation of contact details sliding in

@@ -9,6 +9,7 @@
   grid-template-areas:
     'sidebar header'
     'sidebar pages';
+  background-color: $color-grey-background;
 
   @include tablet {
     display: flex;
