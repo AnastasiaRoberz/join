@@ -3,8 +3,16 @@
   <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
     <div class="task-container">
       <div class="taskWrap taskLeft">
-        <div class="taskWrap__inputBox">
-          <label for="task-title">Title<span class="required">*</span></label>
+        <!-- <div class="taskWrap__inputBox"> -->
+        <app-text-field
+          id="task-title"
+          formControlName="title"
+          labelPos="top"
+          label="Title"
+          type="input"
+          placeholder="Enter a Title"
+        ></app-text-field>
+        <!-- <label for="task-title">Title<span class="required">*</span></label>
           <div class="taskWrap__withHint">
             <input
               id="task-title"
@@ -15,16 +23,24 @@
             @if (showError('title')) {
               <span class="hint-msg">This field is required</span>
             }
-          </div>
-        </div>
-        <div class="taskWrap__inputBox">
-          <label for="task-description">Description</label>
+          </div> -->
+        <!-- </div> -->
+        <!-- <div class="taskWrap__inputBox"> -->
+        <app-text-field
+          id="task-description"
+          formControlName="description"
+          labelPos="top"
+          label="Description"
+          type="textarea"
+          placeholder="Enter a Description"
+        ></app-text-field>
+        <!-- <label for="task-description">Description</label>
           <textarea
             id="task-description"
             formControlName="description"
             placeholder="Enter a Description"
-          ></textarea>
-        </div>
+          ></textarea> -->
+        <!-- </div> -->
         <div class="taskWrap__inputBox">
           <label for="task-date">Due date<span class="required">*</span></label>
           <div class="taskWrap__withHint">
