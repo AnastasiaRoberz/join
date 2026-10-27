@@ -7,6 +7,8 @@
 
 label {
   margin-bottom: 8px;
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
 }
 
 .input-container {
@@ -30,6 +32,8 @@ input {
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 .input-icon {
@@ -87,6 +91,8 @@ input {
     padding: 8px 16px;
     border-radius: 10px;
     cursor: pointer;
+    font-family: Inter;
+    font-size: calcClamp(16, 20, 768, 320);
 
     &.selected {
       background-color: $dropdown-item-active;
@@ -97,6 +103,10 @@ input {
         background-color: $dropdown-item-active-hover;
       }
     }
+
+    &:hover {
+      background-color: $input-select-hover;
+    }
   }
 
   .name {
@@ -105,6 +115,10 @@ input {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.required {
+  color: $hint;
 }
 
 .no-results {
