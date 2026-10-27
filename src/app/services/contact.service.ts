@@ -5,12 +5,18 @@ import { getRandomColor } from '../utils/utils';
 
 /**
  * Domain service managing contact data, reactive state storage, alphabetical sorting,
- * and contact mutations.
+ * grouping by initial letter, and contact mutations.
+ * Serves as the single source of truth for all contacts across the application.
  */
 @Service()
 export class ContactService {
+  /** Low-level database gateway used for contact queries and mutations. */
   supabaseService = inject(SupabaseService);
 
+  /**
+   * Reactive list of all contacts fetched from Supabase.
+   * Updated in place upon addition, update, or deletion of contacts.
+   */
   contacts = signal<ContactInterface[]>([]);
 
   /**
@@ -35,25 +41,35 @@ export class ContactService {
    * Useful when opening detailed route views without relying on an existing client-side cache.
    *
    * @param id - The ID of the contact to retrieve
-   * @returns A promise resolving to the contact record, or `null` if not found
+   * @returns A promise resolving to the contact record, or `null` if not found or on error
    */
   async getOneContact(id: number): Promise<ContactInterface | null> {
     return await this.supabaseService.getOneItem('contacts', id);
   }
 
   /**
-   * Derived computed signal that groups contacts alphabetically by the uppercase initial of their first name.
+   * Derived computed signal containing all contacts sorted alphabetically by `firstname`
+   * (locale-aware, via `localeCompare`).
    *
    * @remarks
    * - Creates a defensive shallow copy (`[...this.contacts()]`) before sorting to avoid mutating state
    * - Automatically recalculates whenever the underlying `contacts` signal emits a new value
    *
-   * @returns An array of objects each containing an uppercase `letter` and its matching `contacts` array
+   * @returns An array of contacts sorted alphabetically by first name
    */
   sortedContacts = computed(() => {
     return [...this.contacts()].sort((a, b) => a.firstname.localeCompare(b.firstname));
   });
 
+  /**
+   * Derived computed signal that groups contacts alphabetically by the uppercase first letter of their `firstname`.
+   *
+   * @remarks
+   * Relies on {@link ContactService.sortedContacts}, so the contacts inside each letter group
+   * remain in alphabetical order. Used by the contact list view to render letter header sections.
+   *
+   * @returns An array of objects each containing an uppercase `letter` and its matching `contacts` array
+   */
   groupedContacts = computed(() => {
     const sortedContacts = this.sortedContacts();
 
@@ -76,9 +92,9 @@ export class ContactService {
    * Appends the created record to the local `contacts` signal on success to eliminate full re-fetches.
    *
    * @param contactData - The contact information excluding server-managed properties (`id`, `badge_color`)
-   * @returns A promise that resolves once insertion and state update are complete
+   * @returns A promise that resolves to the newly created contact with server-generated ID, or `null` on failure
    */
-  async addContact(contactData: Omit<ContactInterface, 'id' | 'badge_color'>) {
+  async addContact(contactData: Omit<ContactInterface, 'id' | 'badge_color'>): Promise<ContactInterface | null> {
     const contact = {
       ...contactData,
       badge_color: getRandomColor(),
@@ -87,9 +103,9 @@ export class ContactService {
     const newContact = await this.supabaseService.addData(contact, 'contacts');
     if (newContact) {
       this.contacts.update((list) => [...list, newContact]);
-      return newContact; // Returns the full contact object including the server-generated id
+      return newContact;
     }
-    return null; // Returns null if the insert failed
+    return null;
   }
 
   /**
@@ -99,7 +115,7 @@ export class ContactService {
    * @param contactData - A partial object containing the properties to update
    * @returns A promise resolving after the update has been reflected in state
    */
-  async updateContact(id: number, contactData: Partial<ContactInterface>) {
+  async updateContact(id: number, contactData: Partial<ContactInterface>): Promise<void> {
     const success = await this.supabaseService.updateData(id, contactData, 'contacts');
     if (success) {
       this.contacts.update((list) =>
@@ -112,7 +128,7 @@ export class ContactService {
    * Removes a contact from the database by ID and filters it out of the local `contacts` signal.
    *
    * @param id - The ID of the contact to delete
-   * @returns A promise that resolves when the contact has been removed from DB and state
+   * @returns A promise that resolves to `true` when the contact has been removed from DB and state, or `false` on failure
    */
   async deleteContact(id: number): Promise<boolean> {
     const success = await this.supabaseService.deleteData(id, 'contacts');
