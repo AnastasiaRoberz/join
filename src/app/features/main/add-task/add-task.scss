@@ -16,7 +16,7 @@
   gap: 48px;
 
   @include widescreen {
-    max-height: 800px;
+    max-height: 750px;
   }
 }
 
@@ -27,6 +27,7 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 48px;
 }
 
 .task-container {
@@ -83,7 +84,6 @@ form {
   width: 100%;
   max-width: 976px;
   height: 56px;
-  // margin-top: 76px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
