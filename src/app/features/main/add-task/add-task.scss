@@ -23,6 +23,7 @@
 form {
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -30,6 +31,7 @@ form {
 
 .task-container {
   width: 100%;
+  min-height: 0;
   display: flex;
   gap: calcClamp(70, 96, 1300, 769);
   color: $text-dark;
@@ -57,20 +59,6 @@ form {
   }
 }
 
-.required {
-  color: $hint;
-  text-align: start;
-}
-
-.name {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: Inter;
-  font-size: calcClamp(16, 20, 768, 320);
-}
-
 .taskWrap {
   flex: 1;
   min-width: 0;
@@ -82,11 +70,20 @@ form {
   position: relative;
 }
 
+.name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
+}
+
 .task-footer {
   width: 100%;
   max-width: 976px;
   height: 56px;
-  margin-top: 76px;
+  // margin-top: 76px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
