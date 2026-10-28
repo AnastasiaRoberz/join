@@ -95,21 +95,4 @@ form {
   flex-direction: column;
   gap: 24px;
   position: relative;
-
-  &__btnBox {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    &--buttons {
-      display: flex;
-      gap: 16px;
-    }
-  }
-
-  label,
-  .prio-label {
-    font-size: 20px;
-    line-height: 120%;
-  }
 }

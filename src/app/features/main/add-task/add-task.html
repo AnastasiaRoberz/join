@@ -29,32 +29,7 @@
       </div>
 
       <div class="taskWrap">
-        <div class="taskWrap__btnBox">
-          <p class="prio-label">Priority</p>
-          <!-- <div class="taskWrap__btnBox--buttons">
-            <button
-              aria-label="priority: urgent"
-              priority="urgent"
-              [isActive]="selectedPrio() === 'urgent'"
-              (prioSelected)="onPrioritySelected($event)"
-              type="button"
-            ></button>
-            <button
-              aria-label="priority: medium"
-              priority="medium"
-              [isActive]="selectedPrio() === 'medium'"
-              (prioSelected)="onPrioritySelected($event)"
-              type="button"
-            ></button>
-            <button
-              aria-label="priority: low"
-              priority="low"
-              [isActive]="selectedPrio() === 'low'"
-              (prioSelected)="onPrioritySelected($event)"
-              type="button"
-            ></button>
-          </div> -->
-        </div>
+        <app-priority-btn></app-priority-btn>
 
         <app-select-field
           label="Assigned to"
