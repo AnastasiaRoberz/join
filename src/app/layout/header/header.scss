@@ -27,11 +27,18 @@
   @include flex-center;
   gap: 16px;
 
-  a .icon {
-    padding: 2px;
+  &--help {
+    width: 32px;
+    height: 32px;
 
-    &:hover {
-      padding: 0;
+    svg {
+      width: 32px;
+      height: 32px;
+      padding: 2px;
+
+      &:hover {
+        padding: 0;
+      }
     }
   }
 }
