@@ -49,6 +49,7 @@ import { Buttons } from '../button.component/button.component';
   host: {
     '[class]': 'size()',
     '[class.no-overlap]': '!overlapLayout()',
+    '[class.has-users]': 'hasUsers()',
   },
 })
 export class AvatarGroupComponent {
@@ -154,6 +155,9 @@ export class AvatarGroupComponent {
 
   /** Number of users hidden behind the `+N` badge; the badge is only rendered when this is greater than 0. */
   remainingUsersCount = computed(() => Math.max(0, this.users().length - this.fittingUsers()));
+
+  /** True if at least one user visible - controls margin-top on host */
+  protected hasUsers = computed(() => this.visibleUsers().length > 0);
 
   /**
    * Click handler of the delete button. Stops the click from bubbling to parent elements and

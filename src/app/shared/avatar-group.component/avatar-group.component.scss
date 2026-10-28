@@ -3,7 +3,10 @@
 :host {
   @include flex-start;
   width: 100%;
-  margin-top: 8px;
+
+  &.has-users {
+    margin-top: 8px; //only, when contacts selected, host has no size if group empty
+  }
 
   &.no-overlap {
     gap: 8px;
