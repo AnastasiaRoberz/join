@@ -4,8 +4,8 @@
     @if (status() !== 'Done') {
       <button
         appBtn
-        variant="icon"
-        icon="plus-square"
+        preset="iconSmall"
+        icon="add-task-btn"
         type="button"
         (click)="openAddTask()"
         [attr.aria-label]="'Add task to ' + status()"

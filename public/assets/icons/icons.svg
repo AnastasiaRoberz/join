@@ -1,5 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg">
-
     <symbol id="logo" viewBox="0 0 56 67">
         <path d="M39.8357 0H27.5203V13.8957H39.8357V0Z" fill="var(--logo-main, white)" />
         <path
@@ -56,10 +55,10 @@
             fill="currentColor" />
     </symbol>
 
-    <symbol id="plus-square" viewBox="0 0 24 24">
-        <rect x="1" y="1" width="22" height="22" rx="7" stroke="currentColor" stroke-width="2" fill="none"/>
-        <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <path d="M16 12.0754L8 12.0754" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <symbol id="add-task-btn" viewBox="0 0 24 24">
+        <rect x="1" y="1" width="22" height="22" rx="7" stroke="currentColor" fill="none" stroke-width="2"/>
+        <path d="M12 8V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M16 12.0754L8 12.0754" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
     </symbol>
 
     <symbol id="arrow-down" viewBox="0 0 24 24">
