@@ -136,7 +136,7 @@ export class TaskService {
     );
 
     // send update per task to Supabase
-    const results = await Promise.all(
+    await Promise.all(
       // Create one update request for each task in the column
       columnTasks.map((task) =>
         this.supabaseService.updateData(

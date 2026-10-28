@@ -11,7 +11,7 @@
   rotate: 3deg;
 }
 
-// so card does take up more space when tilted
+// anchor for the dashed ::after box, so it covers exactly the card
 :host(.cdk-drag-placeholder) {
   position: relative;
 }

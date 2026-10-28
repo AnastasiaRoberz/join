@@ -1,20 +1,19 @@
 <!-- cdkDropListGroup = linking all the columns as drag and drop lists -->
 <div class="board" cdkDropListGroup>
+  <!-- Container = defines the drop item container-->
+  <!-- Data = list data (tasks). In dragDrop(), used as event.container.data and event.previousContainer.data-->
+  <!-- Dropped = ($event: which card, old index, new index) for moveItemInArray & transferArrayItem-->
+  <!-- DropHint = show hint / placeholder in neighbor columns-->
+  <!-- height = height of the pressed card, so the placeholder is just as tall-->
+  <!-- pressed = tracks column index when card is pressed and card height-->
   @for (column of columns(); track column.status) {
     <app-board-column
-      // making each column a drag and drop list
       cdkDropList
-      // defines the drop item container
       cdkDropListElementContainer=".board-column__tasks"
-      // list data (tasks). In dragDrop(), used as event.container.data and event.previousContainer.data
       [cdkDropListData]="column.tasks"
-      // ($event: which card, old index, new index) for moveItemInArray & transferArrayItem
       (cdkDropListDropped)="dragDrop($event, column.status)"
-      // show hint in neighbor columns
       [showDropHint]="isNeighbourColumn($index)"
-      // height of the pressed card, so the placeholder is just as tall
       [dropHintHeight]="pressedCardHeight()"
-      // tracks column index when card is pressed and card height
       (cardPressed)="pressedColumnIndex.set($index); pressedCardHeight.set($event)"
       [status]="column.status"
       [tasks]="column.tasks"

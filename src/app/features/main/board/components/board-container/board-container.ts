@@ -29,12 +29,6 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
 export class BoardContainer {
   taskService = inject(TaskService);
 
-  /** Index of the column whose card is currently pressed, `null` if none. */
-  pressedColumnIndex = signal<number | null>(null);
-
-  /** Height (px) of the pressed card, used for the drop hints. */
-  pressedCardHeight = signal(0);
-
   columns = computed(() => {
     const tasks = this.taskService.tasks();
     return COLUMN_STATUSES.map((status) => ({
@@ -43,6 +37,12 @@ export class BoardContainer {
       // sorting cards by position now, as its assigned automatically
     }));
   });
+
+  /** Index of the column whose card is currently pressed, `null` if none. */
+  pressedColumnIndex = signal<number | null>(null);
+
+  /** Height (px) of the pressed card, used for the drop hints. */
+  pressedCardHeight = signal(0);
 
   // drag and drop function assigning new status once dropped
   /**
@@ -76,7 +76,9 @@ export class BoardContainer {
 
   /** True for the columns directly left and right of the pressed card's column. */
   isNeighbourColumn(index: number): boolean {
+    // reads the signal and stores the index or null
     const pressed = this.pressedColumnIndex();
+    // each column gets a hint, which is one away as well
     return pressed !== null && Math.abs(index - pressed) === 1;
   }
 }

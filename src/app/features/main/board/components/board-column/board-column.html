@@ -23,12 +23,12 @@
         <p class="board-column__empty">No tasks {{ status() }}</p>
       }
     }
+    <!-- show drop placeholder with heigth of actual card clicked inside the column -->
+    @if (showDropHint()) {
+      <div
+        class="board-column__placeholder board-column__drop-hint"
+        [style.height.px]="dropHintHeight()"
+      ></div>
+    }
   </div>
-  <!-- show drop placeholder with heigth of actual card clicked -->
-  @if (showDropHint()) {
-    <div
-      class="board-column__placeholder board-column__drop-hint"
-      [style.height.px]="dropHintHeight()"
-    ></div>
-  }
 </section>

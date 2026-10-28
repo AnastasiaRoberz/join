@@ -11,6 +11,7 @@
   @include flex-start(column);
   align-items: stretch;
   gap: calcClamp(12, 16);
+  flex: 1;
 
   // same height with and without the add button, so all columns start on one line
   &__header {
@@ -28,6 +29,10 @@
     @include flex-start(column);
     align-items: stretch;
     gap: calcClamp(12, 16);
+    flex: 1;
+    // outline: 1px solid red; // helper for seeing column height
+    min-height: calc(100dvh - 310px);
+    justify-content: flex-start;
   }
 
   // placeholder upon mouse click
@@ -35,10 +40,6 @@
     border: 1px dashed $color-grey-400;
     border-radius: 24px; // same as your task card
     background-color: transparent;
-  }
-
-  &__drop-hint {
-    height: 120px; // roughly one card
   }
 
   // once the real card is in this column, hide the hint so there aren't two boxes
