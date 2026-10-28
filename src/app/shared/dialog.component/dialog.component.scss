@@ -10,14 +10,14 @@
   z-index: 10;
   pointer-events: none;
 
-  //backdrop unsichtbar, wenn dialog geschlossen
+  // backdrop invisible while the dialog is closed
   backdrop-filter: blur(0px);
   background-color: rgba($color: #000000, $alpha: 0);
   transition:
     background-color 400ms ease,
     backdrop-filter 400ms ease;
 
-  //backdrop sichtbar, wenn dialog geöffnet
+  // backdrop visible while the dialog is open
   &.is-open {
     pointer-events: all;
     backdrop-filter: blur(2px);
@@ -37,7 +37,7 @@
   z-index: 100;
   overflow: hidden;
 
-  //dialog ohne Hintergrund ungeöffnet: unsichtbar + slide-out
+  // dialog closed: invisible + slides out
   opacity: 0;
   visibility: hidden;
   transform: translateX(100dvw);
@@ -46,7 +46,7 @@
     transform 0.4s ease,
     visibility 0s linear 0.2s;
 
-  //dialog ohne HG geöffnet: sichtbar + slide-in
+  // dialog open: visible + slides in
   :host.is-open & {
     opacity: 1;
     visibility: visible;
