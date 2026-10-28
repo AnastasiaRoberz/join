@@ -6,8 +6,27 @@
   width: 100%;
 }
 
-// the board page scrolls itself, so the navigation stays at the bottom
+// the page is exactly as high as the space it gets, so the browser does not scroll,
+// only the columns do (see board-column)
 .board-page {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   background: $color-grey-background;
+
+  // the container with the columns takes the space below the header
+  app-board-container {
+    flex: 1;
+    min-height: 0;
+  }
+
+  // with 2 or 1 columns there is not enough height for scrolling columns,
+  // so the whole page scrolls instead
+  @include tablet(1280px) {
+    overflow-y: auto;
+
+    app-board-container {
+      flex: none;
+    }
+  }
 }

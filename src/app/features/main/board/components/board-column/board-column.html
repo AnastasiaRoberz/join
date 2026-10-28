@@ -13,7 +13,7 @@
     }
   </header>
 
-  <div class="board-column__tasks">
+  <div class="board-column__tasks scroll-container">
     @for (task of tasks(); track task.id) {
       <app-task-card [task]="task" />
     } @empty {

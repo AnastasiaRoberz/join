@@ -4,11 +4,14 @@
 :host {
   display: block;
   min-width: 0;
+  min-height: 0;
 }
 
 .board-column {
   @include flex-start(column);
   align-items: stretch;
+  justify-content: flex-start;
+  height: 100%;
   gap: calcClamp(12, 16);
 
   // same height with and without the add button, so all columns start on one line
@@ -16,7 +19,6 @@
     @include flex-start;
     justify-content: space-between;
     min-height: 24px;
-    padding: 0 2px;
   }
 
   &__title {
@@ -24,10 +26,23 @@
     color: $text-dark;
   }
 
+  // takes the rest of the column height and scrolls if there are too many cards
+  // (scroll-container = scrollbar style of the project)
   &__tasks {
     @include flex-start(column);
     align-items: stretch;
+    justify-content: flex-start;
+    flex: 1;
+    min-height: 0;
     gap: calcClamp(12, 16);
+
+    // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
+    @include tablet(1280px) {
+      flex: none;
+      overflow-y: visible;
+      width: auto;
+      scrollbar-gutter: auto;
+    }
   }
 
   // dashed grey box that is shown instead of the cards if the column is empty

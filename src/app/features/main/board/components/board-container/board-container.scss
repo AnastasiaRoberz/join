@@ -2,18 +2,23 @@
 
 :host {
   display: block;
+  height: 100%;
 }
 
 // 4 columns next to each other, on smaller screens the columns wrap earlier
 .board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: start;
-  gap: calcClamp(12, 24);
+  grid-template-rows: minmax(0, 1fr);
+  height: 100%;
+  gap: 24px;
   padding: 0 calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
 
   @include tablet(1280px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    align-items: start;
+    height: auto;
   }
 
   @include mobile(600px) {
