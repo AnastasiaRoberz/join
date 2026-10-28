@@ -1,13 +1,14 @@
 <div class="overlay-content" (click)="$event.stopPropagation()">
+  <button appBtn preset="iconSmall" icon="x" class="btn-close" (click)="handleClose()"></button>
   @switch (dialogService.dialogType()) {
     @case ('contact') {
-      <app-contact-dialog [contact]="dialogService.selectedItem()" />
+      <app-contact-dialog />
     }
     @case ('task') {
       <app-task-details />
     }
     @case ('task-edit') {
-      <app-task-edit [task]="dialogService.selectedItem()" />
+      <app-task-edit />
     }
   }
 </div>

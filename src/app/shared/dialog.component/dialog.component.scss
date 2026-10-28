@@ -36,6 +36,7 @@
   box-shadow: $overlay-shadow;
   z-index: 100;
   overflow: hidden;
+  position: relative;
 
   //dialog ohne Hintergrund ungeöffnet: unsichtbar + slide-out
   opacity: 0;
@@ -63,5 +64,11 @@
     max-height: 760px;
     width: 100%;
     flex-direction: column;
+  }
+
+  .btn-close {
+    position: absolute;
+    top: 32px;
+    right: 32px;
   }
 }
