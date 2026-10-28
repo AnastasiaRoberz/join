@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<ul>
+<ul [class.scroll-container]="isScrollable()">
   @for (subtask of sortedSubtasks(); track subtask.id) {
     <li>
       @if (editingSubtaskId() !== subtask.id) {
