@@ -39,21 +39,6 @@ form {
   }
 }
 
-.task-footer {
-  width: 100%;
-  max-width: 976px;
-  height: 56px;
-  margin-top: 76px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  &__buttons {
-    display: flex;
-    gap: 16px;
-  }
-}
-
 .taskLeft {
   position: relative;
 
@@ -95,4 +80,19 @@ form {
   flex-direction: column;
   gap: 24px;
   position: relative;
+}
+
+.task-footer {
+  width: 100%;
+  max-width: 976px;
+  height: 56px;
+  margin-top: 76px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  &__buttons {
+    display: flex;
+    gap: 16px;
+  }
 }
