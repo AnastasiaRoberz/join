@@ -128,10 +128,7 @@ export class TaskEdit {
     title: ['', { validators: [Validators.required] }],
     description: ['', { validators: [Validators.required] }],
     dueDate: ['', { validators: [Validators.required] }],
-    priority: this.fb.control<Priority>('medium', {
-      validators: [Validators.required],
-      nonNullable: true,
-    }),
+    priority: this.fb.control<Priority>('medium', { nonNullable: true }),
   });
 
   /**
