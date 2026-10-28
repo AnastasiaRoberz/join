@@ -41,9 +41,6 @@ let nextId = 0;
   selector: 'app-text-field',
   styleUrl: './text-field.scss',
   templateUrl: './text-field.html',
-  host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
-  },
 })
 export class TextField implements ControlValueAccessor {
   /** Translates validation error objects into user-facing messages. */

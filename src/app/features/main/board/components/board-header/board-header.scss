@@ -1,113 +1,25 @@
 @use '../../../../../../../public/assets/styles' as *;
 
-.board-header {
-  @include flex-start;
-  justify-content: space-between;
-  gap: calcClamp(40, 24, 768, 320);
-  padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
-  background-color: $color-grey-background;
+:host {
+  @include flex-center;
+  gap: 32px;
+  width: 100%;
 
-  // search und add untereinander
-  &__mobile {
-    flex-direction: column;
+  @include mobile {
+    flex-wrap: wrap;
+    gap: 48px;
   }
+}
 
-  &-title {
+h2 {
+  flex: 1;
+}
+
+app-select-field {
+  width: 312px;
+
+  @include mobile {
+    order: 1;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-
-    h2 {
-      align-self: center;
-    }
-
-    // mobile add button
-    // design for button, as design in component is not helpful here
-    // component has: prosition: absolute, bottom & right definitions, padding
-    .is-mobile {
-      position: relative;
-      border-radius: 10px;
-      bottom: 0;
-      right: 0;
-      height: 40px;
-      width: 40px;
-      padding: 0;
-      box-shadow: none;
-
-      &:hover {
-        background-color: $color-cyan-700;
-      }
-
-      &:active {
-        background-color: $color-navy-900;
-      }
-    }
-  }
-
-  &-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 32px;
-    width: 100%;
-    height: 100%;
-
-    .search {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 16px;
-      max-width: 100%;
-      height: 48px;
-      padding: 8px 16px;
-      border: 1px solid #686868;
-      border-radius: 10px;
-      background: $color-white;
-
-      &__mobile {
-        width: 100%;
-      }
-
-      &:hover {
-        border-color: $color-grey-100;
-      }
-
-      input {
-        flex: 1;
-        min-width: 0;
-        border: none;
-        outline: none;
-        font-size: 20px;
-        cursor: text;
-      }
-
-      &__divider {
-        width: 1px;
-        height: 31px;
-        background: #686868;
-      }
-
-      &__icon {
-        height: 25px;
-        width: 25px;
-        border-radius: 50%;
-        cursor: pointer;
-
-        &:hover {
-          background-color: $color-grey-50;
-        }
-      }
-    }
-
-    // desktop add button height
-    button {
-      height: 48px;
-    }
-
-    // tablet  add button size
-    .is-tablet {
-      border-radius: 10px;
-      height: 48px;
-      width: 48px;
-    }
   }
 }

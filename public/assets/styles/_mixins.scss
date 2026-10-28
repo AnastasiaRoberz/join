@@ -44,3 +44,15 @@
     @content;
   }
 }
+
+@mixin responsive($width, $value: max) {
+  @if ($value == 'max') {
+    @media screen and (max-width: $width) {
+      @content;
+    }
+  } @else if($value == 'min') {
+    @media screen and (min-width: $width) {
+      @content;
+    }
+  }
+}

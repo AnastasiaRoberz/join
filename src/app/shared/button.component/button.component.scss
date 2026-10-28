@@ -203,6 +203,7 @@
 
   &.btn--addTask {
     gap: 4px;
+    padding: 8px 16px;
     @include tablet {
       position: relative;
       bottom: 0;
@@ -211,6 +212,10 @@
       width: 40px;
       padding: 0;
       box-shadow: none;
+
+      .btn-label {
+        display: none;
+      }
 
       &:active {
         box-shadow: none;
