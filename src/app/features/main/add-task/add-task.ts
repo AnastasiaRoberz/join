@@ -101,75 +101,6 @@ export class AddTask {
     contact.surname,
   ];
 
-  //#region  --------- Date-Picker Input-Field -------------
-
-  /**
-   * Flag used by `openDatePicker()` to toggle the native date picker.
-   * Reset via the `blur` event on the hidden date input when the picker closes.
-   */
-  pickerOpen = false;
-
-  /**
-   * Reference to the hidden native date input (`#datePickerRef`).
-   * Available once the view has been initialized, so it can be used in event handlers
-   * without an undefined check.
-   */
-  @ViewChild('datePickerRef') datePickerRef!: ElementRef<HTMLInputElement>;
-
-  /**
-   * Opens the native date picker of the hidden date input when the calendar button
-   * is clicked.
-   */
-  openDatePicker() {
-    this.pickerOpen = true;
-    this.datePickerRef.nativeElement.showPicker();
-  }
-
-  /**
-   * Handles a date chosen in the native date picker. Converts the value from
-   * `yyyy-mm-dd` to `dd/mm/yyyy` and writes it into the `date` form control.
-   *
-   * @param event - The change event of the hidden date input
-   */
-  onDateSelected(event: Event) {
-    const input = event.target as HTMLInputElement; //Auslöser vom Event als HTML-Input
-    const raw = input.value;
-
-    if (raw) {
-      const [year, month, day] = raw.split('-');
-      const formatted = `${day}/${month}/${year}`;
-      this.taskForm.controls.date.setValue(formatted);
-    }
-  }
-
-  /**
-   * Formats the text input while typing as `dd/mm/yyyy`: removes all non-digit
-   * characters, inserts the slashes and limits the value to 10 characters.
-   * Updates the `date` form control without emitting a value change.
-   *
-   * @param event - The input event of the date text field
-   */
-  formatDateInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const isDeleting = (event as InputEvent).inputType?.startsWith('delete');
-
-    let value = input.value.replace(/\D/g, ''); //alles, außer Ziffern, ersetzen
-    if (!isDeleting) {
-      if (value.length > 2) {
-        value = value.slice(0, 2) + '/' + value.slice(2);
-      }
-      if (value.length > 5) {
-        value = value.slice(0, 5) + '/' + value.slice(5);
-      }
-    }
-
-    value = value.slice(0, 10);
-    input.value = value;
-    this.taskForm.controls.date.setValue(value, { emitEvent: false });
-  }
-
-  //#endregion
-
   /**
    * Returns `true` if the given form control is invalid and has been
    * touched or dirtied by the user. Used by the template to show error hints.
@@ -252,22 +183,20 @@ export class AddTask {
       return;
     }
 
-    const [day, month, year] = this.taskForm.value.date!.split('/');
-    const dateValue = `${year}-${month}-${day}`;
     const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
-      due_date: dateValue,
+      due_date: this.taskForm.value.date!,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: 'To do',
     };
 
-    const newTaskId = await this.taskService.addTask(task);
+    const newTask = await this.taskService.addTask(task);
 
-    if (newTaskId) {
+    if (newTask) {
       const contactIds = this.selectedContactIds();
-      await this.taskService.setTaskAssignment(newTaskId, contactIds);
+      await this.taskService.setTaskAssignments(newTask.id, contactIds);
 
       this.onClear();
     }
