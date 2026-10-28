@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
-import { ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
 
 /** Module-level counter used to generate a unique default DOM id for every TextField instance. */
@@ -76,12 +76,11 @@ export class TextField implements ControlValueAccessor {
   /** Callback registered by Angular forms; called on blur to mark the control as touched. */
   onTouched: () => void = () => {};
 
-  /**
-   * Registers this component as the value accessor of its bound {@link NgControl} and sets up an
-   * effect that re-renders the field on every control event (value, status, touched, ...).
-   * This is needed so the error message appears/disappears when the control state changes
-   * (e.g. `markAllAsTouched()` on submit) without any user interaction in the field itself.
-   */
+  isRequired(): boolean {
+    const ctrl = this.ngControl?.control;
+    return ctrl ? ctrl.hasValidator(Validators.required) : false;
+  }
+
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;

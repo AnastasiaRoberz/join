@@ -208,6 +208,8 @@ export class SelectFieldComponent<T = any> {
    */
   getIncludeStrings = input<((item: T) => (string | undefined | null)[]) | undefined>(undefined);
 
+  required = input<boolean>(false);
+
   // ---------------------------------------------------------------------------
   // Content & View Queries
   // ---------------------------------------------------------------------------
