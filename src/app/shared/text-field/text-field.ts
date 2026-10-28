@@ -57,7 +57,7 @@ export class TextField implements ControlValueAccessor {
   /** Name of a symbol in `assets/icons/icons.svg` shown inside the field. No icon if empty. */
   icon = input<string>();
   /** DOM id of the input/textarea, linked to the label via `for`. Defaults to a unique generated id. */
-  id = input<string>(`app-input-${nextId++}`);
+  fieldId = input<string>(`app-input-${nextId++}`);
   /** Label position: `'inner'` (inside the field container, default) or `'top'` (above the field). */
   labelPos = input<string>('inner');
   /** Renders either a single-line `<input type="text">` or a multi-line `<textarea>`. */

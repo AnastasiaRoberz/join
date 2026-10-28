@@ -3,6 +3,8 @@ import { ResponsiveService } from '../../services/responsive.service';
 import { SubtaskInterface } from '../../interfaces/subtask.interface';
 import { Buttons } from '../button.component/button.component';
 
+let nextId = 0;
+
 /**
  * Form field for managing a list of subtasks (add, rename, delete).
  *
@@ -33,6 +35,8 @@ import { Buttons } from '../button.component/button.component';
 export class SubtaskFieldComponent {
   /** Used by the template to adapt the label styling on mobile viewports. */
   responsiveService = inject(ResponsiveService);
+
+  fieldId = input<string>(`app-subtask-field-${nextId++}`);
 
   /**
    * The list of subtasks. A `model` signal, so the parent can use two-way binding

@@ -1,10 +1,10 @@
-<label for="subtasks">Subtasks</label>
+<label [for]="fieldId()">Subtasks</label>
 
 <div class="input-container">
   <input
     #mainInput
     type="text"
-    id="subtasks"
+    [id]="fieldId()"
     autocomplete="off"
     (keydown.enter)="$event.preventDefault(); saveSubtask(mainInput)"
     (keydown.escape)="clearInput(mainInput)"
@@ -49,6 +49,7 @@
           <input
             #editInput
             type="text"
+            id="editInput"
             [value]="subtask.title"
             autocomplete="off"
             (keydown.enter)="$event.preventDefault(); updateSubtaskTitle(editInput, subtask.id)"
