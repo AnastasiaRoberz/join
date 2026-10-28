@@ -8,6 +8,7 @@ import { CheckboxComponent } from '../../../../../shared/checkbox.component/chec
 import { capitalizeFirstLetter } from '../../../../../utils/utils';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { CATEGORIES } from '../../../../../utils/categories-list';
+import { ConfirmService } from '../../../../../services/confirm.service';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -38,6 +39,7 @@ import { CATEGORIES } from '../../../../../utils/categories-list';
 export class TaskDetails {
   /** Provides reactive access to the task collection and `updateSubtaskStatus()` for persisting subtask toggles. */
   taskService = inject(TaskService);
+  confirmService = inject(ConfirmService);
 
   /** Manages closing the detail modal (close button) or switching to the `task-edit` dialog (edit button). */
   dialogService = inject(DialogService);
@@ -102,5 +104,11 @@ export class TaskDetails {
    */
   async toggleSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     await this.taskService.updateSubtaskStatus(subtaskId, isDone);
+  }
+
+  async onDelete(taskId: number): Promise<void> {
+    if (!(await this.confirmService.askDelete('Task'))) return;
+    await this.taskService.deleteTask(taskId);
+    this.dialogService.closeDialog();
   }
 }

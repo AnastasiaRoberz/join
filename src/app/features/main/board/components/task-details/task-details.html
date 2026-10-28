@@ -48,7 +48,7 @@
   }
 
   <div class="button-wrapper">
-    <button appBtn preset="delete"></button>
+    <button appBtn preset="delete" (click)="onDelete(task.id)"></button>
     <hr />
     <button appBtn preset="edit" (click)="dialogService.openDialog('task-edit', task)"></button>
   </div>
