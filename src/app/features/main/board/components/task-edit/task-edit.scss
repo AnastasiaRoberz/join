@@ -14,9 +14,21 @@
 }
 
 form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 32px;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+}
+
+.form-content-wrapper {
   @include flex-start(column, both);
   gap: 32px;
   height: 100%;
+  width: 100%;
 }
 
 .assigned-users {

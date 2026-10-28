@@ -51,7 +51,7 @@
             type="text"
             [value]="subtask.title"
             autocomplete="off"
-            (keydown.enter)="$event.preventDefault(); updateSubtask(editInput, subtask.id)"
+            (keydown.enter)="$event.preventDefault(); updateSubtaskTitle(editInput, subtask.id)"
             (keydown.escape)="editingSubtaskId.set(null)"
           />
           <div class="subtask-btn-wrapper">
@@ -66,7 +66,7 @@
               appBtn
               preset="iconSmall"
               icon="check"
-              (click)="updateSubtask(editInput, subtask.id)"
+              (click)="updateSubtaskTitle(editInput, subtask.id)"
             ></button>
           </div>
         </div>

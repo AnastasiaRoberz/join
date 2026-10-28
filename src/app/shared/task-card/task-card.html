@@ -34,7 +34,7 @@
       class="task-card__users"
       role="group"
       aria-label="Assigned users"
-      [users]="task().assigned_users"
+      [users]="task().assigned_users ?? []"
       size="small"
     />
     <svg

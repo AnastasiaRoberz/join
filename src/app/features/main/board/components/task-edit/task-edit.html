@@ -6,45 +6,49 @@
   (click)="dialogService.openDialog('task', task())"
 ></button>
 
-<form [formGroup]="taskForm" (ngSubmit)="saveTask()" class="scroll-container" cdkScrollable>
-  <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
+<form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable>
+  <div class="form-content-wrapper scroll-container">
+    <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
 
-  <app-text-field
-    id="description"
-    formControlName="description"
-    labelPos="top"
-    label="Description"
-    type="textarea"
-  />
-
-  <app-calendar-field id="due-date" formControlName="dueDate" label="Due Date" />
-
-  <app-select-field
-    id="assigned-to"
-    label="Assigned to"
-    placeholder="Select contacts to assign"
-    emptyText="No contacts found."
-    [options]="contactService.sortedContacts()"
-    [multi]="true"
-    [value]="selectedContactIds()"
-    (valueChange)="onAssignmentChange($event)"
-    [getSearchStrings]="contactSearchStrings"
-  >
-    <ng-template #optionTemplate let-contact let-selected="selected">
-      <app-user-avatar [user]="contact" size="medium" />
-      <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
-      <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
-    </ng-template>
-    <app-avatar-group
-      footer
-      [users]="selectedContacts()"
-      size="medium"
-      [overlapLayout]="false"
-      (userDeletedId)="toggleAssignment($event, false)"
+    <app-text-field
+      id="description"
+      formControlName="description"
+      labelPos="top"
+      label="Description"
+      type="textarea"
     />
-  </app-select-field>
 
-  <app-subtask-field [subtasks]="task()?.subtasks ?? []" [taskId]="task().id" />
+    <app-calendar-field id="due-date" formControlName="dueDate" label="Due Date" />
+
+    <app-priority-btn formControlName="priority" />
+
+    <app-select-field
+      #assignedSelect
+      id="assigned-to"
+      label="Assigned to"
+      placeholder="Select contacts to assign"
+      emptyText="No contacts found."
+      [options]="contactService.sortedContacts()"
+      [multi]="true"
+      [(value)]="selectedContactIds"
+      [getSearchStrings]="contactService.contactSearchStrings"
+    >
+      <ng-template #optionTemplate let-contact let-selected="selected">
+        <app-user-avatar [user]="contact" size="medium" />
+        <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+        <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
+      </ng-template>
+      <app-avatar-group
+        footer
+        [users]="selectedContacts()"
+        size="medium"
+        [overlapLayout]="false"
+        (userDeletedId)="assignedSelect.deselect($event)"
+      />
+    </app-select-field>
+
+    <app-subtask-field [(subtasks)]="currentSubtasks" />
+  </div>
 
   <button appBtn type="submit" preset="check">Ok</button>
 </form>
