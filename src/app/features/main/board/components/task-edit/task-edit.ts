@@ -214,6 +214,7 @@ export class TaskEdit {
       await this.taskService.setTaskSubtasks(currentTaskId, this.currentSubtasks());
     }
 
-    this.dialogService.openDialog('task', this.currentTask());
+    const updatedTask = this.taskService.tasks().find((t) => t.id === currentTaskId);
+    this.dialogService.openDialog('task', updatedTask);
   }
 }

@@ -28,7 +28,7 @@
       <ng-template #optionTemplate let-contact let-selected="selected">
         <app-user-avatar [user]="contact" size="medium" />
         <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
-        <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
+        <app-checkbox [checked]="selected" />
       </ng-template>
       <app-avatar-group
         footer
