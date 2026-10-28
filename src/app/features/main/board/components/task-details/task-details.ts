@@ -6,6 +6,8 @@ import { Buttons } from '../../../../../shared/button.component/button.component
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
 import { capitalizeFirstLetter } from '../../../../../utils/utils';
+import { TaskInterface } from '../../../../../interfaces/task.interface';
+import { CATEGORIES } from '../../../../../utils/categories-list';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -47,22 +49,24 @@ export class TaskDetails {
   // Inputs & Computed State
   // ---------------------------------------------------------------------------
 
-  /**
-   * Fallback task ID (default `1`) used if no task object was passed via `DialogService.openDialog()`.
-   * Normally not set, because the dialog container does not bind it.
-   */
-  selectedId = input<number>(1);
+  selectedTask = computed(() => this.dialogService.selectedItem() as TaskInterface);
 
-  /**
-   * Reactively resolves the full task object from `TaskService` matching the task
-   * stored in `dialogService.selectedItem()` (or falls back to `selectedId()`).
-   * Automatically reflects live changes when subtasks or task details are updated.
-   * Resolves to `undefined` if no matching task exists (the template then renders nothing).
-   */
-  selectedTask = computed(() => {
-    const targetId = this.dialogService.selectedItem()?.id ?? this.selectedId();
-    return this.taskService.tasks().find((task) => task.id === targetId);
-  });
+  // /**
+  //  * Fallback task ID (default `1`) used if no task object was passed via `DialogService.openDialog()`.
+  //  * Normally not set, because the dialog container does not bind it.
+  //  */
+  // selectedId = input<number>(1);
+
+  // /**
+  //  * Reactively resolves the full task object from `TaskService` matching the task
+  //  * stored in `dialogService.selectedItem()` (or falls back to `selectedId()`).
+  //  * Automatically reflects live changes when subtasks or task details are updated.
+  //  * Resolves to `undefined` if no matching task exists (the template then renders nothing).
+  //  */
+  // selectedTask = computed(() => {
+  //   const targetId = this.dialogService.selectedItem()?.id ?? this.selectedId();
+  //   return this.taskService.tasks().find((task) => task.id === targetId);
+  // });
 
   /**
    * Subtasks of `selectedTask()` in display order (the source array is not mutated):
@@ -77,6 +81,11 @@ export class TaskDetails {
       }
       return b.id - a.id;
     });
+  });
+
+  categoryColor = computed(() => {
+    const currentCategory = this.selectedTask().category;
+    return CATEGORIES.find((cat) => cat.name === currentCategory)?.color;
   });
 
   // ---------------------------------------------------------------------------

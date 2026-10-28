@@ -1,31 +1,26 @@
 @if (selectedTask(); as task) {
-  <div class="fixed-content">
-    <div class="header">
-      <span class="task-tag">{{ task.category }}</span>
-      <button appBtn preset="iconSmall" icon="x" (click)="dialogService.closeDialog()"></button>
-    </div>
+  <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
 
-    <h2>{{ task.title }}</h2>
+  <h2>{{ task.title }}</h2>
 
-    <p class="description">{{ task.description }}</p>
+  <p class="description">{{ task.description }}</p>
 
-    <table>
-      <tr>
-        <th>Due date:</th>
-        <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
-      </tr>
-      <tr class="spacer"></tr>
-      <tr>
-        <th>Priority:</th>
-        <td class="priority">
-          <span>{{ capitalizeFirstLetter(task.priority) }}</span>
-          <svg [class]="'icon-priority icon-' + task.priority">
-            <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
-          </svg>
-        </td>
-      </tr>
-    </table>
-  </div>
+  <table>
+    <tr>
+      <th>Due date:</th>
+      <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
+    </tr>
+    <tr class="spacer"></tr>
+    <tr>
+      <th>Priority:</th>
+      <td class="priority">
+        <span>{{ capitalizeFirstLetter(task.priority) }}</span>
+        <svg [class]="'icon-priority icon-' + task.priority">
+          <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
+        </svg>
+      </td>
+    </tr>
+  </table>
 
   <span>Assigned To:</span>
   <ul class="scroll-container">
