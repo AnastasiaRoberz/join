@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -64,12 +64,7 @@ export class AddTask {
   taskService = inject(TaskService);
 
   readonly categories = CATEGORIES;
-
-  // /** Whether the category dropdown is open. */
-  // categoryOpen = signal(false);
-
-  // /** Whether the contact dropdown is open. */
-  // assignedOpen = signal(false);
+  categoryKey = (category: (typeof CATEGORIES)[number]) => category.name;
 
   /** Contacts currently selected for assignment. */
   assignedContacts = signal<ContactInterface[]>([]);
@@ -126,7 +121,7 @@ export class AddTask {
   onCategoryChange(value: string): void {
     this.selectedCategory.set(value);
     this.taskForm.controls.category.setValue(value);
-    this.taskForm.controls.category.markAsDirty;
+    this.taskForm.controls.category.markAsDirty();
   }
 
   /**

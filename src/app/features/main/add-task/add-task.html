@@ -62,6 +62,7 @@
           placeholder="Select Task Category"
           formControlName="category"
           [options]="categories"
+          [valueKey]="categoryKey"
           [(value)]="selectedCategory"
           (valueChange)="onCategoryChange($event)"
           [required]="true"
@@ -75,7 +76,13 @@
       <span><span class="required">*</span>This field is required</span>
       <div class="task-footer__buttons">
         <button appBtn preset="cancel" label="Clear" (click)="onClear()"></button>
-        <button appBtn preset="check" label="Create Task" [disabled]="taskForm.invalid"></button>
+        <button
+          appBtn
+          preset="check"
+          type="submit"
+          label="Create Task"
+          [disabled]="taskForm.invalid"
+        ></button>
       </div>
     </div>
   </form>
