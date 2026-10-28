@@ -58,7 +58,7 @@ label {
   bottom: -8px;
   transform: translateY(100%);
 
-  &.is-mobile {
+  @include mobile {
     bottom: -1px;
   }
 }

@@ -1,32 +1,9 @@
-@use '../../../../../public/assets/styles' as *;
+@use '../../../../../public/assets/styles/' as *;
 
 :host {
-  display: block;
-  height: 100%;
+  @include flex-start(column, both);
+  gap: 48px;
   width: 100%;
-}
-
-// the page is exactly as high as the space it gets, so the browser does not scroll,
-// only the columns do (see board-column)
-.board-page {
-  display: flex;
-  flex-direction: column;
   height: 100%;
-  background: $color-grey-background;
-
-  // the container with the columns takes the space below the header
-  app-board-container {
-    flex: 1;
-    min-height: 0;
-  }
-
-  // with 2 or 1 columns there is not enough height for scrolling columns,
-  // so the whole page scrolls instead
-  @include tablet(1280px) {
-    overflow-y: auto;
-
-    app-board-container {
-      flex: none;
-    }
-  }
+  padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
 }

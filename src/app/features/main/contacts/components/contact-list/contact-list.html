@@ -10,7 +10,7 @@
         <!-- (click) sends id to contacts.ts -->
         <button
           #contactBtn
-          class="contact"
+          class="contact-card-btn"
           type="button"
           [class.contact--active]="contact.id === selectedId()"
           (click)="contactSelected.emit(contact.id)"
