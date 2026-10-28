@@ -16,41 +16,29 @@
   gap: 48px;
 
   @include widescreen {
-    max-height: 800px;
+    max-height: 750px;
   }
 }
 
 form {
   width: 100%;
   height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 48px;
 }
 
 .task-container {
   width: 100%;
+  min-height: 0;
   display: flex;
   gap: calcClamp(70, 96, 1300, 769);
   color: $text-dark;
 
   @include mobile {
     flex-direction: column;
-  }
-}
-
-.task-footer {
-  width: 100%;
-  max-width: 976px;
-  height: 56px;
-  margin-top: 76px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  &__buttons {
-    display: flex;
-    gap: 16px;
   }
 }
 
@@ -72,9 +60,15 @@ form {
   }
 }
 
-.required {
-  color: $hint;
-  text-align: start;
+.taskWrap {
+  flex: 1;
+  min-width: 0;
+  max-width: 440px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
 }
 
 .name {
@@ -86,30 +80,16 @@ form {
   font-size: calcClamp(16, 20, 768, 320);
 }
 
-.taskWrap {
-  flex: 1;
-  min-width: 0;
-  max-width: 440px;
-  height: 100%;
+.task-footer {
+  width: 100%;
+  max-width: 976px;
+  height: 56px;
   display: flex;
-  flex-direction: column;
-  gap: 24px;
-  position: relative;
+  justify-content: space-between;
+  align-items: flex-end;
 
-  &__btnBox {
+  &__buttons {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    &--buttons {
-      display: flex;
-      gap: 16px;
-    }
-  }
-
-  label,
-  .prio-label {
-    font-size: 20px;
-    line-height: 120%;
+    gap: 16px;
   }
 }

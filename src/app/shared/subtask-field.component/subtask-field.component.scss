@@ -8,12 +8,19 @@
   min-height: 0;
 }
 
+label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
 input,
 span {
   border: none;
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 .input-container {

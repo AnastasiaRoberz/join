@@ -14,6 +14,7 @@ import { ContactService } from '../../../services/contact.service';
 import { CATEGORIES } from '../../../utils/categories-list';
 import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
+import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
 
 /**
  * Form component for creating a new task.
@@ -33,6 +34,7 @@ import { AvatarGroupComponent } from '../../../shared/avatar-group.component/ava
     SelectFieldComponent,
     CheckboxComponent,
     AvatarGroupComponent,
+    SubtaskFieldComponent,
   ],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
