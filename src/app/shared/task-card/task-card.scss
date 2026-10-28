@@ -14,19 +14,14 @@
   background-color: $color-white;
   box-shadow: 0px 0px 10px 3px #0000000a;
 
+  // the color of the label comes from utils/categories-list.ts (set in the template),
+  // grey is only the fallback for an unknown category
   &__category {
     align-self: flex-start;
     padding: 4px 16px;
     border-radius: 8px;
+    background-color: $color-grey-400;
     color: $text-light;
-
-    &--user-story {
-      background-color: $category-user-story;
-    }
-
-    &--technical-task {
-      background-color: $category-technical-task;
-    }
   }
 
   &__title {
