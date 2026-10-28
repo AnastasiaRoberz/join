@@ -15,7 +15,7 @@
       </div>
       <!-- Back arrow: only visible on mobile (contacts.scss) -->
       @if (responsiveService.isMobile()) {
-        <button appBtn preset="iconMedium" icon="arrow" (click)="closeDetails()"></button>
+        <button appBtn preset="iconMedium" icon="arrow-back" (click)="closeDetails()"></button>
       }
     </div>
     @if (selectedId(); as id) {

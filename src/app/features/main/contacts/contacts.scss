@@ -61,7 +61,7 @@ app-contact-details {
       height: 100%;
     }
 
-    @include responsive(1290) {
+    @include mobile {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
