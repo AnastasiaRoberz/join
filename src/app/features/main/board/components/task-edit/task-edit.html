@@ -1,11 +1,3 @@
-<button
-  appBtn
-  preset="iconSmall"
-  icon="x"
-  class="btn-close"
-  (click)="dialogService.openDialog('task', task())"
-></button>
-
 <form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable>
   <div class="form-content-wrapper scroll-container">
     <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
