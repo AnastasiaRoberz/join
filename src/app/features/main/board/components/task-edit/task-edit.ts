@@ -87,7 +87,7 @@ export class TaskEdit {
    * The task currently being edited, passed in from the dialog container.
    * Whenever it changes, the local edit state is re-initialized from it (see constructor).
    */
-  task = input.required<TaskInterface>();
+  currentTask = computed(() => this.dialogService.selectedItem() as TaskInterface);
 
   /**
    * Local, unsaved list of currently assigned contact IDs.
@@ -138,7 +138,7 @@ export class TaskEdit {
    */
   constructor() {
     effect(() => {
-      const currentTask = this.task();
+      const currentTask = this.currentTask();
       if (currentTask) {
         this.selectedContactIds.set(currentTask.assigned_users?.map((u) => u.id) ?? []);
         this.currentSubtasks.set(currentTask.subtasks ?? []);
@@ -199,7 +199,7 @@ export class TaskEdit {
    */
   async saveTask(): Promise<void> {
     // if (!this.taskForm.valid) return;
-    const currentTaskId = this.task()?.id;
+    const currentTaskId = this.currentTask()?.id;
     const rawValue = this.taskForm.getRawValue();
     console.log(rawValue);
 
@@ -215,6 +215,6 @@ export class TaskEdit {
       await this.taskService.setTaskSubtasks(currentTaskId, this.currentSubtasks());
     }
 
-    this.dialogService.openDialog('task', this.task());
+    this.dialogService.openDialog('task', this.currentTask());
   }
 }
