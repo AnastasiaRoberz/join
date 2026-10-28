@@ -12,7 +12,15 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  // a little more space left and right for header and columns
+  padding-inline: calcClamp(0, 16);
   background: $color-grey-background;
+
+  // scroll-container is only used for the style of the scrollbar,
+  // so its extra width and the reserved space are switched off
+  width: 100%;
+  overflow-y: hidden;
+  scrollbar-gutter: auto;
 
   // the container with the columns takes the space below the header
   app-board-container {
@@ -20,10 +28,11 @@
     min-height: 0;
   }
 
-  // with 2 or 1 columns there is not enough height for scrolling columns,
-  // so the whole page scrolls instead
-  @include tablet(1280px) {
+  // on mobile the columns are below each other, so the whole page scrolls instead
+  // (with the scrollbar of the project)
+  @include mobile {
     overflow-y: auto;
+    scrollbar-gutter: stable;
 
     app-board-container {
       flex: none;

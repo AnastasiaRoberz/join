@@ -36,8 +36,8 @@
     min-height: 0;
     gap: calcClamp(12, 16);
 
-    // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
-    @include tablet(1280px) {
+    // on mobile the page scrolls, so the columns must not scroll themselves
+    @include mobile {
       flex: none;
       overflow-y: visible;
       width: auto;
