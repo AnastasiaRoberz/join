@@ -190,7 +190,6 @@ export class AddTask {
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: 'To do',
-      assigned_users: this.assignedContacts(),
     };
 
     const newTask = await this.taskService.addTask(task);
@@ -199,7 +198,7 @@ export class AddTask {
       const contactIds = this.selectedContactIds();
       await this.taskService.setTaskAssignments(newTask.id, contactIds);
 
-    //   this.onClear();
-    // }
+      this.onClear();
+    }
   }
 }
