@@ -60,9 +60,11 @@
         <app-select-field
           label="Category"
           placeholder="Select Task Category"
+          formControlName="category"
           [options]="categories"
           [(value)]="selectedCategory"
           (valueChange)="onCategoryChange($event)"
+          [required]="true"
         ></app-select-field>
 
         <app-subtask-field [isScrollable]="true"></app-subtask-field>
