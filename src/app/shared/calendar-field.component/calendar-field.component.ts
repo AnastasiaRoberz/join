@@ -57,7 +57,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
   // ---------------------------------------------------------------------------
 
   /** Unique HTML id attribute for the underlying input element. */
-  id = input<string>(`app-calendar-${nextId++}`);
+  fieldId = input<string>(`app-calendar-${nextId++}`);
 
   /** Optional label text displayed above the date input field. */
   label = input<string>();

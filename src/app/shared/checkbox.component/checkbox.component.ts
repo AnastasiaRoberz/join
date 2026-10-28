@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  contentChild,
-  effect,
-  inject,
-  input,
-  model,
-} from '@angular/core';
+import { Component, computed, contentChild, effect, inject, input, model } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { ErrorService } from '../../services/error.service';
 
@@ -85,7 +77,7 @@ export class CheckboxComponent {
    * Unique HTML id attribute for the native (hidden) checkbox input element.
    * Defaults to an auto-generated `app-checkbox-<n>`.
    */
-  id = input<string>(`app-checkbox-${nextId++}`);
+  fieldId = input<string>(`app-checkbox-${nextId++}`);
 
   /**
    * Optional text label displayed next to the checkbox icon (rendered in a `<span>`).

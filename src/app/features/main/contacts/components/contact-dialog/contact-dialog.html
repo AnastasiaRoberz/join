@@ -14,11 +14,11 @@
     <app-user-avatar class="avatar" [user]="contact()" size="large" />
 
     <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-      <app-text-field label="Name" formControlName="name" icon="person" [id]="'name'" />
+      <app-text-field label="Name" formControlName="name" icon="person" fieldId="name" />
 
-      <app-text-field label="Mail" formControlName="mail" icon="mail" [id]="'mail'" />
+      <app-text-field label="Mail" formControlName="mail" icon="mail" fieldId="mail" />
 
-      <app-text-field label="Phone" formControlName="phone" icon="phone" [id]="'phone'" />
+      <app-text-field label="Phone" formControlName="phone" icon="phone" fieldId="phone" />
 
       <div class="buttons-wrapper">
         @if (contact()) {

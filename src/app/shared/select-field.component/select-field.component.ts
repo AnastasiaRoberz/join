@@ -136,7 +136,7 @@ export class SelectFieldComponent<T = any> {
   // ---------------------------------------------------------------------------
 
   /** Unique HTML id attribute for the underlying input element (also used as the `for` target of the label). */
-  id = input<string>(`app-select-${nextId++}`);
+  fieldId = input<string>(`app-select-${nextId++}`);
 
   /** Optional label text displayed above the select input. */
   label = input<string>();

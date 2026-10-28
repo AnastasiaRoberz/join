@@ -86,6 +86,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
         todayBtn.className = 'flatpickr-today-btn';
         todayBtn.onclick = () => instance.setDate(new Date(), true);
         instance.calendarContainer.appendChild(todayBtn);
+        instance.currentYearElement.id = 'flatpickr-year';
       },
       onOpen: (_selectedDates, _dateStr, instance) => {
         this.isOpen.set(true);
