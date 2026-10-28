@@ -1,0 +1,49 @@
+<article class="task-card">
+  <span
+    class="task-card__category"
+    [class.task-card__category--user-story]="task().category === 'User Story'"
+    [class.task-card__category--technical-task]="task().category === 'Technical Task'"
+  >
+    {{ task().category }}
+  </span>
+
+  <h4 class="task-card__title">{{ task().title }}</h4>
+
+  @if (task().description) {
+    <p class="task-card__description">{{ task().description }}</p>
+  }
+
+  @if (totalSubtasks() > 0) {
+    <div class="task-card__progress">
+      <div
+        class="task-card__bar"
+        role="progressbar"
+        aria-label="Subtask progress"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="progress()"
+      >
+        <div class="task-card__bar-fill" [style.width.%]="progress()"></div>
+      </div>
+      <span class="task-card__count">{{ doneSubtasks() }}/{{ totalSubtasks() }} Subtasks</span>
+    </div>
+  }
+
+  <footer class="task-card__footer">
+    <app-avatar-group
+      class="task-card__users"
+      role="group"
+      aria-label="Assigned users"
+      [users]="task().assigned_users"
+      size="small"
+    />
+    <svg
+      class="task-card__priority"
+      role="img"
+      [attr.aria-label]="'Priority: ' + task().priority"
+      [class]="'icon-priority icon-' + task().priority"
+    >
+      <use [attr.href]="'/assets/icons/icons.svg#' + task().priority"></use>
+    </svg>
+  </footer>
+</article>

@@ -119,7 +119,7 @@
   }
 }
 
-.btn-dots {
+button.btn.btn-dots {
   @include flex-center;
   position: fixed;
   bottom: 112px;

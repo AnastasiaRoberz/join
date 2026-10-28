@@ -1,0 +1,13 @@
+@use '../../../../../public/assets/styles' as *;
+
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+// the board page scrolls itself, so the navigation stays at the bottom
+.board-page {
+  height: 100%;
+  background: $color-grey-background;
+}

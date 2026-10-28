@@ -4,6 +4,7 @@ import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog.service';
 import { ContactDialog } from './components/contact-dialog/contact-dialog';
 import { ResponsiveService } from '../../../services/responsive.service';
+import { Buttons } from '../../../shared/button.component/button.component';
 
 /**
  * Container component for the Contacts page.
@@ -15,7 +16,7 @@ import { ResponsiveService } from '../../../services/responsive.service';
  * (to load and display the contact).
  */
 @Component({
-  imports: [ContactList, ContactDetails, ContactDialog],
+  imports: [ContactList, ContactDetails, ContactDialog, Buttons],
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',

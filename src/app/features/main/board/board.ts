@@ -1,13 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
-import { TaskService } from '../../../services/task.service';
-import { DialogService } from '../../../services/dialog.service';
-import { TaskInterface } from '../../../interfaces/task.interface';
+import { Component } from '@angular/core';
 import { BoardHeader } from './components/board-header/board-header';
+import { BoardContainer } from './components/board-container/board-container';
 
 @Component({
-  imports: [BoardHeader],
   selector: 'app-board',
-  styleUrl: './board.scss',
+  imports: [BoardHeader, BoardContainer],
   templateUrl: './board.html',
+  styleUrl: './board.scss',
 })
 export class Board {}

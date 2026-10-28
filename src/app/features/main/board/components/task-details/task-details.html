@@ -2,7 +2,7 @@
   <div class="fixed-content">
     <div class="header">
       <span class="task-tag">{{ task.category }}</span>
-      <button appBtn preset="close" (click)="dialogService.closeDialog()"></button>
+      <button appBtn preset="iconSmall" icon="x" (click)="dialogService.closeDialog()"></button>
     </div>
 
     <h2>{{ task.title }}</h2>
@@ -27,37 +27,34 @@
     </table>
   </div>
 
-  <div class="scrollable-content">
-    <ul class="scroll-container">
-      <span>Assigned To:</span>
+  <span>Assigned To:</span>
+  <ul class="scroll-container">
+    @for (user of task.assigned_users; track user.id) {
+      <li class="user-item">
+        <app-user-avatar [user]="user" size="medium" />
+        <span>{{ user.firstname }} {{ user.surname }}</span>
+      </li>
+    }
+  </ul>
 
-      @for (user of task.assigned_users; track user.id) {
-        <li class="user-item">
-          <app-user-avatar [user]="user" size="medium" />
-          <span>{{ user.firstname }} {{ user.surname }}</span>
+  @if (sortedSubtasks().length > 0) {
+    <span>Subtasks</span>
+    <ul class="scroll-container">
+      @for (subtask of sortedSubtasks(); track subtask.id) {
+        <li class="subtask">
+          <app-checkbox
+            [text]="subtask.title"
+            [checked]="subtask.is_done"
+            (checkedChange)="toggleSubtaskStatus(subtask.id, $event)"
+          />
         </li>
       }
     </ul>
-
-    @if (sortedSubtasks().length > 0) {
-      <ul class="scroll-container">
-        <span>Subtasks</span>
-        @for (subtask of sortedSubtasks(); track subtask.id) {
-          <li class="subtask">
-            <app-checkbox
-              [text]="subtask.title"
-              [checked]="subtask.is_done"
-              (checkedChange)="toggleSubtaskStatus(subtask.id, task.id, $event)"
-            />
-          </li>
-        }
-      </ul>
-    }
-  </div>
+  }
 
   <div class="button-wrapper">
-    <button appBtn preset="deleteIcon"></button>
+    <button appBtn preset="delete"></button>
     <hr />
-    <button appBtn preset="editIcon" (click)="dialogService.openDialog('task-edit', task)"></button>
+    <button appBtn preset="edit" (click)="dialogService.openDialog('task-edit', task)"></button>
   </div>
 }

@@ -10,17 +10,15 @@
     (keydown.escape)="clearInput(mainInput)"
   />
   <div class="input-btn-wrapper">
-    <button type="button" class="btn-cancel" (click)="clearInput(mainInput)">
-      <svg>
-        <use href="./assets/icons/icons.svg#x"></use>
-      </svg>
-    </button>
+    <button appBtn preset="iconSmall" icon="cancel" (click)="clearInput(mainInput)"></button>
     <hr />
-    <button type="button" class="btn-save" (click)="saveSubtask(mainInput)">
-      <svg>
-        <use href="./assets/icons/icons.svg#check"></use>
-      </svg>
-    </button>
+    <button
+      appBtn
+      preset="iconSmall"
+      icon="check"
+      class="btn-save"
+      (click)="saveSubtask(mainInput)"
+    ></button>
   </div>
 </div>
 
@@ -31,17 +29,19 @@
         <div class="li-wrapper" (dblclick)="editSubtask(subtask.id)">
           <span>{{ subtask.title }}</span>
           <div class="subtask-btn-wrapper">
-            <button type="button" class="btn-subtask" (click)="editSubtask(subtask.id)">
-              <svg>
-                <use href="./assets/icons/icons.svg#edit"></use>
-              </svg>
-            </button>
+            <button
+              appBtn
+              preset="iconSmall"
+              icon="edit"
+              (click)="editSubtask(subtask.id)"
+            ></button>
             <hr />
-            <button type="button" class="btn-subtask" (click)="deleteSubtask(subtask.id)">
-              <svg>
-                <use href="./assets/icons/icons.svg#delete"></use>
-              </svg>
-            </button>
+            <button
+              appBtn
+              preset="iconSmall"
+              icon="delete"
+              (click)="deleteSubtask(subtask.id)"
+            ></button>
           </div>
         </div>
       } @else {
@@ -51,25 +51,23 @@
             type="text"
             [value]="subtask.title"
             autocomplete="off"
-            (keydown.enter)="$event.preventDefault(); updateSubtask(editInput, subtask.id)"
+            (keydown.enter)="$event.preventDefault(); updateSubtaskTitle(editInput, subtask.id)"
             (keydown.escape)="editingSubtaskId.set(null)"
           />
           <div class="subtask-btn-wrapper">
-            <button type="button" class="btn-subtask" (click)="deleteSubtask(subtask.id)">
-              <svg>
-                <use href="./assets/icons/icons.svg#delete"></use>
-              </svg>
-            </button>
+            <button
+              appBtn
+              preset="iconSmall"
+              icon="delete"
+              (click)="deleteSubtask(subtask.id)"
+            ></button>
             <hr />
             <button
-              type="button"
-              class="btn-subtask"
-              (click)="updateSubtask(editInput, subtask.id)"
-            >
-              <svg>
-                <use href="./assets/icons/icons.svg#check"></use>
-              </svg>
-            </button>
+              appBtn
+              preset="iconSmall"
+              icon="check"
+              (click)="updateSubtaskTitle(editInput, subtask.id)"
+            ></button>
           </div>
         </div>
       }
