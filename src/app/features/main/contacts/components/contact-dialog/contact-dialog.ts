@@ -23,10 +23,6 @@ import { fullName, splitName } from '../../../../../utils/name-utils';
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
-  host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
-    '[class.is-tablet]': 'responsiveService.isTablet()',
-  },
 })
 export class ContactDialog {
   supabaseService = inject(SupabaseService);

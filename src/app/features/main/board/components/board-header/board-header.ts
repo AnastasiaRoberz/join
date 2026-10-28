@@ -11,11 +11,6 @@ import { SelectFieldComponent } from '../../../../../shared/select-field.compone
   selector: 'app-board-header',
   styleUrl: './board-header.scss',
   templateUrl: './board-header.html',
-  host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
-    '[class.is-tablet]': 'responsiveService.isTablet()',
-    '[class.is-desktop]': 'responsiveService.isDesktop()',
-  },
 })
 export class BoardHeader {
   responsiveService = inject(ResponsiveService);

@@ -1,16 +1,14 @@
 @use '../../../../../../../public/assets/styles' as *;
 
+// 4 columns next to each other, on smaller screens the columns wrap earlier
 :host {
   display: block;
-}
-
-// 4 columns next to each other, on smaller screens the columns wrap earlier
-.board {
+  height: 100%;
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
   gap: calcClamp(12, 24);
-  padding: 0 calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
 
   @include tablet(1280px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));

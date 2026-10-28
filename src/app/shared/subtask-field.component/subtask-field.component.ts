@@ -1,4 +1,4 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
+import { Component, computed, inject, input, model, signal } from '@angular/core';
 import { ResponsiveService } from '../../services/responsive.service';
 import { SubtaskInterface } from '../../interfaces/subtask.interface';
 import { Buttons } from '../button.component/button.component';
@@ -46,6 +46,8 @@ export class SubtaskFieldComponent {
 
   /** Id of the subtask currently shown in edit mode, or `null` if none is being edited. */
   editingSubtaskId = signal<number | null>(null);
+
+  isScrollable = input<boolean>(false);
 
   /**
    * Clears the text of the given input without changing the list

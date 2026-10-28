@@ -9,6 +9,14 @@
   grid-template-areas:
     'sidebar header'
     'sidebar pages';
+  background-color: $color-grey-background;
+
+  @include tablet {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 app-sidebar {
@@ -23,16 +31,13 @@ app-header {
   grid-area: pages;
   height: 100%;
   min-height: 0;
-}
+  width: 100%;
+  max-width: 1208px;
 
-:host.is-tablet {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-
-  .pages {
-    width: 100%;
-    flex: 1;
+  @include tablet {
+    .pages {
+      width: 100%;
+      flex: 1;
+    }
   }
 }

@@ -4,6 +4,8 @@
   @include flex-start(column, both);
   gap: 8px;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 label {

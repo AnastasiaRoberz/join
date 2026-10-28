@@ -14,8 +14,6 @@
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
-    font-family: 'Inter';
-    transition: all 100ms ease-in-out;
 
     &:hover,
     &:active {
@@ -84,12 +82,6 @@
     &:active {
       border: 1px solid $btn-secondary-active;
       color: $btn-secondary-active;
-    }
-
-    &.btn--addTaskSmall {
-      border-width: 2px;
-      width: 24px;
-      height: 24px;
     }
   }
 
@@ -203,6 +195,7 @@
 
   &.btn--addTask {
     gap: 4px;
+    padding: 8px 16px;
     @include tablet {
       position: relative;
       bottom: 0;
@@ -211,6 +204,10 @@
       width: 40px;
       padding: 0;
       box-shadow: none;
+
+      .btn-label {
+        display: none;
+      }
 
       &:active {
         box-shadow: none;
