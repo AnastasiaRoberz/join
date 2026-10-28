@@ -9,6 +9,6 @@ export interface TaskInterface {
   priority: 'urgent' | 'medium' | 'low';
   category: 'User Story' | 'Technical Task';
   status: 'To do' | 'In progress' | 'Await feedback' | 'Done';
-  subtasks?: SubtaskInterface[] | [];
-  assigned_users: ContactInterface[];
+  subtasks?: SubtaskInterface[];
+  assigned_users?: ContactInterface[];
 }

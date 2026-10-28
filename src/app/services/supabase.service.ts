@@ -99,6 +99,8 @@ export class SupabaseService {
       return result;
     } else {
       if (entityName) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
+      console.log(error);
+
       return null;
     }
   }

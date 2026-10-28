@@ -145,10 +145,13 @@ export class TaskService {
    *                   `assigned_users`, as these are managed via their own tables)
    * @returns A promise that resolves after the insert and the subsequent reload have finished
    */
-  async addTask(taskData: Omit<TaskInterface, 'id'>): Promise<void> {
+  async addTask(taskData: Omit<TaskInterface, 'id'>): Promise<TaskInterface | null> {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
       await this.getAllTasks();
+      return newTask;
+    } else {
+      return null;
     }
   }
 
