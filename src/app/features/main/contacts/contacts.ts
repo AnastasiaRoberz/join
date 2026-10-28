@@ -15,7 +15,7 @@ import { Buttons } from '../../../shared/button.component/button.component';
  * (to load and display the contact).
  */
 @Component({
-  imports: [ContactList, ContactDetails, ContactDialog, Buttons],
+  imports: [ContactList, ContactDetails, Buttons],
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
