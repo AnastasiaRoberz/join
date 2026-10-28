@@ -201,7 +201,6 @@ export class TaskEdit {
     // if (!this.taskForm.valid) return;
     const currentTaskId = this.currentTask()?.id;
     const rawValue = this.taskForm.getRawValue();
-    console.log(rawValue);
 
     if (currentTaskId && rawValue) {
       await this.taskService.updateTask(currentTaskId, {
