@@ -10,6 +10,12 @@
       [cdkDropListData]="column.tasks"
       // ($event: which card, old index, new index) for moveItemInArray & transferArrayItem
       (cdkDropListDropped)="dragDrop($event, column.status)"
+      // show hint in neighbor columns
+      [showDropHint]="isNeighbourColumn($index)"
+      // height of the pressed card, so the placeholder is just as tall
+      [dropHintHeight]="pressedCardHeight()"
+      // tracks column index when card is pressed and card height
+      (cardPressed)="pressedColumnIndex.set($index); pressedCardHeight.set($event)"
       [status]="column.status"
       [tasks]="column.tasks"
     />

@@ -5,6 +5,31 @@
   width: 100%;
 }
 
+// tilt only the inner card while pressed and while dragged,
+:host(:active) > *,
+:host(.cdk-drag-preview) > * {
+  rotate: 3deg;
+}
+
+// so card does take up more space when tilted
+:host(.cdk-drag-placeholder) {
+  position: relative;
+}
+
+// copy of actual card invisible in column
+:host(.cdk-drag-placeholder) > * {
+  opacity: 0;
+}
+
+// placeholder for drop, same size
+:host(.cdk-drag-placeholder)::after {
+  content: '';
+  position: absolute;
+  inset: 0; // same size as the card
+  border: 1px dashed $color-grey-400;
+  border-radius: 24px;
+}
+
 .task-card {
   @include flex-start(column);
   align-items: stretch;

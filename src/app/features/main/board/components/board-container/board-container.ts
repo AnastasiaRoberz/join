@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskService } from '../../../../../services/task.service';
 import { BoardColumn } from '../board-column/board-column';
@@ -23,9 +23,17 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
   imports: [BoardColumn, CdkDropListGroup, CdkDropList],
   templateUrl: './board-container.html',
   styleUrl: './board-container.scss',
+  // listens on mouse button being released, hides the placeholder
+  host: { '(document:pointerup)': 'pressedColumnIndex.set(null)' },
 })
 export class BoardContainer {
   taskService = inject(TaskService);
+
+  /** Index of the column whose card is currently pressed, `null` if none. */
+  pressedColumnIndex = signal<number | null>(null);
+
+  /** Height (px) of the pressed card, used for the drop hints. */
+  pressedCardHeight = signal(0);
 
   columns = computed(() => {
     const tasks = this.taskService.tasks();
@@ -64,5 +72,11 @@ export class BoardContainer {
     const updatedColumns = newColumn.map((task, index) => ({ ...task, status, position: index }));
     // updates the board right away and saves status + position to Supabase
     this.taskService.saveColumn(updatedColumns);
+  }
+
+  /** True for the columns directly left and right of the pressed card's column. */
+  isNeighbourColumn(index: number): boolean {
+    const pressed = this.pressedColumnIndex();
+    return pressed !== null && Math.abs(index - pressed) === 1;
   }
 }

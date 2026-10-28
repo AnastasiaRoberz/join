@@ -30,6 +30,22 @@
     gap: calcClamp(12, 16);
   }
 
+  // placeholder upon mouse click
+  &__placeholder {
+    border: 1px dashed $color-grey-400;
+    border-radius: 24px; // same as your task card
+    background-color: transparent;
+  }
+
+  &__drop-hint {
+    height: 120px; // roughly one card
+  }
+
+  // once the real card is in this column, hide the hint so there aren't two boxes
+  &:has(.cdk-drag-placeholder) &__drop-hint {
+    display: none;
+  }
+
   // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);

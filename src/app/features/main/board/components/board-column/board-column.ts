@@ -1,9 +1,9 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskCard } from '../../../../../shared/task-card/task-card';
 import { Buttons } from '../../../../../shared/button.component/button.component';
-import { CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragPlaceholder, CdkDragPreview } from '@angular/cdk/drag-drop';
 
 /**
  * One column of the board (e.g. "To do"): title, button to add a task
@@ -14,7 +14,7 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
  * <app-board-column status="To do" [tasks]="todoTasks" />
  */
 @Component({
-  imports: [RouterLink, Buttons, TaskCard, CdkDrag],
+  imports: [RouterLink, Buttons, TaskCard, CdkDrag, CdkDragPlaceholder],
   selector: 'app-board-column',
   styleUrl: './board-column.scss',
   templateUrl: './board-column.html',
@@ -25,4 +25,19 @@ export class BoardColumn {
 
   /** Tasks that are shown in this column. */
   tasks = input.required<TaskInterface[]>();
+
+  /** Shows a dashed drop hint at the end of the column. default = false */
+  showDropHint = input(false);
+
+  /** Emits the height (px) of the pressed card. */
+  cardPressed = output<number>();
+
+  /** Height (px) of the drop hint, same as the pressed card. */
+  dropHintHeight = input(0);
+
+  /** Measures the pressed card and passes its height to the container. */
+  onCardPressed(event: PointerEvent) {
+    const card = event.currentTarget as HTMLElement;
+    this.cardPressed.emit(card.offsetHeight);
+  }
 }
