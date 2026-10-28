@@ -254,22 +254,23 @@ export class AddTask {
 
     const [day, month, year] = this.taskForm.value.date!.split('/');
     const dateValue = `${year}-${month}-${day}`;
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
+    const task: Omit<TaskInterface, 'id'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: dateValue,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: 'To do',
+      assigned_users: this.assignedContacts(),
     };
 
     const newTaskId = await this.taskService.addTask(task);
 
-    if (newTaskId) {
-      const contactIds = this.selectedContactIds();
-      await this.taskService.setTaskAssignment(newTaskId, contactIds);
+    // if (newTaskId) {
+    //   const contactIds = this.selectedContactIds();
+    //   await this.taskService.setTaskAssignments(newTaskId, contactIds);
 
-      this.onClear();
-    }
+    //   this.onClear();
+    // }
   }
 }
