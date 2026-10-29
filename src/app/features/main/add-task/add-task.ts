@@ -176,13 +176,22 @@ export class AddTask implements OnDestroy {
       return;
     }
 
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'> = {
+    const status = this.dialogService.addTaskStatus(); // adding the status
+    // find all tasks of that status / column
+    const columnTasks = this.taskService.tasks().filter((task) => task.status === status);
+
+    /** one above the current top task, so the new task always lands first. */
+    // identify task positions in column and get smallest position, apply -1 from there or applues 0 if empty column
+    const top = columnTasks.length ? Math.min(...columnTasks.map((task) => task.position)) - 1 : 0;
+
+    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: this.taskForm.value.date!,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: this.dialogService.addTaskStatus(),
+      position: top, // assigning top position
     };
 
     const newTask = await this.taskService.addTask(task);
