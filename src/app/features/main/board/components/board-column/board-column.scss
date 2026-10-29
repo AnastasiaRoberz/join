@@ -30,8 +30,8 @@
     align-items: stretch;
     gap: calcClamp(12, 16);
     flex: 1;
-    // outline: 1px solid red; // helper for seeing column height
-    min-height: calc(100dvh - 310px);
+    outline: 1px solid red; // helper for seeing column height
+    min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
     justify-content: flex-start;
   }
 
