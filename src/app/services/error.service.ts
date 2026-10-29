@@ -62,6 +62,8 @@ export class ErrorService {
 
     // --- Angular standard validator (used for Validators.required) ---
     required: (field) => `Your ${field} is required.`,
+
+    requiredDefault: () => 'This field is required.',
   };
 
   /**

@@ -1,5 +1,5 @@
 @if (label() && labelPos() === 'top') {
-  <label [attr.for]="id()" [class.is-mobile]="responsiveService.isMobile()" [class]="labelPos()"
+  <label [for]="fieldId()" [class.is-mobile]="responsiveService.isMobile()" [class]="labelPos()"
     >{{ label() }}
     @if (isRequired()) {
       <span class="required">*</span>
@@ -9,13 +9,13 @@
 
 <div class="input-container">
   @if (label() && labelPos() === 'inner') {
-    <label [attr.for]="id()" [class]="labelPos()">{{ label() }}</label>
+    <label [attr.for]="fieldId()" [class]="labelPos()">{{ label() }}</label>
   }
 
   @if (type() === 'input') {
     <input
       type="text"
-      [id]="id()"
+      [id]="fieldId()"
       [value]="value"
       (input)="onInput($event)"
       (blur)="onTouched()"
@@ -24,7 +24,7 @@
     />
   } @else if (type() === 'textarea') {
     <textarea
-      [id]="id()"
+      [id]="fieldId()"
       [value]="value"
       (input)="onInput($event)"
       (blur)="onTouched()"

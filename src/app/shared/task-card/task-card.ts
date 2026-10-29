@@ -1,6 +1,8 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { TaskInterface } from '../../interfaces/task.interface';
 import { AvatarGroupComponent } from '../avatar-group.component/avatar-group.component';
+import { DialogService } from '../../services/dialog.service';
+import { CATEGORIES } from '../../utils/categories-list';
 
 /**
  * Shows one task as a card on the board: category, title, description preview,
@@ -18,6 +20,7 @@ import { AvatarGroupComponent } from '../avatar-group.component/avatar-group.com
   templateUrl: './task-card.html',
 })
 export class TaskCard {
+  dialogService = inject(DialogService);
   /** The task that is displayed. Must be provided by the parent. */
   task = input.required<TaskInterface>();
 
@@ -34,4 +37,9 @@ export class TaskCard {
     const total = this.totalSubtasks();
     return total ? (this.doneSubtasks() / total) * 100 : 0;
   });
+
+  /** Background color of the category label, taken from the shared category list. */
+  categoryColor = computed(
+    () => CATEGORIES.find((category) => category.name === this.task().category)?.color,
+  );
 }

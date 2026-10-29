@@ -3,6 +3,32 @@
 :host {
   display: block;
   width: 100%;
+  cursor: pointer;
+}
+
+// tilt only the inner card while pressed and while dragged,
+:host(:active) > *,
+:host(.cdk-drag-preview) > * {
+  rotate: 3deg;
+}
+
+// anchor for the dashed ::after box, so it covers exactly the card
+:host(.cdk-drag-placeholder) {
+  position: relative;
+}
+
+// copy of actual card invisible in column
+:host(.cdk-drag-placeholder) > * {
+  opacity: 0;
+}
+
+// placeholder for drop, same size
+:host(.cdk-drag-placeholder)::after {
+  content: '';
+  position: absolute;
+  inset: 0; // same size as the card
+  border: 1px dashed $color-grey-400;
+  border-radius: 24px;
 }
 
 .task-card {
@@ -14,19 +40,14 @@
   background-color: $color-white;
   box-shadow: 0px 0px 10px 3px #0000000a;
 
+  // the color of the label comes from utils/categories-list.ts (set in the template),
+  // grey is only the fallback for an unknown category
   &__category {
     align-self: flex-start;
     padding: 4px 16px;
     border-radius: 8px;
+    background-color: $color-grey-400;
     color: $text-light;
-
-    &--user-story {
-      background-color: $category-user-story;
-    }
-
-    &--technical-task {
-      background-color: $category-technical-task;
-    }
   }
 
   // shows max. 2 lines of the title, the rest is cut off with "..."

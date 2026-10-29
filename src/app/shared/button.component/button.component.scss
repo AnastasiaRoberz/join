@@ -1,6 +1,16 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
+  .icon {
+    transition: transform 0.2s ease;
+  }
+
+  &.is-open {
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
+
   // BUTTONS DEFAULT
   &.btn {
     display: inline-flex;

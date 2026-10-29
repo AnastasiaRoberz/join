@@ -4,8 +4,11 @@
     <div class="task-container">
       <div class="taskWrap taskLeft">
         <app-text-field
-          id="task-title"
+          fieldId="task-title"
+          class="task-input"
           formControlName="title"
+          requiredMsg
+          ...
           labelPos="top"
           label="Title"
           type="input"
@@ -13,7 +16,8 @@
         ></app-text-field>
 
         <app-text-field
-          id="task-description"
+          fieldId="task-description"
+          class="task-input"
           formControlName="description"
           labelPos="top"
           label="Description"
@@ -22,9 +26,11 @@
         ></app-text-field>
 
         <app-calendar-field
-          id="task-date"
+          fieldId="task-date"
           label="Due date"
           formControlName="date"
+          requiredMsg
+          ...
         ></app-calendar-field>
       </div>
 
@@ -61,13 +67,15 @@
           label="Category"
           placeholder="Select Task Category"
           formControlName="category"
+          requiredMsg
+          ...
           [options]="categories"
-          [(value)]="selectedCategory"
-          (valueChange)="onCategoryChange($event)"
+          [valueKey]="categoryKey"
           [required]="true"
+          [scrollable]="false"
         ></app-select-field>
 
-        <app-subtask-field [isScrollable]="true"></app-subtask-field>
+        <app-subtask-field [isScrollable]="true" class="task-input"></app-subtask-field>
       </div>
     </div>
 
@@ -75,7 +83,13 @@
       <span><span class="required">*</span>This field is required</span>
       <div class="task-footer__buttons">
         <button appBtn preset="cancel" label="Clear" (click)="onClear()"></button>
-        <button appBtn preset="check" label="Create Task" [disabled]="taskForm.invalid"></button>
+        <button
+          appBtn
+          preset="check"
+          type="submit"
+          label="Create Task"
+          [disabled]="taskForm.invalid"
+        ></button>
       </div>
     </div>
   </form>

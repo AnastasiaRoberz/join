@@ -1,9 +1,5 @@
-<article class="task-card">
-  <span
-    class="task-card__category"
-    [class.task-card__category--user-story]="task().category === 'User Story'"
-    [class.task-card__category--technical-task]="task().category === 'Technical Task'"
-  >
+<article class="task-card" (click)="dialogService.openDialog('task', task())">
+  <span class="task-card__category" [style.background-color]="categoryColor()">
     {{ task().category }}
   </span>
 
