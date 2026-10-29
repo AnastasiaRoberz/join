@@ -18,6 +18,8 @@ import { CdkOverlayOrigin, ConnectedPosition, OverlayModule } from '@angular/cdk
 import { ResponsiveService } from '../../services/responsive.service';
 import { filterInput } from '../../utils/utils';
 import { Buttons } from '../button.component/button.component';
+import { ErrorService } from '../../services/error.service';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 let nextId = 0;
 
@@ -127,9 +129,13 @@ let nextId = 0;
   styleUrl: './select-field.component.scss',
   templateUrl: './select-field.component.html',
 })
-export class SelectFieldComponent<T = any> {
+export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   /** Service used to adapt label styling to mobile/desktop viewports. */
   responsiveService = inject(ResponsiveService);
+
+  errorService = inject(ErrorService);
+
+  ngControl = inject(NgControl, { optional: true });
 
   // ---------------------------------------------------------------------------
   // Inputs & Two-Way Models
@@ -211,6 +217,8 @@ export class SelectFieldComponent<T = any> {
   required = input<boolean>(false);
 
   readonly scrollable = input<boolean>(true);
+
+  private wasOpen = false;
 
   // ---------------------------------------------------------------------------
   // Content & View Queries
@@ -334,6 +342,16 @@ export class SelectFieldComponent<T = any> {
    * `[value]` binding alone does not overwrite text the user has typed into the field.
    */
   constructor() {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+
+    effect(() => {
+      const open = this.popupExpanded();
+      if (this.wasOpen && !open) this.onTouched();
+      this.wasOpen = open;
+    });
+
     effect(() => {
       if (!this.popupExpanded()) {
         this.searchTerm.set('');
@@ -342,6 +360,23 @@ export class SelectFieldComponent<T = any> {
       }
     });
   }
+
+  writeValue(val: any): void {
+    this.value.set(val);
+  }
+
+  registerOnChange(fn: (v: any) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {}
+
+  private onChange: (v: any) => void = () => {};
+  private onTouched: () => void = () => {};
 
   // ---------------------------------------------------------------------------
   // User Interaction & Popup Control Methods
@@ -436,7 +471,7 @@ export class SelectFieldComponent<T = any> {
     if (this.multi()) {
       const visibleKeys = new Set(this.filteredOptions().map((opt) => this.valueKey()(opt)));
       const hiddenSelectedKeys = this.selectedKeys().filter((key) => !visibleKeys.has(key));
-      this.value.set([...hiddenSelectedKeys, ...selected]);
+      this.updateValue([...hiddenSelectedKeys, ...selected]);
     } else if (this.variant() === 'search') {
       const picked = selected[0] ?? null;
       if (picked != null) {
@@ -445,7 +480,7 @@ export class SelectFieldComponent<T = any> {
       }
       this.closePopup();
     } else {
-      this.value.set(selected[0] ?? null);
+      this.updateValue(selected[0] ?? null);
       this.closePopup();
     }
   }
@@ -472,10 +507,18 @@ export class SelectFieldComponent<T = any> {
    */
   deselect(key: any) {
     if (this.multi()) {
-      this.value.set(this.selectedKeys().filter((k) => k !== key));
+      this.updateValue(this.selectedKeys().filter((k) => k !== key));
     } else {
-      this.value.set(null);
+      this.updateValue(null);
     }
+  }
+
+  showError(): string | null {
+    const ctrl = this.ngControl?.control;
+
+    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
+
+    return this.errorService.getErrorMessage(ctrl.errors, this.label() ?? '');
   }
 
   // ---------------------------------------------------------------------------
@@ -499,5 +542,10 @@ export class SelectFieldComponent<T = any> {
     } else {
       this.positions.set([this.positionBelow, this.positionAbove]);
     }
+  }
+
+  private updateValue(val: any): void {
+    this.value.set(val);
+    this.onChange(val);
   }
 }
