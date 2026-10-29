@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectorRef,
+  Component,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
 import { ErrorService } from '../../services/error.service';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
@@ -67,6 +74,8 @@ export class TextField implements ControlValueAccessor {
 
   /** Current value displayed in the field. Updated by user input and by `writeValue()`. */
   value: string = '';
+
+  requiredMsg = input(false, { transform: booleanAttribute });
 
   /** Callback registered by Angular forms; call it to propagate a new value to the form control. */
   onChange: (value: string) => void = () => {};
@@ -143,9 +152,11 @@ export class TextField implements ControlValueAccessor {
    */
   showError(): string | null {
     const ctrl = this.ngControl.control;
-
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
-    return this.errorService.getErrorMessage(ctrl.errors, this.label() ?? '');
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 }

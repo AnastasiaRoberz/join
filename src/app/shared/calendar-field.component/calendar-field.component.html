@@ -13,6 +13,7 @@
     [id]="fieldId()"
     [value]="value()"
     (blur)="onTouched()"
+    (input)="onInputChange($event)"
     #picker="appFlatpickr"
     appFlatpickr
     (dateChanged)="onDateSelect($event)"

@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectorRef,
   Component,
   effect,
@@ -68,12 +69,15 @@ export class CalendarFieldComponent implements ControlValueAccessor {
   /** Formatted date string (`DD/MM/YYYY`) currently displayed inside the input element. */
   value = signal<string>('');
 
+  requiredMsg = input(false, { transform: booleanAttribute });
+
   /** Registered `ControlValueAccessor` callback invoked when the date value changes. */
   onChange: (value: string) => void = () => {};
 
   /** Registered `ControlValueAccessor` callback invoked when the input loses focus. */
   onTouched: () => void = () => {};
 
+  /** Shows the label-free `requiredDefault` message instead of "Your {label} is required.". */
   isRequired(): boolean {
     const ctrl = this.ngControl?.control;
     return ctrl ? ctrl.hasValidator(Validators.required) : false;
@@ -167,6 +171,25 @@ export class CalendarFieldComponent implements ControlValueAccessor {
   }
 
   /**
+   * Handles manual user input in the date field.
+   * If the user clears the input, notifies the Angular FormControl with an empty
+   * string so the required validator triggers and the error message becomes visible.
+   * If the input is not empty, Flatpickr takes over via (dateChanged).
+   *
+   * @param event - The native DOM input event fired on every keystroke.
+   */
+  onInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.value === '') {
+      this.value.set('');
+      this.onChange(''); // Notify Angular FormControl → required validator fires
+      this.onTouched(); // Mark as touched → error message becomes visible
+    }
+    // If not empty: Flatpickr handles the value via (dateChanged)
+  }
+
+  /**
    * Returns a localized validation error message when the bound `FormControl`
    * is invalid and has been touched.
    *
@@ -176,6 +199,9 @@ export class CalendarFieldComponent implements ControlValueAccessor {
     const ctrl = this.ngControl.control;
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
-    return this.errorService.getErrorMessage(ctrl.errors, this.label() ?? '');
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 }

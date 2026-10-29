@@ -72,8 +72,6 @@ export class AddTask {
   /** Priority selected via the priority buttons, `null` if none is selected. */
   selectedPrio = signal<Priority>('medium');
 
-  selectedCategory = signal<string>('');
-
   /** Reactive list of currently assigned contact IDs. */
   selectedContactIds = signal<number[]>([]);
 
@@ -116,12 +114,6 @@ export class AddTask {
    */
   onPrioritySelected(prio: Priority): void {
     this.selectedPrio.set(prio);
-  }
-
-  onCategoryChange(value: string): void {
-    this.selectedCategory.set(value);
-    this.taskForm.controls.category.setValue(value);
-    this.taskForm.controls.category.markAsDirty();
   }
 
   /**
