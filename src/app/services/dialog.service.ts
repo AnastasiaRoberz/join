@@ -96,10 +96,12 @@ export class DialogService {
     this.scrollToContact.set(true);
   }
 
+  // inject for openAddTask method below
   router = inject(Router);
   responsiveService = inject(ResponsiveService);
 
   /** mobile: go to the Add Task page. tablet/desktop: open the dialog. */
+  // using a method here, as it needs to be called from board-header and board-column
   openAddTask() {
     if (this.responsiveService.isMobile()) {
       this.router.navigate(['/add-task']);
