@@ -213,13 +213,12 @@ export class TaskService {
           task.id,
           { status: task.status, position: task.position }, // only these two fields are saved
           'tasks', // table "tasks"
-          false, // no success/error toast (as in Figma)
         ),
       ),
     );
   }
 
-/**
+  /**
    * Persists the `is_done` flag of a single subtask immediately (e.g. when a subtask checkbox is
    * toggled) and patches the matching subtask in the local `tasks` signal.
    *
