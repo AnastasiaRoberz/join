@@ -167,6 +167,25 @@ export class CalendarFieldComponent implements ControlValueAccessor {
   }
 
   /**
+   * Handles manual user input in the date field.
+   * If the user clears the input, notifies the Angular FormControl with an empty
+   * string so the required validator triggers and the error message becomes visible.
+   * If the input is not empty, Flatpickr takes over via (dateChanged).
+   *
+   * @param event - The native DOM input event fired on every keystroke.
+   */
+  onInputChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.value === '') {
+      this.value.set('');
+      this.onChange(''); // Notify Angular FormControl → required validator fires
+      this.onTouched(); // Mark as touched → error message becomes visible
+    }
+    // If not empty: Flatpickr handles the value via (dateChanged)
+  }
+
+  /**
    * Returns a localized validation error message when the bound `FormControl`
    * is invalid and has been touched.
    *
