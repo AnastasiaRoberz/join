@@ -5,6 +5,7 @@
       <div class="taskWrap taskLeft">
         <app-text-field
           fieldId="task-title"
+          class="task-input"
           formControlName="title"
           requiredMsg
           ...
@@ -16,6 +17,7 @@
 
         <app-text-field
           fieldId="task-description"
+          class="task-input"
           formControlName="description"
           labelPos="top"
           label="Description"
@@ -73,7 +75,7 @@
           [scrollable]="false"
         ></app-select-field>
 
-        <app-subtask-field [isScrollable]="true"></app-subtask-field>
+        <app-subtask-field [isScrollable]="true" class="task-input"></app-subtask-field>
       </div>
     </div>
 
