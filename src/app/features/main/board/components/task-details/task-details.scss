@@ -5,6 +5,7 @@
   gap: 24px;
   width: 525px;
   max-width: 100%;
+  height: min(95dvh, 1024px);
   max-height: min(95dvh, 1024px);
   min-height: 0;
   font-size: $font-medium;
@@ -14,18 +15,46 @@
 .fixed-content {
   @include flex-start(column, both);
   gap: 24px;
-  flex-shrink: 0;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .task-tag {
   padding: 4px 24px;
   border-radius: 8px;
   color: $text-light;
+  flex-shrink: 0;
+}
+
+.title-description-wrapper {
+  @include flex-start(column, both);
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
 }
 
 h2 {
   line-height: 120%;
+  max-width: 100%;
+  word-break: break-word;
+  flex: 0 0 auto;
+  min-height: 0;
+
+  &:has(+ .description) {
+    max-height: calc(60% - 12px);
+  }
+
+  &:only-child {
+    max-height: 100%;
+  }
+}
+
+.description {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 100%;
+  word-break: break-word;
 }
 
 table {
@@ -49,36 +78,34 @@ table {
 
 .scrollable-content {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: minmax(0, auto) minmax(0, auto);
   gap: 24px;
   width: 100%;
   flex: 1;
   min-height: 0;
-
-  &:has(.assigned-wrapper):has(.subtasks-wrapper) {
-    grid-template-rows: fit-content(50%) 1fr;
-  }
 }
 
 .assigned-wrapper,
 .subtasks-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 0;
-  max-height: 100%;
+  @include flex-start(column, both);
+  gap: 8px;
   width: 100%;
+  min-height: 0;
+
+  span {
+    flex-shrink: 0;
+  }
 }
 
 ul {
   @include flex-start(column, both);
   gap: 16px;
-  max-height: 100%;
-  min-height: 0;
+  width: 100%;
 
   li {
     @include flex-start;
     gap: 16px;
+    flex-shrink: 0;
   }
 
   .user-item {

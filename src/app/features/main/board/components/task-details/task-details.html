@@ -2,11 +2,15 @@
   <div class="fixed-content">
     <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
 
-    <h2>{{ task.title }}</h2>
+    <div class="title-description-wrapper">
+      <h2 appFitText>{{ task.title }}</h2>
 
-    @if (task.description) {
-      <p class="description">{{ task.description }}</p>
-    }
+      @if (task.description) {
+        <p class="description scroll-container" appFitText [maxSize]="20" [minSize]="16">
+          {{ task.description }}
+        </p>
+      }
+    </div>
 
     <table>
       <tr>
@@ -43,7 +47,7 @@
 
     @if (sortedSubtasks().length > 0) {
       <div class="subtasks-wrapper">
-        <span>Subtasks</span>
+        <span>Subtasks:</span>
         <ul class="scroll-container">
           @for (subtask of sortedSubtasks(); track subtask.id) {
             <li class="subtask">

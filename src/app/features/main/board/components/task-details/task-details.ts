@@ -8,6 +8,7 @@ import { CheckboxComponent } from '../../../../../shared/checkbox.component/chec
 import { capitalizeFirstLetter } from '../../../../../utils/utils';
 import { CATEGORIES } from '../../../../../utils/categories-list';
 import { ConfirmService } from '../../../../../services/confirm.service';
+import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -30,7 +31,7 @@ import { ConfirmService } from '../../../../../services/confirm.service';
  * ```
  */
 @Component({
-  imports: [Buttons, UserAvatar, CheckboxComponent, DatePipe],
+  imports: [Buttons, UserAvatar, CheckboxComponent, DatePipe, FitTextDirective],
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
