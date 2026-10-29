@@ -38,6 +38,7 @@
       appBtn
       preset="iconMedium"
       icon="arrow-down"
+      [class.is-open]="popupExpanded()"
       (click)="togglePopup()"
       (mousedown)="$event.preventDefault()"
     ></button>
