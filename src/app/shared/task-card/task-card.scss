@@ -3,6 +3,8 @@
 :host {
   display: block;
   width: 100%;
+  // same fixed width as in Figma, the card does not grow with the column
+  max-width: $task-card-width;
   cursor: pointer;
 }
 

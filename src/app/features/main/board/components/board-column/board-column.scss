@@ -1,6 +1,5 @@
 @use '../../../../../../../public/assets/styles' as *;
 
-// min-width: 0 lets the column shrink, so long words in a card cannot push it wider
 :host {
   display: block;
   min-width: 0;
@@ -14,7 +13,6 @@
   height: 100%;
   gap: calcClamp(12, 16);
 
-  // same height with and without the add button, so all columns start on one line
   &__header {
     @include flex-start;
     justify-content: space-between;
@@ -26,8 +24,6 @@
     color: $text-dark;
   }
 
-  // takes the rest of the column height and scrolls if there are too many cards
-  // (scroll-container = scrollbar style of the project)
   &__tasks {
     @include flex-start(column);
     align-items: stretch;
@@ -36,16 +32,28 @@
     min-height: 0;
     gap: calcClamp(12, 16);
 
-    // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
-    @include tablet(1280px) {
+    // compact layout: cards in a row, scrolling sideways
+    @include tablet {
       flex: none;
-      overflow-y: visible;
+      flex-direction: row;
+      align-items: flex-start;
+      overflow-x: auto;
+      overflow-y: hidden;
       width: auto;
       scrollbar-gutter: auto;
+      padding-block: 6px;
+
+      app-task-card {
+        flex: 0 0 $task-card-width;
+        width: $task-card-width;
+      }
+
+      .board-column__empty {
+        flex: 1;
+      }
     }
   }
 
-  // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);
     border: 1px dashed $color-grey-400;
