@@ -33,6 +33,10 @@ input {
   background: none;
   width: 100%;
   font-size: calcClamp(16, 20, 768, 320);
+
+  &::placeholder {
+    color: $text-dark;
+  }
 }
 
 .input-icon {
