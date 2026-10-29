@@ -1,6 +1,8 @@
-import { Service, signal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskInterface } from '../interfaces/task.interface';
+import { Router } from '@angular/router';
+import { ResponsiveService } from './responsive.service';
 
 export type DialogItem = TaskInterface | ContactInterface | null;
 
@@ -92,5 +94,17 @@ export class DialogService {
   selectContact(id: number): void {
     this.pendingSelectedId.set(id);
     this.scrollToContact.set(true);
+  }
+
+  router = inject(Router);
+  responsiveService = inject(ResponsiveService);
+
+  /** mobile: go to the Add Task page. tablet/desktop: open the dialog. */
+  openAddTask() {
+    if (this.responsiveService.isMobile()) {
+      this.router.navigate(['/add-task']);
+    } else {
+      this.openDialog('add-task');
+    }
   }
 }

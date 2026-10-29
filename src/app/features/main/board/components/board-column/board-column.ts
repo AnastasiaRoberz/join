@@ -44,8 +44,8 @@ export class BoardColumn {
     this.cardPressed.emit(card.offsetHeight);
   }
 
-  /** Opens the Add Task form as an overlay on the board. */
-  openAddTask(): void {
-    this.dialogService.openDialog('add-task');
-  }
+  // /** Opens the Add Task form as an overlay on the board. */
+  // openAddTask(): void {
+  //   this.dialogService.openDialog('add-task');
+  // }
 }
