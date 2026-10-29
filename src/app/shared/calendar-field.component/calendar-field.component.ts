@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectorRef,
   Component,
   effect,
@@ -68,12 +69,15 @@ export class CalendarFieldComponent implements ControlValueAccessor {
   /** Formatted date string (`DD/MM/YYYY`) currently displayed inside the input element. */
   value = signal<string>('');
 
+  requiredMsg = input(false, { transform: booleanAttribute });
+
   /** Registered `ControlValueAccessor` callback invoked when the date value changes. */
   onChange: (value: string) => void = () => {};
 
   /** Registered `ControlValueAccessor` callback invoked when the input loses focus. */
   onTouched: () => void = () => {};
 
+  /** Shows the label-free `requiredDefault` message instead of "Your {label} is required.". */
   isRequired(): boolean {
     const ctrl = this.ngControl?.control;
     return ctrl ? ctrl.hasValidator(Validators.required) : false;
@@ -195,6 +199,9 @@ export class CalendarFieldComponent implements ControlValueAccessor {
     const ctrl = this.ngControl.control;
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
-    return this.errorService.getErrorMessage(ctrl.errors, this.label() ?? '');
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 }

@@ -6,6 +6,8 @@
         <app-text-field
           fieldId="task-title"
           formControlName="title"
+          requiredMsg
+          ...
           labelPos="top"
           label="Title"
           type="input"
@@ -25,6 +27,8 @@
           fieldId="task-date"
           label="Due date"
           formControlName="date"
+          requiredMsg
+          ...
         ></app-calendar-field>
       </div>
 
@@ -61,6 +65,8 @@
           label="Category"
           placeholder="Select Task Category"
           formControlName="category"
+          requiredMsg
+          ...
           [options]="categories"
           [valueKey]="categoryKey"
           [required]="true"

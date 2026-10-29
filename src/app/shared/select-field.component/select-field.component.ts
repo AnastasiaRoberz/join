@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   Component,
   computed,
   contentChild,
@@ -219,6 +220,8 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   readonly scrollable = input<boolean>(true);
 
   private wasOpen = false;
+
+  requiredMsg = input(false, { transform: booleanAttribute });
 
   // ---------------------------------------------------------------------------
   // Content & View Queries
@@ -515,10 +518,12 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
 
   showError(): string | null {
     const ctrl = this.ngControl?.control;
-
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
-    return this.errorService.getErrorMessage(ctrl.errors, this.label() ?? '');
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 
   // ---------------------------------------------------------------------------
