@@ -1,9 +1,9 @@
-import { Component, input, output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, input, output, inject } from '@angular/core';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskCard } from '../../../../../shared/task-card/task-card';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { CdkDrag } from '@angular/cdk/drag-drop';
+import { DialogService } from '../../../../../services/dialog.service';
 
 /**
  * One column of the board (e.g. "To do"): title, button to add a task
@@ -14,7 +14,7 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
  * <app-board-column status="To do" [tasks]="todoTasks" />
  */
 @Component({
-  imports: [RouterLink, Buttons, TaskCard, CdkDrag],
+  imports: [Buttons, TaskCard, CdkDrag],
   selector: 'app-board-column',
   styleUrl: './board-column.scss',
   templateUrl: './board-column.html',
@@ -39,5 +39,13 @@ export class BoardColumn {
   onCardPressed(event: PointerEvent) {
     const card = event.currentTarget as HTMLElement;
     this.cardPressed.emit(card.offsetHeight);
+  }
+}
+  /** Opens the global dialog (same service as in the board header). */
+  dialogService = inject(DialogService);
+
+  /** Opens the Add Task form as an overlay on the board. */
+  openAddTask(): void {
+    this.dialogService.openDialog('add-task');
   }
 }

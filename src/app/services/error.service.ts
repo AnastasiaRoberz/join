@@ -1,8 +1,25 @@
 import { Service } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 
+/**
+ * Translates Angular form validation errors into short, user-facing messages.
+ *
+ * The keys of {@link ErrorService.messages} must match the error keys returned by the validators
+ * (both Angular's built-in ones like `required` and the app's custom validators). It is used by
+ * {@link TextField} to display the error of a touched, invalid control.
+ *
+ * To support a new validator error, add an entry to `messages` with the same key.
+ *
+ * @example
+ * errorService.getErrorMessage({ required: true }, 'Name'); // "Your Name is required."
+ */
 @Service()
 export class ErrorService {
+  /**
+   * Maps a validation error key to a function that builds the message.
+   * The function receives the field label and the error data of the validator
+   * (e.g. `{ requiredLength, actualLength }` for `maxLength`).
+   */
   messages: Record<string, (field: string, err: any) => string> = {
     // --- General Custom Validators ---
     onlyWhitespace: (field) => `${field} can't be only spaces.`,
@@ -43,10 +60,18 @@ export class ErrorService {
 
     invalidPhoneBrackets: () => `The parentheses do not match / close.`,
 
-    // --- Angular Standard Validator (falls du required nutzt) ---
+    // --- Angular standard validator (used for Validators.required) ---
     required: (field) => `Your ${field} is required.`,
   };
 
+  /**
+   * Returns the message for the first error of a control.
+   *
+   * @param errors - The `errors` object of a form control (`control.errors`).
+   * @param fieldName - Label of the field, inserted into messages that mention it.
+   * @returns `null` if there are no errors, the matching message for the first error key,
+   * or the generic "Invalid input." if no message is registered for that key.
+   */
   getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
     if (!errors) return null;
 

@@ -12,6 +12,8 @@ textarea {
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 textarea {
@@ -36,7 +38,7 @@ textarea {
       transform: translateY(-150%);
       color: $input-focus-label;
 
-      &.is-mobile {
+      @include mobile {
         display: none;
       }
     }
@@ -59,6 +61,11 @@ textarea {
   }
 }
 
+label.top {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
 label.inner {
   font-size: calcClamp(16, 20, 768, 320);
   position: absolute;
@@ -71,9 +78,13 @@ label.inner {
   padding: 0 8px;
   transition: all 150ms ease-in-out;
 
-  &.is-mobile {
+  @include mobile {
     padding: 0;
   }
+}
+
+.required {
+  color: $hint;
 }
 
 .input-icon {
@@ -91,7 +102,7 @@ label.inner {
   bottom: -8px;
   transform: translateY(100%);
 
-  &.is-mobile {
+  @include mobile {
     bottom: -1px;
   }
 }

@@ -11,24 +11,10 @@
   padding: 48px 40px;
 }
 
-.fixed-content {
-  @include flex-start(column);
-  gap: 24px;
-  flex-shrink: 0;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-
-  .task-tag {
-    padding: 4px 24px;
-    border-radius: 8px;
-    background-color: #0038ff;
-    color: $text-light;
-  }
+.task-tag {
+  padding: 4px 24px;
+  border-radius: 8px;
+  color: $text-light;
 }
 
 h2 {
@@ -52,16 +38,6 @@ table {
     @include flex-start;
     gap: 10px;
   }
-}
-
-.scrollable-content {
-  display: grid;
-  // grid-template-rows: repeat(2, minmax(0, 1fr));
-  grid-template-rows: fit-content(50%) 1fr;
-  gap: 24px;
-  width: 100%;
-  flex: 1;
-  min-height: 0;
 }
 
 ul {

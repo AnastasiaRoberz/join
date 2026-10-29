@@ -1,40 +1,12 @@
-<header class="board-header" [class.board-header__mobile]="responsiveService.isMobile()">
-  <!-- div needed for mobile design with button -->
-  <div class="board-header-title" [class.board-header-title__mobile]="responsiveService.isMobile()">
-    <h2>Board</h2>
-    <!-- add button in mobile -->
-    @if (responsiveService.isMobile()) {
-      <button
-        appBtn
-        preset="addTask"
-        (click)="dialogService.openDialog('add-task')"
-        [class.is-mobile]="responsiveService.isMobile()"
-        type="button"
-      ></button>
-    }
-  </div>
-
-  <div class="board-header-actions">
-    <app-select-field
-      variant="search"
-      placeholder="Find Task"
-      emptyText="No tasks found."
-      [options]="taskService.sortedTasks()"
-      [labelFn]="taskLabelFn"
-      [getSearchStrings]="taskTitleSearch"
-      [getIncludeStrings]="taskDescriptionSearch"
-      (valueChange)="onTaskSelected($event)"
-    />
-    <!-- add button in tablet + desktop -->
-    @if (!responsiveService.isMobile()) {
-      <button
-        appBtn
-        preset="addTask"
-        (click)="dialogService.openDialog('add-task')"
-        [class.is-tablet]="responsiveService.isTablet()"
-        // for mobile button style in tablet size
-        type="button"
-      ></button>
-    }
-  </div>
-</header>
+<h2>Board</h2>
+<app-select-field
+  variant="search"
+  placeholder="Find Task"
+  emptyText="No tasks found."
+  [options]="taskService.sortedTasks()"
+  [labelFn]="taskLabelFn"
+  [getSearchStrings]="taskTitleSearch"
+  [getIncludeStrings]="taskDescriptionSearch"
+  (valueChange)="onTaskSelected($event)"
+/>
+<button appBtn preset="addTask" (click)="dialogService.openDialog('add-task')"></button>

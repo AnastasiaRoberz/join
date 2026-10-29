@@ -4,12 +4,14 @@
 :host {
   display: block;
   min-width: 0;
-  min-height: 300px; // drop area stays big enough even when the column is empty
+  min-height: 0;
 }
 
 .board-column {
   @include flex-start(column);
   align-items: stretch;
+  justify-content: flex-start;
+  height: 100%;
   gap: calcClamp(12, 16);
   flex: 1;
 
@@ -25,14 +27,27 @@
     color: $text-dark;
   }
 
+  // takes the rest of the column height and scrolls if there are too many cards
+  // (scroll-container = scrollbar style of the project)
   &__tasks {
     @include flex-start(column);
     align-items: stretch;
+    justify-content: flex-start;
+    flex: 1;
+    min-height: 0;
     gap: calcClamp(12, 16);
     flex: 1;
     outline: 1px solid red; // helper for seeing column height
     min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
     justify-content: flex-start;
+    
+          // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
+    @include tablet(1280px) {
+      flex: none;
+      overflow-y: visible;
+      width: auto;
+      scrollbar-gutter: auto;
+    }
   }
 
   // placeholder upon mouse click
@@ -46,7 +61,7 @@
   &:has(.cdk-drag-placeholder) &__drop-hint {
     display: none;
   }
-
+  
   // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);

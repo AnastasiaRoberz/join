@@ -1,13 +1,4 @@
 <div class="header-section">
-  @if (responsiveService.isMobile()) {
-    <button
-      appBtn
-      preset="iconSmall"
-      icon="x"
-      class="btn-close-mobile"
-      (click)="closeDialog()"
-    ></button>
-  }
   <div class="header">
     @if (contact()) {
       <h2>Edit contact</h2>
@@ -19,19 +10,15 @@
 </div>
 
 <div class="content-section">
-  @if (!responsiveService.isMobile()) {
-    <button appBtn preset="iconSmall" icon="x" (click)="closeDialog()"></button>
-  }
-
   <div class="input-wrapper">
     <app-user-avatar class="avatar" [user]="contact()" size="large" />
 
     <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-      <app-text-field label="Name" formControlName="name" icon="person" [id]="'name'" />
+      <app-text-field label="Name" formControlName="name" icon="person" fieldId="name" />
 
-      <app-text-field label="Mail" formControlName="mail" icon="mail" [id]="'mail'" />
+      <app-text-field label="Mail" formControlName="mail" icon="mail" fieldId="mail" />
 
-      <app-text-field label="Phone" formControlName="phone" icon="phone" [id]="'phone'" />
+      <app-text-field label="Phone" formControlName="phone" icon="phone" fieldId="phone" />
 
       <div class="buttons-wrapper">
         @if (contact()) {

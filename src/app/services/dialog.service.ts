@@ -2,19 +2,41 @@ import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskInterface } from '../interfaces/task.interface';
 
+export type DialogItem = TaskInterface | ContactInterface | null;
+
+/**
+ * Content that the global dialog can display:
+ * - `'contact'`: add/edit contact form
+ * - `'task'`: task details view
+ * - `'task-edit'`: task edit form
+ * - `'add-task'`: add task form
+ * - `null`: no content (dialog closed/reset)
+ */
 export type DialogContentType = 'contact' | 'task' | 'task-edit' | 'add-task' | null;
 
 /**
- * Manages the state of the contact dialog (open/closed, which contact is being edited)
- * and coordinates post-creation selection and scroll behavior via signals.
+ * Controls the global dialog: whether it is open, which content it shows (`dialogType`)
+ * and which item (contact or task) it works on (`selectedItem`). The dialog component
+ * reads these signals; any component opens it via `openDialog()`.
+ *
+ * It also coordinates the selection and scroll behavior for a newly created contact via
+ * `selectContact()`, `pendingSelectedId` and `scrollToContact`.
+ *
+ * @example
+ * dialog = inject(DialogService);
+ * this.dialog.openDialog('contact');            // create a new contact
+ * this.dialog.openDialog('contact', contact);   // edit an existing contact
+ * this.dialog.openDialog('task', task);         // show task details
+ * this.dialog.closeDialog();
  */
 @Service()
 export class DialogService {
-  /** Whether the contact dialog is currently open. */
+  /** Whether the dialog is currently open (drives the open/close animation). */
   isOpen = signal<boolean>(false);
+  /** Which content the dialog shows. Stays set during the close animation and is reset to `null` afterwards. */
   dialogType = signal<DialogContentType>(null);
 
-  /** The contact currently being edited, or null when creating a new one. */
+  /** The item (contact or task, depending on `dialogType`) the dialog works on, or `null` when creating a new one. */
   selectedItem = signal<any | null>(null);
 
   /**
@@ -29,10 +51,17 @@ export class DialogService {
    */
   scrollToContact = signal<boolean>(false);
 
+  /** Handle of the pending state reset started in `closeDialog()`; cleared if the dialog is reopened within 400ms. */
   closeTimeout?: ReturnType<typeof setTimeout>;
 
-  /** Opens the dialog. Pass a contact to edit it, or null to create a new one. */
-  openDialog<T>(type: DialogContentType, item: T | null = null): void {
+  /**
+   * Opens the dialog with the given content. Cancels a pending reset from `closeDialog()`,
+   * so reopening during the close animation works correctly.
+   *
+   * @param type - Which content to show.
+   * @param item - The contact/task to display or edit, or `null` to create a new one.
+   */
+  openDialog<T>(type: DialogContentType, item: DialogItem | null = null): void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
     }
@@ -41,7 +70,10 @@ export class DialogService {
     this.isOpen.set(true);
   }
 
-  /** Closes the dialog and clears the selected contact. */
+  /**
+   * Closes the dialog. `isOpen` is set to `false` immediately; `dialogType` and `selectedItem`
+   * are reset after 400ms so the content stays visible during the close animation.
+   */
   closeDialog(): void {
     this.isOpen.set(false);
 

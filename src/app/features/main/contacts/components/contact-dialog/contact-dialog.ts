@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextField } from '../../../../../shared/text-field/text-field';
@@ -23,10 +23,6 @@ import { fullName, splitName } from '../../../../../utils/name-utils';
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
-  host: {
-    '[class.is-mobile]': 'responsiveService.isMobile()',
-    '[class.is-tablet]': 'responsiveService.isTablet()',
-  },
 })
 export class ContactDialog {
   supabaseService = inject(SupabaseService);
@@ -37,7 +33,7 @@ export class ContactDialog {
   confirmService = inject(ConfirmService);
   isSubmitting = signal<boolean>(false);
 
-  contact = input<ContactInterface | null>(null);
+  contact = computed(() => this.dialogService.selectedItem() as ContactInterface);
 
   contactForm = this.fb.group({
     name: [

@@ -11,6 +11,8 @@ input {
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 .input-container {
@@ -32,6 +34,22 @@ input {
   }
 }
 
+label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
+.required {
+  color: $hint;
+}
+
+.input-icon {
+  width: 24px;
+  height: 24px;
+  color: $main-color;
+  pointer-events: none;
+}
+
 .error-msg {
   font-size: calcClamp(12, 16, 768, 320);
   color: $error;
@@ -40,7 +58,7 @@ input {
   bottom: -8px;
   transform: translateY(100%);
 
-  &.is-mobile {
+  @include mobile {
     bottom: -1px;
   }
 }

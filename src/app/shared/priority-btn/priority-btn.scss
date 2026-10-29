@@ -1,8 +1,28 @@
 @use '../../../../public/assets/styles/' as *;
 
-// allgemeines btn-Styling mit svg, hover + active
 :host {
-  width: calcClamp(121, 136, 1300, 430);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.prio-label {
+  font-size: $font-medium;
+}
+
+.btn-wrapper {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.prio-btn {
+  width: 100%;
+  max-width: 136px;
   height: calcClamp(41, 56, 1300, 430);
   border-radius: 10px;
   padding: 16px 10px;
@@ -20,7 +40,7 @@
     aspect-ratio: 1 / 1;
   }
 
-  &:hover:not(.active):not(:active) {
+  &:hover:not(.active) {
     box-shadow: 0 4px 4px 0 #00000040;
   }
 
@@ -28,57 +48,43 @@
   &.active {
     color: $text-light;
     font-weight: 700;
+
+    svg {
+      color: $text-light;
+    }
   }
 
-  &:active:hover,
   &.active:hover {
     box-shadow: none;
   }
-}
 
-//jeweiliges Styling für jede Prio (urgent, medium, low) inkl. active-svg-farbe
-
-:host([priority='urgent']) {
-  svg {
-    color: $prio-urgent;
-  }
-
-  &:active,
-  &.active {
-    background-color: $prio-urgent;
-
+  &--urgent {
     svg {
-      color: $text-light;
+      color: $prio-urgent;
+    }
+    &.active,
+    &:active {
+      background-color: $prio-urgent;
     }
   }
-}
 
-:host([priority='medium']) {
-  svg {
-    color: $prio-medium;
-  }
-
-  &:active,
-  &.active {
-    background-color: $prio-medium;
-
+  &--medium {
     svg {
-      color: $text-light;
+      color: $prio-medium;
+    }
+    &.active,
+    &:active {
+      background-color: $prio-medium;
     }
   }
-}
 
-:host([priority='low']) {
-  svg {
-    color: $prio-low;
-  }
-
-  &:active,
-  &.active {
-    background-color: $prio-low;
-
+  &--low {
     svg {
-      color: $text-light;
+      color: $prio-low;
+    }
+    &.active,
+    &:active {
+      background-color: $prio-low;
     }
   }
 }

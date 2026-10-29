@@ -1,70 +1,156 @@
-import { Component, computed, HostBinding, HostListener, input, output } from '@angular/core';
-
-// example: <button priority="urgent"></button>
+import { Component, inject, signal } from '@angular/core';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
 /**
  * Available priority levels of a task.
+ * Matches the database schema and {@link TaskInterface.priority}.
  */
 export type Priority = 'urgent' | 'medium' | 'low';
 
 /**
- * Selectable priority button.
+ * Configuration interface describing the visual and functional properties of a single priority button.
+ */
+export interface PriorityOption {
+  /** The technical priority value used for storage and styling. */
+  value: Priority;
+  /** Human-readable display label. */
+  label: string;
+  /** SVG symbol identifier referencing the icon sprite (e.g. 'urgent', 'medium', 'low'). */
+  icon: string;
+}
+
+/**
+ * Predefined list of selectable priority options including labels and sprite icon IDs.
+ */
+export const PRIORITY_OPTIONS: PriorityOption[] = [
+  {
+    value: 'urgent',
+    label: 'Urgent',
+    icon: 'urgent',
+  },
+  {
+    value: 'medium',
+    label: 'Medium',
+    icon: 'medium',
+  },
+  {
+    value: 'low',
+    label: 'Low',
+    icon: 'low',
+  },
+];
+
+/**
+ * Reusable priority selector component containing all three priority options (Urgent, Medium, Low).
  *
- * Uses the attribute selector `button[priority]`, so it is applied to a native
- * `<button>` element. The label and icon are derived from the required `priority` input.
+ * Implements Angular's {@link ControlValueAccessor} so it can be seamlessly used within
+ * Reactive Forms via `formControlName` or `[formControl]`. The component injects its own
+ * {@link NgControl} and registers itself as the value accessor in the constructor, allowing
+ * bidirectional communication with the parent form control.
+ *
+ * Visual selection state is managed via an internal signal (`activePriority`), which is kept in
+ * sync with programmatic form updates via {@link writeValue} and user interaction via
+ * {@link selectPriority}.
  *
  * @example
- * <button priority="urgent" [isActive]="selected === 'urgent'" (prioSelected)="onSelect($event)"></button>
+ * ```html
+ * <!-- Inside a Reactive Form -->
+ * <form [formGroup]="taskForm">
+ *   <app-priority-btn formControlName="priority" />
+ * </form>
+ * ```
  */
 @Component({
   imports: [],
-  selector: 'button[priority]', //selector umbenannt, Nutzung über button und Attribut, siehe oben example
+  selector: 'app-priority-btn',
   styleUrl: './priority-btn.scss',
   templateUrl: './priority-btn.html',
 })
-export class PriorityBtn {
+export class PriorityBtn implements ControlValueAccessor {
   /**
-   * The priority this button represents. Required when using the component.
+   * The list of available priority options rendered by the template.
    */
-  priority = input.required<Priority>();
+  readonly priorities = PRIORITY_OPTIONS;
 
   /**
-   * Whether this button is currently selected. Controls the `active` CSS class.
+   * Internal signal tracking the currently active priority level for template rendering and class binding.
+   * Defaults to `'medium'`.
    */
-  isActive = input<boolean>(false);
+  activePriority = signal<Priority>('medium');
 
   /**
-   * Emits the button's priority when it is clicked.
+   * Injected {@link NgControl} binding this component to the parent Angular form control directive.
    */
-  prioSelected = output<Priority>();
+  private ngControl = inject(NgControl, { optional: true });
 
   /**
-   * Adds the CSS class `active` to the host element while `isActive()` is `true`.
+   * Callback registered by Angular Forms; invoked to propagate new priority values to the bound form control.
+   */
+  private onChange: (value: Priority) => void = () => {};
+
+  /**
+   * Callback registered by Angular Forms; invoked to mark the bound form control as touched on user interaction.
+   */
+  private onTouched: () => void = () => {};
+
+  /**
+   * Registers this component as the value accessor of its bound {@link NgControl}.
+   */
+  constructor() {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // ControlValueAccessor Implementation
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Writes a new priority value from the Angular form model into the component view.
+   * Called by Angular Forms when the control value is updated programmatically
+   * (e.g. `setValue()`, `patchValue()`, or `reset()`).
    *
-   * @returns `true` if the button is active
+   * @param value - The priority value from the form model (`'urgent'`, `'medium'`, `'low'`).
    */
-  @HostBinding('class.active')
-  get activeClass() {
-    return this.isActive();
+  writeValue(value: Priority): void {
+    if (value) {
+      this.activePriority.set(value);
+    }
   }
 
   /**
-   * Label and icon for the current priority, used by the template.
+   * Registers the callback function that Angular Forms invokes when the control value changes.
+   *
+   * @param fn - The callback receiving the updated {@link Priority}.
    */
-  preset = computed(() => {
-    const presets = {
-      urgent: { label: 'Urgent', icon: 'urgent' },
-      medium: { label: 'Medium', icon: 'medium' },
-      low: { label: 'Low', icon: 'low' },
-    };
-    return presets[this.priority()];
-  });
+  registerOnChange(fn: (value: Priority) => void): void {
+    this.onChange = fn;
+  }
 
   /**
-   * Emits `prioSelected` with the button's priority on click.
+   * Registers the callback function that Angular Forms invokes when the control is touched/blurred.
+   *
+   * @param fn - The callback notifying Angular Forms that the control was touched.
    */
-  @HostListener('click')
-  onClick(): void {
-    this.prioSelected.emit(this.priority());
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  // ---------------------------------------------------------------------------
+  // User Interaction Handlers
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Updates the selected priority when the user clicks a priority button.
+   * Sets the internal signal, emits the value to the parent form control via `onChange`,
+   * and marks the control as touched.
+   *
+   * @param prio - The chosen {@link Priority} level.
+   */
+  selectPriority(prio: Priority): void {
+    this.activePriority.set(prio);
+    this.onChange(prio);
+    this.onTouched();
   }
 }

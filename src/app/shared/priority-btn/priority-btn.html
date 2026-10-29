@@ -1,7 +1,17 @@
-<!-- zur Info: hier nur Inhalt des Buttons, also span + svg (<button priority="urgent">InhaltDerKomponente</button>) -->
-<!-- Inhalt wird über TS gefüllt: je nach Prio anderer span/ svg -->
-
-<span>{{ preset().label }}</span>
-<svg>
-  <use [attr.href]="'/assets/icons/icons.svg#' + preset().icon"></use>
-</svg>
+<span class="prio-label">Priority</span>
+<div class="btn-wrapper">
+  @for (prio of priorities; track prio.value) {
+    <button
+      type="button"
+      class="prio-btn"
+      [class]="'prio-btn--' + prio.value"
+      [class.active]="activePriority() === prio.value"
+      (click)="selectPriority(prio.value)"
+    >
+      <span>{{ prio.label }}</span>
+      <svg class="prio-icon">
+        <use [attr.href]="'/assets/icons/icons.svg#' + prio.icon"></use>
+      </svg>
+    </button>
+  }
+</div>

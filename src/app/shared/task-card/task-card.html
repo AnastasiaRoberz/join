@@ -1,4 +1,4 @@
-<article class="task-card">
+<article class="task-card" (click)="dialogService.openDialog('task', task())">
   <span
     class="task-card__category"
     [class.task-card__category--user-story]="task().category === 'User Story'"
@@ -34,7 +34,7 @@
       class="task-card__users"
       role="group"
       aria-label="Assigned users"
-      [users]="task().assigned_users"
+      [users]="task().assigned_users ?? []"
       size="small"
     />
     <svg

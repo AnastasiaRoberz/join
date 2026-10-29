@@ -1,13 +1,20 @@
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Dropdown } from './components/dropdown/dropdown';
 import { ContactInterface } from '../../../interfaces/contact.interface';
 import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { TaskService } from '../../../services/task.service';
 import { TaskInterface } from '../../../interfaces/task.interface';
+import { TextField } from '../../../shared/text-field/text-field';
+import { CalendarFieldComponent } from '../../../shared/calendar-field.component/calendar-field.component';
+import { SelectFieldComponent } from '../../../shared/select-field.component/select-field.component';
+import { ContactService } from '../../../services/contact.service';
+import { CATEGORIES } from '../../../utils/categories-list';
+import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
+import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
+import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
 
 /**
  * Form component for creating a new task.
@@ -17,7 +24,18 @@ import { TaskInterface } from '../../../interfaces/task.interface';
  * to it, and the form is reset.
  */
 @Component({
-  imports: [Dropdown, Buttons, PriorityBtn, ReactiveFormsModule, UserAvatar],
+  imports: [
+    Buttons,
+    PriorityBtn,
+    ReactiveFormsModule,
+    UserAvatar,
+    TextField,
+    CalendarFieldComponent,
+    SelectFieldComponent,
+    CheckboxComponent,
+    AvatarGroupComponent,
+    SubtaskFieldComponent,
+  ],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
@@ -32,6 +50,7 @@ export class AddTask {
     title: new FormControl('', Validators.required),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
+    assigned: new FormControl<number[]>([]),
     category: new FormControl('', Validators.required),
     subtask: new FormControl(''),
   });
@@ -39,89 +58,45 @@ export class AddTask {
   /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
 
+  contactService = inject(ContactService);
+
   /** Used to create the task and to assign contacts to it. */
   taskService = inject(TaskService);
 
-  /** Whether the category dropdown is open. */
-  categoryOpen = signal(false);
-
-  /** Whether the contact dropdown is open. */
-  assignedOpen = signal(false);
+  readonly categories = CATEGORIES;
+  categoryKey = (category: (typeof CATEGORIES)[number]) => category.name;
 
   /** Contacts currently selected for assignment. */
   assignedContacts = signal<ContactInterface[]>([]);
 
   /** Priority selected via the priority buttons, `null` if none is selected. */
-  selectedPrio = signal<Priority | null>(null);
+  selectedPrio = signal<Priority>('medium');
 
-  //#region  --------- Date-Picker Input-Field -------------
+  selectedCategory = signal<string>('');
+
+  /** Reactive list of currently assigned contact IDs. */
+  selectedContactIds = signal<number[]>([]);
 
   /**
-   * Flag used by `openDatePicker()` to toggle the native date picker.
-   * Reset via the `blur` event on the hidden date input when the picker closes.
+   * Full contact objects corresponding to `selectedContactIds()`,
+   * used to render the assigned user avatars in the select-field footer.
    */
-  pickerOpen = false;
+  selectedContacts = computed(() => {
+    const ids = new Set(this.selectedContactIds());
+    return this.contactService.sortedContacts().filter((contact) => ids.has(contact.id));
+  });
 
   /**
-   * Reference to the hidden native date input (`#datePickerRef`).
-   * Available once the view has been initialized, so it can be used in event handlers
-   * without an undefined check.
-   */
-  @ViewChild('datePickerRef') datePickerRef!: ElementRef<HTMLInputElement>;
-
-  /**
-   * Opens the native date picker of the hidden date input when the calendar button
-   * is clicked.
-   */
-  openDatePicker() {
-    this.pickerOpen = true;
-    this.datePickerRef.nativeElement.showPicker();
-  }
-
-  /**
-   * Handles a date chosen in the native date picker. Converts the value from
-   * `yyyy-mm-dd` to `dd/mm/yyyy` and writes it into the `date` form control.
+   * Extraction function passed to `<app-select-field [getSearchStrings]>`
+   * so contacts can be filtered by either first name or surname.
    *
-   * @param event - The change event of the hidden date input
+   * @param contact - The contact item to extract searchable strings from.
+   * @returns An array containing the contact's first name and surname.
    */
-  onDateSelected(event: Event) {
-    const input = event.target as HTMLInputElement; //Auslöser vom Event als HTML-Input
-    const raw = input.value;
-
-    if (raw) {
-      const [year, month, day] = raw.split('-');
-      const formatted = `${day}/${month}/${year}`;
-      this.taskForm.controls.date.setValue(formatted);
-    }
-  }
-
-  /**
-   * Formats the text input while typing as `dd/mm/yyyy`: removes all non-digit
-   * characters, inserts the slashes and limits the value to 10 characters.
-   * Updates the `date` form control without emitting a value change.
-   *
-   * @param event - The input event of the date text field
-   */
-  formatDateInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const isDeleting = (event as InputEvent).inputType?.startsWith('delete');
-
-    let value = input.value.replace(/\D/g, ''); //alles, außer Ziffern, ersetzen
-    if (!isDeleting) {
-      if (value.length > 2) {
-        value = value.slice(0, 2) + '/' + value.slice(2);
-      }
-      if (value.length > 5) {
-        value = value.slice(0, 5) + '/' + value.slice(5);
-      }
-    }
-
-    value = value.slice(0, 10);
-    input.value = value;
-    this.taskForm.controls.date.setValue(value, { emitEvent: false });
-  }
-
-  //#endregion
+  contactSearchStrings = (contact: ContactInterface): string[] => [
+    contact.firstname,
+    contact.surname,
+  ];
 
   /**
    * Returns `true` if the given form control is invalid and has been
@@ -143,33 +118,40 @@ export class AddTask {
     this.selectedPrio.set(prio);
   }
 
-  /** Opens or closes the category dropdown. */
-  toggleCategory() {
-    this.categoryOpen.update((v) => !v);
-  }
-
-  /** Opens or closes the contact dropdown. */
-  toggleAssigned() {
-    this.assignedOpen.update((v) => !v);
+  onCategoryChange(value: string): void {
+    this.selectedCategory.set(value);
+    this.taskForm.controls.category.setValue(value);
+    this.taskForm.controls.category.markAsDirty();
   }
 
   /**
-   * Writes the chosen category into the form and closes the category dropdown.
+   * Updates both the `selectedContactIds` signal and the `assignedTo` form control
+   * when the selection changes via the `<app-select-field>` listbox.
    *
-   * @param value - The selected category
+   * @param ids - The updated array of selected contact IDs.
    */
-  onCategorySelected(value: string) {
-    this.taskForm.get('category')?.setValue(value);
-    this.categoryOpen.set(false);
+  onAssignmentChange(ids: number[]): void {
+    this.selectedContactIds.set(ids);
+    this.taskForm.controls.assigned.setValue(ids);
+    this.taskForm.controls.assigned.markAsDirty();
   }
 
   /**
-   * Stores the updated contact selection coming from the dropdown.
+   * Toggles a single contact's assignment state when clicking an option's checkbox
+   * or the delete button on an avatar badge in the footer.
    *
-   * @param contacts - The currently selected contacts
+   * @param contactId - The ID of the contact to assign or unassign.
+   * @param isAssigned - `true` to assign the contact, `false` to remove the assignment.
    */
-  onContactsSelected(contacts: ContactInterface[]) {
-    this.assignedContacts.set(contacts);
+  toggleAssignment(contactId: number, isAssigned: boolean): void {
+    const currentIds = this.selectedContactIds();
+    const updatedIds = isAssigned
+      ? currentIds.includes(contactId)
+        ? currentIds
+        : [...currentIds, contactId]
+      : currentIds.filter((id) => id !== contactId);
+
+    this.onAssignmentChange(updatedIds);
   }
 
   /**
@@ -178,10 +160,9 @@ export class AddTask {
    */
   onClear(): void {
     this.taskForm.reset();
-    this.selectedPrio.set(null);
+    this.selectedPrio.set('medium');
     this.assignedContacts.set([]);
-    this.categoryOpen.set(false);
-    this.assignedOpen.set(false);
+    this.selectedContactIds.set([]);
   }
 
   /**
@@ -194,28 +175,25 @@ export class AddTask {
    * @returns A promise that resolves when the task and its assignments are saved
    */
   async onSubmit(): Promise<void> {
-    if (this.taskForm.invalid || !this.selectedPrio()) {
+    if (this.taskForm.invalid) {
       this.taskForm.markAllAsTouched();
       return;
     }
 
-    const [day, month, year] = this.taskForm.value.date!.split('/');
-    const dateValue = `${year}-${month}-${day}`;
     const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'> = {
-      // added position
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
-      due_date: dateValue,
-      priority: this.selectedPrio()!,
+      due_date: this.taskForm.value.date!,
+      priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: 'To do',
     };
 
-    const newTaskId = await this.taskService.addTask(task);
+    const newTask = await this.taskService.addTask(task);
 
-    if (newTaskId) {
-      const contactIds = this.assignedContacts().map((c) => c.id);
-      await this.taskService.setTaskAssignment(newTaskId, contactIds);
+    if (newTask) {
+      const contactIds = this.selectedContactIds();
+      await this.taskService.setTaskAssignments(newTask.id, contactIds);
 
       this.onClear();
     }

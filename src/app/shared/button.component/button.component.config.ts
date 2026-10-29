@@ -40,11 +40,6 @@ export const BUTTON_STYLES = {
     icon: 'plus',
     iconPos: 'right',
   },
-  addTaskSmall: {
-    variant: 'secondary',
-    size: 'small',
-    icon: 'plus',
-  },
 
   // * --- TEXT WITH ICON --- *
   edit: {

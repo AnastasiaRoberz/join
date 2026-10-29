@@ -4,6 +4,13 @@
   @include flex-start(column, both);
   gap: 8px;
   width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
 }
 
 input,
@@ -12,6 +19,8 @@ span {
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 .input-container {

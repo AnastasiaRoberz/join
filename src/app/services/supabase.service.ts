@@ -17,6 +17,11 @@ export class SupabaseService {
 
   feedbackService = inject(FeedbackService);
 
+  private readonly allowedFeedbackTables: Record<string, string> = {
+    tasks: 'Task',
+    contacts: 'Contact',
+  };
+
   /**
    * Retrieves an array of records from a specific table.
    *
@@ -48,7 +53,7 @@ export class SupabaseService {
    *
    * @param table - The name of the database table to query
    * @param id - The primary key ID of the record
-   * @param selectedData - The SQL/PostgREST select pattern[cite: 29]. Defaults to `'*'`
+   * @param selectedData - The SQL/PostgREST select pattern. Defaults to `'*'`
    * @returns A promise resolving to the record object, or `null` if not found or on error
    */
   async getOneItem(table: string, id: number, selectedData: string = '*'): Promise<any | null> {
@@ -67,19 +72,17 @@ export class SupabaseService {
   }
 
   /**
-   * Inserts a new record into a table and immediately selects and returns the created row.
+   * Inserts a new record (or array of records) into a table and immediately selects and returns the created row(s).
+   * Automatically triggers a user-facing success or error notification via {@link FeedbackService}.
    *
    * @template T - The shape of the payload extending a key-value record
-   * @param data - The data object to insert (omitting generated keys such as `id`)
+   * @param data - The data object or array of objects to insert (omitting generated keys such as `id`)
    * @param table - The target database table name
-   * @returns A promise resolving to the freshly created database row (including server-generated values like `id`), or `null` on failure
+   * @returns A promise resolving to the freshly created database row(s) (including server-generated values like `id`), or `null` on failure
    */
-  async addData<T extends Record<string, any>>(
-    data: T | T[],
-    table: string,
-    showError: boolean = true,
-  ): Promise<any | null> {
+  async addData<T extends Record<string, any>>(data: T | T[], table: string): Promise<any | null> {
     const isArray = Array.isArray(data);
+    const entityName = this.allowedFeedbackTables[table];
 
     let query = this.supabase
       .from(table)
@@ -89,19 +92,22 @@ export class SupabaseService {
     const { data: result, error } = await query;
 
     if (!error) {
-      if (showError)
+      if (entityName)
         this.feedbackService.showSuccess(
           `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
         );
       return result;
     } else {
-      if (showError) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
+      if (entityName) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
+      console.log(error);
+
       return null;
     }
   }
 
   /**
-   * Updates an existing database row identified by its ID.
+   * Updates an existing database row identified by its primary key ID.
+   * Automatically triggers a user-facing success or error notification via {@link FeedbackService}.
    *
    * @template T - The shape of the entity being updated
    * @param id - The primary key ID of the target record
@@ -113,48 +119,74 @@ export class SupabaseService {
     id: number,
     data: Partial<T>,
     table: string,
-    showError: boolean = true,
   ): Promise<boolean> {
+    const entityName = this.allowedFeedbackTables[table];
     const { error } = await this.supabase
       .from(table)
       .update(data as any)
       .eq('id', id);
 
     if (!error) {
-      if (showError)
+      if (entityName)
         this.feedbackService.showSuccess(
           `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
         );
       return true;
     } else {
-      if (showError) this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
+      if (entityName) this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
 
   /**
    * Removes a record from a database table based on its primary key ID.
+   * Automatically triggers a user-facing success or error notification via {@link FeedbackService}.
    *
    * @param id - The primary key ID of the record to delete
    * @param table - The target database table name
    * @returns A promise resolving to `true` if successfully deleted, or `false` on failure
    */
-  async deleteData(id: number, table: string, showError: boolean = true): Promise<boolean> {
+  async deleteData(id: number, table: string): Promise<boolean> {
+    const entityName = this.allowedFeedbackTables[table];
     const { error } = await this.supabase.from(table).delete().eq('id', id);
 
     if (!error) {
-      if (showError)
+      if (entityName)
         this.feedbackService.showSuccess(
           `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
         );
       return true;
     } else {
-      if (showError) this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
+      if (entityName) this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
       return false;
     }
   }
 
-  async deleteAssignment(taskId: number) {
+  /**
+   * Deletes all subtask rows associated with a given parent task ID from the `subtasks` table.
+   * Used when synchronizing/replacing a task's subtasks in bulk.
+   *
+   * @param taskId - The parent task ID whose subtasks should be deleted
+   * @returns A promise that resolves once the deletion query has completed
+   */
+  async deleteTaskSubtasks(taskId: number): Promise<void> {
+    const { error } = await this.supabase.from('subtasks').delete().eq('task_id', taskId);
+    if (error) {
+      console.log(`Error deleting subtasks for task ${taskId}: `, error);
+    }
+  }
+
+  /**
+   * Deletes all contact assignment rows associated with a given task ID from the `task-assignment` join table.
+   * Used when synchronizing/replacing a task's assigned contacts in bulk.
+   *
+   * @param taskId - The target task ID whose assignments should be cleared
+   * @returns A promise that resolves once the deletion query has completed
+   */
+  async deleteTaskAssignments(taskId: number): Promise<void> {
     const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
+    if (error) {
+      console.log(`Error deleting assignments for task ${taskId}: `, error);
+    }
   }
 }

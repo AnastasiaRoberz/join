@@ -11,5 +11,5 @@ export interface TaskInterface {
   category: 'User Story' | 'Technical Task';
   status: 'To do' | 'In progress' | 'Await feedback' | 'Done';
   subtasks?: SubtaskInterface[] | [];
-  assigned_users: ContactInterface[];
+  assigned_users?: ContactInterface[] | [];
 }

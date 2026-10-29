@@ -7,6 +7,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-wrap-style: balance;
 }
 
 a {
@@ -32,6 +33,8 @@ button {
   scrollbar-gutter: stable;
   overscroll-behavior-y: contain;
   width: calc(100% + 24px);
+  flex: 1;
+  min-height: 0;
 
   &::-webkit-scrollbar {
     background: transparent;
