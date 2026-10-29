@@ -14,9 +14,11 @@
 }
 
 app-board-header {
-  position: sticky;
-  top: -90px; // 90px is header without searchbar
-  z-index: 1; // stays above the task cards
-  background: $color-grey-background; // otherwise cards show through
-  padding: 20px 0px;
+  @include mobile {
+    position: sticky;
+    top: -90px; // 90px is header without searchbar
+    z-index: 1; // stays above the task cards
+    background: $color-grey-background; // otherwise cards show through
+    padding: 20px 0px;
+  }
 }
