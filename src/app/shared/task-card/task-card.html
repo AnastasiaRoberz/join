@@ -1,4 +1,4 @@
-<article class="task-card">
+<article class="task-card" (click)="dialogService.openDialog('task', task())">
   <span class="task-card__category" [style.background-color]="categoryColor()">
     {{ task().category }}
   </span>

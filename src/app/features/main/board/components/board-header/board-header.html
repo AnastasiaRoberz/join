@@ -9,4 +9,4 @@
   [getIncludeStrings]="taskDescriptionSearch"
   (valueChange)="onTaskSelected($event)"
 />
-<button appBtn preset="addTask"></button>
+<button appBtn preset="addTask" (click)="dialogService.openDialog('add-task')"></button>

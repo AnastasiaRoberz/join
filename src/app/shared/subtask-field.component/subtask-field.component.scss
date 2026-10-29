@@ -8,12 +8,19 @@
   min-height: 0;
 }
 
+label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
 input,
 span {
   border: none;
   outline: none;
   background: none;
   flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
 }
 
 .input-container {
@@ -105,4 +112,8 @@ li {
     border-left: 1px solid $devider;
     height: 24px;
   }
+}
+
+:host(.task-input) .input-container {
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
 }

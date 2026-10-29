@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextField } from '../../../../../shared/text-field/text-field';
@@ -33,7 +33,7 @@ export class ContactDialog {
   confirmService = inject(ConfirmService);
   isSubmitting = signal<boolean>(false);
 
-  contact = input<ContactInterface | null>(null);
+  contact = computed(() => this.dialogService.selectedItem() as ContactInterface);
 
   contactForm = this.fb.group({
     name: [

@@ -1,6 +1,7 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { TaskInterface } from '../../interfaces/task.interface';
 import { AvatarGroupComponent } from '../avatar-group.component/avatar-group.component';
+import { DialogService } from '../../services/dialog.service';
 import { CATEGORIES } from '../../utils/categories-list';
 
 /**
@@ -19,6 +20,7 @@ import { CATEGORIES } from '../../utils/categories-list';
   templateUrl: './task-card.html',
 })
 export class TaskCard {
+  dialogService = inject(DialogService);
   /** The task that is displayed. Must be provided by the parent. */
   task = input.required<TaskInterface>();
 

@@ -36,6 +36,7 @@
   box-shadow: $overlay-shadow;
   z-index: 100;
   overflow: hidden;
+  position: relative;
 
   // dialog closed: invisible + slides out
   opacity: 0;
@@ -64,4 +65,18 @@
     width: 100%;
     flex-direction: column;
   }
+
+  .btn-close {
+    position: absolute;
+    top: 52px;
+    right: 52px;
+    z-index: 20;
+  }
+}
+
+.add-task-overlay {
+  @include flex-center;
+  padding: 64px;
+  max-width: 1116px;
+  max-height: min(95dvh, 870px);
 }

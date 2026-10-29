@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TaskService } from '../../../../../services/task.service';
 import { DialogService } from '../../../../../services/dialog.service';
@@ -6,6 +6,8 @@ import { Buttons } from '../../../../../shared/button.component/button.component
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { CheckboxComponent } from '../../../../../shared/checkbox.component/checkbox.component';
 import { capitalizeFirstLetter } from '../../../../../utils/utils';
+import { CATEGORIES } from '../../../../../utils/categories-list';
+import { ConfirmService } from '../../../../../services/confirm.service';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -36,6 +38,7 @@ import { capitalizeFirstLetter } from '../../../../../utils/utils';
 export class TaskDetails {
   /** Provides reactive access to the task collection and `updateSubtaskStatus()` for persisting subtask toggles. */
   taskService = inject(TaskService);
+  confirmService = inject(ConfirmService);
 
   /** Manages closing the detail modal (close button) or switching to the `task-edit` dialog (edit button). */
   dialogService = inject(DialogService);
@@ -47,20 +50,20 @@ export class TaskDetails {
   // Inputs & Computed State
   // ---------------------------------------------------------------------------
 
-  /**
-   * Fallback task ID (default `1`) used if no task object was passed via `DialogService.openDialog()`.
-   * Normally not set, because the dialog container does not bind it.
-   */
-  selectedId = input<number>(1);
+  // /**
+  //  * Fallback task ID (default `1`) used if no task object was passed via `DialogService.openDialog()`.
+  //  * Normally not set, because the dialog container does not bind it.
+  //  */
+  // selectedId = input<number>(1);
 
-  /**
-   * Reactively resolves the full task object from `TaskService` matching the task
-   * stored in `dialogService.selectedItem()` (or falls back to `selectedId()`).
-   * Automatically reflects live changes when subtasks or task details are updated.
-   * Resolves to `undefined` if no matching task exists (the template then renders nothing).
-   */
+  // /**
+  //  * Reactively resolves the full task object from `TaskService` matching the task
+  //  * stored in `dialogService.selectedItem()` (or falls back to `selectedId()`).
+  //  * Automatically reflects live changes when subtasks or task details are updated.
+  //  * Resolves to `undefined` if no matching task exists (the template then renders nothing).
+  //  */
   selectedTask = computed(() => {
-    const targetId = this.dialogService.selectedItem()?.id ?? this.selectedId();
+    const targetId = this.dialogService.selectedItem()?.id;
     return this.taskService.tasks().find((task) => task.id === targetId);
   });
 
@@ -79,6 +82,11 @@ export class TaskDetails {
     });
   });
 
+  categoryColor = computed(() => {
+    const currentCategory = this.selectedTask()?.category;
+    return CATEGORIES.find((cat) => cat.name === currentCategory)?.color;
+  });
+
   // ---------------------------------------------------------------------------
   // Public Methods
   // ---------------------------------------------------------------------------
@@ -93,5 +101,11 @@ export class TaskDetails {
    */
   async toggleSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     await this.taskService.updateSubtaskStatus(subtaskId, isDone);
+  }
+
+  async onDelete(taskId: number): Promise<void> {
+    if (!(await this.confirmService.askDelete('Task'))) return;
+    await this.taskService.deleteTask(taskId);
+    this.dialogService.closeDialog();
   }
 }

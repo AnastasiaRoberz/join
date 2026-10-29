@@ -2,6 +2,8 @@ import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskInterface } from '../interfaces/task.interface';
 
+export type DialogItem = TaskInterface | ContactInterface | null;
+
 /**
  * Content that the global dialog can display:
  * - `'contact'`: add/edit contact form
@@ -59,7 +61,7 @@ export class DialogService {
    * @param type - Which content to show.
    * @param item - The contact/task to display or edit, or `null` to create a new one.
    */
-  openDialog<T>(type: DialogContentType, item: T | null = null): void {
+  openDialog<T>(type: DialogContentType, item: DialogItem | null = null): void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
     }

@@ -1,17 +1,9 @@
-<button
-  appBtn
-  preset="iconSmall"
-  icon="x"
-  class="btn-close"
-  (click)="dialogService.openDialog('task', task())"
-></button>
-
 <form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable>
   <div class="form-content-wrapper scroll-container">
     <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
 
     <app-text-field
-      id="description"
+      fieldId="description"
       formControlName="description"
       labelPos="top"
       label="Description"
@@ -24,7 +16,7 @@
 
     <app-select-field
       #assignedSelect
-      id="assigned-to"
+      fieldId="assigned-to"
       label="Assigned to"
       placeholder="Select contacts to assign"
       emptyText="No contacts found."
@@ -36,7 +28,7 @@
       <ng-template #optionTemplate let-contact let-selected="selected">
         <app-user-avatar [user]="contact" size="medium" />
         <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
-        <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
+        <app-checkbox [checked]="selected" />
       </ng-template>
       <app-avatar-group
         footer

@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectorRef,
+  Component,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
 import { ErrorService } from '../../services/error.service';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
@@ -57,7 +64,7 @@ export class TextField implements ControlValueAccessor {
   /** Name of a symbol in `assets/icons/icons.svg` shown inside the field. No icon if empty. */
   icon = input<string>();
   /** DOM id of the input/textarea, linked to the label via `for`. Defaults to a unique generated id. */
-  id = input<string>(`app-input-${nextId++}`);
+  fieldId = input<string>(`app-input-${nextId++}`);
   /** Label position: `'inner'` (inside the field container, default) or `'top'` (above the field). */
   labelPos = input<string>('inner');
   /** Renders either a single-line `<input type="text">` or a multi-line `<textarea>`. */
@@ -67,6 +74,8 @@ export class TextField implements ControlValueAccessor {
 
   /** Current value displayed in the field. Updated by user input and by `writeValue()`. */
   value: string = '';
+
+  requiredMsg = input(false, { transform: booleanAttribute });
 
   /** Callback registered by Angular forms; call it to propagate a new value to the form control. */
   onChange: (value: string) => void = () => {};
@@ -143,9 +152,11 @@ export class TextField implements ControlValueAccessor {
    */
   showError(): string | null {
     const ctrl = this.ngControl.control;
-
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
-    return this.errorService.getErrorMessage(ctrl.errors, this.label() ?? '');
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 }

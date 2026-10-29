@@ -33,8 +33,6 @@ $color-green-500: #7ae229;
 
 
 
-
-
 // ==========================================
 // SEMANTIC TOKENS
 // ==========================================
@@ -105,9 +103,12 @@ $error: $color-red-500;
 $mail: $color-blue-500;
 
 // TASK PRIORITIES
-$prio-urgent: $color-orange-500;
-$prio-medium: $color-amber-500;
-$prio-low: $color-green-500;
+// $prio-urgent: $color-orange-500;
+// $prio-medium: $color-amber-500;
+// $prio-low: $color-green-500;
+$prio-urgent: #e03e3e;
+$prio-medium: #d96b00;
+$prio-low: #29a347;
 
 // INPUT FIELDS
 $input-default-border: $color-grey-100;

@@ -3,6 +3,7 @@ import { DialogService } from '../../services/dialog.service';
 import { ContactDialog } from '../../features/main/contacts/components/contact-dialog/contact-dialog';
 import { TaskDetails } from '../../features/main/board/components/task-details/task-details';
 import { TaskEdit } from '../../features/main/board/components/task-edit/task-edit';
+import { Buttons } from '../button.component/button.component';
 import { AddTask } from '../../features/main/add-task/add-task';
 /**
  * Global modal overlay that hosts the currently active dialog content.
@@ -29,7 +30,7 @@ import { AddTask } from '../../features/main/add-task/add-task';
  * ```
  */
 @Component({
-  imports: [ContactDialog, TaskDetails, TaskEdit, AddTask],
+  imports: [ContactDialog, TaskEdit, Buttons, TaskDetails, AddTask],
   selector: 'app-dialog',
   styleUrl: './dialog.component.scss',
   templateUrl: './dialog.component.html',
@@ -41,4 +42,12 @@ import { AddTask } from '../../features/main/add-task/add-task';
 export class DialogComponent {
   /** Provides the dialog state (open flag, type, selected item) and `closeDialog()` for the backdrop click. */
   dialogService = inject(DialogService);
+
+  handleClose(): void {
+    if (this.dialogService.dialogType() === 'task-edit') {
+      this.dialogService.openDialog('task', this.dialogService.selectedItem());
+    } else {
+      this.dialogService.closeDialog();
+    }
+  }
 }

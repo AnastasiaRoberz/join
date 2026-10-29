@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { ContactService } from '../../../services/contact.service';
 import { CATEGORIES } from '../../../utils/categories-list';
 import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
+import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
 
 /**
  * Form component for creating a new task.
@@ -33,6 +34,7 @@ import { AvatarGroupComponent } from '../../../shared/avatar-group.component/ava
     SelectFieldComponent,
     CheckboxComponent,
     AvatarGroupComponent,
+    SubtaskFieldComponent,
   ],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
@@ -62,20 +64,13 @@ export class AddTask {
   taskService = inject(TaskService);
 
   readonly categories = CATEGORIES;
-
-  // /** Whether the category dropdown is open. */
-  // categoryOpen = signal(false);
-
-  // /** Whether the contact dropdown is open. */
-  // assignedOpen = signal(false);
+  categoryKey = (category: (typeof CATEGORIES)[number]) => category.name;
 
   /** Contacts currently selected for assignment. */
   assignedContacts = signal<ContactInterface[]>([]);
 
   /** Priority selected via the priority buttons, `null` if none is selected. */
   selectedPrio = signal<Priority>('medium');
-
-  selectedCategory = signal<string>('');
 
   /** Reactive list of currently assigned contact IDs. */
   selectedContactIds = signal<number[]>([]);
@@ -119,12 +114,6 @@ export class AddTask {
    */
   onPrioritySelected(prio: Priority): void {
     this.selectedPrio.set(prio);
-  }
-
-  onCategoryChange(value: string): void {
-    this.selectedCategory.set(value);
-    this.taskForm.controls.category.setValue(value);
-    this.taskForm.controls.category.markAsDirty;
   }
 
   /**
@@ -183,7 +172,7 @@ export class AddTask {
       return;
     }
 
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
+    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: this.taskForm.value.date!,

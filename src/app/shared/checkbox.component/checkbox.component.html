@@ -1,8 +1,8 @@
-<label (change)="onInputChange($event)">
+<label [for]="fieldId()" (change)="onInputChange($event)">
   <svg>
     <use [attr.href]="iconHref()"></use>
   </svg>
-  <input type="checkbox" [id]="id()" [checked]="checked()" />
+  <input type="checkbox" [id]="fieldId()" [checked]="checked()" />
 </label>
 @if (text()) {
   <span>{{ text() }}</span>
