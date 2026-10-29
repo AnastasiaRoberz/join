@@ -36,7 +36,6 @@
     justify-content: flex-start;
     flex: 1;
     gap: calcClamp(12, 16);
-    outline: 1px solid red; // helper for seeing column height
     min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
 
     // compact layout: cards in a row, scrolling sideways
