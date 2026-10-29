@@ -73,3 +73,10 @@
     z-index: 20;
   }
 }
+
+.add-task-overlay {
+  @include flex-center;
+  padding: 64px;
+  max-width: 1116px;
+  max-height: min(95dvh, 870px);
+}

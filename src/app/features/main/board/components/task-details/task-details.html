@@ -3,7 +3,9 @@
 
   <h2>{{ task.title }}</h2>
 
-  <p class="description">{{ task.description }}</p>
+  @if (task.description) {
+    <p class="description">{{ task.description }}</p>
+  }
 
   <table>
     <tr>
@@ -22,15 +24,17 @@
     </tr>
   </table>
 
-  <span>Assigned To:</span>
-  <ul class="scroll-container">
-    @for (user of task.assigned_users; track user.id) {
-      <li class="user-item">
-        <app-user-avatar [user]="user" size="medium" />
-        <span>{{ user.firstname }} {{ user.surname }}</span>
-      </li>
-    }
-  </ul>
+  @if (task.assigned_users) {
+    <span>Assigned To:</span>
+    <ul class="scroll-container">
+      @for (user of task.assigned_users; track user.id) {
+        <li class="user-item">
+          <app-user-avatar [user]="user" size="medium" />
+          <span>{{ user.firstname }} {{ user.surname }}</span>
+        </li>
+      }
+    </ul>
+  }
 
   @if (sortedSubtasks().length > 0) {
     <span>Subtasks</span>
@@ -48,7 +52,7 @@
   }
 
   <div class="button-wrapper">
-    <button appBtn preset="delete"></button>
+    <button appBtn preset="delete" (click)="onDelete(task.id)"></button>
     <hr />
     <button appBtn preset="edit" (click)="dialogService.openDialog('task-edit', task)"></button>
   </div>

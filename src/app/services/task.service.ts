@@ -286,6 +286,8 @@ export class TaskService {
         is_done: s.is_done ?? false,
         task_id: taskId,
       }));
+      console.log(data);
+
       await this.supabaseService.addData(data, 'subtasks');
     }
     await this.getAllTasks();
