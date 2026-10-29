@@ -144,6 +144,10 @@ $overlay-shadow: 0px 0px 4px 0px #00000066;
 // TASK CARD
 $task-card-width: 252px;
 
+// BOARD
+// below this width the columns are below each other (4 columns would get too narrow)
+$board-breakpoint: 1280px;
+
 // ==========================================
 // FONT SIZES
 // ==========================================

@@ -19,6 +19,7 @@
   &__header {
     @include flex-start;
     justify-content: space-between;
+    gap: calcClamp(8, 12); // keeps the title and the plus button apart
     min-height: 24px;
   }
 
@@ -39,7 +40,7 @@
     min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
 
     // compact layout: cards in a row, scrolling sideways
-    @include tablet {
+    @include tablet($board-breakpoint) {
       flex: none;
       flex-direction: row;
       align-items: flex-start;

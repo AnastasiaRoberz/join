@@ -10,7 +10,7 @@
   min-height: 0;
 
   // compact layout: the sections are below each other
-  @include tablet {
+  @include tablet($board-breakpoint) {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
     align-items: start;
