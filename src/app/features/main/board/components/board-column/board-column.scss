@@ -1,5 +1,6 @@
 @use '../../../../../../../public/assets/styles' as *;
 
+// min-width: 0 lets the column shrink, so long words in a card cannot push it wider
 :host {
   display: block;
   min-width: 0;
@@ -12,7 +13,9 @@
   justify-content: flex-start;
   height: 100%;
   gap: calcClamp(12, 16);
+  flex: 1;
 
+  // same height with and without the add button, so all columns start on one line
   &__header {
     @include flex-start;
     justify-content: space-between;
@@ -24,19 +27,23 @@
     color: $text-dark;
   }
 
+  // takes the rest of the column height and scrolls if there are too many cards
+  // (scroll-container = scrollbar style of the project)
   &__tasks {
     @include flex-start(column);
     align-items: stretch;
     justify-content: flex-start;
     flex: 1;
-    min-height: 0;
     gap: calcClamp(12, 16);
+    outline: 1px solid red; // helper for seeing column height
+    min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
 
     // compact layout: cards in a row, scrolling sideways
     @include tablet {
       flex: none;
       flex-direction: row;
       align-items: flex-start;
+      min-height: 0; // the fixed height from above is only for the desktop layout
       overflow-x: auto;
       overflow-y: hidden;
       width: auto;
@@ -54,6 +61,19 @@
     }
   }
 
+  // placeholder upon mouse click
+  &__placeholder {
+    border: 1px dashed $color-grey-400;
+    border-radius: 24px; // same as your task card
+    background-color: transparent;
+  }
+
+  // once the real card is in this column, hide the hint so there aren't two boxes
+  &:has(.cdk-drag-placeholder) &__drop-hint {
+    display: none;
+  }
+
+  // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);
     border: 1px dashed $color-grey-400;
