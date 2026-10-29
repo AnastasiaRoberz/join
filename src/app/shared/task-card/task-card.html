@@ -3,11 +3,13 @@
     {{ task().category }}
   </span>
 
-  <h4 class="task-card__title">{{ task().title }}</h4>
+  <div class="task-card__text">
+    <h4 class="task-card__title">{{ task().title }}</h4>
 
-  @if (task().description) {
-    <p class="task-card__description">{{ task().description }}</p>
-  }
+    @if (task().description) {
+      <p class="task-card__description">{{ task().description }}</p>
+    }
+  </div>
 
   @if (totalSubtasks() > 0) {
     <div class="task-card__progress">

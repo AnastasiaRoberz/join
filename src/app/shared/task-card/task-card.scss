@@ -53,12 +53,20 @@
   // shows max. 2 lines of the title, the rest is cut off with "..."
   &__title {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: $font-default;
     color: $text-dark;
+  }
+
+    // title and description belong together, so they sit closer than the other parts of the card
+  &__text {
+    @include flex-start(column);
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
   }
 
   // shows max. 2 lines of the description, the rest is cut off with "..."
