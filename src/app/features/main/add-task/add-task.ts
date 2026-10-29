@@ -180,7 +180,7 @@ export class AddTask {
       return;
     }
 
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
+    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: this.taskForm.value.date!,

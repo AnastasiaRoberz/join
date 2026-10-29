@@ -145,7 +145,7 @@ export class TaskService {
    *                   `assigned_users`, as these are managed via their own tables)
    * @returns A promise that resolves after the insert and the subsequent reload have finished
    */
-  async addTask(taskData: Omit<TaskInterface, 'id'>): Promise<TaskInterface | null> {
+  async addTask(taskData: Omit<TaskInterface, 'id' | 'position'>): Promise<TaskInterface | null> {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
       await this.getAllTasks();
@@ -192,6 +192,34 @@ export class TaskService {
   }
 
   /**
+   * Saves the new order of a column after drag and drop.
+   * Updates the local signal first so the card doesn't jump back,
+   * then stores `status` and `position` of every task in the column.
+   *
+   * @param columnTasks - All tasks of the target column, in their new order
+   */
+  async saveColumn(columnTasks: TaskInterface[]): Promise<void> {
+    // check all tasks: if a task is in the moved column, take the new version
+    this.tasks.update((list) =>
+      // (new task(s) with status + position), otherwise (`??`) keep the old task unchanged
+      list.map((task) => columnTasks.find((moved) => moved.id === task.id) ?? task),
+    );
+
+    // send update per task to Supabase
+    await Promise.all(
+      // Create one update request for each task in the column
+      columnTasks.map((task) =>
+        this.supabaseService.updateData(
+          task.id,
+          { status: task.status, position: task.position }, // only these two fields are saved
+          'tasks', // table "tasks"
+          false, // no success/error toast (as in Figma)
+        ),
+      ),
+    );
+  }
+
+/**
    * Persists the `is_done` flag of a single subtask immediately (e.g. when a subtask checkbox is
    * toggled) and patches the matching subtask in the local `tasks` signal.
    *

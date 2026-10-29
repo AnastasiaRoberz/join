@@ -15,9 +15,20 @@
 
   <div class="board-column__tasks scroll-container">
     @for (task of tasks(); track task.id) {
-      <app-task-card [task]="task" />
+      <!-- cdkDrag = making the task cards drag and drop items, pointer down to start visualization-->
+      <app-task-card [task]="task" cdkDrag (pointerdown)="onCardPressed($event)" />
     } @empty {
-      <p class="board-column__empty">No tasks {{ status() }}</p>
+      <!-- hidden while the column shows the placeholder -->
+      @if (!showDropHint()) {
+        <p class="board-column__empty">No tasks {{ status() }}</p>
+      }
+    }
+    <!-- show drop placeholder with heigth of actual card clicked inside the column -->
+    @if (showDropHint()) {
+      <div
+        class="board-column__placeholder board-column__drop-hint"
+        [style.height.px]="dropHintHeight()"
+      ></div>
     }
   </div>
 </section>

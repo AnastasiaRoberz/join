@@ -13,6 +13,7 @@
   justify-content: flex-start;
   height: 100%;
   gap: calcClamp(12, 16);
+  flex: 1;
 
   // same height with and without the add button, so all columns start on one line
   &__header {
@@ -35,8 +36,12 @@
     flex: 1;
     min-height: 0;
     gap: calcClamp(12, 16);
-
-    // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
+    flex: 1;
+    outline: 1px solid red; // helper for seeing column height
+    min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
+    justify-content: flex-start;
+    
+          // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
     @include tablet(1280px) {
       flex: none;
       overflow-y: visible;
@@ -45,6 +50,18 @@
     }
   }
 
+  // placeholder upon mouse click
+  &__placeholder {
+    border: 1px dashed $color-grey-400;
+    border-radius: 24px; // same as your task card
+    background-color: transparent;
+  }
+
+  // once the real card is in this column, hide the hint so there aren't two boxes
+  &:has(.cdk-drag-placeholder) &__drop-hint {
+    display: none;
+  }
+  
   // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);
