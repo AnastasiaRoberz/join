@@ -35,14 +35,14 @@ export class BoardColumn {
   /** Height (px) of the drop hint, same as the pressed card. */
   dropHintHeight = input(0);
 
+  /** Opens the global dialog (same service as in the board header). */
+  dialogService = inject(DialogService);
+
   /** Measures the pressed card and passes its height to the container. */
   onCardPressed(event: PointerEvent) {
     const card = event.currentTarget as HTMLElement;
     this.cardPressed.emit(card.offsetHeight);
   }
-}
-  /** Opens the global dialog (same service as in the board header). */
-  dialogService = inject(DialogService);
 
   /** Opens the Add Task form as an overlay on the board. */
   openAddTask(): void {
