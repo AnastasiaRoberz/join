@@ -67,8 +67,9 @@
       (valueChange)="onValueChange($event)"
       (mousedown)="$event.preventDefault()"
       [activeDescendant]="listbox.activeDescendant()"
-      class="dropdown scroll-container"
+      class="dropdown"
       [class.is-open]="popupExpanded()"
+      [class.scroll-container]="scrollable()"
     >
       @for (option of filteredOptions(); track valueKey()(option)) {
         <li

@@ -66,6 +66,7 @@
           [(value)]="selectedCategory"
           (valueChange)="onCategoryChange($event)"
           [required]="true"
+          [scrollable]="false"
         ></app-select-field>
 
         <app-subtask-field [isScrollable]="true"></app-subtask-field>

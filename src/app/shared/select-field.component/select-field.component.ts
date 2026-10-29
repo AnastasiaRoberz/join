@@ -210,6 +210,8 @@ export class SelectFieldComponent<T = any> {
 
   required = input<boolean>(false);
 
+  readonly scrollable = input<boolean>(true);
+
   // ---------------------------------------------------------------------------
   // Content & View Queries
   // ---------------------------------------------------------------------------
