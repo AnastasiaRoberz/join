@@ -46,6 +46,7 @@
       min-height: 0; // the fixed height from above is only for the desktop layout
       overflow-x: auto;
       overflow-y: hidden;
+      overscroll-behavior-y: auto; // let the page scroll, the global scroll-container blocks it
       width: auto;
       scrollbar-gutter: auto;
       padding-block: 6px;
