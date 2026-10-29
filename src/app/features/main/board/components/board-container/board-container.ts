@@ -5,7 +5,6 @@ import { BoardColumn } from '../board-column/board-column';
 import {
   CdkDragDrop,
   CdkDropList,
-  CdkDropListGroup,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
@@ -20,7 +19,7 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
 
 @Component({
   selector: 'app-board-container',
-  imports: [BoardColumn, CdkDropListGroup, CdkDropList],
+  imports: [BoardColumn, CdkDropList],
   templateUrl: './board-container.html',
   styleUrl: './board-container.scss',
   // listens on mouse button being released, hides the placeholder
