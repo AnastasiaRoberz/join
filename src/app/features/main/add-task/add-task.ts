@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { CATEGORIES } from '../../../utils/categories-list';
 import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
 import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
+import { DialogService } from '../../../services/dialog.service';
 
 /**
  * Form component for creating a new task.
@@ -40,7 +41,7 @@ import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/s
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
 })
-export class AddTask {
+export class AddTask implements OnDestroy {
   /**
    * Reactive form of the task. `title`, `date` and `category` are required.
    * The date is stored as text in the format `dd/mm/yyyy`.
@@ -157,6 +158,9 @@ export class AddTask {
     this.selectedContactIds.set([]);
   }
 
+  /** Holds the status chosen via a column "+" button. */
+  dialogService = inject(DialogService);
+
   /**
    * Submits the form. If the form is invalid or no priority is selected,
    * all fields are marked as touched to reveal error hints and the method aborts.
@@ -178,7 +182,7 @@ export class AddTask {
       due_date: this.taskForm.value.date!,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
-      status: 'To do',
+      status: this.dialogService.addTaskStatus(),
     };
 
     const newTask = await this.taskService.addTask(task);
@@ -189,5 +193,11 @@ export class AddTask {
 
       this.onClear();
     }
+  }
+
+  /** Resets the column status so the next task starts in "To do" again. */
+  // needed for the add task link on the sidebar, as that is never the overlay and does not call the dialogservice
+  ngOnDestroy(): void {
+    this.dialogService.addTaskStatus.set('To do');
   }
 }

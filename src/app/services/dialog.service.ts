@@ -100,9 +100,13 @@ export class DialogService {
   router = inject(Router);
   responsiveService = inject(ResponsiveService);
 
+  // for adding tasks into column, passed status
+  addTaskStatus = signal<TaskInterface['status']>('To do');
+
   /** mobile: go to the Add Task page. tablet/desktop: open the dialog. */
   // using a method here, as it needs to be called from board-header and board-column
-  openAddTask() {
+  openAddTask(status: TaskInterface['status'] = 'To do') {
+    this.addTaskStatus.set(status); // sets status received by signal, default = To do
     if (this.responsiveService.isMobile()) {
       this.router.navigate(['/add-task']);
     } else {
