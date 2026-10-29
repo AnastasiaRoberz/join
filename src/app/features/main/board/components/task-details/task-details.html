@@ -1,55 +1,63 @@
 @if (selectedTask(); as task) {
-  <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
+  <div class="fixed-content">
+    <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
 
-  <h2>{{ task.title }}</h2>
+    <h2>{{ task.title }}</h2>
 
-  @if (task.description) {
-    <p class="description">{{ task.description }}</p>
-  }
+    @if (task.description) {
+      <p class="description">{{ task.description }}</p>
+    }
 
-  <table>
-    <tr>
-      <th>Due date:</th>
-      <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
-    </tr>
-    <tr class="spacer"></tr>
-    <tr>
-      <th>Priority:</th>
-      <td class="priority">
-        <span>{{ capitalizeFirstLetter(task.priority) }}</span>
-        <svg [class]="'icon-priority icon-' + task.priority">
-          <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
-        </svg>
-      </td>
-    </tr>
-  </table>
+    <table>
+      <tr>
+        <th>Due date:</th>
+        <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
+      </tr>
+      <tr class="spacer"></tr>
+      <tr>
+        <th>Priority:</th>
+        <td class="priority">
+          <span>{{ capitalizeFirstLetter(task.priority) }}</span>
+          <svg [class]="'icon-priority icon-' + task.priority">
+            <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
+          </svg>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-  @if (task.assigned_users) {
-    <span>Assigned To:</span>
-    <ul class="scroll-container">
-      @for (user of task.assigned_users; track user.id) {
-        <li class="user-item">
-          <app-user-avatar [user]="user" size="medium" />
-          <span>{{ user.firstname }} {{ user.surname }}</span>
-        </li>
-      }
-    </ul>
-  }
+  <div class="scrollable-content">
+    @if (task.assigned_users && task.assigned_users.length > 0) {
+      <div class="assigned-wrapper">
+        <span>Assigned To:</span>
+        <ul class="scroll-container">
+          @for (user of task.assigned_users; track user.id) {
+            <li class="user-item">
+              <app-user-avatar [user]="user" size="medium" />
+              <span>{{ user.firstname }} {{ user.surname }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    }
 
-  @if (sortedSubtasks().length > 0) {
-    <span>Subtasks</span>
-    <ul class="scroll-container">
-      @for (subtask of sortedSubtasks(); track subtask.id) {
-        <li class="subtask">
-          <app-checkbox
-            [text]="subtask.title"
-            [checked]="subtask.is_done"
-            (checkedChange)="toggleSubtaskStatus(subtask.id, $event)"
-          />
-        </li>
-      }
-    </ul>
-  }
+    @if (sortedSubtasks().length > 0) {
+      <div class="subtasks-wrapper">
+        <span>Subtasks</span>
+        <ul class="scroll-container">
+          @for (subtask of sortedSubtasks(); track subtask.id) {
+            <li class="subtask">
+              <app-checkbox
+                [text]="subtask.title"
+                [checked]="subtask.is_done"
+                (checkedChange)="toggleSubtaskStatus(subtask.id, $event)"
+              />
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
 
   <div class="button-wrapper">
     <button appBtn preset="delete" (click)="onDelete(task.id)"></button>

@@ -1,14 +1,21 @@
 @use '../../../../../../../public/assets/styles/' as *;
 
 :host {
-  @include flex-start(column);
-  align-items: flex-start;
+  @include flex-start(column, both);
   gap: 24px;
   width: 525px;
+  max-width: 100%;
   max-height: min(95dvh, 1024px);
   min-height: 0;
   font-size: $font-medium;
   padding: 48px 40px;
+}
+
+.fixed-content {
+  @include flex-start(column, both);
+  gap: 24px;
+  flex-shrink: 0;
+  width: 100%;
 }
 
 .task-tag {
@@ -40,10 +47,32 @@ table {
   }
 }
 
+.scrollable-content {
+  display: grid;
+  grid-template-rows: 1fr;
+  gap: 24px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  &:has(.assigned-wrapper):has(.subtasks-wrapper) {
+    grid-template-rows: fit-content(50%) 1fr;
+  }
+}
+
+.assigned-wrapper,
+.subtasks-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  max-height: 100%;
+  width: 100%;
+}
+
 ul {
   @include flex-start(column, both);
   gap: 16px;
-  align-self: start;
   max-height: 100%;
   min-height: 0;
 
