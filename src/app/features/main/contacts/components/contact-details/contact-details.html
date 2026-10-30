@@ -1,18 +1,23 @@
 @if (selectedContact(); as contact) {
-  <div class="detail-header" [class.detail-header__long]="isLongName()">
-    <app-user-avatar [user]="contact" size="details"></app-user-avatar>
+  <div class="detail-header">
+    <app-user-avatar [user]="contact" size="large"></app-user-avatar>
     <div class="name-wrapper">
-      <p class="name">{{ fullName(contact) }}</p>
+      <p class="name" appFitText container="parent" [minSize]="24" [maxSize]="47">
+        {{ fullName(contact) }}
+      </p>
+      <div
+        class="btn-wrapper"
+        [class.is-tablet]="responsiveService.isTablet()"
+        [class.is-open]="menuOpen()"
+      >
+        <button
+          appBtn
+          preset="edit"
+          (click)="dialogService.openDialog('contact', contact)"
+        ></button>
+        <button appBtn preset="delete" (click)="deleteContact(contact.id)"></button>
+      </div>
     </div>
-  </div>
-
-  <div
-    class="btn-wrapper"
-    [class.is-tablet]="responsiveService.isTablet()"
-    [class.is-open]="menuOpen()"
-  >
-    <button appBtn preset="edit" (click)="dialogService.openDialog('contact', contact)"></button>
-    <button appBtn preset="delete" (click)="deleteContact(contact.id)"></button>
   </div>
 
   <p class="info-heading">Contact Information</p>

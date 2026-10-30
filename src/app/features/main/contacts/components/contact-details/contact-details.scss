@@ -15,38 +15,31 @@
   gap: calcClamp(16, 54, 1440, 1290);
   max-width: 100%; // never wider than the component
 
+  app-user-avatar {
+    flex-shrink: 1;
+    height: 100%;
+    aspect-ratio: 1;
+  }
+
   .name-wrapper {
     @include flex-start(column);
     gap: 8px;
+    flex: 1 1 auto;
+    max-height: 120px;
   }
 
   .name {
-    min-height: 105px;
-    font-size: calcClamp(20, 47);
-    max-width: 100%; // never wider than the wrapper
-    overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
-    display: flex;
-    align-items: center;
-  }
-
-  // long names design for icon and name position and size
-  &__long {
-    gap: calcClamp(16, 50, 1440, 1025);
-
-    .name {
-      font-size: calcClamp(20, 38, 1440, 1025);
-    }
+    max-height: 2lh;
+    word-break: break-word;
   }
 }
 
 .btn-wrapper {
   @include flex-start;
   gap: 16px;
+  flex-shrink: 0;
 
   @include tablet {
-    // position: absolute;
-    // bottom: 16px;
-    // right: 8px;
     position: fixed;
     bottom: 106px;
     right: 14px;
@@ -94,28 +87,6 @@
     width: 100%;
     overflow-wrap: anywhere;
     color: $mail;
-  }
-}
-
-@include tablet {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(22, 36, 1024, 769);
-      }
-    }
-  }
-}
-
-@include mobile {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(20, 38, 768, 320);
-      }
-    }
   }
 }
 

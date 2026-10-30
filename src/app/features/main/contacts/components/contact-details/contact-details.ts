@@ -6,8 +6,7 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName } from '../../../../../utils/name-utils';
-// amount of loetter as of where a name is considered long
-const longNames = 10;
+import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -19,7 +18,7 @@ const longNames = 10;
  * <app-contact-details [selectedId]="id" />
  */
 @Component({
-  imports: [UserAvatar, Buttons],
+  imports: [UserAvatar, Buttons, FitTextDirective],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
@@ -73,13 +72,6 @@ export class ContactDetails {
    */
   selectedContact = computed(() => {
     return this.contactService.contacts().find((item) => item.id === this.selectedId());
-  });
-
-  // true if full name is longer than 20 characters
-  isLongName = computed(() => {
-    const contact = this.selectedContact();
-    if (!contact) return false;
-    return contact.firstname.length > longNames || contact.surname.length > longNames;
   });
 
   /**
