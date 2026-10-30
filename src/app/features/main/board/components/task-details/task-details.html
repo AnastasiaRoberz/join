@@ -1,5 +1,7 @@
 @if (selectedTask(); as task) {
-  <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
+  <p class="task-tag" [style.background-color]="categoryColor()" (click)="scrollToTop()">
+    {{ task.category }}
+  </p>
 
   <div class="content-wrapper scroll-container" #scrollTop>
     <h2 appFitText>{{ task.title }}</h2>
@@ -65,9 +67,7 @@
               class="btn-toggle-items"
               [class.expanded]="showAllUsers()"
               (click)="toggleUsers(usersSection)"
-            >
-              <span>{{ showAllUsers() ? 'Show less' : 'Show all users' }}</span>
-            </button>
+            ></button>
           }
         </div>
 
@@ -90,7 +90,7 @@
               <svg>
                 <use href="./assets/icons/icons.svg#check"></use>
               </svg>
-              {{ subtasksDone()?.length }} / {{ task.subtasks?.length }}
+              {{ subtasksDone().length }} / {{ sortedSubtasks().length }}
             </span>
           </div>
           @if (subtasksDone().length > 0) {
@@ -102,12 +102,9 @@
               icon="arrow-down"
               iconPos="left"
               class="btn-toggle-items"
+              [class.expanded]="showDoneSubtasks()"
               (click)="toggleSubtasks(subtasksSection)"
-            >
-              <span>{{
-                showDoneSubtasks() ? 'Hide checked Subtasks' : 'Show checked Subtasks'
-              }}</span>
-            </button>
+            ></button>
           }
         </div>
 

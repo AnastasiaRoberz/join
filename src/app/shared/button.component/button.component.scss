@@ -1,7 +1,9 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  // BUTTONS DEFAULT
+  // ===========================================================================
+  // DEFAULT BUTTON BASE
+  // ===========================================================================
   &.btn {
     display: inline-flex;
     justify-content: center;
@@ -36,7 +38,9 @@
     }
   }
 
-  // BUTTONS SIZES
+  // ===========================================================================
+  // BUTTON SIZES
+  // ===========================================================================
   &.btn--small {
     font-size: $font-default;
     padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
@@ -55,7 +59,9 @@
     border-radius: 10px;
   }
 
-  // BUTTON COLORS
+  // ===========================================================================
+  // BUTTON VARIANTS
+  // ===========================================================================
   &.btn--primary {
     background-color: $btn-primary-default;
     color: $btn-primary-txt;
@@ -159,7 +165,6 @@
     background-color: $btn-add-default;
     color: $btn-add-txt;
     font-weight: 700;
-    gap: 16px;
     gap: 0;
 
     .icon {
@@ -177,8 +182,12 @@
     }
   }
 
+  // ===========================================================================
+  // PRESET-SPECIFIC OVERRIDES
+  // ===========================================================================
   &.btn--addContact {
     gap: 16px;
+
     @include mobile {
       position: absolute;
       bottom: 32px;
@@ -198,6 +207,7 @@
   &.btn--addTask {
     gap: 4px;
     padding: 8px 16px;
+
     @include tablet {
       position: relative;
       bottom: 0;

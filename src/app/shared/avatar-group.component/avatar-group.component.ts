@@ -1,25 +1,20 @@
-import { Component, computed, ElementRef, inject, input, output, signal } from '@angular/core';
+import { Component, computed, ElementRef, inject, input, OnDestroy, OnInit, output, signal } from '@angular/core';
 import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
 import { Buttons } from '../button.component/button.component';
 
 /**
- * Displays a group of user avatars, in one of two layouts:
- * - **Overlapping (`overlapLayout = true`, default)**: avatars partially overlap each other (compact
- *   stack). At most `maxUsers` avatars are shown; the rest is summarized in a `+N` badge whose
+ * Displays a group of user avatars in one of two layouts:
+ * - **Overlapping (`overlapLayout = true`, default)**: Avatars partially overlap each other (compact
+ *   stack). At most `maxUsers` avatars are shown; the rest are summarized in a `+N` badge whose
  *   tooltip lists the names of the hidden users. Typical use: card previews on the board.
- * - **Non-overlapping (`overlapLayout = false`)**: a row of avatars separated by a gap. The number of
- *   avatars adapts to the available width of the host element (measured with a `ResizeObserver`),
- *   with a `+N` badge for the users that do not fit. Hovering an avatar shows a delete button that
- *   emits `userDeletedId`. Typical use: the list of assigned users below a select field.
- *
- * Every avatar has a cursor tooltip with the full name of the user. The host element receives the
- * `size` value (`small` / `medium`) as CSS class and the `no-overlap` class when `overlapLayout` is `false`.
- *
- * The delete buttons are `<button appBtn>` elements. `appBtn` renders `type="button"` by default
- * (see `Buttons.btnType`), so they never submit a surrounding `<form>`. The click is additionally
- * stopped from propagating (see `onDelete`), so parent click handlers (e.g. opening a card) are not triggered.
+ * - **Non-overlapping (`overlapLayout = false`)**:
+ *   - **Collapsed (`isExpanded = false`, default)**: A horizontal row of avatars separated by a gap.
+ *     The number of visible avatars adapts dynamically to the host width (measured via `ResizeObserver`),
+ *     with a `+N` badge for overflow users. Hovering an avatar shows a delete button when `canDelete` is `true`.
+ *   - **Expanded (`isExpanded = true`)**: Animates the avatars from the horizontal row into a vertical list
+ *     displaying each user's avatar alongside their full name.
  *
  * @example
  * ### 1. Overlapping stack (e.g., on a task card)
@@ -28,17 +23,26 @@ import { Buttons } from '../button.component/button.component';
  * ```
  *
  * @example
- * ### 2. Removable users below a multi-select (footer slot of the select field)
+ * ### 2. Removable users below a multi-select
  * ```html
- * <app-select-field #assignedSelect [multi]="true" [(value)]="selectedIds" [options]="contacts()">
- *   <app-avatar-group
- *     footer
- *     [users]="selectedContacts()"
- *     size="medium"
- *     [overlapLayout]="false"
- *     (userDeletedId)="assignedSelect.deselect($event)"
- *   />
- * </app-select-field>
+ * <app-avatar-group
+ *   [users]="selectedContacts()"
+ *   size="medium"
+ *   [overlapLayout]="false"
+ *   (userDeletedId)="assignedSelect.deselect($event)"
+ * />
+ * ```
+ *
+ * @example
+ * ### 3. Expandable user list in task details
+ * ```html
+ * <app-avatar-group
+ *   [users]="task.assigned_users"
+ *   size="medium"
+ *   [overlapLayout]="false"
+ *   [canDelete]="false"
+ *   [isExpanded]="!moreUsers() || showAllUsers()"
+ * />
  * ```
  */
 @Component({
@@ -55,8 +59,12 @@ import { Buttons } from '../button.component/button.component';
     '[style.--fitting-users]': 'fittingUsers()',
   },
 })
-export class AvatarGroupComponent {
-  /** Reference to the host element, observed by the `ResizeObserver` to measure the available width. */
+export class AvatarGroupComponent implements OnInit, OnDestroy {
+  // ---------------------------------------------------------------------------
+  // Injected Dependencies & Internal State
+  // ---------------------------------------------------------------------------
+
+  /** Reference to the host element, observed by `ResizeObserver` to measure available width. */
   element = inject(ElementRef<HTMLElement>);
 
   /** Observer that keeps `containerWidth` up to date; created in `ngOnInit`, disconnected in `ngOnDestroy`. */
@@ -64,69 +72,53 @@ export class AvatarGroupComponent {
 
   /**
    * Current content width of the host element in pixels (`0` until the first measurement).
-   * Only used in the non-overlapping layout to calculate how many avatars fit (see `fittingUsers`).
+   * Used in the non-overlapping layout to calculate how many avatars fit into a single row.
    */
   containerWidth = signal<number>(0);
 
-  /**
-   * Users to display. Partial contacts are accepted; `id`, `firstname` and `surname` are used
-   * (id for tracking/deleting, names for the tooltips), the rest is handled by `app-user-avatar`.
-   */
+  // ---------------------------------------------------------------------------
+  // Inputs & Outputs
+  // ---------------------------------------------------------------------------
+
+  /** Users to display. Uses `id`, `firstname`, and `surname` for tracking, labels, and tooltips. */
   users = input<Partial<ContactInterface>[]>([]);
 
-  /** Avatar size: `'small'` (32px) or `'medium'` (42px). Also set as CSS class on the host element. */
+  /** Avatar size: `'small'` (32px) or `'medium'` (42px). Bound as a CSS class on the host element. */
   size = input<'small' | 'medium'>('small');
 
   /**
    * Maximum number of avatars shown before collapsing the rest into the `+N` badge.
-   * Only applies to the overlapping layout (and as fallback while the width is unknown).
+   * Applies to the overlapping layout and as a fallback before `containerWidth` is measured.
    */
   maxUsers = input<number>(3);
 
   /**
-   * `true` (default): avatars overlap, no delete buttons.
-   * `false`: avatars are laid out in a row (host class `no-overlap`) with a delete button on hover.
+   * `true` (default): Compact overlapping avatar stack.
+   * `false`: Non-overlapping layout (`no-overlap` host class) supporting horizontal row or expanded vertical list.
    */
   overlapLayout = input<boolean>(true);
+
+  /** Whether hovering an avatar in the non-overlapping layout displays a delete button. */
   canDelete = input<boolean>(true);
+
+  /** Whether the non-overlapping layout is expanded into a vertical list showing full user names. */
   isExpanded = input<boolean>(false);
 
-  /**
-   * Horizontal spacing in pixels between avatars, used only for the "how many fit" calculation in
-   * `fittingUsers` (non-overlapping layout). It does not change the CSS gap, which is defined in the stylesheet.
-   */
+  /** Horizontal spacing in pixels between avatars used for the `fittingUsers` width calculation. */
   gap = input<number>(8);
 
-  /**
-   * Emits the `id` of the user whose delete button was clicked (non-overlapping layout only).
-   * Typically wired to a select field: `(userDeletedId)="assignedSelect.deselect($event)"`.
-   */
+  /** Emits the `id` of the user whose delete button was clicked (when `canDelete` is `true`). */
   userDeletedId = output<number>();
 
-  /**
-   * Starts a `ResizeObserver` on the host element that writes its width to `containerWidth`,
-   * so the number of visible avatars can adapt when the container is resized.
-   */
-  ngOnInit(): void {
-    this.resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        this.containerWidth.set(entry.contentRect.width);
-      }
-    });
-    this.resizeObserver.observe(this.element.nativeElement);
-  }
-
-  /** Disconnects the `ResizeObserver` to avoid leaks after the component is destroyed. */
-  ngOnDestroy(): void {
-    this.resizeObserver?.disconnect();
-  }
+  // ---------------------------------------------------------------------------
+  // Computed State
+  // ---------------------------------------------------------------------------
 
   /**
-   * Number of avatars that are rendered before the `+N` badge.
-   * - Overlapping layout, or width not yet measured (`<= 0`): `maxUsers()`.
-   * - Non-overlapping layout: as many avatars as fit into `containerWidth()`, assuming a fixed item
-   *   width of 32px (`small`) or 42px (`medium`) plus `gap()`; at least 1. If all users fit, all are shown;
-   *   otherwise one slot is reserved for the `+N` badge (`fitting - 1`, but never less than 1).
+   * Number of avatars that fit before the `+N` badge:
+   * - Overlapping layout or unmeasured width (`<= 0`): `maxUsers()`.
+   * - Non-overlapping layout: as many avatars as fit into `containerWidth()` based on avatar width
+   *   (32px for `small`, 42px for `medium`) and `gap()`, reserving one slot for the `+N` badge if needed.
    */
   fittingUsers = computed(() => {
     if (this.overlapLayout()) return this.maxUsers();
@@ -144,11 +136,11 @@ export class AvatarGroupComponent {
     return Math.max(1, maxFitting - 1);
   });
 
-  /** The first `fittingUsers()` users, i.e. the ones that are rendered as avatars. */
+  /** Slice of `users()` rendered in the overlapping layout (`0` up to `fittingUsers()`). */
   visibleUsers = computed(() => this.users().slice(0, this.fittingUsers()));
 
   /**
-   * Full names (`firstname surname`) of all users that do not fit, separated by line breaks (`\n`).
+   * Line-separated full names (`firstname surname`) of all users hidden in the `+N` badge.
    * Used as the tooltip text of the `+N` badge.
    */
   remainingUsers = computed(() => {
@@ -158,20 +150,40 @@ export class AvatarGroupComponent {
       .join('\n');
   });
 
-  /** Number of users hidden behind the `+N` badge; the badge is only rendered when this is greater than 0. */
+  /** Number of users hidden behind the `+N` badge; the badge is only rendered when `> 0`. */
   remainingUsersCount = computed(() => Math.max(0, this.users().length - this.fittingUsers()));
 
-  /** True if at least one user visible - controls margin-top on host */
+  /** True if at least one user is present; controls the host top margin via `.has-users`. */
   protected hasUsers = computed(() => this.visibleUsers().length > 0);
 
+  // ---------------------------------------------------------------------------
+  // Lifecycle
+  // ---------------------------------------------------------------------------
+
+  /** Starts a `ResizeObserver` on the host element to dynamically update `containerWidth`. */
+  ngOnInit(): void {
+    this.resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        this.containerWidth.set(entry.contentRect.width);
+      }
+    });
+    this.resizeObserver.observe(this.element.nativeElement);
+  }
+
+  /** Disconnects the `ResizeObserver` when the component is destroyed. */
+  ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Public Methods
+  // ---------------------------------------------------------------------------
+
   /**
-   * Click handler of the delete button. Stops the click from bubbling to parent elements and
-   * emits `userDeletedId` with the given id. Nothing is emitted for a falsy id (`undefined`, `0`).
-   *
-   * @param id - The id of the user to remove.
-   * @param event - The click event of the delete button.
+   * Handles clicks on the per-avatar delete button. Stops event propagation to parent elements
+   * and emits `userDeletedId` if a valid user `id` is provided.
    */
-  onDelete(id?: number, event?: MouseEvent) {
+  onDelete(id?: number, event?: MouseEvent): void {
     event?.stopPropagation();
     if (id) this.userDeletedId.emit(id);
   }
