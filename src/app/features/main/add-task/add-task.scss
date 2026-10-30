@@ -4,8 +4,10 @@
   width: 100%;
   height: 100%;
   padding-inline: calcClamp(16, 96, 1440, 950);
-  padding-block: 124px 66px;
+  padding-block: calcClamp(48, 124, 1300, 400) 66px;
   background-color: $main-bg;
+  overflow-y: auto;
+  position: relative;
 }
 
 .content {
@@ -18,6 +20,15 @@
   @include widescreen {
     max-height: 750px;
   }
+}
+
+.task-header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: auto;
+  background-color: $main-bg;
+  z-index: 4;
 }
 
 form {
