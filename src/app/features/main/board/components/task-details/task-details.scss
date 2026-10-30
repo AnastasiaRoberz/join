@@ -29,6 +29,17 @@
     width: calc(100% + 32px);
     padding-right: 8px;
   }
+
+  &.scroll-container {
+    --sb-width: 16px;
+
+    &::-webkit-scrollbar {
+      width: var(--sb-width);
+    }
+    &::-webkit-scrollbar-thumb {
+      border: 6px solid transparent;
+    }
+  }
 }
 
 .task-tag {
@@ -43,7 +54,6 @@ h2 {
   line-height: 120%;
   max-width: 100%;
   text-wrap: wrap;
-  word-break: break-word;
   max-height: clamp(10dvh, 7lh, 25dvh);
 }
 

@@ -28,6 +28,17 @@ form {
   @include flex-start(column, both);
   gap: 32px;
   height: 100%;
+
+  &.scroll-container {
+    --sb-width: 16px;
+
+    &::-webkit-scrollbar {
+      width: var(--sb-width);
+    }
+    &::-webkit-scrollbar-thumb {
+      border: 6px solid transparent;
+    }
+  }
 }
 
 .assigned-users {

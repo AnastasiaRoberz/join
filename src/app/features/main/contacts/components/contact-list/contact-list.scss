@@ -1,11 +1,13 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
+  --padding-inline: #{calcClamp(12, 24, 768, 320)};
   @include flex-start(column);
   justify-content: flex-start;
   width: 100%;
   height: 100%;
-  padding: calcClamp(16, 32, 768, 320) 0 calcClamp(6, 12, 768, 320) calcClamp(12, 24, 768, 320);
+  padding-block: calcClamp(16, 32, 768, 320) calcClamp(6, 12, 768, 320);
+  padding-inline: var(--padding-inline);
   gap: 24px;
   background-color: white;
 }
@@ -36,9 +38,7 @@ hr {
 .contact-list {
   @include flex-start(column);
   justify-content: flex-start;
-  padding-right: calcClamp(0, 8, 768, 320);
   height: 100%;
-  width: 100%;
 }
 
 .group-wrapper {
