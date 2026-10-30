@@ -43,26 +43,27 @@ button {
 
   &::-webkit-scrollbar {
     background: transparent;
-    width: 24px;
+    width: var(--sb-width);
   }
 
   &::-webkit-scrollbar-button:single-button {
-    display: block;
-    height: 30px;
-    width: 10px;
-    background-size: 10px 4px;
-    background-repeat: no-repeat;
+    // display: block;
+    // height: 30px;
+    // width: 10px;
+    // background-size: 10px 4px;
+    // background-repeat: no-repeat;
+    display: none;
   }
 
-  &::-webkit-scrollbar-button:single-button:vertical:start {
-    background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
-    background-position: center bottom;
-  }
+  // &::-webkit-scrollbar-button:single-button:vertical:start {
+  //   background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
+  //   background-position: center bottom;
+  // }
 
-  &::-webkit-scrollbar-button:single-button:vertical:end {
-    background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
-    background-position: center top;
-  }
+  // &::-webkit-scrollbar-button:single-button:vertical:end {
+  //   background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
+  //   background-position: center top;
+  // }
 
   &::-webkit-scrollbar-track {
     background: none;

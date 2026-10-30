@@ -84,3 +84,14 @@
     text-align: center;
   }
 }
+.scroll-container {
+  --sb-width: 16px;
+  // --padding-right: 0;
+
+  &::-webkit-scrollbar {
+    width: var(--sb-width);
+  }
+  &::-webkit-scrollbar-thumb {
+    border: 6px solid transparent;
+  }
+}
