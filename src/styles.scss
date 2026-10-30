@@ -41,7 +41,7 @@ button {
   --padding-right: var(--padding-inline, 40px);
   --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
   width: calc(100% + var(--sb-offset));
-  padding-right: calc(var(--sb-offset) - var(--sb-width));
+  // padding-right: calc(var(--sb-offset) - var(--sb-width));
   flex: 1;
   min-height: 0;
 

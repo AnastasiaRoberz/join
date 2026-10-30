@@ -86,7 +86,6 @@
 }
 .scroll-container {
   --sb-width: 16px;
-  // --padding-right: 0;
 
   &::-webkit-scrollbar {
     width: var(--sb-width);
