@@ -19,7 +19,6 @@ import { CATEGORIES } from '../../../../../utils/categories-list';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
-import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -68,6 +67,7 @@ export class TaskDetails {
   collapsedHeight = input<string>('140px');
   isExpanded = signal<boolean>(false);
   container = viewChild<ElementRef<HTMLElement>>('container');
+  scrollWrapper = viewChild<ElementRef<HTMLElement>>('scrollTop');
   expandedHeight = signal<string | null>(null);
   hasMoreHeight = signal<boolean>(false);
 
@@ -106,17 +106,32 @@ export class TaskDetails {
     this.expandedHeight.set(this.isExpanded() ? `${el.scrollHeight}px` : null);
   }
 
-  toggleSubtasks() {
+  toggleSubtasks(element: HTMLElement) {
     this.showDoneSubtasks.update((v) => !v);
+    if (this.showDoneSubtasks()) {
+      setTimeout(() => this.scrollContainer(element));
+    } else {
+      setTimeout(() => this.scrollToTop());
+    }
   }
 
-  scrollSubtasks(element: HTMLElement) {
-    element.scrollIntoView({ block: 'start' });
+  scrollContainer(element: HTMLElement) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  scrollToTop(): void {
+    this.scrollWrapper()?.nativeElement.scrollTo({ behavior: 'smooth', top: 0 });
   }
 
   showAllUsers = signal<boolean>(false);
-  toggleUsers(): void {
+
+  toggleUsers(element: HTMLElement): void {
     this.showAllUsers.update((v) => !v);
+    if (this.showAllUsers()) {
+      setTimeout(() => this.scrollContainer(element));
+    } else {
+      setTimeout(() => this.scrollToTop());
+    }
   }
 
   // ---------------------------------------------------------------------------

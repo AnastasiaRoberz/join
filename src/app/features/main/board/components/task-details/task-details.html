@@ -1,7 +1,7 @@
 @if (selectedTask(); as task) {
   <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
 
-  <div class="content-wrapper scroll-container">
+  <div class="content-wrapper scroll-container" #scrollTop>
     <h2 appFitText>{{ task.title }}</h2>
 
     @if (task.description) {
@@ -51,61 +51,62 @@
     </table>
 
     @if (task.assigned_users && task.assigned_users.length > 0) {
-      <div class="list-wrapper">
+      <div class="list-wrapper" #usersSection>
         <div class="label-wrapper">
           <span>Assigned To:</span>
           @if (moreUsers()) {
             <button
               appBtn
-              preset="secondary"
+              preset="text"
               size="small"
+              [label]="showAllUsers() ? 'Show less' : 'Show all users'"
               icon="arrow-down"
-              iconPos="right"
-              class="show-more-btn"
-              /* [class.expanded]="isExpanded()"
-            (click)="toggleDescription()" */
+              iconPos="left"
+              class="btn-toggle-items"
+              [class.expanded]="showAllUsers()"
+              (click)="toggleUsers(usersSection)"
             >
-              {{ showAllUsers() ? 'Show less' : 'Show all users' }}
+              <span>{{ showAllUsers() ? 'Show less' : 'Show all users' }}</span>
             </button>
           }
         </div>
 
-        @if (!moreUsers() || showAllUsers()) {
-          <ul>
-            @for (user of task.assigned_users; track user.id) {
-              <li class="user-item">
-                <app-user-avatar [user]="user" size="medium" />
-                <span>{{ user.firstname }} {{ user.surname }}</span>
-              </li>
-            }
-          </ul>
-        } @else {
-          <app-avatar-group
-            [users]="task.assigned_users"
-            size="medium"
-            [overlapLayout]="false"
-            [canDelete]="false"
-          />
-        }
+        <app-avatar-group
+          [users]="task.assigned_users"
+          size="medium"
+          [overlapLayout]="false"
+          [canDelete]="false"
+          [isExpanded]="!moreUsers() || showAllUsers()"
+        />
       </div>
     }
 
     @if (sortedSubtasks().length > 0) {
-      <div class="subtasks-wrapper" #subtasksSection>
+      <div class="list-wrapper" #subtasksSection>
         <div class="label-wrapper">
-          <span (click)="scrollSubtasks(subtasksSection)">Subtasks:</span>
-          <span>{{ subtasksDone()?.length }} / {{ task.subtasks?.length }}</span>
+          <div class="subtask-label">
+            <span class="label" (click)="scrollContainer(subtasksSection)">Subtasks</span>
+            <span class="status">
+              <svg>
+                <use href="./assets/icons/icons.svg#check"></use>
+              </svg>
+              {{ subtasksDone()?.length }} / {{ task.subtasks?.length }}
+            </span>
+          </div>
           @if (subtasksDone().length > 0) {
             <button
               appBtn
-              preset="secondary"
+              preset="text"
               size="small"
+              [label]="showDoneSubtasks() ? 'Hide checked Subtasks' : 'Show checked Subtasks'"
               icon="arrow-down"
-              iconPos="right"
-              class="btn-show-items"
-              (click)="toggleSubtasks()"
+              iconPos="left"
+              class="btn-toggle-items"
+              (click)="toggleSubtasks(subtasksSection)"
             >
-              <span>{{ showDoneSubtasks() ? 'Hide checked Subtasks' : 'Show all Subtasks' }}</span>
+              <span>{{
+                showDoneSubtasks() ? 'Hide checked Subtasks' : 'Show checked Subtasks'
+              }}</span>
             </button>
           }
         </div>
