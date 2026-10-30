@@ -7,6 +7,9 @@
   // same fixed width as in Figma, the card does not grow with the column
   max-width: $task-card-width;
   cursor: pointer;
+
+  user-select: none; // no text selection on long press
+  -webkit-touch-callout: none; // no "copy / share" menu on iOS
 }
 
 // tilt only the inner card while pressed and while dragged,
@@ -18,6 +21,11 @@
 // anchor for the dashed ::after box, so it covers exactly the card
 :host(.cdk-drag-placeholder) {
   position: relative;
+
+  // height for mobile smaller and fixed, so columns do not jump
+  @include mobile {
+    height: 230px;
+  }
 }
 
 // copy of actual card invisible in column

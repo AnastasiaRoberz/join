@@ -12,7 +12,7 @@
     // otherwise the top of the page is cut off when the content is higher than the page
     justify-content: flex-start;
     overflow-y: auto;
-    gap: calcclamp(24, 48);
+    gap: calcClamp(24, 48);
 
     app-board-container {
       flex: none;
@@ -21,7 +21,7 @@
 
   @include mobile {
     padding-top: 28px;
-    gap: 28px;
+    gap: calcClamp(0, 20, 600, 320); // reduced gap in mobile
   }
 }
 
@@ -31,6 +31,6 @@ app-board-header {
     top: -90px; // 90px is header without searchbar
     z-index: 1; // stays above the task cards
     background: $color-grey-background; // otherwise cards show through
-    padding: 20px 0px;
+    padding-top: calcClamp(0, 20, 600, 320); // reduced padding in mobile
   }
 }

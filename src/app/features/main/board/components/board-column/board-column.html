@@ -21,6 +21,8 @@
         [task]="task"
         cdkDrag
         cdkDragBoundary="app-board"
+        /* delay drag on touch devices */
+        [cdkDragStartDelay]="{ touch: 250, mouse: 0 }"
         (cdkDragStarted)="onDragStarted($event)"
         /* (pointerdown)="onCardPressed($event)" */
       />

@@ -14,6 +14,6 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
     align-items: start;
-    gap: calcClamp(12, 32);
+    gap: calcClamp(0, 32); // reduced gap in mobile
   }
 }
