@@ -18,6 +18,7 @@ import { capitalizeFirstLetter } from '../../../../../utils/utils';
 import { CATEGORIES } from '../../../../../utils/categories-list';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { FitTextDirective } from '../../../../../directives/fit-text.directive';
+import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -40,7 +41,14 @@ import { FitTextDirective } from '../../../../../directives/fit-text.directive';
  * ```
  */
 @Component({
-  imports: [Buttons, DatePipe, FitTextDirective, UserAvatar, CheckboxComponent],
+  imports: [
+    Buttons,
+    DatePipe,
+    FitTextDirective,
+    UserAvatar,
+    CheckboxComponent,
+    AvatarGroupComponent,
+  ],
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
@@ -61,6 +69,8 @@ export class TaskDetails {
   container = viewChild<ElementRef<HTMLElement>>('container');
   expandedHeight = signal<string | null>(null);
   hasMoreHeight = signal<boolean>(false);
+
+  moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 3);
 
   constructor() {
     afterRenderEffect(() => {

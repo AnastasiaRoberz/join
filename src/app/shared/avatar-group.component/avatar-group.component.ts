@@ -85,6 +85,7 @@ export class AvatarGroupComponent {
    * `false`: avatars are laid out in a row (host class `no-overlap`) with a delete button on hover.
    */
   overlapLayout = input<boolean>(true);
+  canDelete = input<boolean>(true);
 
   /**
    * Horizontal spacing in pixels between avatars, used only for the "how many fit" calculation in

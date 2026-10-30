@@ -21,12 +21,6 @@
   }
 }
 
-.fixed-content {
-  @include flex-start(column, both);
-  gap: 24px;
-  width: 100%;
-}
-
 .task-tag {
   padding: 4px 24px;
   border-radius: 8px;
@@ -37,20 +31,16 @@ h2 {
   line-height: 120%;
   max-width: 100%;
   word-break: break-word;
-  max-height: min(20dvh, 200px);
+  max-height: min(18dvh, 180px);
 }
 
 .description-wrapper {
-  @include flex-start(column, both);
-  gap: 8px;
+  @include flex-center(column);
+  gap: 4px;
   width: 100%;
 
   .description {
     width: 100%;
-    overflow: hidden;
-    text-align: justify;
-    line-height: 1.2;
-    word-break: break-word;
 
     &.collapsible {
       height: var(--collapsedHeight);
@@ -72,7 +62,7 @@ h2 {
 .show-more-btn {
   display: inline-flex;
   align-items: center;
-  align-self: flex-end;
+  // align-self: flex-end;
   gap: 0;
   padding: 4px 8px;
   border-radius: 6px;
@@ -112,11 +102,14 @@ table {
   }
 }
 
-.scrollable-content {
-  display: grid;
-  grid-template-rows: minmax(0, auto) minmax(0, auto);
-  gap: 24px;
+.list-wrapper {
+  @include flex-start(column, both);
+  gap: 16px;
   width: 100%;
+
+  app-avatar-group {
+    margin: 0;
+  }
 }
 
 .assigned-wrapper,
