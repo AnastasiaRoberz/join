@@ -12,6 +12,7 @@
     // otherwise the top of the page is cut off when the content is higher than the page
     justify-content: flex-start;
     overflow-y: auto;
+    gap: calcclamp(24, 48);
 
     app-board-container {
       flex: none;
