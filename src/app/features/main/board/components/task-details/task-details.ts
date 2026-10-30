@@ -19,6 +19,7 @@ import { CATEGORIES } from '../../../../../utils/categories-list';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
+import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -72,6 +73,16 @@ export class TaskDetails {
 
   moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 3);
 
+  subtasksNotDone = computed(() => this.sortedSubtasks().filter((item) => !item.is_done));
+
+  subtasksDone = computed(() => this.sortedSubtasks().filter((item) => item.is_done));
+
+  showDoneSubtasks = signal<boolean>(false);
+
+  visibleSubtasks = computed(() =>
+    this.showDoneSubtasks() ? this.sortedSubtasks() : this.subtasksNotDone(),
+  );
+
   constructor() {
     afterRenderEffect(() => {
       const el = this.container()?.nativeElement;
@@ -93,6 +104,19 @@ export class TaskDetails {
 
     this.isExpanded.update((v) => !v);
     this.expandedHeight.set(this.isExpanded() ? `${el.scrollHeight}px` : null);
+  }
+
+  toggleSubtasks() {
+    this.showDoneSubtasks.update((v) => !v);
+  }
+
+  scrollSubtasks(element: HTMLElement) {
+    element.scrollIntoView({ block: 'start' });
+  }
+
+  showAllUsers = signal<boolean>(false);
+  toggleUsers(): void {
+    this.showAllUsers.update((v) => !v);
   }
 
   // ---------------------------------------------------------------------------
