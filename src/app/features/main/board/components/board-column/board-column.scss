@@ -21,6 +21,8 @@
     justify-content: space-between;
     gap: calcClamp(8, 12); // keeps the title and the plus button apart
     min-height: 24px;
+    padding-left: 4px;
+    margin-right: -10px;
   }
 
   &__title {
