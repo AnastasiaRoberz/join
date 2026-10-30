@@ -1,17 +1,19 @@
 @use '../../../../../../../public/assets/styles' as *;
 
-// 4 columns next to each other, each column scrolls itself,
-// on mobile the columns are below each other
+// desktop: 4 columns next to each other (max. card width as in Figma),
+// each column scrolls itself
 :host {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, $task-card-width));
   grid-template-rows: minmax(0, 1fr);
   gap: calcClamp(28, 40);
   min-height: 0;
 
-  @include mobile {
+  // compact layout: the sections are below each other
+  @include tablet($board-breakpoint) {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
     align-items: start;
+    gap: calcClamp(12, 32);
   }
 }

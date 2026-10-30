@@ -7,6 +7,18 @@
   height: 100%;
   padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
 
+  // compact layout: the columns are below each other, so the page scrolls up and down
+  @include tablet($board-breakpoint) {
+    // otherwise the top of the page is cut off when the content is higher than the page
+    justify-content: flex-start;
+    overflow-y: auto;
+    gap: calcclamp(24, 48);
+
+    app-board-container {
+      flex: none;
+    }
+  }
+
   @include mobile {
     padding-top: 28px;
     gap: 28px;

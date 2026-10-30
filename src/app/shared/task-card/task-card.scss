@@ -3,6 +3,8 @@
 :host {
   display: block;
   width: 100%;
+  // same fixed width as in Figma, the card does not grow with the column
+  max-width: $task-card-width;
   cursor: pointer;
 }
 
@@ -53,8 +55,8 @@
   // shows max. 2 lines of the title, the rest is cut off with "..."
   &__title {
     display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: $font-default;

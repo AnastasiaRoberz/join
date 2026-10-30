@@ -19,6 +19,7 @@
   &__header {
     @include flex-start;
     justify-content: space-between;
+    gap: calcClamp(8, 12); // keeps the title and the plus button apart
     min-height: 24px;
   }
 
@@ -34,19 +35,30 @@
     align-items: stretch;
     justify-content: flex-start;
     flex: 1;
-    min-height: 0;
     gap: calcClamp(12, 16);
-    flex: 1;
-    outline: 1px solid red; // helper for seeing column height
-    min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
-    justify-content: flex-start;
-    
-          // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
-    @include tablet(1280px) {
+    min-height: calc(100dvh - 410px); // fix height, due to drag box needed for now
+
+    // compact layout: cards in a row, scrolling sideways
+    @include tablet($board-breakpoint) {
       flex: none;
-      overflow-y: visible;
+      flex-direction: row;
+      align-items: flex-start;
+      min-height: 0; // the fixed height from above is only for the desktop layout
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-y: auto; // let the page scroll, the global scroll-container blocks it
       width: auto;
       scrollbar-gutter: auto;
+      padding-block: 6px;
+
+      app-task-card {
+        flex: 0 0 $task-card-width;
+        width: $task-card-width;
+      }
+
+      .board-column__empty {
+        flex: 1;
+      }
     }
   }
 
@@ -61,7 +73,7 @@
   &:has(.cdk-drag-placeholder) &__drop-hint {
     display: none;
   }
-  
+
   // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);
