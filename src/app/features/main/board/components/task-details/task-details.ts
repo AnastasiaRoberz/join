@@ -171,6 +171,9 @@ export class TaskDetails {
 
     this.isExpanded.update((v) => !v);
     this.expandedHeight.set(this.isExpanded() ? `${el.scrollHeight}px` : null);
+    if (!this.isExpanded()) {
+      setTimeout(() => this.scrollToTop());
+    }
   }
 
   /**
