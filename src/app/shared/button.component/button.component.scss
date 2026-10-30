@@ -21,9 +21,11 @@
     }
 
     .icon {
-      width: 24px;
-      height: 24px;
+      width: var(--btn-icon-size, 24px);
+      aspect-ratio: 1/1;
       flex-shrink: 0;
+      transform: var(--btn-icon-transform, none);
+      transition: transform 0.25s ease;
     }
 
     &:disabled {
@@ -134,17 +136,17 @@
     }
 
     &.btn--small {
-      width: 24px;
-      height: 24px;
+      width: var(--btn-icon-small-size, 24px);
+      aspect-ratio: 1/1;
     }
 
     &.btn--medium {
-      width: 32px;
-      height: 32px;
+      width: var(--btn-icon-medium-size, 32px);
+      aspect-ratio: 1/1;
 
       .icon {
-        width: 32px;
-        height: 32px;
+        width: inherit;
+        height: inherit;
       }
     }
 
