@@ -74,7 +74,7 @@ button {
   }
 
   &::-webkit-scrollbar-thumb {
-    border: 8px solid transparent;
+    border: 10px solid transparent;
     border-radius: 9999px;
     background-clip: content-box;
     background-color: $icon;
@@ -93,7 +93,7 @@ button {
     }
 
     &::-webkit-scrollbar-thumb {
-      border: 9px solid transparent;
+      border: 10px solid transparent;
     }
   }
 }

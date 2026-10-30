@@ -14,7 +14,6 @@
 
   @include mobile {
     width: 100%;
-    height: 100%;
   }
 }
 
@@ -28,17 +27,6 @@
   &:has(.description.expanded) {
     width: calc(100% + 32px);
     padding-right: 8px;
-  }
-
-  &.scroll-container {
-    --sb-width: 16px;
-
-    &::-webkit-scrollbar {
-      width: var(--sb-width);
-    }
-    &::-webkit-scrollbar-thumb {
-      border: 6px solid transparent;
-    }
   }
 }
 
