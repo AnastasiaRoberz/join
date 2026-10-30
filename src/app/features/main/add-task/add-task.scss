@@ -5,17 +5,11 @@
   height: 100%;
   padding-inline: calcClamp(16, 96, 1440, 950);
   padding-block: calcClamp(48, 124, 1300, 400) 66px;
-  background-color: $main-bg;
-  overflow-y: auto;
-  position: relative;
-}
-
-.content {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 48px;
+  overflow-y: auto;
+  position: relative;
 
   @include widescreen {
     max-height: 750px;
@@ -39,6 +33,8 @@ form {
   flex-direction: column;
   justify-content: space-between;
   gap: 48px;
+  // display: grid;
+  // grid-template-rows: auto 1fr;
 }
 
 .task-container {
