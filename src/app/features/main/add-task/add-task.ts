@@ -16,6 +16,7 @@ import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.c
 import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
 import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
 import { DialogService } from '../../../services/dialog.service';
+import { Router } from '@angular/router';
 
 /**
  * Form component for creating a new task.
@@ -75,6 +76,14 @@ export class AddTask implements OnDestroy {
 
   /** Reactive list of currently assigned contact IDs. */
   selectedContactIds = signal<number[]>([]);
+
+  /** Holds the status chosen via a column "+" button.
+   * also used to close dialog when task is created
+   */
+  dialogService = inject(DialogService);
+
+  /** used to route to board page after task is created via sidebar */
+  private router = inject(Router);
 
   /**
    * Full contact objects corresponding to `selectedContactIds()`,
@@ -158,9 +167,6 @@ export class AddTask implements OnDestroy {
     this.selectedContactIds.set([]);
   }
 
-  /** Holds the status chosen via a column "+" button. */
-  dialogService = inject(DialogService);
-
   /**
    * Submits the form. If the form is invalid or no priority is selected,
    * all fields are marked as touched to reveal error hints and the method aborts.
@@ -201,6 +207,17 @@ export class AddTask implements OnDestroy {
       await this.taskService.setTaskAssignments(newTask.id, contactIds);
 
       this.onClear();
+      this.finishSubmit();
+    }
+  }
+
+  /** After saving: closes the dialog, or navigates to the board when on the Add Task page. */
+  private finishSubmit(): void {
+    const inDialog = this.dialogService.isOpen() && this.dialogService.dialogType() === 'add-task';
+    if (inDialog) {
+      this.dialogService.closeDialog();
+    } else {
+      this.router.navigate(['/board']);
     }
   }
 
