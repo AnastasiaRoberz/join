@@ -65,7 +65,6 @@ h2 {
     font-size: calcClamp(16, 20);
 
     &.collapsible {
-      height: var(--collapsedHeight);
       mask-image: linear-gradient(black, black calc(100% - 1.5rem), rgba(black, 0) 100%);
       mask-size: 100% calc(100% + 1.5rem);
       mask-position: 0 100%;
@@ -75,7 +74,7 @@ h2 {
     }
 
     &.collapsible.expanded {
-      height: var(--expandedHeight);
+      max-height: var(--expandedHeight);
       mask-position: 0 0;
     }
   }
