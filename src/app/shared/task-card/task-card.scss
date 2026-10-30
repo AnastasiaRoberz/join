@@ -63,6 +63,14 @@
     color: $text-dark;
   }
 
+    // title and description belong together, so they sit closer than the other parts of the card
+  &__text {
+    @include flex-start(column);
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
   // shows max. 2 lines of the description, the rest is cut off with "..."
   &__description {
     display: -webkit-box;
