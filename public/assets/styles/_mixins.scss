@@ -118,3 +118,15 @@
     }
   }
 }
+
+@mixin height-responsive($height, $value: max) {
+  @if ($value == 'max') {
+    @media screen and (max-height: #{$height}px) {
+      @content;
+    }
+  } @else if($value == 'min') {
+    @media screen and (min-height: #{$height}px) {
+      @content;
+    }
+  }
+}
