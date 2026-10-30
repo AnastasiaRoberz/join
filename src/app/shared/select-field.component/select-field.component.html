@@ -38,10 +38,13 @@
       appBtn
       preset="iconMedium"
       icon="arrow-down"
+      [class.is-open]="popupExpanded()"
       (click)="togglePopup()"
       (mousedown)="$event.preventDefault()"
     ></button>
   }
+
+  <span class="error-msg">{{ showError() }}</span>
 </div>
 
 <!-- Optional slot for footer content (e.g., assigned user avatar badges) -->
@@ -66,8 +69,9 @@
       (valueChange)="onValueChange($event)"
       (mousedown)="$event.preventDefault()"
       [activeDescendant]="listbox.activeDescendant()"
-      class="dropdown scroll-container"
+      class="dropdown"
       [class.is-open]="popupExpanded()"
+      [class.scroll-container]="scrollable()"
     >
       @for (option of filteredOptions(); track valueKey()(option)) {
         <li

@@ -1,4 +1,4 @@
-import { Service, signal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskInterface } from '../interfaces/task.interface';
 

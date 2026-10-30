@@ -113,3 +113,7 @@ li {
     height: 24px;
   }
 }
+
+:host(.task-input) .input-container {
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
+}

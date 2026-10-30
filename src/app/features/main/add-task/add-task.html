@@ -5,7 +5,10 @@
       <div class="taskWrap taskLeft">
         <app-text-field
           fieldId="task-title"
+          class="task-input"
           formControlName="title"
+          requiredMsg
+          ...
           labelPos="top"
           label="Title"
           type="input"
@@ -14,6 +17,7 @@
 
         <app-text-field
           fieldId="task-description"
+          class="task-input"
           formControlName="description"
           labelPos="top"
           label="Description"
@@ -25,6 +29,8 @@
           fieldId="task-date"
           label="Due date"
           formControlName="date"
+          requiredMsg
+          ...
         ></app-calendar-field>
       </div>
 
@@ -61,14 +67,15 @@
           label="Category"
           placeholder="Select Task Category"
           formControlName="category"
+          requiredMsg
+          ...
           [options]="categories"
           [valueKey]="categoryKey"
-          [(value)]="selectedCategory"
-          (valueChange)="onCategoryChange($event)"
           [required]="true"
+          [scrollable]="false"
         ></app-select-field>
 
-        <app-subtask-field [isScrollable]="true"></app-subtask-field>
+        <app-subtask-field [isScrollable]="true" class="task-input"></app-subtask-field>
       </div>
     </div>
 
