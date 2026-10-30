@@ -8,7 +8,7 @@
         preset="iconSmall"
         icon="add-task-btn"
         type="button"
-        (click)="dialogService.openAddTask(status())"
+        (click)="taskService.openAddTask(status())"
         [attr.aria-label]="'Add task to ' + status()"
       ></button>
     }

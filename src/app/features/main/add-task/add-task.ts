@@ -176,7 +176,7 @@ export class AddTask implements OnDestroy {
       return;
     }
 
-    const status = this.dialogService.addTaskStatus(); // adding the status
+    const status = this.taskService.addTaskStatus(); // adding the status
     // find all tasks of that status / column
     const columnTasks = this.taskService.tasks().filter((task) => task.status === status);
 
@@ -190,7 +190,7 @@ export class AddTask implements OnDestroy {
       due_date: this.taskForm.value.date!,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
-      status: this.dialogService.addTaskStatus(),
+      status: this.taskService.addTaskStatus(),
       position: top, // assigning top position
     };
 
@@ -207,6 +207,6 @@ export class AddTask implements OnDestroy {
   /** Resets the column status so the next task starts in "To do" again. */
   // needed for the add task link on the sidebar, as that is never the overlay and does not call the dialogservice
   ngOnDestroy(): void {
-    this.dialogService.addTaskStatus.set('To do');
+    this.taskService.addTaskStatus.set('To do');
   }
 }
