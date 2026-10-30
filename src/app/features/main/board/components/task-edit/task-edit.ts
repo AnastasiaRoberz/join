@@ -125,7 +125,7 @@ export class TaskEdit {
    * Contacts and subtasks are handled separately via signals.
    */
   taskForm = this.fb.group({
-    title: ['', { validators: [Validators.required, Validators.maxLength(250)] }],
+    title: ['', { validators: [Validators.required, Validators.maxLength(200)] }],
     description: ['', { validators: [Validators.required] }],
     dueDate: ['', { validators: [Validators.required] }],
     priority: this.fb.control<Priority>('medium', { nonNullable: true }),

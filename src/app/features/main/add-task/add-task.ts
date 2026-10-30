@@ -47,7 +47,7 @@ export class AddTask {
    * Contact assignment is handled separately via the `assignedContacts` signal.
    */
   taskForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.maxLength(250)]),
+    title: new FormControl('', [Validators.required, Validators.maxLength(200)]),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
     assigned: new FormControl<number[]>([]),
