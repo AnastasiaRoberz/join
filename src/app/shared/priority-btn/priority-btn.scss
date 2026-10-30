@@ -10,7 +10,7 @@
 }
 
 .prio-label {
-  font-size: $font-medium;
+  @include field-label;
 }
 
 .btn-wrapper {
@@ -32,12 +32,24 @@
   gap: 8px;
   box-shadow: 0 0 4px 0 #00000066;
   background-color: $color-white;
-  font-size: calcClamp(16, 20, 1300, 430);
+  font-size: calcClamp(16, 20, 1300, 1025);
   line-height: 120%;
 
+  @include tablet {
+    font-size: calcClamp(16, 20, 1024, 769);
+  }
+
+  @include mobile {
+    font-size: calcClamp(14, 20, 768, 350);
+  }
+
   svg {
-    width: calcClamp(16, 20, 1300, 430);
+    width: calcClamp(12, 20, 1300, 769);
     aspect-ratio: 1 / 1;
+
+    @include mobile {
+      width: 20px;
+    }
   }
 
   &:hover:not(.active) {

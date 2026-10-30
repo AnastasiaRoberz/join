@@ -1,3 +1,11 @@
+@use '_variables.scss' as *;
+@use '_fonts.scss' as *;
+@use '_functions' as *;
+
+//==========================================
+// DISPLAY: FLEX
+//==========================================
+
 @mixin flex-center($direction: row) {
   display: flex;
   flex-direction: $direction;
@@ -20,6 +28,60 @@
     align-items: flex-start;
   }
 }
+
+//==========================================
+// INPUT-FIELD-COMPONENTS
+//==========================================
+
+@mixin field-host($gap: 8px) {
+  width: 100%;
+  gap: $gap;
+}
+
+@mixin field-label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
+@mixin field-container($height: calcClamp(40, 48, 769, 400)) {
+  @include flex-center;
+  width: 100%;
+  height: $height;
+  border: 1px solid $input-default-border;
+  border-radius: 10px;
+  background-color: $color-white;
+  position: relative;
+
+  &:focus-within {
+    border-color: $input-focus-border;
+  }
+}
+
+@mixin field-input {
+  border: none;
+  outline: none;
+  background: none;
+  flex: 1;
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
+}
+
+@mixin field-error-msg {
+  font-size: calcClamp(12, 16, 940, 400);
+  color: $error;
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  transform: translateY(100%);
+
+  @include mobile {
+    bottom: -1px;
+  }
+}
+
+//==========================================
+// RESPONSIVE
+//==========================================
 
 @mixin widescreen($height: 1800px) {
   @media screen and (min-height: $height) {
