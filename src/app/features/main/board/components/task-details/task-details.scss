@@ -24,7 +24,6 @@
   align-items: flex-start;
   gap: calcClamp(16, 24);
   height: auto;
-  // overflow-x: hidden;
 
   &:has(.description.expanded) {
     width: calc(100% + 32px);
@@ -43,6 +42,7 @@
 h2 {
   line-height: 120%;
   max-width: 100%;
+  text-wrap: wrap;
   word-break: break-word;
   max-height: clamp(10dvh, 7lh, 25dvh);
 }
@@ -59,7 +59,7 @@ h2 {
   .description {
     --collapsedHeight: clamp(5dvh, 4lh, 10dvh);
     width: 100%;
-    height: var(--collapsedHeight);
+    max-height: var(--collapsedHeight);
     overflow: hidden;
     word-break: break-word;
     font-size: calcClamp(16, 20);
