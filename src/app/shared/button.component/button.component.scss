@@ -196,6 +196,7 @@
   // ===========================================================================
   &.btn--addContact {
     gap: 16px;
+    width: calc(100% - 24px);
 
     @include mobile {
       position: absolute;

@@ -92,11 +92,3 @@ hr {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.btn {
-  width: calc(100% - 24px);
-
-  @include mobile {
-    width: auto;
-  }
-}
