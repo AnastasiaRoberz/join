@@ -6,4 +6,19 @@
   width: 100%;
   height: 100%;
   padding: calcClamp(48, 80) calcClamp(16, 88) calcClamp(24, 80) calcClamp(16, 64);
+
+  @include mobile {
+    padding-top: 28px;
+    gap: 28px;
+  }
+}
+
+app-board-header {
+  @include mobile {
+    position: sticky;
+    top: -90px; // 90px is header without searchbar
+    z-index: 1; // stays above the task cards
+    background: $color-grey-background; // otherwise cards show through
+    padding: 20px 0px;
+  }
 }
