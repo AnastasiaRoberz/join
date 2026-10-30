@@ -207,12 +207,12 @@ export class AddTask implements OnDestroy {
       await this.taskService.setTaskAssignments(newTask.id, contactIds);
 
       this.onClear();
-      this.finishSubmit();
+      this.returnToBoard(); // calls to close dialog or navigate to board page
     }
   }
 
   /** After saving: closes the dialog, or navigates to the board when on the Add Task page. */
-  private finishSubmit(): void {
+  private returnToBoard(): void {
     const inDialog = this.dialogService.isOpen() && this.dialogService.dialogType() === 'add-task';
     if (inDialog) {
       this.dialogService.closeDialog();
