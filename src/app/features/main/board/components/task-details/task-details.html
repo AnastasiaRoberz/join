@@ -3,8 +3,8 @@
     {{ task.category }}
   </p>
 
-  <div class="content-wrapper scroll-container" #scrollTop>
-    <h2 appFitText>{{ task.title }}</h2>
+  <div class="scroll-container content-wrapper" #scrollTop>
+    <h2 appFitText [minSize]="16">{{ task.title }}</h2>
 
     @if (task.description) {
       <div class="description-wrapper">
@@ -13,7 +13,6 @@
           #container
           [class.collapsible]="hasMoreHeight()"
           [class.expanded]="isExpanded()"
-          [style.--collapsedHeight]="collapsedHeight()"
           [style.--expandedHeight]="expandedHeight()"
         >
           {{ task.description }}
@@ -55,13 +54,15 @@
     @if (task.assigned_users && task.assigned_users.length > 0) {
       <div class="list-wrapper" #usersSection>
         <div class="label-wrapper">
-          <span>Assigned To:</span>
+          <span class="label" (click)="scrollToSection(usersSection)">Assigned To:</span>
           @if (moreUsers()) {
             <button
               appBtn
               preset="text"
               size="small"
-              [label]="showAllUsers() ? 'Show less' : 'Show all users'"
+              [label]="
+                responsiveService.isMobile() ? '' : showAllUsers() ? 'Show less' : 'Show all users'
+              "
               icon="arrow-down"
               iconPos="left"
               class="btn-toggle-items"
@@ -85,7 +86,7 @@
       <div class="list-wrapper" #subtasksSection>
         <div class="label-wrapper">
           <div class="subtask-label">
-            <span class="label" (click)="scrollContainer(subtasksSection)">Subtasks</span>
+            <span class="label" (click)="scrollToSection(subtasksSection)">Subtasks</span>
             <span class="status">
               <svg>
                 <use href="./assets/icons/icons.svg#check"></use>
@@ -98,7 +99,13 @@
               appBtn
               preset="text"
               size="small"
-              [label]="showDoneSubtasks() ? 'Hide checked Subtasks' : 'Show checked Subtasks'"
+              [label]="
+                responsiveService.isMobile()
+                  ? ''
+                  : showDoneSubtasks()
+                    ? 'Hide checked Subtasks'
+                    : 'Show checked Subtasks'
+              "
               icon="arrow-down"
               iconPos="left"
               class="btn-toggle-items"
@@ -110,7 +117,7 @@
 
         <ul>
           @for (subtask of visibleSubtasks(); track subtask.id) {
-            <li class="subtask">
+            <li class="subtask" [class.done]="subtask.is_done">
               <app-checkbox
                 [text]="subtask.title"
                 [checked]="subtask.is_done"

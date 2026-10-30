@@ -18,6 +18,7 @@ import { AvatarGroupComponent } from '../../../../../shared/avatar-group.compone
 import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 import { capitalizeFirstLetter } from '../../../../../utils/utils';
 import { CATEGORIES } from '../../../../../utils/categories-list';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -39,13 +40,7 @@ import { CATEGORIES } from '../../../../../utils/categories-list';
  * ```
  */
 @Component({
-  imports: [
-    Buttons,
-    DatePipe,
-    FitTextDirective,
-    CheckboxComponent,
-    AvatarGroupComponent,
-  ],
+  imports: [Buttons, DatePipe, FitTextDirective, CheckboxComponent, AvatarGroupComponent],
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
@@ -54,6 +49,7 @@ export class TaskDetails {
   // ---------------------------------------------------------------------------
   // Injected Services & Helpers
   // ---------------------------------------------------------------------------
+  responsiveService = inject(ResponsiveService);
 
   /** Provides reactive access to the task collection and persists subtask status changes. */
   taskService = inject(TaskService);
@@ -152,16 +148,15 @@ export class TaskDetails {
 
   constructor() {
     afterRenderEffect(() => {
-      const el = this.container()?.nativeElement;
-      const maxHeight = parseInt(this.collapsedHeight(), 10);
+      const element = this.container()?.nativeElement;
       this.selectedTask()?.description;
 
-      if (!el || isNaN(maxHeight)) {
+      if (!element) {
         this.hasMoreHeight.set(false);
         return;
       }
 
-      this.hasMoreHeight.set(el.scrollHeight > maxHeight);
+      this.hasMoreHeight.set(element.scrollHeight > element.clientHeight + 1);
     });
   }
 
@@ -185,7 +180,7 @@ export class TaskDetails {
   toggleUsers(element: HTMLElement): void {
     this.showAllUsers.update((v) => !v);
     if (this.showAllUsers()) {
-      this.scrollContainer(element);
+      setTimeout(() => element.scrollIntoView({ behavior: 'smooth', block: 'start' }));
     } else {
       this.scrollToTop();
     }
@@ -198,14 +193,17 @@ export class TaskDetails {
   toggleSubtasks(element: HTMLElement): void {
     this.showDoneSubtasks.update((v) => !v);
     if (this.showDoneSubtasks()) {
-      this.scrollContainer(element);
+      setTimeout(() => {
+        const firstDoneTask = element.querySelector<HTMLElement>('.subtask.done') ?? element;
+        firstDoneTask.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     } else {
       this.scrollToTop();
     }
   }
 
   /** Smoothly scrolls the dialog content so the given section element aligns with the top edge. */
-  scrollContainer(element: HTMLElement): void {
+  scrollToSection(element: HTMLElement): void {
     setTimeout(() => {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });

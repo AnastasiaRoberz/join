@@ -1,4 +1,12 @@
-import { Directive, HostListener, inject, input, OnDestroy, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  inject,
+  input,
+  OnDestroy,
+  Renderer2,
+} from '@angular/core';
 
 /**
  * Displays a floating tooltip that follows the mouse cursor while hovering the host element.
@@ -16,6 +24,7 @@ export class CursorTooltipDirective implements OnDestroy {
   // ---------------------------------------------------------------------------
 
   renderer = inject(Renderer2);
+  hostElement = inject(ElementRef<HTMLElement>).nativeElement;
 
   /** Text content displayed inside the tooltip; when empty, no tooltip is shown. */
   tooltipText = input.required<string>({ alias: 'appCursorTooltip' });
@@ -49,7 +58,9 @@ export class CursorTooltipDirective implements OnDestroy {
       this.destroyTooltip();
       return;
     }
-    this.updatePosition(event);
+    if (window.innerWidth > 768) {
+      this.updatePosition(event);
+    }
   }
 
   /** Removes the tooltip when the cursor leaves the host element. */
@@ -71,11 +82,32 @@ export class CursorTooltipDirective implements OnDestroy {
   updatePosition(event: MouseEvent): void {
     if (!this.tooltipElement) return;
 
-    const offsetX = 12;
-    const offsetY = 16;
+    const isMobile = window.innerWidth <= 768;
+    const tooltipRect = this.tooltipElement.getBoundingClientRect();
+    const padding = 8;
 
-    this.renderer.setStyle(this.tooltipElement, 'left', `${event.clientX + offsetX}px`);
-    this.renderer.setStyle(this.tooltipElement, 'top', `${event.clientY + offsetY}px`);
+    let left = 0;
+    let top = 0;
+
+    if (isMobile) {
+      const hostRect = this.hostElement.getBoundingClientRect();
+      left = hostRect.left + hostRect.width / 2 - tooltipRect.width / 2;
+      top = hostRect.top - tooltipRect.height - 8;
+
+      if (top < padding) {
+        top = hostRect.bottom + 8;
+      }
+    } else {
+      left = event.clientX + 12;
+      top = event.clientY + 16;
+    }
+
+    if (left + tooltipRect.width > window.innerWidth - padding)
+      left = window.innerWidth - tooltipRect.width - padding;
+    if (left < padding) left = padding;
+
+    this.renderer.setStyle(this.tooltipElement, 'left', `${left}px`);
+    this.renderer.setStyle(this.tooltipElement, 'top', `${top}px`);
   }
 
   /** Removes the tooltip DOM element from `document.body` if it exists. */

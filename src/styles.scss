@@ -32,7 +32,12 @@ button {
   overflow-y: auto;
   scrollbar-gutter: stable;
   overscroll-behavior-y: contain;
-  width: calc(100% + 24px);
+
+  --sb-width: 24px;
+  --padding-right: var(--padding-inline, 40px);
+  --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
+  width: calc(100% + var(--sb-offset));
+  padding-right: calc(var(--sb-offset) - var(--sb-width));
   flex: 1;
   min-height: 0;
 

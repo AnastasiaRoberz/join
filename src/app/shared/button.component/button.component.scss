@@ -104,6 +104,7 @@
       display: inline-flex;
       flex-direction: column;
       align-items: center;
+      font-size: var(--font-size-textbtn, calcClamp(16, 20));
 
       &::after {
         content: attr(data-text);

@@ -1,4 +1,14 @@
-import { Component, computed, ElementRef, inject, input, OnDestroy, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
@@ -57,6 +67,8 @@ import { Buttons } from '../button.component/button.component';
     '[class.expanded]': 'isExpanded()',
     '[style.--total-users]': 'users().length',
     '[style.--fitting-users]': 'fittingUsers()',
+    '[style.--columns]': 'remainingUsersCount() > 0 ? fittingUsers() + 1 : fittingUsers()',
+    '[style.--avatar-gap.px]': 'computedGap()',
   },
 })
 export class AvatarGroupComponent implements OnInit, OnDestroy {
@@ -75,6 +87,16 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
    * Used in the non-overlapping layout to calculate how many avatars fit into a single row.
    */
   containerWidth = signal<number>(0);
+
+  /** Tracks current viewport width to compute the responsive avatar size matching `calcClamp(32, 42)`. */
+  windowWidth = signal<number>(typeof window !== 'undefined' ? window.innerWidth : 1440);
+
+  /** Window resize listener to keep `windowWidth` reactive. */
+  private onWindowResize = () => {
+    if (typeof window !== 'undefined') {
+      this.windowWidth.set(window.innerWidth);
+    }
+  };
 
   // ---------------------------------------------------------------------------
   // Inputs & Outputs
@@ -115,25 +137,64 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   /**
+   * Clamped pixel size of a single avatar matching SCSS `calcClamp(32, 42)`.
+   * For 'small' it is always 32px; for 'medium' it scales between 32px (320px viewport) and 42px (1440px+ viewport).
+   */
+  avatarSize = computed(() => {
+    if (this.size() === 'small') return 32;
+    const vw = this.windowWidth();
+    const clamped = 32 + ((vw - 320) * (42 - 32)) / (1440 - 320);
+    return Math.min(42, Math.max(32, Math.round(clamped)));
+  });
+
+  /**
    * Number of avatars that fit before the `+N` badge:
    * - Overlapping layout or unmeasured width (`<= 0`): `maxUsers()`.
-   * - Non-overlapping layout: as many avatars as fit into `containerWidth()` based on avatar width
-   *   (32px for `small`, 42px for `medium`) and `gap()`, reserving one slot for the `+N` badge if needed.
+   * - Non-overlapping layout: as many avatars as fit into `containerWidth()` based on `avatarSize()`
+   *   and minimum gap of 8px, reserving one slot for the `+N` badge if total users exceed the fitting limit.
    */
   fittingUsers = computed(() => {
     if (this.overlapLayout()) return this.maxUsers();
 
     const total = this.users().length;
+    if (total === 0) return 0;
+
     const width = this.containerWidth();
     if (width <= 0) return this.maxUsers();
 
-    const itemWidth = this.size() === 'small' ? 32 : 42;
-    const gap = this.gap();
+    const itemWidth = this.avatarSize();
+    const minGap = 8;
 
-    const maxFitting = Math.max(1, Math.floor((width + gap) / (itemWidth + gap)));
+    // How many total items (avatars + remaining badge) can physically fit with minimum gap of 8px
+    const maxFitting = Math.max(1, Math.floor((width + minGap) / (itemWidth + minGap)));
+
     if (total <= maxFitting) return total;
-
     return Math.max(1, maxFitting - 1);
+  });
+
+  /**
+   * Dynamically calculated gap between avatars in the non-overlapping layout:
+   * Distributes remaining width evenly among visible items so avatars span the container.
+   * Clamped between 8px and 16px as requested.
+   */
+  computedGap = computed(() => {
+    if (this.overlapLayout() || this.isExpanded()) return 8;
+
+    const width = this.containerWidth();
+    if (width <= 0) return 8;
+
+    const fitting = this.fittingUsers();
+    const hasRemaining = this.remainingUsersCount() > 0;
+    const visibleCount = fitting + (hasRemaining ? 1 : 0);
+
+    if (visibleCount <= 1) return 8;
+
+    const itemWidth = this.avatarSize();
+    const availableForGaps = width - visibleCount * itemWidth;
+    const gapsCount = visibleCount - 1;
+
+    const rawGap = availableForGaps / gapsCount;
+    return Math.min(16, Math.max(8, Math.floor(rawGap * 10) / 10));
   });
 
   /** Slice of `users()` rendered in the overlapping layout (`0` up to `fittingUsers()`). */
@@ -160,8 +221,12 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   // Lifecycle
   // ---------------------------------------------------------------------------
 
-  /** Starts a `ResizeObserver` on the host element to dynamically update `containerWidth`. */
+  /** Starts a `ResizeObserver` on the host element and listens for window resize events. */
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.windowWidth.set(window.innerWidth);
+      window.addEventListener('resize', this.onWindowResize);
+    }
     this.resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         this.containerWidth.set(entry.contentRect.width);
@@ -170,8 +235,11 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
     this.resizeObserver.observe(this.element.nativeElement);
   }
 
-  /** Disconnects the `ResizeObserver` when the component is destroyed. */
+  /** Disconnects the `ResizeObserver` and window listener when the component is destroyed. */
   ngOnDestroy(): void {
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onWindowResize);
+    }
     this.resizeObserver?.disconnect();
   }
 

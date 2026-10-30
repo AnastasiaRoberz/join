@@ -1,21 +1,30 @@
 @use '../../../../../../../public/assets/styles/' as *;
 
 :host {
+  --dialog-max-height: min(95dvh, 1024px);
+  --padding-inline: #{calcClamp(24, 40, 769, 320)};
   @include flex-start(column, both);
-  gap: 24px;
+  gap: calcClamp(16, 24);
   width: 525px;
-  max-height: min(95dvh, 1024px);
   min-height: 0;
+  max-height: var(--dialog-max-height);
   font-size: $font-medium;
-  padding: 48px 40px;
+  padding-inline: var(--padding-inline);
+  padding-block: calcClamp(32, 48, 769, 320);
+
+  @include mobile {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .content-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
+  gap: calcClamp(16, 24);
   height: auto;
+  // overflow-x: hidden;
 
   &:has(.description.expanded) {
     width: calc(100% + 32px);
@@ -24,17 +33,18 @@
 }
 
 .task-tag {
-  padding: 4px 24px;
+  padding: 4px calcClamp(16, 24);
   border-radius: 8px;
   color: $text-light;
   cursor: pointer;
+  font-size: calcClamp(16, 20);
 }
 
 h2 {
   line-height: 120%;
   max-width: 100%;
   word-break: break-word;
-  max-height: min(18dvh, 180px);
+  max-height: clamp(10dvh, 7lh, 25dvh);
 }
 
 .description-wrapper {
@@ -47,9 +57,12 @@ h2 {
   flex-shrink: 0;
 
   .description {
+    --collapsedHeight: clamp(5dvh, 4lh, 10dvh);
     width: 100%;
+    height: var(--collapsedHeight);
     overflow: hidden;
     word-break: break-word;
+    font-size: calcClamp(16, 20);
 
     &.collapsible {
       height: var(--collapsedHeight);
@@ -66,15 +79,32 @@ h2 {
       mask-position: 0 0;
     }
   }
+
+  .show-more-btn {
+    --btn-gap: 0;
+    margin-bottom: calcClamp(-24, 0, 320, 769);
+    padding: 0 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+    font-size: calcClamp(13, 16, 769, 320);
+
+    &:hover {
+      color: $btn-txtIcon-hover;
+      background-color: $checkbox-hover;
+    }
+  }
 }
 
 table {
   text-align: left;
-  margin-top: -24px;
   flex-shrink: 0;
+  font-size: calcClamp(16, 20, 769, 320);
 
   .spacer {
-    height: 24px;
+    height: calcClamp(16, 24, 769, 320);
   }
 
   th {
@@ -91,9 +121,10 @@ table {
 
 .list-wrapper {
   @include flex-start(column, both);
-  gap: 16px;
+  gap: calcClamp(8, 16, 769, 320);
   width: 100%;
   flex-shrink: 0;
+  font-size: calcClamp(16, 20);
 
   app-avatar-group {
     margin: 0;
@@ -141,27 +172,14 @@ ul {
   }
 }
 
-.show-more-btn {
-  --btn-gap: 0;
-  padding: 0 8px;
-  border-radius: 6px;
-  font-weight: 500;
-  transition:
-    color 0.15s ease,
-    background-color 0.15s ease;
-
-  &:hover {
-    color: $btn-txtIcon-hover;
-    background-color: $checkbox-hover;
-  }
-}
-
 .btn-toggle-items {
   --btn-gap: 0;
+  --font-size-textbtn: calcClamp(13, 16, 1440, 768);
 }
 
 .show-more-btn,
 .btn-toggle-items {
+  gap: 0;
   &.expanded {
     --btn-icon-transform: rotate(180deg);
   }
