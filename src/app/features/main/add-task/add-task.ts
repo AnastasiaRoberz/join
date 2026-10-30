@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { CATEGORIES } from '../../../utils/categories-list';
 import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 import { AvatarGroupComponent } from '../../../shared/avatar-group.component/avatar-group.component';
 import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
+import { DialogService } from '../../../services/dialog.service';
 
 /**
  * Form component for creating a new task.
@@ -40,7 +41,7 @@ import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/s
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
 })
-export class AddTask {
+export class AddTask implements OnDestroy {
   /**
    * Reactive form of the task. `title`, `date` and `category` are required.
    * The date is stored as text in the format `dd/mm/yyyy`.
@@ -157,6 +158,9 @@ export class AddTask {
     this.selectedContactIds.set([]);
   }
 
+  /** Holds the status chosen via a column "+" button. */
+  dialogService = inject(DialogService);
+
   /**
    * Submits the form. If the form is invalid or no priority is selected,
    * all fields are marked as touched to reveal error hints and the method aborts.
@@ -172,13 +176,22 @@ export class AddTask {
       return;
     }
 
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks' | 'position'> = {
+    const status = this.taskService.addTaskStatus(); // adding the status
+    // find all tasks of that status / column
+    const columnTasks = this.taskService.tasks().filter((task) => task.status === status);
+
+    /** one above the current top task, so the new task always lands first. */
+    // identify task positions in column and get smallest position, apply -1 from there or applues 0 if empty column
+    const top = columnTasks.length ? Math.min(...columnTasks.map((task) => task.position)) - 1 : 0;
+
+    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: this.taskForm.value.date!,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
-      status: 'To do',
+      status: this.taskService.addTaskStatus(),
+      position: top, // assigning top position
     };
 
     const newTask = await this.taskService.addTask(task);
@@ -189,5 +202,11 @@ export class AddTask {
 
       this.onClear();
     }
+  }
+
+  /** Resets the column status so the next task starts in "To do" again. */
+  // needed for the add task link on the sidebar, as that is never the overlay and does not call the dialogservice
+  ngOnDestroy(): void {
+    this.taskService.addTaskStatus.set('To do');
   }
 }

@@ -2,6 +2,9 @@ import { computed, inject, Service, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { TaskInterface } from '../interfaces/task.interface';
 import { SubtaskInterface } from '../interfaces/subtask.interface';
+import { ResponsiveService } from './responsive.service';
+import { Router } from '@angular/router';
+import { DialogService } from './dialog.service';
 
 /**
  * Domain service managing tasks, subtasks, and user (contact) assignments.
@@ -188,6 +191,25 @@ export class TaskService {
             : task,
         ),
       );
+    }
+  }
+
+  // inject for openAddTask method below
+  router = inject(Router);
+  responsiveService = inject(ResponsiveService);
+  dialogService = inject(DialogService);
+
+  // for adding tasks into column, passed status
+  addTaskStatus = signal<TaskInterface['status']>('To do');
+
+  /** mobile: go to the Add Task page. tablet/desktop: open the dialog. */
+  // using a method here, as it needs to be called from board-header and board-column
+  openAddTask(status: TaskInterface['status'] = 'To do') {
+    this.addTaskStatus.set(status); // sets status received by signal, default = To do
+    if (this.responsiveService.isMobile()) {
+      this.router.navigate(['/add-task']);
+    } else {
+      this.dialogService.openDialog('add-task');
     }
   }
 
