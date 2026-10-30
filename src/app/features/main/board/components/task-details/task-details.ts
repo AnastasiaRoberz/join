@@ -1,4 +1,13 @@
-import { Component, computed, inject } from '@angular/core';
+import {
+  afterRenderEffect,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TaskService } from '../../../../../services/task.service';
 import { DialogService } from '../../../../../services/dialog.service';
@@ -31,7 +40,7 @@ import { FitTextDirective } from '../../../../../directives/fit-text.directive';
  * ```
  */
 @Component({
-  imports: [Buttons, UserAvatar, CheckboxComponent, DatePipe, FitTextDirective],
+  imports: [Buttons, DatePipe, FitTextDirective, UserAvatar, CheckboxComponent],
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
@@ -46,6 +55,35 @@ export class TaskDetails {
 
   /** Helper function exposed to the template for formatting priority labels. */
   capitalizeFirstLetter = capitalizeFirstLetter;
+
+  collapsedHeight = input<string>('140px');
+  isExpanded = signal<boolean>(false);
+  container = viewChild<ElementRef<HTMLElement>>('container');
+  expandedHeight = signal<string | null>(null);
+  hasMoreHeight = signal<boolean>(false);
+
+  constructor() {
+    afterRenderEffect(() => {
+      const el = this.container()?.nativeElement;
+      const maxHeight = parseInt(this.collapsedHeight(), 10);
+      this.selectedTask()?.description;
+
+      if (!el || isNaN(maxHeight)) {
+        this.hasMoreHeight.set(false);
+        return;
+      }
+
+      this.hasMoreHeight.set(el.scrollHeight > maxHeight);
+    });
+  }
+
+  toggleDescription(): void {
+    const el = this.container()?.nativeElement;
+    if (!el) return;
+
+    this.isExpanded.update((v) => !v);
+    this.expandedHeight.set(this.isExpanded() ? `${el.scrollHeight}px` : null);
+  }
 
   // ---------------------------------------------------------------------------
   // Inputs & Computed State
