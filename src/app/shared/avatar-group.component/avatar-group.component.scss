@@ -54,7 +54,7 @@
   }
 
   .avatar-wrapper {
-    @include flex-start(both);
+    @include flex-start;
     position: relative;
     flex-shrink: 0;
     width: var(--avatar-size);
@@ -90,7 +90,7 @@
 
       .user-name {
         display: block;
-        white-space: nowrap;
+        text-wrap: wrap;
       }
     }
 
@@ -112,8 +112,7 @@ button.btn.btn-delete-user {
   backdrop-filter: blur(1px);
 
   svg {
-    width: 24px;
-    height: 24px;
+    --btn-icon-medium-size: calc(var(--avatar-size) * 0.5);
     color: $main-color;
   }
 }
