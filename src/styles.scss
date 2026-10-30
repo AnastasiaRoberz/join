@@ -10,6 +10,10 @@
   text-wrap-style: balance;
 }
 
+body {
+  background-color: $sidebar-main-theme;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
