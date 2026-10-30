@@ -21,7 +21,8 @@
         [task]="task"
         cdkDrag
         cdkDragBoundary="app-board"
-        (pointerdown)="onCardPressed($event)"
+        (cdkDragStarted)="onDragStarted($event)"
+        /* (pointerdown)="onCardPressed($event)" */
       />
     } @empty {
       <!-- hidden while the column shows the placeholder -->

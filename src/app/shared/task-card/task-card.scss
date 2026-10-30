@@ -10,7 +10,7 @@
 }
 
 // tilt only the inner card while pressed and while dragged,
-:host(:active) > *,
+// :host(:active) > *,
 :host(.cdk-drag-preview) > * {
   rotate: 3deg;
 }
