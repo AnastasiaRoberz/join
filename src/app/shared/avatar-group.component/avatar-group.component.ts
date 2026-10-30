@@ -50,6 +50,9 @@ import { Buttons } from '../button.component/button.component';
     '[class]': 'size()',
     '[class.no-overlap]': '!overlapLayout()',
     '[class.has-users]': 'hasUsers()',
+    '[class.expanded]': 'isExpanded()',
+    '[style.--total-users]': 'users().length',
+    '[style.--fitting-users]': 'fittingUsers()',
   },
 })
 export class AvatarGroupComponent {
@@ -86,6 +89,7 @@ export class AvatarGroupComponent {
    */
   overlapLayout = input<boolean>(true);
   canDelete = input<boolean>(true);
+  isExpanded = input<boolean>(false);
 
   /**
    * Horizontal spacing in pixels between avatars, used only for the "how many fit" calculation in

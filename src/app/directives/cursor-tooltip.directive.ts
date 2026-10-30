@@ -12,7 +12,7 @@ export class CursorTooltipDirective {
 
   @HostListener('mouseenter', ['\$event'])
   onmouseenter(event: MouseEvent): void {
-    if (!this.tooltipText) return;
+    if (!this.tooltipText()) return;
 
     this.tooltipElement = this.renderer.createElement('div');
     this.renderer.addClass(this.tooltipElement, 'cursor-tooltip');
@@ -26,6 +26,10 @@ export class CursorTooltipDirective {
 
   @HostListener('mousemove', ['\$event'])
   onMouseMove(event: MouseEvent): void {
+    if (!this.tooltipText()) {
+      this.destroyTooltip();
+      return;
+    }
     this.updatePosition(event);
   }
 

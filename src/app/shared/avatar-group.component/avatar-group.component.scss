@@ -17,14 +17,66 @@
   }
 }
 
-.group-item {
-  cursor: pointer;
-  &:not(:first-child) {
-    &.size-small {
-      margin-left: -8px;
+:host.no-overlap {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  height: 42px;
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  .avatar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-left: 16px;
+    transform: translate(
+      calc(min(var(--i), var(--fitting-users)) * 50px - 16px),
+      calc(var(--i) * -58px)
+    );
+    transition:
+      transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 0.25s ease;
+    &.overflow-user {
+      opacity: 0;
+      pointer-events: none;
     }
-    &.size-medium {
-      margin-left: -12px;
+    .user-name {
+      max-width: 100%;
+      word-break: break-word;
+      opacity: 0;
+      transform: translateX(-8px);
+      pointer-events: none;
+      transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+    }
+  }
+  .remaining-count {
+    position: absolute;
+    top: 0;
+    left: calc(var(--fitting-users) * 50px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease;
+  }
+  &.expanded {
+    height: calc(var(--total-users) * 58px - 16px);
+    .avatar-wrapper {
+      transform: translate(0, 0);
+      opacity: 1;
+      pointer-events: auto;
+      .user-name {
+        opacity: 1;
+        transform: translateX(0);
+        transition:
+          opacity 0.25s ease 0.1s,
+          transform 0.25s ease 0.1s;
+      }
+    }
+    .remaining-count {
+      opacity: 0;
+      transform: scale(0.5);
+      pointer-events: none;
     }
   }
 }
@@ -46,6 +98,7 @@
 .avatar-wrapper {
   position: relative;
   cursor: pointer;
+  max-width: 100%;
 
   &:hover {
     .btn-delete-user {
