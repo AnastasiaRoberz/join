@@ -1,55 +1,134 @@
 @if (selectedTask(); as task) {
-  <p class="task-tag" [style.background-color]="categoryColor()">{{ task.category }}</p>
+  <p class="task-tag" [style.background-color]="categoryColor()" (click)="scrollToTop()">
+    {{ task.category }}
+  </p>
 
-  <h2>{{ task.title }}</h2>
+  <div class="scroll-container content-wrapper" #scrollTop>
+    <h2 appFitText [minSize]="16">{{ task.title }}</h2>
 
-  @if (task.description) {
-    <p class="description">{{ task.description }}</p>
-  }
+    @if (task.description) {
+      <div class="description-wrapper">
+        <p
+          class="description"
+          #container
+          [class.collapsible]="hasMoreHeight()"
+          [class.expanded]="isExpanded()"
+          [style.--expandedHeight]="expandedHeight()"
+        >
+          {{ task.description }}
+        </p>
+        @if (hasMoreHeight()) {
+          <button
+            appBtn
+            preset="secondary"
+            size="small"
+            icon="arrow-down"
+            iconPos="right"
+            class="show-more-btn"
+            [class.expanded]="isExpanded()"
+            (click)="toggleDescription()"
+          >
+            <span>{{ isExpanded() ? 'Show less' : 'Show more' }}</span>
+          </button>
+        }
+      </div>
+    }
 
-  <table>
-    <tr>
-      <th>Due date:</th>
-      <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
-    </tr>
-    <tr class="spacer"></tr>
-    <tr>
-      <th>Priority:</th>
-      <td class="priority">
-        <span>{{ capitalizeFirstLetter(task.priority) }}</span>
-        <svg [class]="'icon-priority icon-' + task.priority">
-          <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
-        </svg>
-      </td>
-    </tr>
-  </table>
+    <table>
+      <tr>
+        <th>Due date:</th>
+        <td>{{ task.due_date | date: 'dd/MM/yyyy' }}</td>
+      </tr>
+      <tr class="spacer"></tr>
+      <tr>
+        <th>Priority:</th>
+        <td class="priority">
+          <span>{{ capitalizeFirstLetter(task.priority) }}</span>
+          <svg [class]="'icon-priority icon-' + task.priority">
+            <use [attr.href]="'./assets/icons/icons.svg#' + task.priority"></use>
+          </svg>
+        </td>
+      </tr>
+    </table>
 
-  @if (task.assigned_users) {
-    <span>Assigned To:</span>
-    <ul class="scroll-container">
-      @for (user of task.assigned_users; track user.id) {
-        <li class="user-item">
-          <app-user-avatar [user]="user" size="medium" />
-          <span>{{ user.firstname }} {{ user.surname }}</span>
-        </li>
-      }
-    </ul>
-  }
+    @if (task.assigned_users && task.assigned_users.length > 0) {
+      <div class="list-wrapper" #usersSection>
+        <div class="label-wrapper">
+          <span class="label" (click)="scrollToSection(usersSection)">Assigned To:</span>
+          @if (moreUsers()) {
+            <button
+              appBtn
+              preset="text"
+              size="small"
+              [label]="
+                responsiveService.isMobile() ? '' : showAllUsers() ? 'Show less' : 'Show all users'
+              "
+              icon="arrow-down"
+              iconPos="left"
+              class="btn-toggle-items"
+              [class.expanded]="showAllUsers()"
+              (click)="toggleUsers(usersSection)"
+            ></button>
+          }
+        </div>
 
-  @if (sortedSubtasks().length > 0) {
-    <span>Subtasks</span>
-    <ul class="scroll-container">
-      @for (subtask of sortedSubtasks(); track subtask.id) {
-        <li class="subtask">
-          <app-checkbox
-            [text]="subtask.title"
-            [checked]="subtask.is_done"
-            (checkedChange)="toggleSubtaskStatus(subtask.id, $event)"
-          />
-        </li>
-      }
-    </ul>
-  }
+        <app-avatar-group
+          [users]="task.assigned_users"
+          size="medium"
+          [overlapLayout]="false"
+          [canDelete]="false"
+          [isExpanded]="!moreUsers() || showAllUsers()"
+        />
+      </div>
+    }
+
+    @if (sortedSubtasks().length > 0) {
+      <div class="list-wrapper" #subtasksSection>
+        <div class="label-wrapper">
+          <div class="subtask-label">
+            <span class="label" (click)="scrollToSection(subtasksSection)">Subtasks</span>
+            <span class="status">
+              <svg>
+                <use href="./assets/icons/icons.svg#check"></use>
+              </svg>
+              {{ subtasksDone().length }} / {{ sortedSubtasks().length }}
+            </span>
+          </div>
+          @if (subtasksDone().length > 0) {
+            <button
+              appBtn
+              preset="text"
+              size="small"
+              [label]="
+                responsiveService.isMobile()
+                  ? ''
+                  : showDoneSubtasks()
+                    ? 'Hide checked Subtasks'
+                    : 'Show checked Subtasks'
+              "
+              icon="arrow-down"
+              iconPos="left"
+              class="btn-toggle-items"
+              [class.expanded]="showDoneSubtasks()"
+              (click)="toggleSubtasks(subtasksSection)"
+            ></button>
+          }
+        </div>
+
+        <ul>
+          @for (subtask of visibleSubtasks(); track subtask.id) {
+            <li class="subtask" [class.done]="subtask.is_done">
+              <app-checkbox
+                [text]="subtask.title"
+                [checked]="subtask.is_done"
+                (checkedChange)="toggleSubtaskStatus(subtask.id, $event)"
+              />
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
 
   <div class="button-wrapper">
     <button appBtn preset="delete" (click)="onDelete(task.id)"></button>

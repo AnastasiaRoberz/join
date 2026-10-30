@@ -16,7 +16,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: var(--btn-gap, 8px);
     border: 1px solid transparent;
     outline: 1px solid transparent;
     box-shadow: $btn-shadow-placeholder;
@@ -31,9 +31,11 @@
     }
 
     .icon {
-      width: 24px;
-      height: 24px;
+      width: var(--btn-icon-size, 24px);
+      aspect-ratio: 1/1;
       flex-shrink: 0;
+      transform: var(--btn-icon-transform, none);
+      transition: transform 0.2s ease;
     }
 
     &:disabled {
@@ -44,7 +46,9 @@
     }
   }
 
-  // BUTTONS SIZES
+  // ===========================================================================
+  // BUTTON SIZES
+  // ===========================================================================
   &.btn--small {
     font-size: $font-default;
     padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
@@ -63,7 +67,9 @@
     border-radius: 10px;
   }
 
-  // BUTTON COLORS
+  // ===========================================================================
+  // BUTTON VARIANTS
+  // ===========================================================================
   &.btn--primary {
     background-color: $btn-primary-default;
     color: $btn-primary-txt;
@@ -106,6 +112,7 @@
       display: inline-flex;
       flex-direction: column;
       align-items: center;
+      font-size: var(--font-size-textbtn, calcClamp(16, 20));
 
       &::after {
         content: attr(data-text);
@@ -144,17 +151,17 @@
     }
 
     &.btn--small {
-      width: 24px;
-      height: 24px;
+      width: var(--btn-icon-small-size, 24px);
+      aspect-ratio: 1/1;
     }
 
     &.btn--medium {
-      width: 32px;
-      height: 32px;
+      width: var(--btn-icon-medium-size, 32px);
+      aspect-ratio: 1/1;
 
       .icon {
-        width: 32px;
-        height: 32px;
+        width: inherit;
+        height: inherit;
       }
     }
 
@@ -167,7 +174,6 @@
     background-color: $btn-add-default;
     color: $btn-add-txt;
     font-weight: 700;
-    gap: 16px;
     gap: 0;
 
     .icon {
@@ -185,8 +191,12 @@
     }
   }
 
+  // ===========================================================================
+  // PRESET-SPECIFIC OVERRIDES
+  // ===========================================================================
   &.btn--addContact {
     gap: 16px;
+
     @include mobile {
       position: absolute;
       bottom: 32px;
@@ -206,6 +216,7 @@
   &.btn--addTask {
     gap: 4px;
     padding: 8px 16px;
+
     @include tablet {
       position: relative;
       bottom: 0;

@@ -5,24 +5,19 @@
   width: 100%;
 
   &.has-users {
-    margin-top: 8px; //only, when contacts selected, host has no size if group empty
-  }
-
-  &.no-overlap {
-    gap: 8px;
-
-    .group-item:not(:first-child) {
-      margin-left: 0;
-    }
+    margin-top: 8px;
   }
 }
 
 .group-item {
   cursor: pointer;
+  flex-shrink: 0;
+
   &:not(:first-child) {
     &.size-small {
       margin-left: -8px;
     }
+
     &.size-medium {
       margin-left: -12px;
     }
@@ -38,26 +33,77 @@
   background-color: $icon-bg;
 
   &.size-medium {
-    height: 42px;
-    width: 42px;
+    height: calcClamp(32, 42);
+    width: calcClamp(32, 42);
   }
 }
 
-.avatar-wrapper {
-  position: relative;
-  cursor: pointer;
+:host.no-overlap {
+  --avatar-size: #{calcClamp(32, 42)};
 
-  &:hover {
-    .btn-delete-user {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--avatar-gap, 8px);
+  height: var(--avatar-size);
+  width: 100%;
+  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+  .group-item {
+    margin-left: 0;
+  }
+
+  .avatar-wrapper {
+    @include flex-start(both);
+    position: relative;
+    flex-shrink: 0;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    cursor: pointer;
+
+    &:hover .btn-delete-user {
       @include flex-center;
+    }
+
+    &.overflow-user,
+    .user-name {
+      display: none;
+    }
+  }
+
+  &.expanded {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: calcClamp(8, 16);
+    height: auto;
+
+    .avatar-wrapper {
+      flex-shrink: 0;
+      width: 100%;
+      height: var(--avatar-size);
+      gap: calcClamp(8, 16);
+
+      &.overflow-user {
+        display: flex;
+      }
+
+      .user-name {
+        display: block;
+        white-space: nowrap;
+      }
+    }
+
+    .remaining-count {
+      display: none;
     }
   }
 }
 
 button.btn.btn-delete-user {
   display: none;
-  width: 42px;
-  height: 42px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border-radius: 50%;
   position: absolute;
   top: 0;

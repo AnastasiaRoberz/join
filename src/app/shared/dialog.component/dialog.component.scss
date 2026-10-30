@@ -68,8 +68,8 @@
 
   .btn-close {
     position: absolute;
-    top: 52px;
-    right: 52px;
+    top: calcClamp(24, 52);
+    right: calcClamp(24, 52);
     z-index: 20;
   }
 }

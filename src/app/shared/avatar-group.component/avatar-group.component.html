@@ -1,21 +1,31 @@
-@for (user of visibleUsers(); track user.id) {
-  @if (overlapLayout()) {
+@if (overlapLayout()) {
+  @for (user of visibleUsers(); track user.id) {
     <app-user-avatar
       [user]="user"
       [size]="size()"
       class="group-item"
       [appCursorTooltip]="user.firstname + ' ' + user.surname"
     />
-  } @else {
-    <div class="avatar-wrapper" [appCursorTooltip]="user.firstname + ' ' + user.surname">
+  }
+} @else {
+  @for (user of users(); track user.id; let i = $index) {
+    <div
+      class="avatar-wrapper"
+      [class.overflow-user]="i >= fittingUsers()"
+      [style.--i]="i"
+      [appCursorTooltip]="isExpanded() ? '' : user.firstname + ' ' + user.surname"
+    >
       <app-user-avatar [user]="user" [size]="size()" class="group-item" />
-      <button
-        appBtn
-        preset="iconMedium"
-        icon="delete"
-        class="btn-delete-user"
-        (click)="onDelete(user.id, $event)"
-      ></button>
+      <span class="user-name">{{ user.firstname }} {{ user.surname }}</span>
+      @if (canDelete()) {
+        <button
+          appBtn
+          preset="iconMedium"
+          icon="delete"
+          class="btn-delete-user"
+          (click)="onDelete(user.id, $event)"
+        ></button>
+      }
     </div>
   }
 }
