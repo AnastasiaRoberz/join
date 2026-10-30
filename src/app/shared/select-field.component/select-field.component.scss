@@ -80,6 +80,7 @@ input {
     gap: 16px;
     width: 100%;
     padding: 8px 16px;
+    padding-right: 8px;
     border-radius: 10px;
     cursor: pointer;
     font-family: Inter;
@@ -105,6 +106,17 @@ input {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  &.scroll-container {
+    --sb-width: 16px;
+
+    &::-webkit-scrollbar {
+      width: var(--sb-width);
+    }
+    &::-webkit-scrollbar-thumb {
+      border: 6px solid transparent;
+    }
   }
 }
 

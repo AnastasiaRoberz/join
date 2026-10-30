@@ -10,6 +10,10 @@
   text-wrap-style: balance;
 }
 
+body {
+  background-color: $sidebar-main-theme;
+}
+
 a {
   cursor: pointer;
   text-decoration: none;
@@ -37,39 +41,40 @@ button {
   --padding-right: var(--padding-inline, 40px);
   --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
   width: calc(100% + var(--sb-offset));
-  padding-right: calc(var(--sb-offset) - var(--sb-width));
+  // padding-right: calc(var(--sb-offset) - var(--sb-width));
   flex: 1;
   min-height: 0;
 
   &::-webkit-scrollbar {
     background: transparent;
-    width: 24px;
+    width: var(--sb-width);
   }
 
   &::-webkit-scrollbar-button:single-button {
-    display: block;
-    height: 30px;
-    width: 10px;
-    background-size: 10px 4px;
-    background-repeat: no-repeat;
+    // display: block;
+    // height: 30px;
+    // width: 10px;
+    // background-size: 10px 4px;
+    // background-repeat: no-repeat;
+    display: none;
   }
 
-  &::-webkit-scrollbar-button:single-button:vertical:start {
-    background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
-    background-position: center bottom;
-  }
+  // &::-webkit-scrollbar-button:single-button:vertical:start {
+  //   background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
+  //   background-position: center bottom;
+  // }
 
-  &::-webkit-scrollbar-button:single-button:vertical:end {
-    background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
-    background-position: center top;
-  }
+  // &::-webkit-scrollbar-button:single-button:vertical:end {
+  //   background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
+  //   background-position: center top;
+  // }
 
   &::-webkit-scrollbar-track {
     background: none;
   }
 
   &::-webkit-scrollbar-thumb {
-    border: 8px solid transparent;
+    border: 10px solid transparent;
     border-radius: 9999px;
     background-clip: content-box;
     background-color: $icon;
@@ -88,7 +93,7 @@ button {
     }
 
     &::-webkit-scrollbar-thumb {
-      border: 9px solid transparent;
+      border: 10px solid transparent;
     }
   }
 }

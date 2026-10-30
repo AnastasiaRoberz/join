@@ -13,6 +13,7 @@ import { UserAvatar } from '../user-avatar/user-avatar';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
 import { Buttons } from '../button.component/button.component';
+import { FitTextDirective } from '../../directives/fit-text.directive';
 
 /**
  * Displays a group of user avatars in one of two layouts:
@@ -56,7 +57,7 @@ import { Buttons } from '../button.component/button.component';
  * ```
  */
 @Component({
-  imports: [UserAvatar, CursorTooltipDirective, Buttons],
+  imports: [UserAvatar, CursorTooltipDirective, Buttons, FitTextDirective],
   selector: 'app-avatar-group',
   styleUrl: './avatar-group.component.scss',
   templateUrl: './avatar-group.component.html',

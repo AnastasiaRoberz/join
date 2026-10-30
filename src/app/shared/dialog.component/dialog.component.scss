@@ -60,9 +60,9 @@
   }
 
   @include mobile {
-    height: 100%;
+    height: auto;
     max-height: 760px;
-    width: 100%;
+    width: 90vw;
     flex-direction: column;
   }
 

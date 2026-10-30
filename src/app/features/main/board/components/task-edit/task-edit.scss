@@ -10,6 +10,10 @@
   min-height: 0;
   padding-inline: var(--padding-inline);
   padding-block: calcClamp(32, 48, 769, 320);
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 form {
@@ -17,16 +21,16 @@ form {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 32px;
+  gap: calcClamp(16, 32);
   height: 100%;
   min-height: 0;
   width: 100%;
-  margin-top: calcClamp(48, 56, 769, 320);
+  margin-top: calcClamp(32, 56, 769, 320);
 }
 
 .form-content-wrapper {
   @include flex-start(column, both);
-  gap: 32px;
+  gap: calcClamp(16, 32);
   height: 100%;
 }
 
