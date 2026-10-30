@@ -40,13 +40,22 @@
     outline: 1px solid red; // helper for seeing column height
     min-height: calc(100dvh - 310px); // fix height, due to drag box needed for now
     justify-content: flex-start;
-    
-          // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
+
+    // with 2 or 1 columns the page scrolls, so the columns must not scroll themselves
     @include tablet(1280px) {
       flex: none;
       overflow-y: visible;
       width: auto;
       scrollbar-gutter: auto;
+    }
+
+    @include mobile {
+      flex-direction: row;
+      overflow-x: auto;
+    }
+
+    app-task-card {
+      flex: 0 0 180px; // fixed card width, cards don't shrink
     }
   }
 
@@ -61,7 +70,7 @@
   &:has(.cdk-drag-placeholder) &__drop-hint {
     display: none;
   }
-  
+
   // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);
