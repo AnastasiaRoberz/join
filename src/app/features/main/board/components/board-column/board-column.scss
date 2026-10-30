@@ -42,7 +42,7 @@
     @include tablet($board-breakpoint) {
       flex: none;
       flex-direction: row;
-      align-items: flex-start;
+      align-items: stretch;
       min-height: 0; // the fixed height from above is only for the desktop layout
       overflow-x: auto;
       overflow-y: hidden;

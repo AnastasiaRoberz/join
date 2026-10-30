@@ -44,8 +44,8 @@ export class BoardContainer {
   /** Index of the column whose card is currently pressed, `null` if none. */
   pressedColumnIndex = signal<number | null>(null);
 
-  /** Height (px) of the pressed card, used for the drop hints. */
-  pressedCardHeight = signal(0);
+  /** Size (px) of the pressed card, used for the drop hints. */
+  pressedCardSize = signal({ width: 0, height: 0 });
 
   // drag and drop function assigning new status once dropped
   /**

@@ -12,8 +12,8 @@
     [cdkDropListData]="column.tasks"
     (cdkDropListDropped)="dragDrop($event, column.status)"
     [showDropHint]="isNeighbourColumn($index)"
-    [dropHintHeight]="pressedCardHeight()"
-    (cardPressed)="pressedColumnIndex.set($index); pressedCardHeight.set($event)"
+    [dropHintSize]="pressedCardSize()"
+    (cardPressed)="pressedColumnIndex.set($index); pressedCardSize.set($event)"
     [status]="column.status"
     [tasks]="column.tasks"
   />
