@@ -52,7 +52,7 @@
     color: $text-light;
   }
 
-  // shows max. 2 lines of the title, the rest is cut off with "..."
+  // shows max. 3 lines of the title, the rest is cut off with "..."
   &__title {
     display: -webkit-box;
     -webkit-line-clamp: 3;
