@@ -3,34 +3,24 @@
 :host {
   width: 100%;
   height: 100%;
-  padding-inline: calcClamp(16, 96, 1440, 950);
-  // padding-block: calcClamp(48, 124, 1300, 400) 66px;
-  display: flex;
-  flex-direction: column;
-  // gap: calcClamp(32, 48, 1300, 400);
-  overflow-y: auto;
-  position: relative;
+  padding-inline: calcClamp(16, 96, 1440, 1024);
+  padding-block: calcClamp(64, 124, 1440, 1024);
   display: grid;
   grid-template-rows: auto 1fr;
+  gap: calcClamp(40, 48, 1440, 430);
+
+  @include responsive-flex {
+    padding-inline: calcClamp(60, 96, 1800, 300, height);
+    padding-block: calcClamp(20, 124, 1800, 700, height);
+    gap: calcClamp(16, 48, 1800, 700);
+  }
 
   @include mobile {
-    padding-inline: calcClamp(10, 50, 768, 400);
-  }
-}
-
-.content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: calcClamp(32, 48, 1300, 400);
-
-  @include widescreen {
-    max-height: 750px;
-  }
-
-  @include height-responsive(860) {
-    gap: calcClamp(30, 48, 860, 600, height);
+    overflow-y: auto;
+    padding-block: 0;
+    padding-bottom: 20px;
+    padding-inline: calcClamp(10, 78, 768, 320);
+    gap: 40px;
   }
 }
 
@@ -39,83 +29,96 @@
   top: 0;
   width: 100%;
   height: auto;
-  background-color: $main-bg;
   z-index: 4;
-  padding-block: calcClamp(36, 124, 1300, 400) 15px;
 
-  @include height-responsive(860) {
-    padding-block: calcClamp(36, 124, 860, 600, height) 15px;
-
+  @include responsive-flex {
     h2 {
-      font-size: calcClamp(40, 60, 860, 600, height);
+      font-size: calcClamp(40, 60, 900, 700, height);
     }
+  }
+
+  @include mobile {
+    background-color: $main-bg;
+    padding-block: calcClamp(30, 48, 768, 320) 15px;
+    position: sticky;
+    top: 0;
   }
 }
 
 form {
   width: 100%;
   height: 100%;
-  min-height: 0;
+  max-height: 600px; //begrenzt die form in der Höhe, damit Footer nicht zu weit nach unten
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 48px;
-  // display: grid;
-  // grid-template-rows: auto 1fr;
+  // gap: 64px;
+
+  @include responsive-flex {
+    gap: calcClamp(5, 48, 1800, 700, height);
+  }
+
+  @include mobile {
+    max-height: 100%;
+    justify-content: flex-start;
+    gap: 64px;
+  }
 }
 
 .task-container {
+  container-type: size; // ← macht Klasse zum Container
+  container-name: task-container;
   width: 100%;
+  height: 100%;
+  max-height: 500px;
+  display: flex;
+  justify-content: space-between;
+  gap: calcClamp(55, 96, 1300, 769);
+
+  @include responsive-flex {
+    max-height: 430px;
+  }
+
+  @include mobile {
+    container-type: unset;
+    max-height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 32px;
+  }
+}
+
+// taskWrap: gibt es 2x, links und rechts die Spalten im add-task
+.taskWrap {
+  width: 100%;
+  height: 100%;
   min-height: 0;
   display: flex;
-  gap: calcClamp(55, 96, 1300, 769);
-  color: $text-dark;
-
-  @include mobile {
-    flex-direction: column;
-    gap: 32px;
-  }
-
-  @include height-responsive(660) {
-    flex-direction: column;
-    gap: 32px;
-  }
-}
-
-.taskLeft {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: calc(100% + calcClamp(25, 48, 1300, 769));
-    top: 0;
-    height: 100%;
-    width: 1px;
-    background-color: $input-placeholder;
-
-    @include mobile {
-      display: none;
-    }
-
-    @include height-responsive(660) {
-      display: none;
-    }
-  }
-}
-
-.taskWrap {
-  flex: 1;
-  min-width: 0;
-  max-width: 440px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  flex-direction: column; //positioniert inputs untereinander
   gap: 24px;
-  position: relative;
+  position: relative; //für das ::after
+
+  @include responsive-flex {
+    gap: calcClamp(10, 24, 1800, 700, height);
+  }
 
   @include mobile {
+    height: auto;
     gap: 32px;
+  }
+}
+
+.taskLeft::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + calcClamp(25, 48, 1300, 769));
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background-color: $input-placeholder;
+
+  @include mobile {
+    display: none;
   }
 }
 
@@ -130,8 +133,6 @@ form {
 
 .task-footer {
   width: 100%;
-  max-width: 976px;
-  height: 56px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -143,6 +144,13 @@ form {
 
   @include mobile {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 48px;
+
+    &__buttons {
+      gap: caclClamp(16, 32, 430, 320);
+      align-self: flex-end;
+    }
   }
 }
 
