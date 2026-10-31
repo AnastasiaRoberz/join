@@ -123,6 +123,10 @@ li {
     border-left: 1px solid $devider;
     height: 24px;
   }
+
+  @include mobile {
+    visibility: visible;
+  }
 }
 
 :host(.task-input) .input-container {
