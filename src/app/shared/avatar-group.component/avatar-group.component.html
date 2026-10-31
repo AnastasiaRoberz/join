@@ -17,7 +17,7 @@
     >
       <app-user-avatar [user]="user" [size]="size()" class="group-item" />
       <span class="user-name">{{ user.firstname }} {{ user.surname }}</span>
-      @if (canDelete()) {
+      @if (canDelete() && responsiveService.isDesktop()) {
         <button
           appBtn
           preset="iconMedium"

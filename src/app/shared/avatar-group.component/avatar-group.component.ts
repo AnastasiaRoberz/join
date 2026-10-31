@@ -14,6 +14,7 @@ import { ContactInterface } from '../../interfaces/contact.interface';
 import { CursorTooltipDirective } from '../../directives/cursor-tooltip.directive';
 import { Buttons } from '../button.component/button.component';
 import { FitTextDirective } from '../../directives/fit-text.directive';
+import { ResponsiveService } from '../../services/responsive.service';
 
 /**
  * Displays a group of user avatars in one of two layouts:
@@ -77,6 +78,7 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   // Injected Dependencies & Internal State
   // ---------------------------------------------------------------------------
 
+  responsiveService = inject(ResponsiveService);
   /** Reference to the host element, observed by `ResizeObserver` to measure available width. */
   element = inject(ElementRef<HTMLElement>);
 
