@@ -11,16 +11,24 @@
   gap: calcClamp(40, 48, 1440, 430);
 
   @include responsive-flex {
-    padding-inline: calcClamp(40, 96, 1800, 700, height);
+    padding-inline: calcClamp(10, 78, 768, 320);
     padding-block: calcClamp(20, 124, 1800, 700, height);
     gap: calcClamp(16, 48, 1800, 700);
+  }
+
+  @include height-responsive(700) {
+    overflow-y: auto;
+    padding-block: 0;
+    padding-bottom: 20px;
+    padding-inline: 0;
+    gap: 48px;
   }
 
   @include mobile {
     overflow-y: auto;
     padding-block: 0;
     padding-bottom: 20px;
-    padding-inline: calcClamp(10, 78, 768, 320);
+    padding-inline: 0;
     gap: 40px;
   }
 }
@@ -38,9 +46,24 @@
     }
   }
 
+  @include responsive-flex(769, 700) {
+    h2 {
+      font-size: 60px;
+    }
+  }
+
+  @include height-responsive(700) {
+    background-color: $main-bg;
+    padding-block: calcClamp(30, 48, 768, 320) 15px;
+    padding-inline: calcClamp(10, 78, 768, 320);
+    position: sticky;
+    top: 0;
+  }
+
   @include mobile {
     background-color: $main-bg;
     padding-block: calcClamp(30, 48, 768, 320) 15px;
+    padding-inline: calcClamp(10, 78, 768, 320);
     position: sticky;
     top: 0;
   }
@@ -60,8 +83,16 @@ form {
     gap: calcClamp(5, 48, 1800, 700, height);
   }
 
+  @include height-responsive(700) {
+    max-height: 100%;
+    padding-inline: calcClamp(10, 78, 768, 320);
+    justify-content: flex-start;
+    gap: 124px;
+  }
+
   @include mobile {
     max-height: 100%;
+    padding-inline: calcClamp(10, 78, 768, 320);
     justify-content: flex-start;
     gap: 64px;
   }
@@ -77,8 +108,12 @@ form {
   justify-content: space-between;
   gap: calcClamp(55, 96, 1300, 769);
 
-  @include responsive-flex {
-    // max-height: 430px;
+  @include height-responsive(700) {
+    container-type: unset;
+    max-height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 32px;
   }
 
   @include mobile {
@@ -102,6 +137,11 @@ form {
 
   @include responsive-flex {
     gap: calcClamp(10, 24, 1800, 700, height);
+  }
+
+  @include height-responsive(700) {
+    height: auto;
+    gap: 32px;
   }
 
   @include mobile {
