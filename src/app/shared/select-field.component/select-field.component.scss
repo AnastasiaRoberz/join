@@ -17,7 +17,7 @@ label {
 }
 
 input {
-  @include field-input;
+  @include field-input(width);
 
   &::placeholder {
     color: $text-dark;
