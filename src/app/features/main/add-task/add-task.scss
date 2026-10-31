@@ -144,7 +144,7 @@ form {
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
-    gap: calcClamp(10, 32, 1800, 700, height);
+    gap: calcClamp(24, 32, 1025, 700, height);
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
