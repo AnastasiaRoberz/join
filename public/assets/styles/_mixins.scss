@@ -136,7 +136,7 @@
   }
 }
 
-@mixin responsive-flex($width: 769, $height: 900) {
+@mixin responsive-flex($width: 769, $height: 1025) {
   @media screen and (min-width: #{$width}px) and (max-height: #{$height}px) {
     @content;
   }
