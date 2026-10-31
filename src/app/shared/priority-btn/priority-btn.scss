@@ -36,6 +36,10 @@
   font-size: calcClamp(16, 20, 1300, 1025);
   line-height: 120%;
 
+  @include responsive-flex {
+    height: calcClamp(48, 56, 1800, 700, height);
+  }
+
   @include tablet {
     font-size: calcClamp(16, 20, 1024, 769);
   }
