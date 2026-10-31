@@ -5,6 +5,10 @@
   @include field-host(0px);
 }
 
+:host(.ng-invalid.ng-touched) .input-container {
+  border-color: $error;
+}
+
 label {
   margin-bottom: 8px;
   @include field-label;

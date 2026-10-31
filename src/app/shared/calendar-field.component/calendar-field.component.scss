@@ -5,6 +5,10 @@
   @include field-host;
 }
 
+:host(.ng-invalid.ng-touched) .input-container {
+  border-color: $error;
+}
+
 input {
   @include field-input;
 }
@@ -12,10 +16,6 @@ input {
 .input-container {
   @include field-container;
   padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
-
-  &:has(.ng-invalid:is(.ng-touched)) {
-    border-color: $error;
-  }
 }
 
 label {

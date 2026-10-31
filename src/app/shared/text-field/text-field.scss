@@ -5,6 +5,10 @@
   @include field-host;
 }
 
+:host(.ng-invalid.ng-touched) .input-container {
+  border-color: $error;
+}
+
 input,
 textarea {
   @include field-input;
