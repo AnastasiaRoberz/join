@@ -6,6 +6,9 @@ import { NavigationService } from '../../../../services/navigation.service';
   selector: 'app-legal-notice',
   styleUrl: './legal-notice.scss',
   templateUrl: './legal-notice.html',
+  host: {
+    class: 'scroll-container',
+  },
 })
 export class LegalNotice {
   navService = inject(NavigationService);
