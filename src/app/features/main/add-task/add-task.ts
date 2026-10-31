@@ -52,6 +52,7 @@ export class AddTask implements OnDestroy {
     title: new FormControl('', [Validators.required, Validators.maxLength(200)]),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
+    priority: new FormControl(''),
     assigned: new FormControl<number[]>([]),
     category: new FormControl('', Validators.required),
     subtask: new FormControl(''),

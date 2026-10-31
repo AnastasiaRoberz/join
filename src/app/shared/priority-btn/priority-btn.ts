@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, model, signal } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
 
@@ -81,7 +81,7 @@ export class PriorityBtn implements ControlValueAccessor {
    * Internal signal tracking the currently active priority level for template rendering and class binding.
    * Defaults to `'medium'`.
    */
-  activePriority = signal<Priority>('medium');
+  activePriority = model<Priority>('medium');
 
   /**
    * Injected {@link NgControl} binding this component to the parent Angular form control directive.

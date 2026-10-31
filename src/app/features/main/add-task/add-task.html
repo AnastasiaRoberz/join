@@ -37,7 +37,10 @@
     </div>
 
     <div class="taskWrap">
-      <app-priority-btn></app-priority-btn>
+      <app-priority-btn
+        formControlName="priority"
+        [(activePriority)]="selectedPrio"
+      ></app-priority-btn>
 
       <app-select-field
         label="Assigned to"
