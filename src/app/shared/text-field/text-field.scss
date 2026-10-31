@@ -2,34 +2,28 @@
 
 :host {
   @include flex-start(column);
-  gap: 8px;
-  width: 100%;
+  @include field-host;
+}
+
+:host(.ng-invalid.ng-touched) .input-container {
+  border-color: $error;
 }
 
 input,
 textarea {
-  border: none;
-  outline: none;
-  background: none;
-  flex: 1;
-  font-family: Inter;
-  font-size: calcClamp(16, 20, 768, 320);
+  @include field-input;
 }
 
 textarea {
   field-sizing: content;
   min-height: 96px;
-  max-height: 240px;
+  max-height: min(40cqh, 240px);
+  resize: vertical;
 }
 
 .input-container {
-  @include flex-center;
-  width: 100%;
+  @include field-container(auto);
   padding: calcClamp(8, 12, 768, 320) calcClamp(12, 20, 768, 320);
-  border: 1px solid $input-default-border;
-  border-radius: 10px;
-  background-color: $color-white;
-  position: relative;
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
@@ -44,12 +38,8 @@ textarea {
     }
   }
 
-  &:focus-within {
-    border-color: $input-focus-border;
-  }
-
   &:has(input) {
-    height: 48px;
+    height: calcClamp(40, 48, 769, 400);
   }
 
   &:has(.ng-invalid:is(.ng-touched)) {
@@ -62,8 +52,7 @@ textarea {
 }
 
 label.top {
-  font-size: calcClamp(16, 20, 768, 320);
-  line-height: 120%;
+  @include field-label;
 }
 
 label.inner {
@@ -95,18 +84,10 @@ label.inner {
 }
 
 .error-msg {
-  font-size: calcClamp(12, 16, 940, 400);
-  color: $error;
-  position: absolute;
-  right: 0;
-  bottom: -8px;
-  transform: translateY(100%);
-
-  @include mobile {
-    bottom: -1px;
-  }
+  @include field-error-msg;
 }
 
 :host(.task-input) .input-container {
-  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
+  padding-block: calcClamp(8, 12, 768, 320);
+  padding-inline: calcClamp(12, 16, 768, 320);
 }
