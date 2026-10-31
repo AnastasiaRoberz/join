@@ -70,6 +70,7 @@ import { FitTextDirective } from '../../directives/fit-text.directive';
     '[style.--fitting-users]': 'fittingUsers()',
     '[style.--columns]': 'remainingUsersCount() > 0 ? fittingUsers() + 1 : fittingUsers()',
     '[style.--avatar-gap.px]': 'computedGap()',
+    '[style.display]': '!hasUsers() ? "none" : null',
   },
 })
 export class AvatarGroupComponent implements OnInit, OnDestroy {
@@ -216,7 +217,7 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   remainingUsersCount = computed(() => Math.max(0, this.users().length - this.fittingUsers()));
 
   /** True if at least one user is present; controls the host top margin via `.has-users`. */
-  protected hasUsers = computed(() => this.visibleUsers().length > 0);
+  hasUsers = computed(() => this.visibleUsers().length > 0);
 
   // ---------------------------------------------------------------------------
   // Lifecycle
