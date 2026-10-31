@@ -10,12 +10,14 @@
   grid-template-rows: auto 1fr;
   gap: calcClamp(40, 48, 1440, 430);
 
+  // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
     padding-inline: calcClamp(10, 78, 768, 320);
     padding-block: calcClamp(20, 124, 1800, 700, height);
     gap: calcClamp(16, 48, 1800, 700);
   }
 
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive(700) {
     overflow-y: auto;
     padding-block: 0;
@@ -40,6 +42,7 @@
   height: auto;
   z-index: 4;
 
+  // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
     h2 {
       font-size: calcClamp(40, 60, 900, 700, height);
@@ -52,6 +55,7 @@
     }
   }
 
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive(700) {
     background-color: $main-bg;
     padding-block: calcClamp(30, 48, 768, 320) 15px;
@@ -78,11 +82,13 @@ form {
   // justify-content: space-between;
   gap: calcClamp(50, 80, 1800, 300);
 
+  // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
     justify-content: space-between;
     gap: calcClamp(5, 48, 1800, 700, height);
   }
 
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive(700) {
     max-height: 100%;
     padding-inline: calcClamp(10, 78, 768, 320);
@@ -108,6 +114,7 @@ form {
   justify-content: space-between;
   gap: calcClamp(55, 96, 1300, 769);
 
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive(700) {
     container-type: unset;
     max-height: 100%;
@@ -135,10 +142,12 @@ form {
   gap: 24px;
   position: relative; //für das ::after
 
+  // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
     gap: calcClamp(10, 24, 1800, 700, height);
   }
 
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive(700) {
     height: auto;
     gap: 32px;
@@ -158,6 +167,11 @@ form {
   height: 100%;
   width: 1px;
   background-color: $input-placeholder;
+
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+  @include height-responsive(700) {
+    display: none;
+  }
 
   @include mobile {
     display: none;
