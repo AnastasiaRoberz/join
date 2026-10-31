@@ -29,6 +29,7 @@ app-header {
 
 .pages {
   grid-area: pages;
+  display: flex;
   height: 100%;
   min-height: 0;
   width: 100%;
