@@ -55,8 +55,8 @@
   // shows max. 2 lines of the title, the rest is cut off with "..."
   &__title {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     font-size: $font-default;
