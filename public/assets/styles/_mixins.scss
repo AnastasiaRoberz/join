@@ -57,11 +57,16 @@
   }
 }
 
-@mixin field-input {
+@mixin field-input($width: flex) {
   border: none;
   outline: none;
   background: none;
-  flex: 1;
+  @if ($width == width) {
+    width: 100%;
+  }
+  @if ($width == flex) {
+    flex: 1;
+  }
   font-family: Inter;
   font-size: calcClamp(16, 20, 768, 320);
 }
@@ -128,5 +133,11 @@
     @media screen and (min-height: #{$height}px) {
       @content;
     }
+  }
+}
+
+@mixin responsive-flex($width: 769, $height: 900) {
+  @media screen and (min-width: #{$width}px) and (max-height: #{$height}px) {
+    @content;
   }
 }
