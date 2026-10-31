@@ -13,7 +13,8 @@ textarea {
 textarea {
   field-sizing: content;
   min-height: 96px;
-  max-height: 240px;
+  max-height: min(40cqh, 240px);
+  resize: vertical;
 }
 
 .input-container {
@@ -83,5 +84,6 @@ label.inner {
 }
 
 :host(.task-input) .input-container {
-  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
+  padding-block: calcClamp(8, 12, 768, 320);
+  padding-inline: calcClamp(12, 16, 768, 320);
 }
