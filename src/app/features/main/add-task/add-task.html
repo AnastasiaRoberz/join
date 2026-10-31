@@ -80,7 +80,11 @@
         [scrollable]="false"
       ></app-select-field>
 
-      <app-subtask-field [isScrollable]="true" class="task-input"></app-subtask-field>
+      <app-subtask-field
+        [(subtasks)]="createdSubtasks"
+        [isScrollable]="true"
+        class="task-input"
+      ></app-subtask-field>
     </div>
   </div>
 
