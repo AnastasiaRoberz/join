@@ -29,6 +29,7 @@ form {
 }
 
 .form-content-wrapper {
+  --padding-inline: #{calcClamp(24, 40, 769, 320)};
   @include flex-start(column, both);
   gap: calcClamp(16, 32);
   height: 100%;
