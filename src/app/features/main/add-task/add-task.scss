@@ -1,27 +1,33 @@
 @use '../../../../../public/assets/styles/' as *;
 
 :host {
+  --padding-inline: #{calcClamp(16, 64, 1440, 1024)};
   width: 100%;
   height: 100%;
-  padding-inline: calcClamp(16, 64, 1440, 1024);
-  padding-top: calcClamp(64, 80, 1440, 1024);
+  padding-inline: var(--padding-inline);
+  padding-top: calcClamp(64, 124, 1440, 1024);
+  padding-bottom: calcClamp(64, 75, 1440, 1024);
   display: grid;
   grid-template-rows: auto 1fr;
   gap: calcClamp(40, 48, 1440, 430);
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
-    padding-bottom: calcClamp(20, 80, 1800, 700, height);
-    gap: calcClamp(10, 40, 900, 700, height);
+    --padding-inline: #{calcClamp(10, 78, 768, 320)};
+    --sb-width: #{calcClamp(10, 24, 413, 320)};
+    padding-inline: var(--padding-inline);
+    padding-top: 48;
+    padding-bottom: calcClamp(20, 124, 1800, 700);
+    gap: calcClamp(16, 48, 1800, 700);
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive {
+    --padding-inline: #{calcClamp(10, 78, 768, 320)};
+    --sb-width: #{calcClamp(10, 24, 413, 320)};
     max-width: 800px;
-    overflow-y: auto;
-    padding-block: 0;
     padding-bottom: 20px;
-    padding-inline: 0;
+    padding-inline: var(--padding-inline);
     gap: 48px;
   }
 
@@ -30,60 +36,32 @@
   }
 
   @include mobile {
-    overflow-y: auto;
-    padding-block: 0;
+    --padding-inline: #{calcClamp(10, 78, 768, 320)};
+    --sb-width: #{calcClamp(10, 24, 413, 320)};
     padding-bottom: 20px;
-    padding-inline: 0;
+    padding-inline: var(--padding-inline);
     gap: 40px;
   }
 }
 
 .task-header {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: auto;
-  z-index: 4;
-
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex(769, 700) {
-    h2 {
-      font-size: 60px;
-    }
+    font-size: 60px;
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive {
-    background-color: $main-bg;
-    padding-block: calcClamp(64, 80, 1440, 769) 15px;
-    padding-inline: calcClamp(10, 64, 1440, 769);
-    position: sticky;
-    top: 0;
-
-    h2 {
-      font-size: calcClamp(40, 61);
-    }
-  }
-
-  @include height-responsive(1024) {
-    padding-inline: calcClamp(30, 124, 1024, 769);
-  }
-
-  @include mobile {
-    background-color: $main-bg;
-    padding-block: calcClamp(30, 48, 768, 320) 15px;
-    padding-inline: calcClamp(10, 78, 768, 320);
-    position: sticky;
-    top: 0;
+    font-size: calcClamp(40, 61);
   }
 }
 
 form {
-  width: 100%;
-  height: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+
+  gap: calcClamp(40, 48, 1440, 430);
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
@@ -93,38 +71,29 @@ form {
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive {
-    max-height: 100%;
-    padding-inline: calcClamp(10, 64, 1440, 769);
     justify-content: flex-start;
     gap: 124px;
   }
 
-  @include height-responsive(1024) {
-    padding-inline: calcClamp(30, 124, 1024, 769);
-  }
-
   @include mobile {
-    max-height: 100%;
-    padding-inline: calcClamp(10, 78, 768, 320);
     justify-content: flex-start;
-    gap: 64px;
+    gap: 40px;
   }
 }
 
 .task-container {
   container-type: size; // ← macht Klasse zum Container
   container-name: task-container;
-  width: 100%;
-  height: 100%;
+  flex: 1;
   max-height: 550px;
   display: flex;
   justify-content: space-between;
-  gap: calcClamp(55, 96, 1300, 769);
+  gap: calcClamp(48, 96, 1300, 769);
+  position: relative;
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive {
     container-type: unset;
-    max-height: 100%;
     flex-direction: column;
     justify-content: flex-start;
     gap: 32px;
@@ -132,7 +101,6 @@ form {
 
   @include mobile {
     container-type: unset;
-    max-height: 100%;
     flex-direction: column;
     justify-content: flex-start;
     gap: 32px;
@@ -142,10 +110,11 @@ form {
 // taskWrap: gibt es 2x, links und rechts die Spalten im add-task
 .taskWrap {
   width: 100%;
-  height: 100%;
+  height: fit-content;
+  max-height: 100%;
   min-height: 0;
   display: flex;
-  flex-direction: column; //positioniert inputs untereinander
+  flex-direction: column;
   gap: 32px;
   position: relative; //für das ::after
 
@@ -156,12 +125,12 @@ form {
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive {
-    height: auto;
+    min-height: auto;
     gap: 32px;
   }
 
   @include mobile {
-    height: auto;
+    min-height: auto;
     gap: 32px;
   }
 }
@@ -208,7 +177,7 @@ form {
   @include mobile {
     flex-direction: column;
     align-items: flex-start;
-    gap: 48px;
+    gap: 10px;
 
     &__buttons {
       gap: caclClamp(16, 32, 430, 320);
