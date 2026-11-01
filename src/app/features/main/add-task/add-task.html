@@ -4,7 +4,7 @@
 <h2 class="task-header">Add Task</h2>
 
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-  <div class="task-container">
+  <div class="task-container" [class.scroll-container]="isScrollable()">
     <div class="taskWrap taskLeft">
       <app-text-field
         fieldId="task-title"
@@ -83,7 +83,7 @@
 
       <app-subtask-field
         [(subtasks)]="createdSubtasks"
-        [isScrollable]="true"
+        [isScrollable]="!isScrollable()"
         class="task-input"
       ></app-subtask-field>
     </div>
