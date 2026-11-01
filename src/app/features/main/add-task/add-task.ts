@@ -42,6 +42,9 @@ import { SubtaskInterface } from '../../../interfaces/subtask.interface';
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
+  host: {
+    '[class.scroll-container]': 'isHeightResponsive()',
+  },
 })
 export class AddTask implements OnDestroy {
   /**
@@ -60,7 +63,9 @@ export class AddTask implements OnDestroy {
 
   /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
-  isHeightResponsive = this.responsiveService.isMaxHeight(815);
+  isHeightResponsive = this.responsiveService.observeQuery(
+    '(max-height: 815px) and (orientation: landscape)',
+  );
   isScrollable = computed(() => this.responsiveService.isMobile() && !this.isHeightResponsive());
 
   contactService = inject(ContactService);

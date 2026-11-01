@@ -3,11 +3,7 @@
 </div> -->
 <h2 class="task-header">Add Task</h2>
 
-<form
-  [formGroup]="taskForm"
-  (ngSubmit)="onSubmit()"
-  [class.scroll-container]="isHeightResponsive()"
->
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
   <div class="task-container" [class.scroll-container]="isScrollable()">
     <div class="taskWrap task-left">
       <app-text-field
