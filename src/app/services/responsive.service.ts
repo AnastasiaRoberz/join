@@ -85,4 +85,16 @@ export class ResponsiveService {
       },
     );
   }
+
+  isMaxHeight(maxHeight: number): Signal<boolean> {
+    return toSignal(
+      this.breakpointObserver
+        .observe(`(max-height: ${maxHeight}px)`)
+        .pipe(map((result) => result.matches)),
+      {
+        initialValue: false,
+        injector: this.injector,
+      },
+    );
+  }
 }
