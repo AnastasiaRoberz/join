@@ -16,13 +16,20 @@ textarea {
 textarea {
   field-sizing: content;
   min-height: 96px;
+  // max-width: 100%;
   max-height: min(40cqh, 240px);
   resize: vertical;
+  overflow-wrap: anywhere;
+  margin-right: calc(-1 * var(--sb-offset));
 }
 
 .input-container {
+  --padding-inline: #{calcClamp(12, 20, 768, 320)};
+  --sb-width: 16px;
+  --sb-border-width: 6px;
   @include field-container(auto);
-  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 20, 768, 320);
+  padding-inline: var(--padding-inline);
+  padding-block: calcClamp(8, 12, 768, 320);
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
@@ -87,6 +94,7 @@ label.inner {
 }
 
 :host(.task-input) .input-container {
+  --padding-inline: #{calcClamp(12, 16, 768, 320)};
   padding-block: calcClamp(8, 12, 768, 320);
-  padding-inline: calcClamp(12, 16, 768, 320);
+  padding-inline: var(--padding-inline);
 }

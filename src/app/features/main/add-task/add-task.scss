@@ -154,6 +154,25 @@ form {
   }
 }
 
+.task-left::after {
+  content: '';
+  position: absolute;
+  left: calc(100% + calcClamp(24, 48, 1300, 769));
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background-color: $input-placeholder;
+
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+  @include height-responsive {
+    display: none;
+  }
+
+  @include mobile {
+    display: none;
+  }
+}
+
 .name {
   flex: 1;
   white-space: nowrap;

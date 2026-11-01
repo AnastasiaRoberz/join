@@ -5,6 +5,7 @@
 
 :root {
   --sb-width: #{calcClamp(16, 24, 768, 320)};
+  --sb-border-width: #{calcClamp(3, 10, 413, 320)};
 }
 
 * {
@@ -77,7 +78,7 @@ button {
 
   &::-webkit-scrollbar-thumb {
     border: 10px solid transparent;
-    border-width: calcClamp(3, 10, 413, 320);
+    border-width: var(--sb-border-width);
     border-radius: 9999px;
     background-clip: content-box;
     background-color: $icon;
