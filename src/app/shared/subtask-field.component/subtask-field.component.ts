@@ -44,10 +44,12 @@ let nextId = 0;
 export class SubtaskFieldComponent {
   /** Used by the template to adapt the label styling on mobile viewports. */
   responsiveService = inject(ResponsiveService);
+  elementRef = inject(ElementRef);
 
   fieldId = input<string>(`app-subtask-field-${nextId++}`);
 
   mainInput = viewChild<ElementRef<HTMLInputElement>>('mainInput');
+  subtaskList = viewChild<ElementRef<HTMLUListElement>>('subtaskList');
 
   /**
    * The list of subtasks. A `model` signal, so the parent can use two-way binding
@@ -88,6 +90,8 @@ export class SubtaskFieldComponent {
     };
     this.subtasks.update((list) => [newSubtask, ...list]);
     input.value = '';
+
+    setTimeout(() => this.scrollToSubtask());
   }
 
   /**
@@ -125,5 +129,19 @@ export class SubtaskFieldComponent {
    */
   editSubtask(id: number) {
     this.editingSubtaskId.set(id);
+  }
+
+  scrollToSubtask(): void {
+    const hostElement = this.elementRef.nativeElement as HTMLElement;
+    const outerScrollContainer = hostElement.closest<HTMLElement>('.scroll-container');
+
+    if (outerScrollContainer) {
+      const containerRect = outerScrollContainer.getBoundingClientRect();
+      const hostRect = hostElement.getBoundingClientRect();
+
+      const targetScrollTop = outerScrollContainer.scrollTop + (hostRect.top - containerRect.top);
+
+      outerScrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+    }
   }
 }
