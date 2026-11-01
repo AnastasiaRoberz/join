@@ -1,7 +1,6 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column);
   @include field-host;
 }
 
@@ -11,7 +10,7 @@
 
 input,
 textarea {
-  @include field-input;
+  @include field-input(flex);
 }
 
 textarea {
@@ -38,17 +37,17 @@ textarea {
     }
   }
 
-  &:has(input) {
-    height: calcClamp(40, 48, 769, 400);
-  }
+  // &:has(input) {
+  //   height: calcClamp(40, 48, 769, 400);
+  // }
 
-  &:has(.ng-invalid:is(.ng-touched)) {
-    border-color: $error;
+  // &:has(.ng-invalid:is(.ng-touched)) {
+  //   border-color: $error;
 
-    label {
-      color: $error;
-    }
-  }
+  //   label {
+  //     color: $error;
+  //   }
+  // }
 }
 
 label.top {

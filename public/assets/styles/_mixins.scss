@@ -34,6 +34,9 @@
 //==========================================
 
 @mixin field-host($gap: 8px) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
   gap: $gap;
 }
@@ -45,11 +48,10 @@
 
 @mixin field-container($height: calcClamp(40, 48, 769, 400)) {
   @include flex-center;
-  width: 100%;
+  flex: 1;
   height: $height;
   border: 1px solid $input-default-border;
   border-radius: 10px;
-  background-color: $color-white;
   position: relative;
 
   &:focus-within {
