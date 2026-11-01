@@ -30,6 +30,7 @@ export class ResponsiveService {
     tablet: '(max-width: 1024px)',
     desktop: '(min-width: 1025px)',
     widescreen: '(min-height: 1800px)',
+    mobileOrLandscape: '(max-width: 768px), ((max-height: 870px) and (orientation: landscape))',
   };
 
   /** `true` when the viewport is at most 768px wide. */
@@ -60,6 +61,13 @@ export class ResponsiveService {
   readonly isWidescreen = toSignal(
     this.breakpointObserver
       .observe(this.customBreakpoints.widescreen)
+      .pipe(map((result) => result.matches)),
+    { initialValue: false },
+  );
+
+  readonly isMobileOrLandscape = toSignal(
+    this.breakpointObserver
+      .observe(this.customBreakpoints.mobileOrLandscape)
       .pipe(map((result) => result.matches)),
     { initialValue: false },
   );

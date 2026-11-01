@@ -11,9 +11,9 @@
   color: $text-muted;
   container-type: inline-size;
 
-  @include responsive-flex {
-    padding-block: calcClamp(32, 64, 1800, 700, height);
-  }
+  // @include responsive-flex {
+  //   padding-block: calcClamp(32, 64, 900, 700, height);
+  // }
 }
 
 .sidebar-wrapper {
@@ -21,10 +21,10 @@
   width: 100%;
   gap: 114px;
 
-  @include responsive-flex {
-    gap: calcClamp(74, 114, 1800, 700, height);
-    margin-bottom: 20px;
-  }
+  // @include responsive-flex {
+  //   gap: calcClamp(74, 114, 1800, 700, height);
+  //   margin-bottom: 20px;
+  // }
 
   .nav-logo {
     width: 100px;

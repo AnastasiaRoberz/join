@@ -113,33 +113,63 @@
   }
 }
 
-@mixin responsive($width, $value: max) {
+@mixin responsive($size, $direction: width, $value: max) {
   @if ($value == 'max') {
-    @media screen and (max-width: $width) {
-      @content;
+    @if ($direction == 'width') {
+      @media screen and (max-width: $size) {
+        @content;
+      }
+    } @else {
+      @media screen and (max-height: $size) {
+        @content;
+      }
     }
-  } @else if($value == 'min') {
-    @media screen and (min-width: $width) {
-      @content;
+  } @else {
+    @if ($direction == 'width') {
+      @media screen and (min-width: $size) {
+        @content;
+      }
+    } @else {
+      @media screen and (min-height: $size) {
+        @content;
+      }
     }
   }
 }
 
-@mixin height-responsive($width: 1920, $height: 815) {
-  @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) {
+@mixin landscape($width: 1920, $height: 870) {
+  @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) and (orientation: landscape) {
     @content;
   }
 }
 
-@mixin responsive-flex($value: min, $width: 769, $height: 900) {
-  @if ($value == min) {
-    @media screen and (min-width: #{$width}px) and (max-height: #{$height}px) {
-      @content;
-    }
-  }
-  else {
-    @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) {
-      @content;
-    }
+@mixin mobile-or-landscape($mobile-width: 768px, $ls-width: 1920, $ls-height: 870) {
+  @media screen and (max-width: $mobile-width),
+    screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
+    @content;
   }
 }
+
+@mixin short-height($height: 500px) {
+  @media screen and (max-height: $height) {
+    @content;
+  }
+}
+
+@mixin middle-height($min: 501px, $max: 700px) {
+  @media screen and (min-height: $min) and (max-height: $max) {
+    @content;
+  }
+}
+
+// @mixin responsive-flex($value: min, $width: 769, $height: 900) {
+//   @if ($value == min) {
+//     @media screen and (min-width: #{$width}px) and (max-height: #{$height}px) {
+//       @content;
+//     }
+//   } @else {
+//     @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) {
+//       @content;
+//     }
+//   }
+// }

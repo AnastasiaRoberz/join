@@ -3,9 +3,12 @@
 </div> -->
 <h2 class="task-header">Add Task</h2>
 
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-  <div class="task-container" [class.scroll-container]="isScrollable()">
-    <div class="taskWrap task-left">
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" [class.scroll-container]="isMiddleHeight()">
+  <div
+    class="task-container"
+    [class.scroll-container]="isMobileOrLandscape() && !isShortHeight() && !isMiddleHeight()"
+  >
+    <div class="task-wrap task-left">
       <app-text-field
         fieldId="task-title"
         class="task-input"
@@ -37,7 +40,7 @@
       ></app-calendar-field>
     </div>
 
-    <div class="taskWrap task-right">
+    <div class="task-wrap task-right">
       <app-priority-btn
         formControlName="priority"
         [(activePriority)]="selectedPrio"
@@ -83,7 +86,7 @@
 
       <app-subtask-field
         [(subtasks)]="createdSubtasks"
-        [isScrollable]="!isScrollable() || !isHeightResponsive()"
+        [isScrollable]="!isMobileOrLandscape()"
         class="task-input"
       ></app-subtask-field>
     </div>

@@ -43,7 +43,7 @@ import { SubtaskInterface } from '../../../interfaces/subtask.interface';
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
   host: {
-    '[class.scroll-container]': 'isHeightResponsive()',
+    '[class.scroll-container]': 'isShortHeight()',
   },
 })
 export class AddTask implements OnDestroy {
@@ -63,10 +63,11 @@ export class AddTask implements OnDestroy {
 
   /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
-  isHeightResponsive = this.responsiveService.observeQuery(
-    '(max-height: 815px) and (orientation: landscape)',
+  isMobileOrLandscape = this.responsiveService.isMobileOrLandscape;
+  isMiddleHeight = this.responsiveService.observeQuery(
+    '(min-height: 501px) and (max-height: 700px)',
   );
-  isScrollable = computed(() => this.responsiveService.isMobile() && !this.isHeightResponsive());
+  isShortHeight = this.responsiveService.isMaxHeight(500);
 
   contactService = inject(ContactService);
 

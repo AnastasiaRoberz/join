@@ -4,8 +4,9 @@
 @use '../public/assets/styles' as *;
 
 :root {
-  --sb-width: #{calcClamp(16, 24, 768, 320)};
-  --sb-border-width: #{calcClamp(3, 10, 413, 320)};
+  --sb-width: #{calcClamp(16, 24, 470, 320)};
+  // --sb-border-width: #{calcClamp(3, 10, 470, 320)};
+  --sb-border-width: calc((var(--sb-width) - 4px) / 2);
 }
 
 * {
