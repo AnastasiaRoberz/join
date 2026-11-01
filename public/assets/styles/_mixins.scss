@@ -48,7 +48,6 @@
 
 @mixin field-container($height: calcClamp(40, 48, 769, 400)) {
   @include flex-center;
-  flex: 1;
   height: $height;
   border: 1px solid $input-default-border;
   border-radius: 10px;
