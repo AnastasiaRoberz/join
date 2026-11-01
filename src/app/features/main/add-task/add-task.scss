@@ -100,6 +100,7 @@ form {
     flex-direction: column;
     justify-content: flex-start;
     gap: 32px;
+    max-height: none;
   }
 
   @include mobile {
@@ -107,6 +108,7 @@ form {
     flex-direction: column;
     justify-content: flex-start;
     gap: 32px;
+    max-height: none;
   }
 }
 
