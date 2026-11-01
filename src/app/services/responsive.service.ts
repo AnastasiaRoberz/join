@@ -97,4 +97,11 @@ export class ResponsiveService {
       },
     );
   }
+
+  observeQuery(query: string): Signal<boolean> {
+    return toSignal(this.breakpointObserver.observe(query).pipe(map((result) => result.matches)), {
+      initialValue: false,
+      injector: this.injector,
+    });
+  }
 }
