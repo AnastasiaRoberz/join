@@ -37,6 +37,7 @@
     flex: 1;
     gap: calcClamp(12, 16);
     min-height: calc(100dvh - 410px); // fix height, due to drag box needed for now
+    padding-right: 0;
 
     // compact layout: cards in a row, scrolling sideways
     @include tablet($board-breakpoint) {
