@@ -3,27 +3,30 @@
 :host {
   width: 100%;
   height: 100%;
-  padding-inline: calcClamp(16, 96, 1440, 1024);
-  padding-top: calcClamp(64, 124, 1440, 1024);
-  padding-bottom: calcClamp(64, 75, 1440, 1024);
+  padding-inline: calcClamp(16, 64, 1440, 1024);
+  padding-top: calcClamp(64, 80, 1440, 1024);
   display: grid;
   grid-template-rows: auto 1fr;
   gap: calcClamp(40, 48, 1440, 430);
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
-    padding-inline: calcClamp(10, 78, 768, 320);
-    padding-block: calcClamp(20, 124, 1800, 700, height);
-    gap: calcClamp(16, 48, 1800, 700);
+    padding-bottom: calcClamp(20, 80, 1800, 700, height);
+    gap: calcClamp(10, 40, 900, 700, height);
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include height-responsive(750) {
+  @include height-responsive {
+    max-width: 800px;
     overflow-y: auto;
     padding-block: 0;
     padding-bottom: 20px;
     padding-inline: 0;
     gap: 48px;
+  }
+
+  @include height-responsive(1024) {
+    max-width: 100%;
   }
 
   @include mobile {
@@ -43,12 +46,6 @@
   z-index: 4;
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
-  @include responsive-flex {
-    h2 {
-      font-size: calcClamp(40, 60, 900, 700, height);
-    }
-  }
-
   @include responsive-flex(769, 700) {
     h2 {
       font-size: 60px;
@@ -56,12 +53,20 @@
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include height-responsive(750) {
+  @include height-responsive {
     background-color: $main-bg;
-    padding-block: calcClamp(30, 48, 768, 320) 15px;
-    padding-inline: calcClamp(10, 78, 768, 320);
+    padding-block: calcClamp(64, 80, 1440, 769) 15px;
+    padding-inline: calcClamp(10, 64, 1440, 769);
     position: sticky;
     top: 0;
+
+    h2 {
+      font-size: calcClamp(40, 61);
+    }
+  }
+
+  @include height-responsive(1024) {
+    padding-inline: calcClamp(30, 124, 1024, 769);
   }
 
   @include mobile {
@@ -76,11 +81,9 @@
 form {
   width: 100%;
   height: 100%;
-  // max-height: 800px; //begrenzt die form in der Höhe, damit Footer nicht zu weit nach unten
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
-  gap: calcClamp(50, 80, 1800, 300);
+  gap: 10px;
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
@@ -89,11 +92,15 @@ form {
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include height-responsive(750) {
+  @include height-responsive {
     max-height: 100%;
-    padding-inline: calcClamp(10, 78, 768, 320);
+    padding-inline: calcClamp(10, 64, 1440, 769);
     justify-content: flex-start;
     gap: 124px;
+  }
+
+  @include height-responsive(1024) {
+    padding-inline: calcClamp(30, 124, 1024, 769);
   }
 
   @include mobile {
@@ -115,7 +122,7 @@ form {
   gap: calcClamp(55, 96, 1300, 769);
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include height-responsive(750) {
+  @include height-responsive {
     container-type: unset;
     max-height: 100%;
     flex-direction: column;
@@ -144,11 +151,11 @@ form {
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
   @include responsive-flex {
-    gap: calcClamp(24, 32, 1025, 700, height);
+    gap: calcClamp(20, 24, 1025, 700, height);
   }
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include height-responsive(750) {
+  @include height-responsive {
     height: auto;
     gap: 32px;
   }
@@ -169,7 +176,7 @@ form {
   background-color: $input-placeholder;
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include height-responsive(750) {
+  @include height-responsive {
     display: none;
   }
 

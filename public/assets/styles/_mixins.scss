@@ -124,20 +124,21 @@
   }
 }
 
-@mixin height-responsive($height, $value: max) {
-  @if ($value == 'max') {
-    @media screen and (max-height: #{$height}px) {
-      @content;
-    }
-  } @else if($value == 'min') {
-    @media screen and (min-height: #{$height}px) {
-      @content;
-    }
+@mixin height-responsive($width: 1920, $height: 815) {
+  @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) {
+    @content;
   }
 }
 
-@mixin responsive-flex($width: 769, $height: 1025) {
-  @media screen and (min-width: #{$width}px) and (max-height: #{$height}px) {
-    @content;
+@mixin responsive-flex($value: min, $width: 769, $height: 900) {
+  @if ($value == min) {
+    @media screen and (min-width: #{$width}px) and (max-height: #{$height}px) {
+      @content;
+    }
+  }
+  else {
+    @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) {
+      @content;
+    }
   }
 }
