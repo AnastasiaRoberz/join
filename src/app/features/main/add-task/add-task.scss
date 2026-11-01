@@ -166,10 +166,10 @@ form {
   }
 }
 
-.taskLeft::after {
+.task-right::after {
   content: '';
   position: absolute;
-  left: calc(100% + calcClamp(25, 48, 1300, 769));
+  left: calc(-1 * calcClamp(24, 48, 1300, 769));
   top: 0;
   height: 100%;
   width: 1px;
