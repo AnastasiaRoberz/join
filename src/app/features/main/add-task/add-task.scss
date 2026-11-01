@@ -8,7 +8,7 @@
   padding-top: calcClamp(64, 124, 1440, 1024);
   padding-bottom: calcClamp(64, 75, 1440, 1024);
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(0, 1fr);
   gap: calcClamp(40, 48, 1440, 430);
 
   // für bestimmte Breite UND Höhe (z.B. Laptop)
@@ -58,6 +58,7 @@
 
 form {
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   max-height: 656px;
@@ -71,8 +72,10 @@ form {
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include height-responsive {
+    flex: 1;
+    max-height: 100%;
     justify-content: flex-start;
-    gap: 124px;
+    gap: 24px;
   }
 
   @include mobile {

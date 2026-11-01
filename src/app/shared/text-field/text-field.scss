@@ -18,9 +18,10 @@ textarea {
   min-height: 96px;
   // max-width: 100%;
   max-height: min(40cqh, 240px);
-  resize: vertical;
+  resize: none;
   overflow-wrap: anywhere;
   margin-right: calc(-1 * var(--sb-offset));
+  overscroll-behavior-y: auto;
 }
 
 .input-container {

@@ -36,9 +36,8 @@ app-header {
   max-width: 1208px;
 
   @include tablet {
-    .pages {
-      height: auto;
-      flex: 1;
-    }
+    height: auto;
+    flex: 1;
+    min-height: 0;
   }
 }
