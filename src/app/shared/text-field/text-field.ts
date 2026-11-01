@@ -75,7 +75,7 @@ export class TextField implements ControlValueAccessor {
   /** Current value displayed in the field. Updated by user input and by `writeValue()`. */
   value: string = '';
 
-  requiredMsg = input(false, { transform: booleanAttribute });
+  // requiredMsg = input(false, { transform: booleanAttribute });
 
   /** Callback registered by Angular forms; call it to propagate a new value to the form control. */
   onChange: (value: string) => void = () => {};
@@ -155,7 +155,8 @@ export class TextField implements ControlValueAccessor {
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
     const errors =
-      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+      // this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+      ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
 
     return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
