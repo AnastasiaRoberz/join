@@ -206,7 +206,7 @@ export class TaskService {
   // using a method here, as it needs to be called from board-header and board-column
   openAddTask(status: TaskInterface['status'] = 'To do') {
     this.addTaskStatus.set(status); // sets status received by signal, default = To do
-    if (this.responsiveService.isMobile() || this.responsiveService.isTablet()) {
+    if (this.responsiveService.isMobile()) {
       this.router.navigate(['/add-task']);
     } else {
       this.dialogService.openDialog('add-task');

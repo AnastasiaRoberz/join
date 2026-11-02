@@ -103,6 +103,8 @@ form {
   flex-direction: column; //positioniert inputs untereinander
   gap: calcClamp(16, 32, 900, 350, height);
   position: relative; //für das ::after
+  min-width: 0;
+  flex: 1 1 0;
 
   @include mobile {
     min-height: auto;
@@ -171,6 +173,10 @@ form {
   width: 95vw;
   max-width: 1116px;
   max-height: 95dvh;
+
+  @include tablet {
+    --padding-inline: 16px;
+  }
 
   @include responsive(700, height, max) {
     padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
