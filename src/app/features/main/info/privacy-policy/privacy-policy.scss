@@ -7,6 +7,8 @@
   gap: 24px;
   padding: calcClamp(48, 116) calcClamp(16, 96);
   line-height: 1.2;
+  width: 100%;
+  padding-right: calc(var(--padding-inline) - var(--sb-width));
 
   @include mobile {
     padding-right: 0;
