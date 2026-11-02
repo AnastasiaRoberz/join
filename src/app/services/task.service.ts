@@ -235,6 +235,7 @@ export class TaskService {
           task.id,
           { status: task.status, position: task.position }, // only these two fields are saved
           'tasks', // table "tasks"
+          false,
         ),
       ),
     );

@@ -7,10 +7,10 @@
     [id]="fieldId()"
     autocomplete="off"
     (keydown.enter)="$event.preventDefault(); saveSubtask(mainInput)"
-    (keydown.escape)="clearInput(mainInput)"
+    (keydown.escape)="reset()"
   />
   <div class="input-btn-wrapper">
-    <button appBtn preset="iconSmall" icon="x" (click)="clearInput(mainInput)"></button>
+    <button appBtn preset="iconSmall" icon="x" (click)="reset()"></button>
     <hr />
     <button
       appBtn

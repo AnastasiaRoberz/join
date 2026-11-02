@@ -14,10 +14,10 @@
   }
 
   &.size-medium {
-    width: 42px;
-    height: 42px;
+    width: calcClamp(32, 42);
+    height: calcClamp(32, 42);
     border-width: 2px;
-    font-size: $font-default;
+    font-size: calcClamp(14, 16, 769, 320);
   }
 
   &.size-large {

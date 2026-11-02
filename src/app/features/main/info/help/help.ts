@@ -6,6 +6,9 @@ import { NavigationService } from '../../../../services/navigation.service';
   selector: 'app-help',
   styleUrl: './help.scss',
   templateUrl: './help.html',
+  host: {
+    class: 'scroll-container',
+  },
 })
 export class Help {
   navService = inject(NavigationService);

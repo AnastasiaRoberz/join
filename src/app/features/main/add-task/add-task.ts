@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { AvatarGroupComponent } from '../../../shared/avatar-group.component/ava
 import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/subtask-field.component';
 import { DialogService } from '../../../services/dialog.service';
 import { Router } from '@angular/router';
+import { SubtaskInterface } from '../../../interfaces/subtask.interface';
 
 /**
  * Form component for creating a new task.
@@ -49,12 +50,12 @@ export class AddTask implements OnDestroy {
    * Contact assignment is handled separately via the `assignedContacts` signal.
    */
   taskForm = new FormGroup({
-    title: new FormControl('', Validators.required),
+    title: new FormControl('', [Validators.required, Validators.maxLength(200)]),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
+    priority: new FormControl(''),
     assigned: new FormControl<number[]>([]),
     category: new FormControl('', Validators.required),
-    subtask: new FormControl(''),
   });
 
   /** Provides responsive layout information. */
@@ -77,6 +78,9 @@ export class AddTask implements OnDestroy {
   /** Reactive list of currently assigned contact IDs. */
   selectedContactIds = signal<number[]>([]);
 
+  createdSubtasks = signal<SubtaskInterface[]>([]);
+
+  subtaskField = viewChild(SubtaskFieldComponent);
   /** Holds the status chosen via a column "+" button.
    * also used to close dialog when task is created
    */
@@ -165,6 +169,8 @@ export class AddTask implements OnDestroy {
     this.selectedPrio.set('medium');
     this.assignedContacts.set([]);
     this.selectedContactIds.set([]);
+    this.createdSubtasks.set([]);
+    this.subtaskField()?.reset();
   }
 
   /**
@@ -204,7 +210,9 @@ export class AddTask implements OnDestroy {
 
     if (newTask) {
       const contactIds = this.selectedContactIds();
+      const subtasks = this.createdSubtasks();
       await this.taskService.setTaskAssignments(newTask.id, contactIds);
+      await this.taskService.setTaskSubtasks(newTask.id, subtasks);
 
       this.onClear();
       this.returnToBoard(); // calls to close dialog or navigate to board page

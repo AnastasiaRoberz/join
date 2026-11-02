@@ -1,4 +1,13 @@
-import { Component, computed, inject, input, model, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  model,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { ResponsiveService } from '../../services/responsive.service';
 import { SubtaskInterface } from '../../interfaces/subtask.interface';
 import { Buttons } from '../button.component/button.component';
@@ -38,6 +47,8 @@ export class SubtaskFieldComponent {
 
   fieldId = input<string>(`app-subtask-field-${nextId++}`);
 
+  mainInput = viewChild<ElementRef<HTMLInputElement>>('mainInput');
+
   /**
    * The list of subtasks. A `model` signal, so the parent can use two-way binding
    * (`[(subtasks)]`) and every add/rename/delete in this component is propagated back to it.
@@ -53,14 +64,10 @@ export class SubtaskFieldComponent {
 
   isScrollable = input<boolean>(false);
 
-  /**
-   * Clears the text of the given input without changing the list
-   * (cancel button or Escape key in the "new subtask" input).
-   *
-   * @param input - The input element to clear.
-   */
-  clearInput(input: HTMLInputElement) {
-    input.value = '';
+  reset(): void {
+    const input = this.mainInput()?.nativeElement;
+    if (input) input.value = '';
+    this.editingSubtaskId.set(null);
   }
 
   /**

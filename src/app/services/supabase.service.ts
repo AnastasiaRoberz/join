@@ -119,7 +119,10 @@ export class SupabaseService {
     id: number,
     data: Partial<T>,
     table: string,
+    showFeedback: boolean = true,
   ): Promise<boolean> {
+    console.log(data);
+
     const entityName = this.allowedFeedbackTables[table];
     const { error } = await this.supabase
       .from(table)
@@ -127,13 +130,14 @@ export class SupabaseService {
       .eq('id', id);
 
     if (!error) {
-      if (entityName)
+      if (entityName && showFeedback)
         this.feedbackService.showSuccess(
           `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
         );
       return true;
     } else {
-      if (entityName) this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
+      if (entityName && showFeedback)
+        this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
       return false;
     }
   }

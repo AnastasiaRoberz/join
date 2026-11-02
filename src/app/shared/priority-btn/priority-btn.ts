@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, model, signal } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { ResponsiveService } from '../../services/responsive.service';
 
 /**
  * Available priority levels of a task.
@@ -67,6 +68,10 @@ export const PRIORITY_OPTIONS: PriorityOption[] = [
   templateUrl: './priority-btn.html',
 })
 export class PriorityBtn implements ControlValueAccessor {
+  responsiveService = inject(ResponsiveService);
+
+  hideBtnText = this.responsiveService.isMaxWidth(400);
+
   /**
    * The list of available priority options rendered by the template.
    */
@@ -76,7 +81,7 @@ export class PriorityBtn implements ControlValueAccessor {
    * Internal signal tracking the currently active priority level for template rendering and class binding.
    * Defaults to `'medium'`.
    */
-  activePriority = signal<Priority>('medium');
+  activePriority = model<Priority>('medium');
 
   /**
    * Injected {@link NgControl} binding this component to the parent Angular form control directive.

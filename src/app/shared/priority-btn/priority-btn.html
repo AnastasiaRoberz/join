@@ -8,7 +8,9 @@
       [class.active]="activePriority() === prio.value"
       (click)="selectPriority(prio.value)"
     >
-      <span>{{ prio.label }}</span>
+      @if (!hideBtnText()) {
+        <span>{{ prio.label }}</span>
+      }
       <svg class="prio-icon">
         <use [attr.href]="'/assets/icons/icons.svg#' + prio.icon"></use>
       </svg>
