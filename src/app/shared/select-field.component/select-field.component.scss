@@ -63,6 +63,10 @@ input {
   overflow-x: hidden;
   margin: 2px 0;
 
+  @include mobile(landscape) {
+    max-height: 160px;
+  }
+
   li {
     @include flex-center;
     gap: 16px;
