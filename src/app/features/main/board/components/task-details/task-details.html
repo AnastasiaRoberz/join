@@ -3,7 +3,11 @@
     {{ task.category }}
   </p>
 
-  <div class="scroll-container content-wrapper" #scrollTop>
+  <div
+    class="content-wrapper"
+    [class.scroll-container]="!responsiveService.isMobileLandscape()"
+    #scrollTop
+  >
     <h2 appFitText [minSize]="16">{{ task.title }}</h2>
 
     @if (task.description) {

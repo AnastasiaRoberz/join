@@ -44,6 +44,9 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
+  host: {
+    '[class.scroll-container]': 'responsiveService.isMobileLandscape()',
+  },
 })
 export class TaskDetails {
   // ---------------------------------------------------------------------------

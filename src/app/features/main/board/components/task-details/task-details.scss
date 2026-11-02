@@ -15,6 +15,17 @@
   @include mobile {
     width: 100%;
   }
+
+  @include mobile(landscape) {
+    --padding-inline: 24px;
+    padding-block: 24px;
+    padding-right: 0;
+
+    &::-webkit-scrollbar-thumb {
+      border-top: 48px solid transparent;
+      border-bottom: 60px solid transparent;
+    }
+  }
 }
 
 .content-wrapper {
@@ -74,6 +85,10 @@ h2 {
     &.collapsible.expanded {
       max-height: var(--expandedHeight);
       mask-position: 0 0;
+    }
+
+    @include mobile(landscape) {
+      --collapsedHeight: 3lh;
     }
   }
 
