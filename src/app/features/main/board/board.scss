@@ -1,38 +1,42 @@
 @use '../../../../../public/assets/styles/' as *;
 
 :host {
+  --padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
+  --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
   @include flex-start(column, both);
-  gap: 48px;
+  gap: min(calcClamp(24, 48), calcClamp(16, 48, 900, 350, height));
   width: 100%;
-  height: 100%;
-  padding-inline: calcClamp(16, 64);
-  padding-top: calcClamp(48, 80);
-  padding-bottom: calcClamp(24, 40);
+  height: auto;
+  min-height: 100%;
+  padding-inline: var(--padding-inline);
+  padding-top: var(--padding-top);
+  padding-bottom: min(calcClamp(24, 40), calcClamp(16, 40, 900, 350, height));
 
   // compact layout: the columns are below each other, so the page scrolls up and down
-  @include tablet($board-breakpoint) {
+  @include responsive($board-breakpoint) {
     // otherwise the top of the page is cut off when the content is higher than the page
     justify-content: flex-start;
-    overflow-y: auto;
-    gap: calcClamp(24, 48);
-
+    --padding-inline: #{calcClamp(16, 48, 1279, 768)};
     app-board-container {
-      flex: none;
+      min-height: 0;
     }
   }
 
   @include mobile {
-    padding-top: 28px;
     gap: 28px;
+    min-height: 0;
+  }
+
+  @include short-height {
+    padding-right: calc(var(--padding-inline) - var(--sb-width));
   }
 }
 
 app-board-header {
-  @include mobile {
-    position: sticky;
-    top: -90px; // 90px is header without searchbar
-    z-index: 1; // stays above the task cards
-    background: $color-grey-background; // otherwise cards show through
-    padding: 20px 0px;
-  }
+  position: sticky;
+  top: calc(40px - 16px - 80px - var(--padding-top) - 1px); // 90px is header without searchbar
+  z-index: 1; // stays above the task cards
+  background: $color-grey-background; // otherwise cards show through
+  padding-bottom: 16px;
+  width: 100%;
 }

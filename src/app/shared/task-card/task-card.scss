@@ -1,7 +1,8 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   // same fixed width as in Figma, the card does not grow with the column
   max-width: $task-card-width;
@@ -41,6 +42,7 @@
   border-radius: 24px;
   background-color: $color-white;
   box-shadow: 0px 0px 10px 3px #0000000a;
+  flex: 1;
 
   // the color of the label comes from utils/categories-list.ts (set in the template),
   // grey is only the fallback for an unknown category
@@ -63,7 +65,7 @@
     color: $text-dark;
   }
 
-    // title and description belong together, so they sit closer than the other parts of the card
+  // title and description belong together, so they sit closer than the other parts of the card
   &__text {
     @include flex-start(column);
     align-items: stretch;
@@ -85,6 +87,7 @@
   &__progress {
     @include flex-start;
     gap: 12px;
+    margin-top: auto;
   }
 
   &__bar {
@@ -111,6 +114,11 @@
   &__footer {
     @include flex-start;
     justify-content: space-between;
+    margin-top: auto;
+  }
+
+  &__progress + &__footer {
+    margin-top: 0;
   }
 
   // the overlap of the avatars is done by the avatar group component

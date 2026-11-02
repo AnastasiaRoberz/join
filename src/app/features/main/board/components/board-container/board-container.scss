@@ -10,10 +10,19 @@
   min-height: 0;
 
   // compact layout: the sections are below each other
-  @include tablet($board-breakpoint) {
+  @include responsive($board-breakpoint) {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: none;
-    align-items: start;
+    grid-template-rows: auto;
+    grid-auto-rows: auto;
+    align-items: stretch;
+    gap: calcClamp(12, 32);
+  }
+
+  @include short-height() {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-auto-rows: auto;
+    align-items: stretch;
     gap: calcClamp(12, 32);
   }
 }
