@@ -144,7 +144,7 @@
   }
 }
 
-@mixin mobile-or-landscape($mobile-width: 768px, $ls-width: 1920, $ls-height: 870) {
+@mixin mobile-or-landscape($mobile-width: 768px, $ls-width: 1920, $ls-height: 971) {
   @media screen and (max-width: $mobile-width),
     screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
     @content;
