@@ -26,12 +26,18 @@ const longNames = 10;
   host: {
     // Any click anywhere on the page closes the mobile menu (listener)
     '(document:click)': 'closeMenu()',
+    '[class.scroll-container]': 'scrollHeight()',
   },
 })
 export class ContactDetails {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
+
+  shortHeight = this.responsiveService.isMaxHeight(500);
+  middleHeight = this.responsiveService.observeQuery('(min-height: 800px) and (max-height: 500px)');
+  isSinglePane = computed(() => this.responsiveService.isTablet() || this.shortHeight());
+  scrollHeight = this.responsiveService.isMaxHeight(800);
 
   /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
   contactDeleted = output<void>();
