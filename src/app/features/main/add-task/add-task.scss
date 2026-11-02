@@ -163,15 +163,22 @@ form {
 }
 
 :host.add-task-overlay {
+  --padding-inline: 32px;
   display: flex;
   flex-direction: column;
-  padding: 48px;
+  padding-block: 48px;
+  padding-inline: var(--padding-inline);
   width: 95vw;
   max-width: 1116px;
   max-height: 95dvh;
 
   @include responsive(700, height, max) {
+    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
     min-height: auto;
+
+    &::-webkit-scrollbar-thumb {
+      border-block: 24px solid transparent;
+    }
 
     form {
       max-height: none;
