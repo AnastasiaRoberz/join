@@ -11,7 +11,7 @@
 }
 
 // same height with and without the add button, so all columns start on one line
-header {
+.header {
   @include flex-start;
   justify-content: space-between;
   gap: calcClamp(8, 12); // keeps the title and the plus button apart
@@ -30,6 +30,7 @@ header {
   align-items: stretch;
   justify-content: flex-start;
   // height: auto;
+  width: calc(100% + var(--sb-width));
   flex: 1;
   gap: calcClamp(12, 16);
   min-height: calc(100dvh - 410px); // fix height, due to drag box needed for now
