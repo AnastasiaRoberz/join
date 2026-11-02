@@ -80,6 +80,7 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   responsiveService = inject(ResponsiveService);
+  isMaxWidth = this.responsiveService.isMaxWidth(350);
   /** Reference to the host element, observed by `ResizeObserver` to measure available width. */
   element = inject(ElementRef<HTMLElement>);
 
