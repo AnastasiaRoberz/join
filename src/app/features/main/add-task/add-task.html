@@ -6,7 +6,9 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" [class.scroll-container]="isMiddleHeight()">
   <div
     class="task-container"
-    [class.scroll-container]="isMobileOrLandscape() && !isShortHeight() && !isMiddleHeight()"
+    [class.scroll-container]="
+      (isMobileOrLandscape() && !isShortHeight() && !isMiddleHeight()) || isTabletSpecialHeight()
+    "
   >
     <div class="task-wrap task-left">
       <app-text-field
