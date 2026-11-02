@@ -31,8 +31,6 @@ $color-orange-500: #de3400;
 $color-amber-500: #df9500;
 $color-green-500: #43a800;
 
-
-
 // ==========================================
 // SEMANTIC TOKENS
 // ==========================================
@@ -140,7 +138,7 @@ $task-card-width: 252px;
 
 // BOARD
 // below this width the columns are below each other (4 columns would get too narrow)
-$board-breakpoint: 1280px;
+$board-breakpoint: 1280;
 
 // ==========================================
 // FONT SIZES

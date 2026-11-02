@@ -116,21 +116,21 @@
 @mixin responsive($size, $direction: width, $value: max) {
   @if ($value == 'max') {
     @if ($direction == 'width') {
-      @media screen and (max-width: $size) {
+      @media screen and (max-width: #{$size}px) {
         @content;
       }
     } @else {
-      @media screen and (max-height: $size) {
+      @media screen and (max-height: #{$size}px) {
         @content;
       }
     }
   } @else {
     @if ($direction == 'width') {
-      @media screen and (min-width: $size) {
+      @media screen and (min-width: #{$size}px) {
         @content;
       }
     } @else {
-      @media screen and (min-height: $size) {
+      @media screen and (min-height: #{$size}px) {
         @content;
       }
     }
@@ -144,6 +144,13 @@
 }
 
 @mixin mobile-or-landscape($mobile-width: 768px, $ls-width: 1920, $ls-height: 870) {
+  @media screen and (max-width: $mobile-width),
+    screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin mobile-or-short($mobile-width: 768px, $ls-width: 1920, $ls-height: 500) {
   @media screen and (max-width: $mobile-width),
     screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
     @content;
