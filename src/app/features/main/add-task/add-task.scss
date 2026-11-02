@@ -92,6 +92,11 @@ form {
   flex-direction: column; //positioniert inputs untereinander
   gap: calcClamp(16, 32, 900, 350, height);
   position: relative; //für das ::after
+
+  @include mobile {
+    min-height: auto;
+    max-height: none;
+  }
 }
 
 .task-left::after {
