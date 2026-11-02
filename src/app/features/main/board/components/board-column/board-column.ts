@@ -55,5 +55,8 @@ export class BoardColumn {
   onDragStarted(event: CdkDragStart) {
     const card = event.source.getPlaceholderElement();
     this.cardPressed.emit({ width: card.offsetWidth, height: card.offsetHeight });
+    // the cdk shows the preview as a popover (top layer), z-index has no effect there,
+    // without the attribute it is a normal fixed element and the navbar can cover it
+    document.querySelector('.cdk-drag-preview')?.removeAttribute('popover');
   }
 }
