@@ -29,11 +29,9 @@
   @include mobile {
     --padding-inline: #{calcClamp(16, 40, 768, 320)};
   }
-}
 
-.task-header {
-  @include landscape {
-    font-size: calcClamp(40, 61, 900, 350, height);
+  @include short-height {
+    padding-right: calc(var(--padding-inline) - var(--sb-width));
   }
 }
 
