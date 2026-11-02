@@ -155,7 +155,7 @@ form {
   }
 
   @include responsive(700, height, max) {
-    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
     min-height: auto;
 
     &::-webkit-scrollbar-thumb {
