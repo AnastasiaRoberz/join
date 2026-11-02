@@ -5,6 +5,7 @@
   @include flex-start(column, both);
   gap: 40px;
   padding-block: calcClamp(48, 116);
+  padding-inline: var(--padding-inline);
   width: 100%;
   padding-right: calc(var(--padding-inline) - var(--sb-width));
 }

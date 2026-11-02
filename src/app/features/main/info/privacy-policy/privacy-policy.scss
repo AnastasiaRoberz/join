@@ -1,14 +1,13 @@
 @use '../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column);
-  justify-content: flex-start;
-  width: 100%;
+  --padding-inline: #{calcClamp(16, 96)};
+  @include flex-start(column, both);
   gap: 24px;
-  padding: calcClamp(48, 116) calcClamp(16, 96);
+  padding-block: calcClamp(48, 116);
+  padding-inline: var(--padding-inline);
   line-height: 1.2;
   width: 100%;
-  padding-right: calc(var(--padding-inline) - var(--sb-width));
 
   @include mobile {
     padding-right: 0;

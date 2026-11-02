@@ -7,7 +7,6 @@
   padding-inline: var(--padding-inline);
   padding-block: calcClamp(48, 116);
   line-height: 1.2;
-  min-height: 0;
   width: 100%;
   padding-right: calc(var(--padding-inline) - var(--sb-width));
 }
