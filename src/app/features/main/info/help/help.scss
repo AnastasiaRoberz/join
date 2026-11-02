@@ -1,36 +1,8 @@
 @use '../../../../../../public/assets/styles' as *;
 
 :host {
-  --padding-inline: #{calcClamp(16, 96)};
-  @include flex-start(column, both);
+  @include info-page;
   gap: 40px;
-  padding-block: calcClamp(48, 116);
-  padding-inline: var(--padding-inline);
-  width: 100%;
-  padding-right: calc(var(--padding-inline) - var(--sb-width));
-}
-
-.header {
-  @include flex-start;
-  justify-content: space-between;
-  width: 100%;
-  position: relative;
-
-  &__btn-back {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-
-    &:hover {
-      background-color: $btn-icon-hover;
-    }
-
-    @include mobile {
-      position: absolute;
-      top: -100%;
-      right: 0;
-    }
-  }
 }
 
 .content {
