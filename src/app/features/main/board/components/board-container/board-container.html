@@ -8,8 +8,8 @@
   <app-board-column
     cdkDropList
     [cdkDropListAutoScrollStep]="10"
-    [cdkDropListOrientation]="responsiveService.isMobile() ? 'horizontal' : 'vertical'"
-    cdkDropListElementContainer=".board-column__tasks"
+    [cdkDropListOrientation]="responsiveService.horizontalDrag() ? 'horizontal' : 'vertical'"
+    cdkDropListElementContainer=".scroll-container"
     [cdkDropListData]="column.tasks"
     (cdkDropListDropped)="dragDrop($event, column.status)"
     [showDropHint]="isNeighbourColumn($index)"

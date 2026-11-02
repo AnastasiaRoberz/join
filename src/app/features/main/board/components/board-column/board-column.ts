@@ -5,6 +5,7 @@ import { Buttons } from '../../../../../shared/button.component/button.component
 import { CdkDrag, CdkDragStart } from '@angular/cdk/drag-drop';
 import { DialogService } from '../../../../../services/dialog.service';
 import { TaskService } from '../../../../../services/task.service';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /**
  * One column of the board (e.g. "To do"): title, button to add a task
@@ -40,6 +41,9 @@ export class BoardColumn {
   dialogService = inject(DialogService);
 
   taskService = inject(TaskService);
+
+  /** Provides responsive layout information for drag columns. */
+  responsiveService = inject(ResponsiveService);
 
   /** Measures the pressed card and passes its height to the container. */
   onCardPressed(event: PointerEvent) {

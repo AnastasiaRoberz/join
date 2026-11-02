@@ -19,11 +19,9 @@
     <app-task-card
       [task]="task"
       cdkDrag
-      cdkDragBoundary="app-board"
-      /* delay drag on touch devices */
+      [cdkDragBoundary]="responsiveService.isMobile() ? 'app-board' : 'app-board-container'"
       [cdkDragStartDelay]="{ touch: 250, mouse: 0 }"
       (cdkDragStarted)="onDragStarted($event)"
-      /* (pointerdown)="onCardPressed($event)" */
     />
   } @empty {
     <!-- hidden while the column shows the placeholder -->
