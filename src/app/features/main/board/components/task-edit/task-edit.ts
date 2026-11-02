@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 import { DialogService } from '../../../../../services/dialog.service';
 import { TaskService } from '../../../../../services/task.service';
 import { ContactService } from '../../../../../services/contact.service';
@@ -58,6 +58,7 @@ import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priori
     SubtaskFieldComponent,
     AvatarGroupComponent,
     PriorityBtn,
+    CdkScrollable,
   ],
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',

@@ -15,28 +15,9 @@
   padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
   --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
 
-  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  // @include landscape {
-  //   --padding-inline: #{calcClamp(16, 64, 1440, 769)};
-  //   max-width: 900px;
-  // }
-
-  // @include landscape(1024) {
-  //   --padding-inline: #{calcClamp(30, 124, 1024, 769)};
-  //   max-width: 100%;
-  // }
-
-  @include tablet {
-    --padding-inline: #{calcClamp(16, 40, 1025, 769)};
-  }
-
   @include mobile {
     --padding-inline: #{calcClamp(16, 40, 768, 320)};
   }
-
-  // @include short-height {
-  //   padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
-  // }
 }
 
 form {
@@ -49,13 +30,18 @@ form {
   gap: #{min(calcClamp(24, 48), calcClamp(16, 40, 1024, 350, height))};
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include mobile-or-landscape {
+  @include mobile {
     max-height: none;
     gap: 24px;
   }
 
   @include short-height {
     flex: none;
+  }
+
+  @include responsive(700, height, max) {
+    max-height: none;
+    min-height: auto;
   }
 
   .task-container {
@@ -66,14 +52,6 @@ form {
     gap: var(--col-gap);
     overflow-x: clip;
 
-    // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-    // @include mobile-or-landscape {
-    //   max-height: none;
-    //   flex-direction: column;
-    //   justify-content: flex-start;
-    //   gap: 32px;
-    // }
-
     @include mobile {
       max-height: none;
       flex-direction: column;
@@ -81,15 +59,8 @@ form {
       gap: 32px;
     }
 
-    // @include responsive(900, height) {
-    //   max-height: none;
-    //   flex-direction: column;
-    //   justify-content: flex-start;
-    //   gap: 32px;
-    // }
-
-    @include tablet {
-      --col-gap: #{calcClamp(32, 48, 1024, 769)};
+    @include responsive(700, height, max) {
+      max-height: none;
     }
   }
 }
@@ -103,8 +74,15 @@ form {
   flex-direction: column; //positioniert inputs untereinander
   gap: calcClamp(16, 32, 900, 350, height);
   position: relative; //für das ::after
+  min-width: 0;
+  flex: 1 1 0;
 
   @include mobile {
+    min-height: auto;
+    max-height: none;
+  }
+
+  @include responsive(700, height, max) {
     min-height: auto;
     max-height: none;
   }
@@ -160,4 +138,37 @@ form {
 
 .required {
   color: $hint;
+}
+
+:host.add-task-overlay {
+  --padding-inline: 32px;
+  display: flex;
+  flex-direction: column;
+  padding-block: 48px;
+  padding-inline: var(--padding-inline);
+  width: 95vw;
+  max-width: 1116px;
+  max-height: 95dvh;
+
+  @include tablet {
+    --padding-inline: 16px;
+  }
+
+  @include responsive(700, height, max) {
+    // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    min-height: auto;
+
+    &::-webkit-scrollbar-thumb {
+      border-block: 24px solid transparent;
+    }
+
+    form {
+      max-height: none;
+    }
+
+    .task-container {
+      max-height: none;
+      width: 100%;
+    }
+  }
 }

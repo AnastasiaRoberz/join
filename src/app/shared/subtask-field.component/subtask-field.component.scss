@@ -107,7 +107,7 @@ li {
     height: 24px;
   }
 
-  @include mobile {
+  @include tablet {
     visibility: visible;
   }
 }

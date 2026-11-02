@@ -18,6 +18,7 @@ import { SubtaskFieldComponent } from '../../../shared/subtask-field.component/s
 import { DialogService } from '../../../services/dialog.service';
 import { Router } from '@angular/router';
 import { SubtaskInterface } from '../../../interfaces/subtask.interface';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 /**
  * Form component for creating a new task.
@@ -38,10 +39,12 @@ import { SubtaskInterface } from '../../../interfaces/subtask.interface';
     CheckboxComponent,
     AvatarGroupComponent,
     SubtaskFieldComponent,
+    CdkScrollable,
   ],
   selector: 'article[app-add-task]',
   styleUrl: './add-task.scss',
   templateUrl: './add-task.html',
+  hostDirectives: [CdkScrollable],
   host: {
     '[class.scroll-container]': 'isShortHeight()',
   },
