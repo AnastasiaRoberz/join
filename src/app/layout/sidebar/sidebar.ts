@@ -14,6 +14,7 @@ import { Footer } from '../footer/footer';
 })
 export class Sidebar {
   responsiveService = inject(ResponsiveService);
+  isShort = this.responsiveService.isMaxHeight(500);
   navList = [
     { section: 'summary', svgId: 'summary', label: 'Summary' },
     { section: 'add-task', svgId: 'task', label: 'Add Task' },
