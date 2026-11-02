@@ -1,7 +1,7 @@
 @use '../../../../../../../public/assets/styles/' as *;
 
 :host {
-  --dialog-max-height: min(95dvh, 1024px);
+  --dialog-max-height: #{min(95dvh, 1024px)};
   --padding-inline: #{calcClamp(24, 40, 769, 320)};
   @include flex-start(column, both);
   gap: calcClamp(16, 24);

@@ -4,13 +4,13 @@
   --padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
   --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
   @include flex-start(column, both);
-  gap: min(calcClamp(24, 48), calcClamp(16, 48, 900, 350, height));
+  gap: #{min(calcClamp(24, 48), calcClamp(16, 48, 900, 350, height))};
   width: 100%;
   height: auto;
   min-height: 100%;
   padding-inline: var(--padding-inline);
   padding-top: var(--padding-top);
-  padding-bottom: min(calcClamp(24, 40), calcClamp(16, 40, 900, 350, height));
+  padding-bottom: #{min(calcClamp(24, 40), calcClamp(16, 40, 900, 350, height))};
 
   // compact layout: the columns are below each other, so the page scrolls up and down
   @include responsive($board-breakpoint) {

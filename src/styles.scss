@@ -38,7 +38,7 @@ button {
   // overscroll-behavior-y: contain;
   --padding-right: var(--padding-inline, 40px);
   --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
-  --sb-width: min(var(--padding-inline, 16px), 24px);
+  --sb-width: #{min(var(--padding-inline, 16px), 24px)};
   --sb-border-width: calc((var(--sb-width) - 4px) / 2);
   width: calc(100% + var(--sb-offset));
   padding-right: calc(var(--sb-offset) - var(--sb-width));

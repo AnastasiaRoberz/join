@@ -20,7 +20,7 @@
 .sidebar-wrapper {
   @include flex-center(column);
   width: 100%;
-  gap: min(114px, calcClamp(32, 114, 700, 500, height));
+  gap: #{min(114px, calcClamp(32, 114, 700, 500, height))};
 
   .nav-logo {
     width: 100px;

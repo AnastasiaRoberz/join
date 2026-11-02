@@ -17,7 +17,7 @@ textarea {
   field-sizing: content;
   min-height: 96px;
   // max-width: 100%;
-  max-height: min(40cqh, 240px);
+  max-height: #{min(40cqh, 240px)};
   resize: none;
   overflow-wrap: anywhere;
   margin-right: calc(-1 * var(--sb-offset));
