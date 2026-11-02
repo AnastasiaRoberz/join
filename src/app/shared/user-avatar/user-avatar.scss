@@ -40,8 +40,8 @@
   }
 
   &.size-header {
-    width: 56px;
-    height: 56px;
+    width: calcClamp(40, 56, 700, 350, height);
+    aspect-ratio: 1;
     border: 3px solid $main-color;
     font-size: $font-medium;
     font-weight: 700;
