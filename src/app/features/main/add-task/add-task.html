@@ -3,12 +3,18 @@
 </div> -->
 <h2 class="task-header">Add Task</h2>
 
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" [class.scroll-container]="isMiddleHeight()">
+<form
+  [formGroup]="taskForm"
+  (ngSubmit)="onSubmit()"
+  [class.scroll-container]="isMiddleHeight()"
+  cdkScrollable
+>
   <div
     class="task-container"
     [class.scroll-container]="
       (isMobileOrLandscape() && !isShortHeight() && !isMiddleHeight()) || isTabletSpecialHeight()
     "
+    cdkScrollable
   >
     <div class="task-wrap task-left">
       <app-text-field

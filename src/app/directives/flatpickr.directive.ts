@@ -1,5 +1,7 @@
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { Directive, ElementRef, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
 import flatpickr from 'flatpickr';
+import { Subscription } from 'rxjs';
 // @ts-ignore
 import ShortcutButtonsPlugin from 'shortcut-buttons-flatpickr';
 
@@ -32,6 +34,8 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
   /** Reference to the host `<input>` element to which Flatpickr is attached. */
   private element = inject(ElementRef<HTMLInputElement>);
 
+  private scrollDispatcher = inject(ScrollDispatcher);
+  private scrollSub?: Subscription;
   /** Underlying Flatpickr instance created during `ngOnInit`. */
   private pickerInstance?: flatpickr.Instance;
 
@@ -96,6 +100,12 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
       onClose: () => this.isOpen.set(false),
       onChange: (_selectedDates, dateStr) => this.dateChanged.emit(dateStr),
     });
+
+    this.scrollSub = this.scrollDispatcher.scrolled().subscribe(() => {
+      if (this.pickerInstance?.isOpen) {
+        this.pickerInstance._positionCalendar(parentContainer);
+      }
+    });
   }
 
   /**
@@ -103,6 +113,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.pickerInstance?.destroy();
+    this.scrollSub?.unsubscribe();
   }
 
   // ---------------------------------------------------------------------------
