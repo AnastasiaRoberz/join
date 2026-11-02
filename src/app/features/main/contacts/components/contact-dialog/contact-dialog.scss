@@ -6,7 +6,7 @@
   height: 100%;
   max-width: 1212px;
 
-  @include mobile {
+  @include mobile(portrait) {
     height: 100%;
     min-height: 560px;
     flex-direction: column;
@@ -21,7 +21,7 @@
   position: relative;
   max-width: 40%;
 
-  @include mobile {
+  @include mobile(portrait) {
     width: 100%;
     max-width: 100%;
     height: 45%;
@@ -40,6 +40,10 @@
   position: relative;
   color: $text-light;
 
+  @include mobile(landscape) {
+    position: static;
+  }
+
   h2 {
     line-height: 1;
     text-wrap: wrap;
@@ -53,6 +57,15 @@
     top: -24px;
     transform: translateY(-100%);
     left: 0;
+
+    @include mobile(landscape) {
+      height: 32px;
+      width: 32px;
+      left: auto;
+      right: 20px;
+      top: 16px;
+      transform: translateX(-50%);
+    }
   }
 
   &::after {
@@ -65,7 +78,7 @@
     left: 0;
   }
 
-  @include mobile {
+  @include mobile(portrait) {
     gap: 8px;
     &::before {
       display: none;
@@ -91,7 +104,7 @@
   padding: calcClamp(80, 136, 1440, 769) calcClamp(24, 48, 1440, 769);
   position: relative;
 
-  @include mobile {
+  @include mobile(portrait) {
     width: 100%;
     flex: 1;
     justify-content: center;
@@ -106,7 +119,7 @@
     transform: none;
   }
 
-  @include mobile {
+  @include mobile(portrait) {
     transform: translateY(0);
     position: absolute;
     top: 0;

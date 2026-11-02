@@ -11,7 +11,9 @@
 
 <div class="content-section">
   <div class="input-wrapper">
-    <app-user-avatar class="avatar" [user]="contact()" size="large" />
+    @if (!responsiveService.isMobileLandscape()) {
+      <app-user-avatar class="avatar" [user]="contact()" size="large" />
+    }
 
     <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
       <app-text-field label="Name" formControlName="name" icon="person" fieldId="name" />

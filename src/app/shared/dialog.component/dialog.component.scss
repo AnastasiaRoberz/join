@@ -23,10 +23,6 @@
     backdrop-filter: blur(2px);
     background-color: rgba($color: #000000, $alpha: 0.2);
   }
-
-  @include mobile {
-    padding: calcClamp(16, 27, 768, 320) calcClamp(16, 112);
-  }
 }
 
 .overlay-content {
@@ -66,11 +62,21 @@
     flex-direction: column;
   }
 
+  @include mobile(landscape) {
+    width: 95vw;
+    height: 90vh;
+  }
+
   .btn-close {
     position: absolute;
     top: calcClamp(24, 52);
     right: calcClamp(24, 52);
     z-index: 20;
+
+    @include mobile(landscape) {
+      top: 16px;
+      right: 16px;
+    }
   }
 }
 

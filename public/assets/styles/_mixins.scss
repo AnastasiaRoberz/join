@@ -157,9 +157,15 @@
   }
 }
 
-@mixin mobile($width: 768px) {
-  @media screen and (max-width: $width) {
-    @content;
+@mixin mobile($orientation: null, $width: 768px) {
+  @if ($orientation) {
+    @media screen and (max-width: $width) and (orientation: $orientation) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $width) {
+      @content;
+    }
   }
 }
 
