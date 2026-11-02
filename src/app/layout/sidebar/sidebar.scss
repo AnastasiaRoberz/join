@@ -10,6 +10,8 @@
   background-color: $sidebar-main-theme;
   color: $text-muted;
   container-type: inline-size;
+  position: relative; // z-index only works on a positioned element
+  z-index: 5; // above the dragged card (4), below dialogs (10)
 
   @include short-height {
     justify-content: center;

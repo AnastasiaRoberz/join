@@ -129,3 +129,8 @@ button {
     color: $prio-low;
   }
 }
+
+// the dragged card stays below the navbar and the header
+.cdk-drag-preview {
+  z-index: 4 !important;
+}
