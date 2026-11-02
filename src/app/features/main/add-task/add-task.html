@@ -74,6 +74,7 @@
         <app-avatar-group
           footer
           [users]="selectedContacts()"
+          [class.has-users]="selectedContacts().length > 0"
           size="medium"
           [overlapLayout]="false"
           (userDeletedId)="toggleAssignment($event, false)"
