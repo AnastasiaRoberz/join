@@ -16,15 +16,15 @@
   --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include landscape {
-    --padding-inline: #{calcClamp(16, 64, 1440, 769)};
-    max-width: 900px;
-  }
+  // @include landscape {
+  //   --padding-inline: #{calcClamp(16, 64, 1440, 769)};
+  //   max-width: 900px;
+  // }
 
-  @include landscape(1024) {
-    --padding-inline: #{calcClamp(30, 124, 1024, 769)};
-    max-width: 100%;
-  }
+  // @include landscape(1024) {
+  //   --padding-inline: #{calcClamp(30, 124, 1024, 769)};
+  //   max-width: 100%;
+  // }
 
   @include tablet {
     --padding-inline: #{calcClamp(16, 40, 1025, 769)};
@@ -34,9 +34,9 @@
     --padding-inline: #{calcClamp(16, 40, 768, 320)};
   }
 
-  @include short-height {
-    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
-  }
+  // @include short-height {
+  //   padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+  // }
 }
 
 form {
@@ -67,7 +67,14 @@ form {
     overflow-x: clip;
 
     // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-    @include mobile-or-landscape {
+    // @include mobile-or-landscape {
+    //   max-height: none;
+    //   flex-direction: column;
+    //   justify-content: flex-start;
+    //   gap: 32px;
+    // }
+
+    @include mobile {
       max-height: none;
       flex-direction: column;
       justify-content: flex-start;
@@ -113,7 +120,7 @@ form {
   background-color: $input-placeholder;
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include mobile-or-landscape {
+  @include mobile {
     display: none;
   }
 }
