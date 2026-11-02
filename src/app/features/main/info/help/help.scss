@@ -5,6 +5,12 @@
   gap: 40px;
 }
 
+.header .btn.btn-back {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+}
+
 .content {
   display: flex;
   flex-direction: column;
