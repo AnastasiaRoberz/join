@@ -10,7 +10,7 @@
   min-height: 100%;
   padding-inline: var(--padding-inline);
   padding-top: var(--padding-top);
-  padding-bottom: #{min(calcClamp(24, 40), calcClamp(16, 40, 900, 350, height))};
+  padding-bottom: calcClamp(16, 64, 700, 500, height);
 
   // compact layout: the columns are below each other, so the page scrolls up and down
   @include responsive($board-breakpoint) {
