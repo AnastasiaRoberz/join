@@ -5,16 +5,16 @@
   width: 100%;
   height: 100%;
   padding-inline: var(--padding-inline);
-  padding-top: min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height));
-  padding-bottom: min(calcClamp(24, 62), calcClamp(16, 62, 900, 350, height));
+  padding-top: #{min(calcClamp(48, 80), calcClamp(24, 60, 1024, 350, height))};
+  padding-bottom: #{min(calcClamp(24, 62), calcClamp(16, 62, 1024, 350, height))};
   display: flex;
   flex-direction: column;
-  gap: min(calcClamp(40, 48, 1440, 430, width), calcClamp(16, 40, 900, 350, height));
+  gap: #{min(calcClamp(40, 48, 1440, 430, width), calcClamp(16, 40, 1024, 350, height))};
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include landscape {
     --padding-inline: #{calcClamp(16, 64, 1440, 769)};
-    max-width: 800px;
+    max-width: 900px;
   }
 
   @include landscape(1024) {
@@ -31,18 +31,18 @@
   }
 
   @include short-height {
-    padding-right: calc(var(--padding-inline) - var(--sb-width));
+    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
   }
 }
 
 form {
   min-width: 0;
   min-height: 0;
-  max-height: 656px;
+  max-height: 650px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: calcClamp(24, 48);
+  gap: #{min(calcClamp(24, 48), calcClamp(16, 40, 1024, 350, height))};
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include mobile-or-landscape {
@@ -56,7 +56,7 @@ form {
 
   .task-container {
     --col-gap: #{calcClamp(48, 96, 1440, 1025)};
-    max-height: 550px;
+    max-height: 514px;
     display: flex;
     justify-content: space-between;
     gap: var(--col-gap);
@@ -135,6 +135,7 @@ form {
   justify-content: space-between;
   align-items: flex-end;
   margin-top: auto;
+  flex-shrink: 0;
 
   &__buttons {
     display: flex;

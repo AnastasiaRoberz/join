@@ -138,7 +138,7 @@
   }
 }
 
-@mixin landscape($width: 1920, $height: 870) {
+@mixin landscape($width: 1920, $height: 900) {
   @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) and (orientation: landscape) {
     @content;
   }

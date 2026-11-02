@@ -30,7 +30,7 @@ export class ResponsiveService {
     tablet: '(max-width: 1024px)',
     desktop: '(min-width: 1025px)',
     widescreen: '(min-height: 1800px)',
-    mobileOrLandscape: '(max-width: 768px), ((max-height: 870px) and (orientation: landscape))',
+    mobileOrLandscape: '(max-width: 768px), ((max-height: 900px) and (orientation: landscape))',
   };
 
   /** `true` when the viewport is at most 768px wide. */
