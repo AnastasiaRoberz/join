@@ -15,8 +15,13 @@
       [style.--i]="i"
       [appCursorTooltip]="isExpanded() ? '' : user.firstname + ' ' + user.surname"
     >
-      <app-user-avatar [user]="user" [size]="size()" class="group-item" />
-      <span class="user-name">{{ user.firstname }} {{ user.surname }}</span>
+      @if (!isMaxWidth()) {
+        <app-user-avatar [user]="user" [size]="size()" class="group-item" />
+      }
+
+      <span class="user-name" appFitText [minSize]="13" [maxSize]="16"
+        >{{ user.firstname }} {{ user.surname }}</span
+      >
       @if (canDelete() && responsiveService.isDesktop()) {
         <button
           appBtn
