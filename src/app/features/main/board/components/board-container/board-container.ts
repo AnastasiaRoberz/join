@@ -9,6 +9,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { ResponsiveService } from '../../../../../services/responsive.service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 
 /** Status of each board column, in the order the columns are shown. */
 const COLUMN_STATUSES: TaskInterface['status'][] = [
@@ -23,6 +24,7 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
   imports: [BoardColumn, CdkDropList],
   templateUrl: './board-container.html',
   styleUrl: './board-container.scss',
+  hostDirectives: [CdkScrollable],
   // listens on mouse button being released, hides the placeholder
   host: { '(document:pointerup)': 'pressedColumnIndex.set(null)' },
 })

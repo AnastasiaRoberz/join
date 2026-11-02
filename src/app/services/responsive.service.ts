@@ -30,8 +30,17 @@ export class ResponsiveService {
     tablet: '(max-width: 1024px)',
     desktop: '(min-width: 1025px)',
     widescreen: '(min-height: 1800px)',
+    horizontalDrag: '(max-width: 1140px)',
     mobileOrLandscape: '(max-width: 768px), ((max-height: 971px) and (orientation: landscape))',
   };
+
+  /** `true` when the viewport is at most 768px wide. */
+  readonly horizontalDrag = toSignal(
+    this.breakpointObserver
+      .observe(this.customBreakpoints.horizontalDrag)
+      .pipe(map((result) => result.matches)),
+    { initialValue: false },
+  );
 
   /** `true` when the viewport is at most 768px wide. */
   readonly isMobile = toSignal(
