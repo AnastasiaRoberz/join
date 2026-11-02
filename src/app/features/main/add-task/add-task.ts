@@ -63,11 +63,15 @@ export class AddTask implements OnDestroy {
 
   /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
+  isMobile = this.responsiveService.isMobile;
   isMobileOrLandscape = this.responsiveService.isMobileOrLandscape;
   isMiddleHeight = this.responsiveService.observeQuery(
     '(min-height: 501px) and (max-height: 700px)',
   );
   isShortHeight = this.responsiveService.isMaxHeight(500);
+  isTabletSpecialHeight = this.responsiveService.observeQuery(
+    '(min-width: 769px) and (max-width: 1024px) and (min-height: 701px)',
+  );
 
   contactService = inject(ContactService);
 
