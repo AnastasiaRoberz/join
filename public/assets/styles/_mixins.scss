@@ -52,6 +52,7 @@
   border: 1px solid $input-default-border;
   border-radius: 10px;
   position: relative;
+  background-color: white;
 
   &:focus-within {
     border-color: $input-focus-border;
