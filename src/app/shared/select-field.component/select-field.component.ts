@@ -1,5 +1,6 @@
 import {
   booleanAttribute,
+  ChangeDetectorRef,
   Component,
   computed,
   contentChild,
@@ -137,6 +138,7 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   errorService = inject(ErrorService);
 
   ngControl = inject(NgControl, { optional: true });
+  cdr = inject(ChangeDetectorRef);
 
   // ---------------------------------------------------------------------------
   // Inputs & Two-Way Models
@@ -362,10 +364,21 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
         if (element) element.value = this.displayValue();
       }
     });
+
+    effect((onCleanUp) => {
+      const ctrl = this.ngControl?.control;
+      if (ctrl) {
+        const sub = ctrl.events.subscribe(() => {
+          this.cdr.markForCheck();
+        });
+        onCleanUp(() => sub.unsubscribe());
+      }
+    });
   }
 
   writeValue(val: any): void {
     this.value.set(val);
+    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: (v: any) => void): void {
