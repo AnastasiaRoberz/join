@@ -9,6 +9,10 @@
     flex-wrap: wrap;
     gap: calcClamp(0, 28, 600, 320); // moved gap to padding at bottom
   }
+
+  @include mobile(landscape) {
+    gap: 24px;
+  }
 }
 
 h2 {
@@ -21,6 +25,5 @@ app-select-field {
   @include mobile {
     order: 1;
     width: 100%;
-    padding: 20px 0px; // padding added so sticky searchbar has padding
   }
 }
