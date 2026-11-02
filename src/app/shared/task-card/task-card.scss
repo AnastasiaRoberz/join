@@ -1,15 +1,19 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   // same fixed width as in Figma, the card does not grow with the column
   max-width: $task-card-width;
   cursor: pointer;
+
+  user-select: none; // no text selection on long press
+  -webkit-touch-callout: none; // no "copy / share" menu on iOS
 }
 
 // tilt only the inner card while pressed and while dragged,
-:host(:active) > *,
+// :host(:active) > *,
 :host(.cdk-drag-preview) > * {
   rotate: 3deg;
 }
@@ -17,6 +21,11 @@
 // anchor for the dashed ::after box, so it covers exactly the card
 :host(.cdk-drag-placeholder) {
   position: relative;
+
+  // height for mobile smaller and fixed, so columns do not jump
+  @include mobile {
+    height: 230px;
+  }
 }
 
 // copy of actual card invisible in column
@@ -34,8 +43,10 @@
 }
 
 .task-card {
+  flex: 1;
   @include flex-start(column);
   align-items: stretch;
+  justify-content: flex-start;
   gap: 20px;
   padding: 16px;
   border-radius: 24px;
@@ -63,7 +74,7 @@
     color: $text-dark;
   }
 
-    // title and description belong together, so they sit closer than the other parts of the card
+  // title and description belong together, so they sit closer than the other parts of the card
   &__text {
     @include flex-start(column);
     align-items: stretch;
@@ -109,13 +120,16 @@
   }
 
   &__footer {
+    height: 32px;
     @include flex-start;
     justify-content: space-between;
+    margin-top: auto;
   }
 
   // the overlap of the avatars is done by the avatar group component
   &__users {
     min-width: 0;
+    margin-top: 0;
   }
 
   // size and color of the icon come from the global classes icon-priority / icon-<priority>

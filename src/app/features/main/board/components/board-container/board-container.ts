@@ -8,6 +8,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /** Status of each board column, in the order the columns are shown. */
 const COLUMN_STATUSES: TaskInterface['status'][] = [
@@ -28,6 +29,9 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
 export class BoardContainer {
   taskService = inject(TaskService);
 
+  /** Provides responsive layout information for drag columns. */
+  responsiveService = inject(ResponsiveService);
+
   columns = computed(() => {
     const tasks = this.taskService.tasks();
     return COLUMN_STATUSES.map((status) => ({
@@ -40,8 +44,8 @@ export class BoardContainer {
   /** Index of the column whose card is currently pressed, `null` if none. */
   pressedColumnIndex = signal<number | null>(null);
 
-  /** Height (px) of the pressed card, used for the drop hints. */
-  pressedCardHeight = signal(0);
+  /** Size (px) of the pressed card, used for the drop hints. */
+  pressedCardSize = signal({ width: 0, height: 0 });
 
   // drag and drop function assigning new status once dropped
   /**

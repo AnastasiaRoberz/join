@@ -2,7 +2,7 @@ import { Component, input, output, inject } from '@angular/core';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskCard } from '../../../../../shared/task-card/task-card';
 import { Buttons } from '../../../../../shared/button.component/button.component';
-import { CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragStart } from '@angular/cdk/drag-drop';
 import { DialogService } from '../../../../../services/dialog.service';
 import { TaskService } from '../../../../../services/task.service';
 
@@ -30,11 +30,11 @@ export class BoardColumn {
   /** Shows a dashed drop hint at the end of the column. default = false */
   showDropHint = input(false);
 
-  /** Emits the height (px) of the pressed card. */
-  cardPressed = output<number>();
+  /** Emits the size (px) of the pressed card. */
+  cardPressed = output<{ width: number; height: number }>();
 
-  /** Height (px) of the drop hint, same as the pressed card. */
-  dropHintHeight = input(0);
+  /** Size (px)  of the drop hint, same as the pressed card. */
+  dropHintSize = input({ width: 0, height: 0 });
 
   /** Opens the global dialog (same service as in the board header). */
   dialogService = inject(DialogService);
@@ -44,6 +44,12 @@ export class BoardColumn {
   /** Measures the pressed card and passes its height to the container. */
   onCardPressed(event: PointerEvent) {
     const card = event.currentTarget as HTMLElement;
-    this.cardPressed.emit(card.offsetHeight);
+    this.cardPressed.emit({ width: card.offsetWidth, height: card.offsetHeight });
+  }
+
+  /** Measures the dragged card and passes its size to the container once dragging starts. */
+  onDragStarted(event: CdkDragStart) {
+    const card = event.source.getPlaceholderElement();
+    this.cardPressed.emit({ width: card.offsetWidth, height: card.offsetHeight });
   }
 }

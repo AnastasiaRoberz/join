@@ -7,7 +7,7 @@
 
   @include mobile {
     flex-wrap: wrap;
-    gap: 48px;
+    gap: calcClamp(0, 28, 600, 320); // moved gap to padding at bottom
   }
 }
 
@@ -21,5 +21,6 @@ app-select-field {
   @include mobile {
     order: 1;
     width: 100%;
+    padding: 20px 0px; // padding added so sticky searchbar has padding
   }
 }
