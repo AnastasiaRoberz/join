@@ -73,10 +73,3 @@
     z-index: 20;
   }
 }
-
-.add-task-overlay {
-  @include flex-start(column);
-  padding: 64px;
-  max-width: 1116px;
-  max-height: #{min(95dvh, 870px)};
-}

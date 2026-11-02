@@ -161,3 +161,25 @@ form {
 .required {
   color: $hint;
 }
+
+:host.add-task-overlay {
+  display: flex;
+  flex-direction: column;
+  padding: 48px;
+  width: 95vw;
+  max-width: 1116px;
+  max-height: 95dvh;
+
+  @include responsive(700, height, max) {
+    min-height: auto;
+
+    form {
+      max-height: none;
+    }
+
+    .task-container {
+      max-height: none;
+      width: 100%;
+    }
+  }
+}
