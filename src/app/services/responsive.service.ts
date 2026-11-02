@@ -30,6 +30,7 @@ export class ResponsiveService {
     tablet: '(max-width: 1024px)',
     desktop: '(min-width: 1025px)',
     widescreen: '(min-height: 1800px)',
+    mobileOrLandscape: '(max-width: 768px), ((max-height: 971px) and (orientation: landscape))',
   };
 
   /** `true` when the viewport is at most 768px wide. */
@@ -64,6 +65,13 @@ export class ResponsiveService {
     { initialValue: false },
   );
 
+  readonly isMobileOrLandscape = toSignal(
+    this.breakpointObserver
+      .observe(this.customBreakpoints.mobileOrLandscape)
+      .pipe(map((result) => result.matches)),
+    { initialValue: false },
+  );
+
   /**
    * Creates a signal for an arbitrary max-width breakpoint.
    * Each call creates a new observer/signal, so call it once (e.g. in a field initializer)
@@ -84,5 +92,24 @@ export class ResponsiveService {
         injector: this.injector,
       },
     );
+  }
+
+  isMaxHeight(maxHeight: number): Signal<boolean> {
+    return toSignal(
+      this.breakpointObserver
+        .observe(`(max-height: ${maxHeight}px)`)
+        .pipe(map((result) => result.matches)),
+      {
+        initialValue: false,
+        injector: this.injector,
+      },
+    );
+  }
+
+  observeQuery(query: string): Signal<boolean> {
+    return toSignal(this.breakpointObserver.observe(query).pipe(map((result) => result.matches)), {
+      initialValue: false,
+      injector: this.injector,
+    });
   }
 }

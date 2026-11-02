@@ -78,5 +78,5 @@
   @include flex-center;
   padding: 64px;
   max-width: 1116px;
-  max-height: min(95dvh, 870px);
+  max-height: #{min(95dvh, 870px)};
 }

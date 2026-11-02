@@ -12,6 +12,10 @@ h2 {
   font-size: calcClamp(40, 61);
   font-weight: 700;
   line-height: 0.75;
+
+  @include landscape {
+    font-size: #{calcClamp(48, 61, 900, 350, height)};
+  }
 }
 
 h3 {

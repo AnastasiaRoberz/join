@@ -30,15 +30,15 @@ app-header {
 .pages {
   grid-area: pages;
   display: flex;
+  flex-direction: column;
   height: 100%;
   min-height: 0;
   width: 100%;
   max-width: 1208px;
 
   @include tablet {
-    .pages {
-      width: 100%;
-      flex: 1;
-    }
+    height: auto;
+    flex: 1;
+    min-height: 0;
   }
 }

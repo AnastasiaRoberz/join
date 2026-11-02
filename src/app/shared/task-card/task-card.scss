@@ -52,6 +52,7 @@
   border-radius: 24px;
   background-color: $color-white;
   box-shadow: 0px 0px 10px 3px #0000000a;
+  flex: 1;
 
   // the color of the label comes from utils/categories-list.ts (set in the template),
   // grey is only the fallback for an unknown category
@@ -75,6 +76,7 @@
   }
 
   // title and description belong together, so they sit closer than the other parts of the card
+  // title and description belong together, so they sit closer than the other parts of the card
   &__text {
     @include flex-start(column);
     align-items: stretch;
@@ -96,6 +98,7 @@
   &__progress {
     @include flex-start;
     gap: 12px;
+    margin-top: auto;
   }
 
   &__bar {
@@ -126,6 +129,10 @@
     margin-top: auto;
   }
 
+  &__progress + &__footer {
+    margin-top: 0;
+  }
+
   // the overlap of the avatars is done by the avatar group component
   &__users {
     min-width: 0;
@@ -134,6 +141,8 @@
 
   // size and color of the icon come from the global classes icon-priority / icon-<priority>
   &__priority {
+    height: 32px;
     flex-shrink: 0;
+    margin-left: auto;
   }
 }

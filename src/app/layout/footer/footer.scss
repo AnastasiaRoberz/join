@@ -2,11 +2,15 @@
 
 :host {
   @include flex-start(column);
-  gap: 8px;
+  gap: calcClamp(4, 8, 700, 500, height);
   margin-top: auto;
 
-  &.is-widescreen {
+  @include widescreen {
     margin-top: 365px;
+  }
+
+  @include short-height {
+    margin-top: 0;
   }
 }
 

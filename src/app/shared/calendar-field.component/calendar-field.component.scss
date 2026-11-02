@@ -1,7 +1,6 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column);
   @include field-host;
 }
 

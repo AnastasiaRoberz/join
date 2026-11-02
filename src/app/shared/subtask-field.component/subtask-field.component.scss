@@ -1,7 +1,6 @@
 @use '../../../../public/assets/styles/' as *;
 
 :host {
-  @include flex-start(column, both);
   @include field-host;
   flex: 1;
   min-height: 0;
@@ -49,6 +48,7 @@ span {
 
 ul {
   width: 100%;
+  padding-right: 0;
 
   &.scroll-container {
     --sb-width: 16px;

@@ -2,7 +2,7 @@
 
 :host {
   @include flex-center;
-  gap: 32px;
+  gap: calcClamp(16, 32, 900, 350, height);
   width: 100%;
 
   @include mobile {

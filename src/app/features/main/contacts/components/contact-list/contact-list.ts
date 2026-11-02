@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   effect,
   ElementRef,
   inject,
@@ -42,6 +43,9 @@ export class ContactList {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
+
+  shortHeight = this.responsiveService.isMaxHeight(500);
+  isSinglePane = computed(() => this.responsiveService.isMobile() || this.shortHeight());
 
   // importing fullName for netter display purposes
   protected fullName = fullName;

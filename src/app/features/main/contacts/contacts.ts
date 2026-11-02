@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ContactList } from './components/contact-list/contact-list';
 import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog.service';
@@ -23,6 +23,8 @@ import { Buttons } from '../../../shared/button.component/button.component';
 export class Contacts {
   responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
+  shortHeight = this.responsiveService.isMaxHeight(500);
+  isSinglePane = computed(() => this.responsiveService.isMobile() || this.shortHeight());
 
   /**
    * Id of the contact currently selected in the list.

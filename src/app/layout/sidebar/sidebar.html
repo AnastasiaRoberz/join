@@ -1,5 +1,5 @@
 <div class="sidebar-wrapper">
-  @if (!responsiveService.isTablet()) {
+  @if (!responsiveService.isTablet() && !isShort()) {
     <svg class="nav-logo">
       <use href="./assets/icons/icons.svg#logo"></use>
     </svg>

@@ -14,7 +14,7 @@
         <p class="subheading">Better with a team</p>
       </div>
       <!-- Back arrow: only visible on mobile (contacts.scss) -->
-      @if (responsiveService.isMobile()) {
+      @if (isSinglePane()) {
         <button appBtn preset="iconMedium" icon="arrow-back" (click)="closeDetails()"></button>
       }
     </div>

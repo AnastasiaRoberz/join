@@ -35,13 +35,13 @@ button {
 .scroll-container {
   overflow-y: auto;
   scrollbar-gutter: stable;
-  overscroll-behavior-y: contain;
-  --padding-inline: 0;
-  --sb-width: 24px;
+  // overscroll-behavior-y: contain;
   --padding-right: var(--padding-inline, 40px);
   --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
+  --sb-width: #{min(var(--padding-inline, 16px), 24px)};
+  --sb-border-width: calc((var(--sb-width) - 4px) / 2);
   width: calc(100% + var(--sb-offset));
-  // padding-right: calc(var(--sb-offset) - var(--sb-width));
+  padding-right: calc(var(--sb-offset) - var(--sb-width));
   flex: 1;
   min-height: 0;
 
@@ -74,7 +74,7 @@ button {
   }
 
   &::-webkit-scrollbar-thumb {
-    border: 10px solid transparent;
+    border: var(--sb-border-width) solid transparent;
     border-radius: 9999px;
     background-clip: content-box;
     background-color: $icon;
@@ -90,10 +90,6 @@ button {
       background: none;
       width: 0;
       height: 0;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border: 10px solid transparent;
     }
   }
 }
