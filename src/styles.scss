@@ -3,12 +3,6 @@
 @use '../public/assets/styles/general/_typography.scss';
 @use '../public/assets/styles' as *;
 
-:root {
-  --sb-width: #{calcClamp(16, 24, 470, 320)};
-  // --sb-border-width: #{calcClamp(3, 10, 470, 320)};
-  --sb-border-width: calc((var(--sb-width) - 4px) / 2);
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -41,9 +35,11 @@ button {
 .scroll-container {
   overflow-y: auto;
   scrollbar-gutter: stable;
-  overscroll-behavior-y: contain;
+  // overscroll-behavior-y: contain;
   --padding-right: var(--padding-inline, 40px);
   --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
+  --sb-width: min(var(--padding-inline, 16px), 24px);
+  --sb-border-width: calc((var(--sb-width) - 4px) / 2);
   width: calc(100% + var(--sb-offset));
   padding-right: calc(var(--sb-offset) - var(--sb-width));
   flex: 1;
@@ -78,8 +74,7 @@ button {
   }
 
   &::-webkit-scrollbar-thumb {
-    border: 10px solid transparent;
-    border-width: var(--sb-border-width);
+    border: var(--sb-border-width) solid transparent;
     border-radius: 9999px;
     background-clip: content-box;
     background-color: $icon;
