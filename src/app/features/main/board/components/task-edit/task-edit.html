@@ -1,5 +1,8 @@
 <form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable>
-  <div class="form-content-wrapper scroll-container">
+  <div
+    class="form-content-wrapper"
+    [class.scroll-container]="!responsiveService.isMobileLandscape()"
+  >
     <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
 
     <app-text-field

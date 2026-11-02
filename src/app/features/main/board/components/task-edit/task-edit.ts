@@ -15,6 +15,7 @@ import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.compo
 import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
 import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priority-btn';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -62,8 +63,12 @@ import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priori
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',
   templateUrl: './task-edit.html',
+  host: {
+    '[class.scroll-container]': 'responsiveService.isMobileLandscape()',
+  },
 })
 export class TaskEdit {
+  responsiveService = inject(ResponsiveService);
   /**
    * Controls switching between the task detail view and the edit dialog
    * (used by the close button and after saving to return to the detail view).

@@ -14,6 +14,17 @@
   @include mobile {
     width: 100%;
   }
+
+  @include mobile(landscape) {
+    --padding-inline: 24px;
+    padding-block: 24px;
+    padding-right: 0;
+
+    &::-webkit-scrollbar-thumb {
+      border-top: 48px solid transparent;
+      border-bottom: 60px solid transparent;
+    }
+  }
 }
 
 form {
@@ -26,6 +37,12 @@ form {
   min-height: 0;
   width: 100%;
   margin-top: calcClamp(32, 56, 769, 320);
+
+  @include mobile(landscape) {
+    margin-top: 0;
+    height: auto;
+    min-height: auto;
+  }
 }
 
 .form-content-wrapper {
@@ -33,6 +50,10 @@ form {
   @include flex-start(column, both);
   gap: calcClamp(16, 32);
   height: 100%;
+
+  @include mobile(landscape) {
+    height: auto;
+  }
 }
 
 .btn-submit {
