@@ -75,7 +75,7 @@
 }
 
 .add-task-overlay {
-  @include flex-center;
+  @include flex-start(column);
   padding: 64px;
   max-width: 1116px;
   max-height: #{min(95dvh, 870px)};
