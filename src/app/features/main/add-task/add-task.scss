@@ -154,27 +154,30 @@ form {
     height: 530px;
   }
 
+  @include responsive(971, height, max) {
+    height: 85vh;
+    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+
+    .task-container {
+      height: auto;
+    }
+  }
   // @include tablet {
   //   --padding-inline: 16px;
   // }
-
   // @include responsive(700, height, max) {
   //   // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
   //   min-height: auto;
-
   //   &::-webkit-scrollbar-thumb {
   //     border-block: 24px solid transparent;
   //   }
-
   //   form {
   //     max-height: none;
   //   }
-
   //   .task-container {
   //     max-height: none;
   //     width: 100%;
-  //   }
-  // }
+  //   } // }
 }
 
 app-avatar-group.has-users {
