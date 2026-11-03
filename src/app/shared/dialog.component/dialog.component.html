@@ -1,5 +1,6 @@
 <div
   class="overlay-content"
+  [class]="dialogService.dialogType()"
   (click)="$event.stopPropagation()"
   (mousedown)="onContentMousedown()"
   (mouseup)="onContentMouseUp()"
