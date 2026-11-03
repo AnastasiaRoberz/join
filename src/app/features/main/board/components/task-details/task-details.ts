@@ -115,7 +115,7 @@ export class TaskDetails {
   });
 
   /** True if more than 3 users are assigned to the task, enabling the compact/expandable avatar view. */
-  moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 3);
+  moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 1);
 
   /**
    * All subtasks of `selectedTask()` sorted for display (without mutating the source array):
