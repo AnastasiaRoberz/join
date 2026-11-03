@@ -1,5 +1,12 @@
 <div class="overlay-content" (click)="$event.stopPropagation()">
-  <button appBtn preset="iconSmall" icon="x" class="btn-close" (click)="handleClose()"></button>
+  <button
+    appBtn
+    preset="iconSmall"
+    icon="x"
+    class="btn-close"
+    (click)="handleClose()"
+    [class.white-btn]="responsiveService.isMobile()"
+  ></button>
   @switch (dialogService.dialogType()) {
     @case ('contact') {
       <app-contact-dialog />

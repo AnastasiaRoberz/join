@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { DialogService } from '../../services/dialog.service';
 import { ContactDialog } from '../../features/main/contacts/components/contact-dialog/contact-dialog';
 import { TaskDetails } from '../../features/main/board/components/task-details/task-details';
 import { TaskEdit } from '../../features/main/board/components/task-edit/task-edit';
 import { Buttons } from '../button.component/button.component';
 import { AddTask } from '../../features/main/add-task/add-task';
+import { ResponsiveService } from '../../services/responsive.service';
 /**
  * Global modal overlay that hosts the currently active dialog content.
  *
@@ -42,6 +43,7 @@ import { AddTask } from '../../features/main/add-task/add-task';
 export class DialogComponent {
   /** Provides the dialog state (open flag, type, selected item) and `closeDialog()` for the backdrop click. */
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   handleClose(): void {
     if (this.dialogService.dialogType() === 'task-edit') {

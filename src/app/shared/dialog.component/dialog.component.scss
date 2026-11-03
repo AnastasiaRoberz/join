@@ -71,5 +71,9 @@
     top: calcClamp(24, 52);
     right: calcClamp(24, 52);
     z-index: 20;
+
+    &.white-btn.btn--icon {
+      color: white;
+    }
   }
 }
