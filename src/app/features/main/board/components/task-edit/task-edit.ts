@@ -15,6 +15,7 @@ import { SubtaskFieldComponent } from '../../../../../shared/subtask-field.compo
 import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
 import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priority-btn';
+import { generalCustomValidators } from '../../../../../utils/custom-validators';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -126,7 +127,7 @@ export class TaskEdit {
    * Contacts and subtasks are handled separately via signals.
    */
   taskForm = this.fb.group({
-    title: ['', [Validators.required, Validators.maxLength(200)]],
+    title: ['', [Validators.required, Validators.maxLength(200), generalCustomValidators()]],
     description: [''],
     dueDate: ['', [Validators.required]],
     priority: this.fb.control<Priority>('medium', { nonNullable: true }),

@@ -19,6 +19,7 @@ import { DialogService } from '../../../services/dialog.service';
 import { Router } from '@angular/router';
 import { SubtaskInterface } from '../../../interfaces/subtask.interface';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import { generalCustomValidators } from '../../../utils/custom-validators';
 
 /**
  * Form component for creating a new task.
@@ -56,7 +57,11 @@ export class AddTask implements OnDestroy {
    * Contact assignment is handled separately via the `assignedContacts` signal.
    */
   taskForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.maxLength(200)]),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(200),
+      generalCustomValidators(),
+    ]),
     description: new FormControl(''),
     date: new FormControl('', Validators.required),
     priority: new FormControl(''),
