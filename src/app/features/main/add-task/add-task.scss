@@ -46,7 +46,7 @@ form {
 
   .task-container {
     --col-gap: #{calcClamp(48, 96, 1440, 1025)};
-    max-height: 578px;
+    max-height: 568px;
     display: flex;
     justify-content: space-between;
     gap: var(--col-gap);
