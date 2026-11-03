@@ -58,11 +58,16 @@ export class BoardContainer {
    * @param status - Status of the column the task was dropped into
    */
   dragDrop(event: CdkDragDrop<TaskInterface[]>, status: TaskInterface['status']) {
+    const sameColumn = event.previousContainer === event.container;
+
+    // dropped in the same spot: nothing changed, so no save and no toast
+    if (sameColumn && event.previousIndex === event.currentIndex) return;
+
     // copy of the tasks in the column the card was dropped into (cdkDropListData)
     const newColumn = [...event.container.data];
 
     // Same status / column: task was only moved up or down (cdkDropListData)
-    if (event.previousContainer === event.container) {
+    if (sameColumn) {
       // moves task from its old to its new index inside the same column (cdkDropListDropped)
       moveItemInArray(newColumn, event.previousIndex, event.currentIndex);
     } else {
@@ -75,8 +80,11 @@ export class BoardContainer {
     // gives all tasks in the target column its column's status
     // and its new position based on its order in the array (using the index)
     const updatedColumns = newColumn.map((task, index) => ({ ...task, status, position: index }));
+
+    // id of the moved card, only if it changed column. Otherwise null = no toast
+    const movedTaskedId = sameColumn ? null : updatedColumns[event.currentIndex].id;
     // updates the board right away and saves status + position to Supabase
-    this.taskService.saveColumn(updatedColumns);
+    this.taskService.saveColumn(updatedColumns, movedTaskedId);
   }
 
   /** True for the columns directly left and right of the pressed card's column. */
