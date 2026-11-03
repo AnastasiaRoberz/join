@@ -141,36 +141,40 @@ form {
 }
 
 :host.add-task-overlay {
-  --padding-inline: 32px;
+  --padding-inline: 70px;
   display: flex;
   flex-direction: column;
-  padding-block: 48px;
+  padding-block: 64px;
   padding-inline: var(--padding-inline);
   width: 95vw;
   max-width: 1116px;
   max-height: 95dvh;
 
-  @include tablet {
-    --padding-inline: 16px;
+  .task-container {
+    height: 530px;
   }
 
-  @include responsive(700, height, max) {
-    // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
-    min-height: auto;
+  // @include tablet {
+  //   --padding-inline: 16px;
+  // }
 
-    &::-webkit-scrollbar-thumb {
-      border-block: 24px solid transparent;
-    }
+  // @include responsive(700, height, max) {
+  //   // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+  //   min-height: auto;
 
-    form {
-      max-height: none;
-    }
+  //   &::-webkit-scrollbar-thumb {
+  //     border-block: 24px solid transparent;
+  //   }
 
-    .task-container {
-      max-height: none;
-      width: 100%;
-    }
-  }
+  //   form {
+  //     max-height: none;
+  //   }
+
+  //   .task-container {
+  //     max-height: none;
+  //     width: 100%;
+  //   }
+  // }
 }
 
 app-avatar-group.has-users {
