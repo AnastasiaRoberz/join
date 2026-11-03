@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { DialogService } from '../../services/dialog.service';
 import { ContactDialog } from '../../features/main/contacts/components/contact-dialog/contact-dialog';
 import { TaskDetails } from '../../features/main/board/components/task-details/task-details';
@@ -44,6 +44,10 @@ export class DialogComponent {
   /** Provides the dialog state (open flag, type, selected item) and `closeDialog()` for the backdrop click. */
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
+
+  whiteBtn = computed(() => {
+    return this.responsiveService.isMobile() && this.dialogService.dialogType() === 'contact';
+  });
 
   constructor() {
     effect(() => {

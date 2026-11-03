@@ -5,7 +5,7 @@
     icon="x"
     class="btn-close"
     (click)="handleClose()"
-    [class.white-btn]="responsiveService.isMobile()"
+    [class.white-btn]="whiteBtn()"
   ></button>
   @switch (dialogService.dialogType()) {
     @case ('contact') {
