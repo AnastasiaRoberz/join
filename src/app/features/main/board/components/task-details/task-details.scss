@@ -43,7 +43,7 @@ h2 {
   max-width: 100%;
   text-wrap: wrap;
   font-size: calcClamp(36, 61);
-  // max-height: clamp(10dvh, 7lh, 25dvh);
+  max-height: clamp(10dvh, 7lh, 25dvh);
 }
 
 .description-wrapper {
