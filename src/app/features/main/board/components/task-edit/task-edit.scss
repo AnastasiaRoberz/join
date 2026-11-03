@@ -9,7 +9,8 @@
   max-height: var(--dialog-max-height);
   min-height: 0;
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(32, 48, 769, 320);
+  padding-top: calcClamp(32, 48, 769, 320);
+  padding-bottom: calcClamp(16, 24, 769, 320);
 
   @include mobile {
     width: 100%;
