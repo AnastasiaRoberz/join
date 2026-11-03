@@ -1,4 +1,8 @@
-<div class="overlay-content" (click)="$event.stopPropagation()">
+<div
+  class="overlay-content"
+  [class]="dialogService.dialogType()"
+  (click)="$event.stopPropagation()"
+>
   <button
     appBtn
     preset="iconSmall"
