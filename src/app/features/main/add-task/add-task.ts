@@ -109,6 +109,8 @@ export class AddTask implements OnDestroy {
   /** used to route to board page after task is created via sidebar */
   private router = inject(Router);
 
+  isSubmitting = signal<boolean>(false);
+
   /**
    * Full contact objects corresponding to `selectedContactIds()`,
    * used to render the assigned user avatars in the select-field footer.
@@ -208,6 +210,10 @@ export class AddTask implements OnDestroy {
       return;
     }
 
+    if (this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
+
     const status = this.taskService.addTaskStatus(); // adding the status
     // find all tasks of that status / column
     const columnTasks = this.taskService.tasks().filter((task) => task.status === status);
@@ -236,6 +242,7 @@ export class AddTask implements OnDestroy {
 
       this.onClear();
       this.returnToBoard(); // calls to close dialog or navigate to board page
+      this.isSubmitting.set(false);
     }
   }
 
