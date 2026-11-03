@@ -10,7 +10,7 @@
   max-height: var(--dialog-max-height);
   font-size: $font-medium;
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(32, 48, 769, 320);
+  padding-block: calcClamp(24, 48, 769, 320);
 
   @include mobile {
     width: 100%;
