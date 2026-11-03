@@ -183,7 +183,19 @@ export class TaskDetails {
   toggleUsers(element: HTMLElement): void {
     this.showAllUsers.update((v) => !v);
     if (this.showAllUsers()) {
-      setTimeout(() => element.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      setTimeout(() => {
+        const container = this.scrollWrapper()?.nativeElement;
+        if (!container) return;
+
+        const lastItem =
+          element.querySelector<HTMLElement>('.avatar-wrapper:last-child') ?? element;
+        const containerRect = container.getBoundingClientRect();
+        const itemRect = lastItem.getBoundingClientRect();
+
+        if (itemRect.bottom > containerRect.bottom) {
+          lastItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
     } else {
       this.scrollToTop();
     }
