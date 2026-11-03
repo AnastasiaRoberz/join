@@ -59,7 +59,8 @@ export class BoardColumn {
   /** Scrolls this column to the top when a new task was */
   scrollToTop = afterRenderEffect(() => {
     const added = this.taskService.lastAddedTask();
-    if (added?.status !== this.status()) return;
+    if (added === null) return; // nothing added yet
+    if (added.status !== this.status()) return; // task belongs to another column
     this.taskList().nativeElement.scrollTo({ top: 0, left: 0 });
   });
 
