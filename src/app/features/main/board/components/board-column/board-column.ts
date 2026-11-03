@@ -1,4 +1,12 @@
-import { Component, input, output, inject } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  inject,
+  ElementRef,
+  viewChild,
+  afterRenderEffect,
+} from '@angular/core';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
 import { TaskCard } from '../../../../../shared/task-card/task-card';
 import { Buttons } from '../../../../../shared/button.component/button.component';
@@ -44,6 +52,16 @@ export class BoardColumn {
 
   /** Provides responsive layout information for drag columns. */
   responsiveService = inject(ResponsiveService);
+
+  /** The scrollable card list of this column (the `.tasks` div). */
+  taskList = viewChild.required<ElementRef<HTMLElement>>('taskList');
+
+  /** Scrolls this column to the top when a new task was */
+  scrollToTop = afterRenderEffect(() => {
+    const added = this.taskService.lastAddedTask();
+    if (added?.status !== this.status()) return;
+    this.taskList().nativeElement.scrollTo({ top: 0, left: 0 });
+  });
 
   /** Measures the pressed card and passes its height to the container. */
   onCardPressed(event: PointerEvent) {

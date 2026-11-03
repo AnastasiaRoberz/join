@@ -13,7 +13,7 @@
   }
 </header>
 
-<div class="tasks scroll-container">
+<div class="tasks scroll-container" #taskList>
   @for (task of tasks(); track task.id) {
     <!-- cdkDrag = making the task cards drag and drop items, pointer down to start visualization-->
     <app-task-card
