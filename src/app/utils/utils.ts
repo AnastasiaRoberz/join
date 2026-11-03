@@ -49,7 +49,7 @@ export function filterInput<T>(
       value?.toLowerCase().startsWith(term),
     );
     const matchesIncludes =
-      getIncludeStrings?.(item).some((value) => value?.toLowerCase().includes(term)) ?? false;
+      getSearchStrings?.(item).some((value) => value?.toLowerCase().includes(term)) ?? false;
 
     return matchesStartsWith || matchesIncludes;
   });
