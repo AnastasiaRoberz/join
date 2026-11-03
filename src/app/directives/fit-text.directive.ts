@@ -17,7 +17,11 @@ export class FitTextDirective implements AfterViewInit {
   @HostListener('window:resize')
   fit() {
     const element = this.element.nativeElement;
-    let size = this.maxSize;
+    element.style.fontSize = '';
+
+    const currentFontSize = parseFloat(window.getComputedStyle(element).fontSize) || this.maxSize;
+
+    let size = Math.floor(currentFontSize);
     element.style.fontSize = `${size}px`;
 
     const isOverflowing = () =>

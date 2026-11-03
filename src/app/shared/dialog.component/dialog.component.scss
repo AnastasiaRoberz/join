@@ -1,7 +1,9 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100vw;
   height: 100dvh;
   position: fixed;
@@ -23,13 +25,34 @@
     backdrop-filter: blur(2px);
     background-color: rgba($color: #000000, $alpha: 0.2);
   }
-
-  @include mobile {
-    padding: calcClamp(16, 27, 768, 320) calcClamp(16, 112);
-  }
 }
 
 .overlay-content {
+  &.contact {
+    --dialog-height: #{min(95dvh, 592px)};
+    --dialog-margin-top: auto;
+  }
+
+  &.task,
+  &.task-edit {
+    --dialog-max-height: #{min(95dvh, 1024px)};
+    --dialog-margin-top: #{calc((100dvh - var(--dialog-max-height, 95dvh)) / 2)};
+
+    .btn-close {
+      top: calcClamp(16, 24);
+      right: calcClamp(16, 24);
+    }
+  }
+
+  &.add-task {
+    --dialog-height: #{min(95dvh, 850px)};
+    --dialog-margin-top: auto;
+  }
+
+  margin-top: var(--dialog-margin-top);
+  max-height: var(--dialog-max-height, none);
+  height: var(--dialog-height, auto);
+  margin-bottom: auto;
   @include flex-start(column, both);
   background-color: white;
   border-radius: 30px;
@@ -60,8 +83,9 @@
   }
 
   @include mobile {
+    --dialog-max-height: #{min(95dvh, 760px)};
     height: auto;
-    max-height: 760px;
+    max-height: var(--dialog-max-height, none);
     width: 90vw;
     flex-direction: column;
   }

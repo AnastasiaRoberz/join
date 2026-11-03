@@ -1,16 +1,15 @@
 @use '../../../../../../../public/assets/styles/' as *;
 
 :host {
-  --dialog-max-height: #{min(95dvh, 1024px)};
   --padding-inline: #{calcClamp(24, 40, 769, 320)};
   @include flex-start(column, both);
   gap: calcClamp(16, 24);
   width: 525px;
   min-height: 0;
-  max-height: var(--dialog-max-height);
+  height: 100%;
   font-size: $font-medium;
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(32, 48, 769, 320);
+  padding-block: calcClamp(24, 48, 769, 320);
 
   @include mobile {
     width: 100%;
@@ -42,6 +41,7 @@ h2 {
   line-height: 120%;
   max-width: 100%;
   text-wrap: wrap;
+  font-size: calcClamp(36, 61);
   max-height: clamp(10dvh, 7lh, 25dvh);
 }
 
@@ -159,7 +159,7 @@ table {
 
 ul {
   @include flex-start(column, both);
-  gap: 16px;
+  gap: 4px;
   width: 100%;
 
   li {

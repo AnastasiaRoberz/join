@@ -115,7 +115,7 @@ export class TaskDetails {
   });
 
   /** True if more than 3 users are assigned to the task, enabling the compact/expandable avatar view. */
-  moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 3);
+  moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 1);
 
   /**
    * All subtasks of `selectedTask()` sorted for display (without mutating the source array):
@@ -183,7 +183,19 @@ export class TaskDetails {
   toggleUsers(element: HTMLElement): void {
     this.showAllUsers.update((v) => !v);
     if (this.showAllUsers()) {
-      setTimeout(() => element.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      setTimeout(() => {
+        const container = this.scrollWrapper()?.nativeElement;
+        if (!container) return;
+
+        const lastItem =
+          element.querySelector<HTMLElement>('.avatar-wrapper:last-child') ?? element;
+        const containerRect = container.getBoundingClientRect();
+        const itemRect = lastItem.getBoundingClientRect();
+
+        if (itemRect.bottom > containerRect.bottom) {
+          lastItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
     } else {
       this.scrollToTop();
     }
