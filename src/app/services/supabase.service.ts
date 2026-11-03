@@ -37,7 +37,6 @@ export class SupabaseService {
     let { data, error } = await this.supabase.from(table).select(selectedData);
 
     if (error) {
-      console.log(`Error fetching data from ${table}: `, error);
       return null;
     }
 
@@ -64,7 +63,6 @@ export class SupabaseService {
       .single();
 
     if (error) {
-      console.log(`Error fetching data from ${table}: `, error);
       return null;
     }
 
@@ -99,7 +97,6 @@ export class SupabaseService {
       return result;
     } else {
       if (entityName) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
-      console.log(error);
 
       return null;
     }
@@ -121,8 +118,6 @@ export class SupabaseService {
     table: string,
     showFeedback: boolean = true,
   ): Promise<boolean> {
-    console.log(data);
-
     const entityName = this.allowedFeedbackTables[table];
     const { error } = await this.supabase
       .from(table)
@@ -175,9 +170,6 @@ export class SupabaseService {
    */
   async deleteTaskSubtasks(taskId: number): Promise<void> {
     const { error } = await this.supabase.from('subtasks').delete().eq('task_id', taskId);
-    if (error) {
-      console.log(`Error deleting subtasks for task ${taskId}: `, error);
-    }
   }
 
   /**
@@ -189,8 +181,5 @@ export class SupabaseService {
    */
   async deleteTaskAssignments(taskId: number): Promise<void> {
     const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
-    if (error) {
-      console.log(`Error deleting assignments for task ${taskId}: `, error);
-    }
   }
 }

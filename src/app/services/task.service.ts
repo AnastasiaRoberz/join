@@ -336,7 +336,6 @@ export class TaskService {
         is_done: s.is_done ?? false,
         task_id: taskId,
       }));
-      console.log(data);
 
       await this.supabaseService.addData(data, 'subtasks');
     }
@@ -373,7 +372,6 @@ export class TaskService {
         task_id: taskId,
         contact_id: contactId,
       }));
-      console.log(newData);
 
       await this.supabaseService.addData(newData, 'task-assignment');
     }
