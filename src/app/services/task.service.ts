@@ -220,7 +220,10 @@ export class TaskService {
    *
    * @param columnTasks - All tasks of the target column, in their new order
    */
-  async saveColumn(columnTasks: TaskInterface[]): Promise<void> {
+  async saveColumn(
+    columnTasks: TaskInterface[],
+    movedTaskedId: number | null = null,
+  ): Promise<void> {
     // check all tasks: if a task is in the moved column, take the new version
     this.tasks.update((list) =>
       // (new task(s) with status + position), otherwise (`??`) keep the old task unchanged
@@ -235,7 +238,7 @@ export class TaskService {
           task.id,
           { status: task.status, position: task.position }, // only these two fields are saved
           'tasks', // table "tasks"
-          // false,
+          task.id === movedTaskedId, // toast only for the card that changed column
         ),
       ),
     );
