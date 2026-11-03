@@ -131,6 +131,9 @@ export class TaskService {
     return [...this.tasks()].sort((a, b) => a.title.localeCompare(b.title));
   });
 
+  /** Last task created on the board, so its column can scroll to it. */
+  lastAddedTask = signal<TaskInterface | null>(null);
+
   /**
    * Inserts a new task row into the `tasks` table and, on success, reloads all tasks via
    * {@link TaskService.getAllTasks} so the local signal contains the new task with clean relational joins.
@@ -152,6 +155,7 @@ export class TaskService {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
     if (newTask) {
       await this.getAllTasks();
+      this.lastAddedTask.set(newTask); // a new object every time for scroll to top
       return newTask;
     } else {
       return null;
