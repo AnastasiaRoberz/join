@@ -91,7 +91,7 @@ export class SubtaskFieldComponent {
     this.subtasks.update((list) => [newSubtask, ...list]);
     input.value = '';
 
-    setTimeout(() => this.scrollToSubtask());
+    // setTimeout(() => this.scrollToSubtask());
   }
 
   /**
