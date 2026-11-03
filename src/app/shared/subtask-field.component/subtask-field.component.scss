@@ -67,6 +67,7 @@ li {
   width: calc(100% - 36px);
   margin-left: 36px;
   cursor: default;
+  overflow-wrap: anywhere;
 
   .li-wrapper {
     @include flex-center;
