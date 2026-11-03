@@ -36,7 +36,7 @@ import { ResponsiveService } from '../../services/responsive.service';
   styleUrl: './dialog.component.scss',
   templateUrl: './dialog.component.html',
   host: {
-    '(click)': 'dialogService.closeDialog()',
+    '(click)': 'onBackdropClick()',
     '[class.is-open]': 'dialogService.isOpen()',
   },
 })
@@ -44,6 +44,28 @@ export class DialogComponent {
   /** Provides the dialog state (open flag, type, selected item) and `closeDialog()` for the backdrop click. */
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
+
+  //ist false, wenn noch kein click innerhalb dialog erfolgt
+  private mousedownInside = false;
+
+  //Click innerhalb Dialog: mousedown-event über html setzt property mousedownInside auf true
+  onContentMousedown(): void {
+    this.mousedownInside = true;
+  }
+
+  //Click innerhalb Dialog: wenn noch IM Dialog mousup-event: property wieder auf false, damit click backdrop sofort wieder funktioniert
+  onContentMouseUp(): void {
+    this.mousedownInside = false;
+  }
+
+  //über click auf host: wenn click backdrop: close wird aufgerufen, außer click innerhalb dialog true, dann return
+  onBackdropClick(): void {
+    if (this.mousedownInside) {
+      this.mousedownInside = false;
+      return;
+    }
+    this.handleClose();
+  }
 
   whiteBtn = computed(() => {
     return this.responsiveService.isMobile() && this.dialogService.dialogType() === 'contact';

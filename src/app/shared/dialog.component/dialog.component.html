@@ -1,4 +1,9 @@
-<div class="overlay-content" (click)="$event.stopPropagation()">
+<div
+  class="overlay-content"
+  (click)="$event.stopPropagation()"
+  (mousedown)="onContentMousedown()"
+  (mouseup)="onContentMouseUp()"
+>
   <button
     appBtn
     preset="iconSmall"
