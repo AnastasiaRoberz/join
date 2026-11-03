@@ -101,19 +101,33 @@
     margin-top: auto;
   }
 
+    // native <progress>: the default browser look is removed, track and fill are styled per engine
   &__bar {
     flex: 1;
     height: 8px;
+    border: 0;
     border-radius: 4px;
-    background-color: $color-grey-500;
+    appearance: none;
     overflow: hidden;
-  }
+    background-color: $color-grey-500; // track in Firefox
 
-  &__bar-fill {
-    height: 100%;
-    border-radius: 4px;
-    background-color: $color-blue-500;
-    transition: width 100ms ease-in-out;
+    // Chrome, Edge, Safari: the track
+    &::-webkit-progress-bar {
+      background-color: $color-grey-500;
+    }
+
+    // Chrome, Edge, Safari: the filled part
+    &::-webkit-progress-value {
+      border-radius: 4px;
+      background-color: $color-blue-500;
+      transition: width 100ms ease-in-out;
+    }
+
+    // Firefox: the filled part
+    &::-moz-progress-bar {
+      border-radius: 4px;
+      background-color: $color-blue-500;
+    }
   }
 
   &__count {

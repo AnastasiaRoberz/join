@@ -32,12 +32,6 @@ export class TaskCard {
     () => this.task().subtasks?.filter((subtask) => subtask.is_done).length ?? 0,
   );
 
-  /** Progress of the subtasks in percent (0 if there are no subtasks). */
-  progress = computed(() => {
-    const total = this.totalSubtasks();
-    return total ? (this.doneSubtasks() / total) * 100 : 0;
-  });
-
   /** Background color of the category label, taken from the shared category list. */
   categoryColor = computed(
     () => CATEGORIES.find((category) => category.name === this.task().category)?.color,
