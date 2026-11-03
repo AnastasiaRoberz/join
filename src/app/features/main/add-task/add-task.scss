@@ -141,14 +141,18 @@ form {
 }
 
 :host.add-task-overlay {
-  --padding-inline: 32px;
+  --padding-inline: 70px;
   display: flex;
   flex-direction: column;
-  padding-block: 48px;
+  padding-block: 64px;
   padding-inline: var(--padding-inline);
   width: 95vw;
   max-width: 1116px;
   max-height: 95dvh;
+
+  .task-container {
+    height: 550px;
+  }
 
   @include tablet {
     --padding-inline: 16px;
