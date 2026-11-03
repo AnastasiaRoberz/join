@@ -42,7 +42,8 @@ h2 {
   line-height: 120%;
   max-width: 100%;
   text-wrap: wrap;
-  max-height: clamp(10dvh, 7lh, 25dvh);
+  font-size: calcClamp(36, 61);
+  // max-height: clamp(10dvh, 7lh, 25dvh);
 }
 
 .description-wrapper {
