@@ -37,6 +37,11 @@
   &.task-edit {
     --dialog-max-height: #{min(95dvh, 1024px)};
     --dialog-margin-top: #{calc((100dvh - var(--dialog-max-height, 95dvh)) / 2)};
+
+    .btn-close {
+      top: calcClamp(16, 24);
+      right: calcClamp(16, 24);
+    }
   }
 
   &.add-task {
