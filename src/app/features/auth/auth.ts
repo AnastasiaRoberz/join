@@ -1,13 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { Login } from './login/login';
-import { Register } from './register/register';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  imports: [Login, Register],
+  imports: [RouterOutlet],
   selector: 'app-auth',
   styleUrl: './auth.scss',
   templateUrl: './auth.html',
 })
-export class Auth {
-  showRegister = signal(false);
-}
+export class Auth {}

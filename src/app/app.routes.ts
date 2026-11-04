@@ -12,9 +12,16 @@ import { Register } from './features/auth/register/register';
 import { Auth } from './features/auth/auth';
 
 export const routes: Routes = [
-  // login as mainscreen -> routing with signal in auth
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
+  // Authentification: main-screen with login-page as standard and navigation to sign-up
+  {
+    path: 'start',
+    component: Auth,
+    children: [
+      { path: 'login', component: Login },
+      { path: 'register', component: Register },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ],
+  },
 
   //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen (unten einfügen)
   //Main
@@ -38,5 +45,5 @@ export const routes: Routes = [
     ],
   },
 
-  { path: '**', redirectTo: 'login' }, // wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
+  { path: '**', redirectTo: 'login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
 ];
