@@ -1,1 +1,5 @@
-<p>auth works!</p>
+@if (!showRegister()) {
+  <app-login></app-login>
+} @else {
+  <app-register></app-register>
+}

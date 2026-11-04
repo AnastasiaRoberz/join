@@ -9,11 +9,15 @@ import { Board } from './features/main/board/board';
 import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { Auth } from './features/auth/auth';
 
 export const routes: Routes = [
-  { path: 'login', component: Login }, //für später: login-page
+  // login as mainscreen -> routing with signal in auth
+  { path: 'login', component: Login },
   { path: 'register', component: Register },
-  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen
+
+  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen (unten einfügen)
+  //Main
   {
     path: '',
     component: Main,
@@ -33,5 +37,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'summary', pathMatch: 'full' },
     ],
   },
-  //   {path: '**', redirectTo: 'login'} //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
+
+  { path: '**', redirectTo: 'login' }, // wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
 ];
