@@ -3,7 +3,7 @@ import { SupabaseService } from './supabase.service';
 import { ContactService } from './contact.service';
 import { Router } from '@angular/router';
 import { splitName } from '../utils/name-utils';
-import { User } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
 
 export interface UserInterface {
   email: string;
@@ -25,6 +25,7 @@ export class UserService {
   router = inject(Router);
 
   currentUser = signal<User | null>(null);
+  currentSession = signal<Session | null>(null);
 
   async userSignUp(data: { name: string; mail: string; password: string }): Promise<void> {
     const { title, firstname, surname } = splitName(data.name);
@@ -54,16 +55,19 @@ export class UserService {
         uid: newUser.user?.id,
       };
       const newContact = await this.contactService.addContact(contactData);
+      this.currentUser.set(newUser.user);
+      this.currentSession.set(newUser.session);
       this.router.navigate(['/summary']);
     }
   }
 
   async logIn(userData: { mail: string; password: string }) {
-    const user = await this.supabaseService.signInWithEmail(userData);
+    const data = await this.supabaseService.signInWithEmail(userData);
 
-    if (user) {
+    if (data) {
       this.router.navigate(['/summary']);
-      this.currentUser.set(user);
+      this.currentUser.set(data.user);
+      this.currentSession.set(data.session);
     }
   }
 
@@ -83,7 +87,11 @@ export class UserService {
 
   async logOut() {
     const { error } = await this.supabase.auth.signOut();
-    if (!error) this.router.navigate(['/login']);
+    if (!error) {
+      this.router.navigate(['/login']);
+      this.currentUser.set(null);
+      this.currentSession.set(null);
+    }
   }
 
   async deleteUser(uid: string) {

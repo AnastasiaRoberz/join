@@ -200,14 +200,17 @@ export class SupabaseService {
     }
   }
 
-  async signInWithEmail(userData: { mail: string; password: string }): Promise<User | null> {
+  async signInWithEmail(userData: {
+    mail: string;
+    password: string;
+  }): Promise<{ user: User | null; session: Session | null } | null> {
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email: userData.mail,
       password: userData.password,
     });
 
     if (!error) {
-      return data.user;
+      return data;
     } else {
       this.feedbackService.showError(`LogIn failed.`);
       return null;
