@@ -3,13 +3,20 @@
 .summary {
   height: 100%;
   width: 100%;
+  padding: 127px 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
 
   &__header {
     display: flex;
+    gap: 30px;
   }
 
   &__content {
     display: flex;
+    gap: 80px;
+    align-items: center;
 
     &__tiles {
       display: grid;
