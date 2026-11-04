@@ -1,0 +1,39 @@
+@use '../../../../../public/assets/styles/' as *;
+
+:host {
+  @include flex-center(column);
+  gap: 48px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  padding-block: 48px;
+  padding-inline: 112px;
+}
+
+h2 {
+  position: relative;
+  line-height: 1.2;
+
+  &::after {
+    content: '';
+    height: 3px;
+    width: 150px;
+    background-color: $text-underline;
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+form {
+  @include flex-center(column);
+  gap: 32px;
+  width: 100%;
+
+  .button-wrapper {
+    @include flex-center;
+    gap: 32px;
+    margin-top: 24px;
+  }
+}
