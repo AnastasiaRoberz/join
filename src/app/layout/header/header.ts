@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 import { ResponsiveService } from '../../services/responsive.service';
 import { UserAvatar } from '../../shared/user-avatar/user-avatar';
+import { UserService } from '../../services/user.service';
 
 @Component({
   imports: [RouterLink, UserAvatar],
@@ -20,6 +21,7 @@ import { UserAvatar } from '../../shared/user-avatar/user-avatar';
 })
 export class Header {
   private elementRef = inject(ElementRef);
+  private userService = inject(UserService);
   private menuRef = viewChild<ElementRef>('menuRef');
   navService = inject(NavigationService);
   responsiveService = inject(ResponsiveService);

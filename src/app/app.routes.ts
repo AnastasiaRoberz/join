@@ -8,10 +8,11 @@ import { AddTask } from './features/main/add-task/add-task';
 import { Board } from './features/main/board/board';
 import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
+import { Register } from './features/auth/register/register';
 
 export const routes: Routes = [
-  //   { path: 'login', component: Login }, //für später: login-page
-
+  { path: 'login', component: Login }, //für später: login-page
+  { path: 'register', component: Register },
   //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen
   {
     path: '',
