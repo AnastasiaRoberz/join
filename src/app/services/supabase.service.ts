@@ -1,8 +1,9 @@
 import { inject, Service } from '@angular/core';
-import { createClient } from '@supabase/supabase-js';
+import { AuthError, AuthResponse, createClient, Session, User } from '@supabase/supabase-js';
 import { capitalizeFirstLetter } from '../utils/utils';
 import { FeedbackService } from './feedback.service';
 import { environment } from '../../environment/environment';
+import { UserInterface } from './user.service';
 
 /**
  * Low-level database gateway and abstraction layer for the Supabase JavaScript client.
@@ -88,6 +89,8 @@ export class SupabaseService {
       .select();
     if (!isArray) query = query.single() as any;
     const { data: result, error } = await query;
+    console.log(error);
+    console.log(data);
 
     if (!error) {
       if (entityName)
@@ -181,5 +184,68 @@ export class SupabaseService {
    */
   async deleteTaskAssignments(taskId: number): Promise<void> {
     const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
+  }
+
+  async userSignUp(
+    userData: UserInterface,
+  ): Promise<{ user: User | null; session: Session | null } | null> {
+    const { data, error } = await this.supabase.auth.signUp(userData);
+
+    if (!error) {
+      this.feedbackService.showSuccess(`New user succesfully created.`);
+      return data;
+    } else {
+      this.feedbackService.showError(`Create new user failed.`);
+      return null;
+    }
+  }
+
+  async signInWithEmail(userData: { mail: string; password: string }): Promise<User | null> {
+    const { data, error } = await this.supabase.auth.signInWithPassword({
+      email: userData.mail,
+      password: userData.password,
+    });
+
+    if (!error) {
+      return data.user;
+    } else {
+      this.feedbackService.showError(`LogIn failed.`);
+      return null;
+    }
+  }
+
+  async updateUser(userUid: string, userData: Partial<User>): Promise<User | null> {
+    const { data, error } = await this.supabase.auth.admin.updateUserById(userUid, userData);
+    if (!error) {
+      this.feedbackService.showError(`User successfully updated.`);
+      const { data, error } = await this.supabase.auth.refreshSession();
+      if (!error) {
+        return data.user;
+      } else {
+        this.feedbackService.showError(`Update current session failed.`);
+        return null;
+      }
+    } else {
+      this.feedbackService.showError(`Update user failed.`);
+      return null;
+    }
+  }
+
+  async logOut() {
+    const { error } = await this.supabase.auth.signOut();
+
+    if (error) console.log('Log Out Error: ', error);
+  }
+
+  async deleteUser(uid: string): Promise<boolean> {
+    const { data, error } = await this.supabase.auth.admin.deleteUser(uid);
+
+    if (!error) {
+      this.feedbackService.showSuccess(`User succesfully deleted.`);
+      return true;
+    } else {
+      this.feedbackService.showError(`Delete user failed.`);
+      return false;
+    }
   }
 }
