@@ -18,7 +18,7 @@
 
   @if (type() === 'input') {
     <input
-      type="text"
+      [type]="inputType()"
       [id]="fieldId()"
       [value]="value"
       (input)="onInput($event)"
