@@ -4,9 +4,12 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
 import { customMailValidator, generalCustomValidators } from '../../../utils/custom-validators';
 import { UserService } from '../../../services/user.service';
+import { RouterLink } from '@angular/router';
+import { Buttons } from '../../../shared/button.component/button.component';
+import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 
 @Component({
-  imports: [TextField, ReactiveFormsModule],
+  imports: [TextField, ReactiveFormsModule, Buttons, CheckboxComponent, RouterLink],
   selector: 'app-register',
   styleUrl: './register.scss',
   templateUrl: './register.html',
