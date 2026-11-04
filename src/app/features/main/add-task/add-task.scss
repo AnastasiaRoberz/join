@@ -152,7 +152,7 @@ form {
 
   @include responsive(971, height, max) {
     height: 85vh;
-    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
 
     .task-container {
       height: auto;
