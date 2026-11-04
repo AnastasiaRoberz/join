@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ResponsiveService } from '../../services/responsive.service';
+import { Footer } from '../footer/footer';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, Footer],
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
+  host: {
+    '[class.is-tablet]': 'responsiveService.isTablet()',
+  },
 })
 export class Sidebar {
+  responsiveService = inject(ResponsiveService);
+  isShort = this.responsiveService.isMaxHeight(500);
   navList = [
     { section: 'summary', svgId: 'summary', label: 'Summary' },
     { section: 'add-task', svgId: 'task', label: 'Add Task' },

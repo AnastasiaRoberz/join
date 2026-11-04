@@ -1,0 +1,45 @@
+@if (overlapLayout()) {
+  @for (user of visibleUsers(); track user.id) {
+    <app-user-avatar
+      [user]="user"
+      [size]="size()"
+      class="group-item"
+      [appCursorTooltip]="user.firstname + ' ' + user.surname"
+    />
+  }
+} @else {
+  @for (user of users(); track user.id; let i = $index) {
+    <div
+      class="avatar-wrapper"
+      [class.overflow-user]="i >= fittingUsers()"
+      [style.--i]="i"
+      [appCursorTooltip]="isExpanded() ? '' : user.firstname + ' ' + user.surname"
+    >
+      @if (!isMaxWidth()) {
+        <app-user-avatar [user]="user" [size]="size()" class="group-item" />
+      }
+
+      <span class="user-name" appFitText [minSize]="13" [maxSize]="16"
+        >{{ user.firstname }} {{ user.surname }}</span
+      >
+      @if (canDelete() && responsiveService.isDesktop()) {
+        <button
+          appBtn
+          preset="iconMedium"
+          icon="delete"
+          class="btn-delete-user"
+          (click)="onDelete(user.id, $event)"
+        ></button>
+      }
+    </div>
+  }
+}
+@if (remainingUsersCount() > 0) {
+  <div
+    class="group-item remaining-count"
+    [class]="'size-' + size()"
+    [appCursorTooltip]="remainingUsers()"
+  >
+    <span>+{{ remainingUsersCount() }}</span>
+  </div>
+}

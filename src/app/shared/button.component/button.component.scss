@@ -1,0 +1,230 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  .icon {
+    transition: transform 0.2s ease;
+  }
+
+  &.is-open {
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  // BUTTONS DEFAULT
+  &.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--btn-gap, 8px);
+    border: 1px solid transparent;
+    outline: 1px solid transparent;
+    box-shadow: $btn-shadow-placeholder;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover,
+    &:active {
+      box-shadow: $btn-shadow;
+    }
+
+    .icon {
+      width: var(--btn-icon-size, 24px);
+      aspect-ratio: 1/1;
+      flex-shrink: 0;
+      transform: var(--btn-icon-transform, none);
+      transition: transform 0.2s ease;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      background-color: $btn-disabled;
+      border-color: transparent;
+    }
+  }
+
+  &.btn--small {
+    font-size: $font-default;
+    padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
+    border-radius: 8px;
+  }
+
+  &.btn--medium {
+    font-size: $font-default;
+    padding: calcClamp(10, 16, 768, 320);
+    border-radius: 8px;
+  }
+
+  &.btn--large {
+    font-size: $font-medium;
+    padding: calcClamp(10, 16, 768, 320);
+    border-radius: 10px;
+  }
+
+  &.btn--primary {
+    background-color: $btn-primary-default;
+    color: $btn-primary-txt;
+    font-weight: 700;
+
+    &:hover {
+      background-color: $btn-primary-hover;
+    }
+
+    &:active {
+      background-color: $btn-primary-active;
+    }
+  }
+
+  &.btn--secondary {
+    background-color: transparent;
+    border: 1px solid $btn-secondary-default;
+    color: $btn-secondary-default;
+
+    &:hover {
+      border: 1px solid $btn-secondary-hover;
+      outline: 1px solid $btn-secondary-hover;
+      color: $btn-secondary-hover;
+    }
+
+    &:active {
+      border: 1px solid $btn-secondary-active;
+      color: $btn-secondary-active;
+    }
+  }
+
+  &.btn--text {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: $btn-icon;
+    padding: 0;
+
+    .btn-label {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: var(--font-size-textbtn, calcClamp(16, 20));
+
+      &::after {
+        content: attr(data-text);
+        font-weight: 700;
+        height: 0;
+        visibility: hidden;
+        overflow: hidden;
+        user-select: none;
+        pointer-events: none;
+      }
+    }
+
+    &:hover {
+      font-weight: 700;
+      box-shadow: none;
+      color: $btn-txtIcon-hover;
+    }
+  }
+
+  &.btn--icon {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    border-radius: 50%;
+    color: $main-color;
+
+    .btn-label {
+      display: none;
+    }
+
+    &:hover,
+    &:active {
+      background-color: $btn-icon-hover;
+      box-shadow: none;
+    }
+
+    &.btn--small {
+      width: var(--btn-icon-small-size, 24px);
+      aspect-ratio: 1/1;
+    }
+
+    &.btn--medium {
+      width: var(--btn-icon-medium-size, 32px);
+      aspect-ratio: 1/1;
+
+      .icon {
+        width: var(--btn-icon-medium-size, 32px);
+        aspect-ratio: 1/1;
+      }
+    }
+
+    .btn-close-mobile {
+      color: $close-btn-mobile-default;
+    }
+  }
+
+  &.btn--add {
+    background-color: $btn-add-default;
+    color: $btn-add-txt;
+    font-weight: 700;
+    gap: 0;
+
+    .icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    &:hover {
+      background-color: $btn-add-hover;
+    }
+
+    &:active {
+      background-color: $btn-add-active;
+      box-shadow: $btn-shadow-placeholder;
+    }
+  }
+
+  &.btn--addContact {
+    gap: 16px;
+    width: 100%;
+
+    @include mobile {
+      position: absolute;
+      bottom: 32px;
+      right: 16px;
+      height: 56px;
+      width: 56px;
+      border-radius: 50%;
+      box-shadow: $btn-shadow;
+      padding: 0;
+
+      .btn-label {
+        display: none;
+      }
+    }
+  }
+
+  &.btn--addTask {
+    gap: 4px;
+    padding: 8px 16px;
+
+    @include tablet {
+      position: relative;
+      bottom: 0;
+      right: 0;
+      height: 40px;
+      width: 40px;
+      padding: 0;
+      box-shadow: none;
+
+      .btn-label {
+        display: none;
+      }
+
+      &:active {
+        box-shadow: none;
+      }
+    }
+  }
+}

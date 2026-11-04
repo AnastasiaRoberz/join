@@ -1,0 +1,37 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include field-host;
+}
+
+:host(.ng-invalid.ng-touched) .input-container {
+  border-color: $error;
+}
+
+input {
+  @include field-input;
+}
+
+.input-container {
+  @include field-container;
+  padding: calcClamp(8, 12, 768, 320) calcClamp(12, 16, 768, 320);
+}
+
+label {
+  @include field-label;
+}
+
+.required {
+  color: $hint;
+}
+
+.input-icon {
+  width: 24px;
+  height: 24px;
+  color: $main-color;
+  pointer-events: none;
+}
+
+.error-msg {
+  @include field-error-msg;
+}

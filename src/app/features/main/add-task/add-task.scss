@@ -1,0 +1,214 @@
+@use '../../../../../public/assets/styles/' as *;
+
+:host {
+  --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
+  width: 100%;
+  height: 100%;
+  padding-inline: var(--padding-inline);
+  padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
+  padding-bottom: #{min(calcClamp(24, 62), calcClamp(16, 62, 1024, 350, height))};
+  display: flex;
+  flex-direction: column;
+  gap: #{min(calcClamp(40, 48, 1440, 430, width), calcClamp(16, 40, 1024, 350, height))};
+
+  @include mobile {
+    --padding-inline: #{calcClamp(16, 40, 768, 320)};
+  }
+}
+
+form {
+  min-width: 0;
+  min-height: 0;
+  max-height: 676px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: #{min(calcClamp(24, 48), calcClamp(16, 40, 1024, 350, height))};
+
+  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+  @include mobile {
+    max-height: none;
+    gap: 24px;
+  }
+
+  @include short-height {
+    flex: none;
+  }
+
+  @include responsive(700, height, max) {
+    max-height: none;
+    min-height: auto;
+  }
+
+  .task-container {
+    // --col-gap: #{calcClamp(48, 96, 1440, 1025)}; // für before/ after Trennstrich
+    --col-gap: #{calcClamp(25, 96, 1440, 1025)}; // für divider-div
+    max-height: 568px;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--col-gap);
+    overflow-x: clip;
+
+    flex: 1;
+    align-items: stretch;
+
+    @include mobile {
+      max-height: none;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 32px;
+    }
+
+    @include responsive(700, height, max) {
+      max-height: none;
+    }
+  }
+}
+
+// taskWrap: gibt es 2x, links und rechts die Spalten im add-task
+.task-wrap {
+  width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column; //positioniert inputs untereinander
+  gap: calcClamp(16, 32, 900, 350, height);
+  position: relative; //für das ::after
+  min-width: 0;
+  flex: 1 1 0;
+
+  @include mobile {
+    min-height: auto;
+    max-height: none;
+  }
+
+  @include responsive(700, height, max) {
+    min-height: auto;
+    max-height: none;
+  }
+}
+
+// .task-left::after {
+//   content: '';
+//   position: absolute;
+//   left: calc(100% + var(--col-gap) / 2);
+//   top: 0;
+//   height: 100%;
+//   width: 1px;
+//   background-color: $input-placeholder;
+
+//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+//   @include mobile {
+//     display: none;
+//   }
+// }
+
+// .task-right::before {
+//   content: '';
+//   position: absolute;
+//   right: calc(100% + var(--col-gap) / 2);
+//   top: 0;
+//   height: 100%;
+//   width: 1px;
+//   background-color: $input-placeholder;
+
+//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+//   @include mobile {
+//     display: none;
+//   }
+// }
+
+.divider {
+  width: 1px;
+  background-color: $input-placeholder;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: stretch;
+}
+
+.name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: calcClamp(16, 20, 768, 320);
+}
+
+.task-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  flex-shrink: 0;
+
+  &__buttons {
+    display: flex;
+    gap: 16px;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    &__buttons {
+      gap: calcClamp(8, 32, 430, 320);
+      align-self: flex-end;
+    }
+  }
+}
+
+.required {
+  color: $hint;
+}
+
+:host.add-task-overlay {
+  --padding-inline: 70px;
+  display: flex;
+  flex-direction: column;
+  padding-block: 64px;
+  padding-inline: var(--padding-inline);
+  width: 95vw;
+  max-width: 1116px;
+  max-height: 95dvh;
+
+  .task-container {
+    height: 530px;
+  }
+
+  @include responsive(971, height, max) {
+    height: 85vh;
+    // padding-right: #{calc(var(--padding-inline) - var(--sb-width))}; // hier falsch gesetzt
+
+    .task-container {
+      height: auto;
+      // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    }
+
+    .task-wrap {
+      height: 100%;
+    }
+  }
+  // @include tablet {
+  //   --padding-inline: 16px;
+  // }
+  // @include responsive(700, height, max) {
+  //   // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+  //   min-height: auto;
+  //   &::-webkit-scrollbar-thumb {
+  //     border-block: 24px solid transparent;
+  //   }
+  //   form {
+  //     max-height: none;
+  //   }
+  //   .task-container {
+  //     max-height: none;
+  //     width: 100%;
+  //   } // }
+}
+
+app-avatar-group.has-users {
+  margin-top: 8px;
+}

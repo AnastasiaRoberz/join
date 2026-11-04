@@ -1,0 +1,30 @@
+<div
+  class="overlay-content"
+  [class]="dialogService.dialogType()"
+  (click)="$event.stopPropagation()"
+  (mousedown)="onContentMousedown()"
+  (mouseup)="onContentMouseUp()"
+>
+  <button
+    appBtn
+    preset="iconSmall"
+    icon="x"
+    class="btn-close"
+    (click)="handleClose()"
+    [class.white-btn]="whiteBtn()"
+  ></button>
+  @switch (dialogService.dialogType()) {
+    @case ('contact') {
+      <app-contact-dialog />
+    }
+    @case ('task') {
+      <app-task-details />
+    }
+    @case ('task-edit') {
+      <app-task-edit />
+    }
+    @case ('add-task') {
+      <article app-add-task class="add-task-overlay"></article>
+    }
+  }
+</div>

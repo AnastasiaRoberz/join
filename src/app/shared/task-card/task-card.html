@@ -1,0 +1,45 @@
+<article class="task-card" (click)="dialogService.openDialog('task', task())">
+  <span class="task-card__category" [style.background-color]="categoryColor()">
+    {{ task().category }}
+  </span>
+
+  <div class="task-card__text">
+    <h4 class="task-card__title">{{ task().title }}</h4>
+
+    @if (task().description) {
+      <p class="task-card__description">{{ task().description }}</p>
+    }
+  </div>
+
+    @if (totalSubtasks() > 0) {
+    <div class="task-card__progress">
+      <!-- native progress element: value and max replace the two divs and the aria attributes -->
+      <progress
+        class="task-card__bar"
+        aria-label="Subtask progress"
+        [value]="doneSubtasks()"
+        [max]="totalSubtasks()"
+        [title]="doneSubtasks() + ' of ' + totalSubtasks() + ' subtasks done'"
+      ></progress>
+      <span class="task-card__count">{{ doneSubtasks() }}/{{ totalSubtasks() }} Subtasks</span>
+    </div>
+  }
+
+  <footer class="task-card__footer">
+    <app-avatar-group
+      class="task-card__users"
+      role="group"
+      aria-label="Assigned users"
+      [users]="task().assigned_users ?? []"
+      size="small"
+    />
+    <svg
+      class="task-card__priority"
+      role="img"
+      [attr.aria-label]="'Priority: ' + task().priority"
+      [class]="'icon-priority icon-' + task().priority"
+    >
+      <use [attr.href]="'./assets/icons/icons.svg#' + task().priority"></use>
+    </svg>
+  </footer>
+</article>

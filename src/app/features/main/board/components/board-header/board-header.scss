@@ -1,0 +1,26 @@
+@use '../../../../../../../public/assets/styles' as *;
+
+:host {
+  @include flex-center;
+  gap: calcClamp(16, 32, 900, 350, height);
+  width: 100%;
+
+  @include mobile {
+    flex-wrap: wrap;
+    gap: calcClamp(0, 28, 600, 320); // moved gap to padding at bottom
+  }
+}
+
+h2 {
+  flex: 1;
+}
+
+app-select-field {
+  width: 312px;
+
+  @include mobile {
+    order: 1;
+    width: 100%;
+    padding: 20px 0px; // padding added so sticky searchbar has padding
+  }
+}

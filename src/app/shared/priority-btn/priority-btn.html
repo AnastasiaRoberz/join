@@ -1,0 +1,19 @@
+<span class="prio-label">Priority</span>
+<div class="btn-wrapper">
+  @for (prio of priorities; track prio.value) {
+    <button
+      type="button"
+      class="prio-btn"
+      [class]="'prio-btn--' + prio.value"
+      [class.active]="activePriority() === prio.value"
+      (click)="selectPriority(prio.value)"
+    >
+      @if (!hideBtnText()) {
+        <span>{{ prio.label }}</span>
+      }
+      <svg class="prio-icon">
+        <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
+      </svg>
+    </button>
+  }
+</div>

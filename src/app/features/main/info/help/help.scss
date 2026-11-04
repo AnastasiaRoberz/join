@@ -1,43 +1,26 @@
 @use '../../../../../../public/assets/styles' as *;
 
-.help {
-  padding: calcClamp(48, 100) calcClamp(16, 100);
+:host {
+  @include info-page;
+  gap: 40px;
+}
 
-  &__header {
-    @include flex-start;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 40px;
-    position: relative;
+.header .btn.btn-back {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  h3 {
+    margin-top: 20px;
   }
 
-  .back-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-
-    &:hover {
-      background-color: $btn-icon-hover;
-    }
-
-    @include mobile {
-      position: absolute;
-      top: -100%;
-      right: 0;
-    }
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-
-    h3 {
-      margin-top: 20px;
-    }
-  }
-
-  &__steps {
+  &__list {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -45,7 +28,7 @@
     counter-reset: step;
   }
 
-  &__step {
+  &__list-item {
     display: grid;
     grid-template-columns: 56px 1fr;
     counter-increment: step;

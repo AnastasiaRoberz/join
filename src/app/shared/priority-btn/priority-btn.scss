@@ -1,0 +1,107 @@
+@use '../../../../public/assets/styles/' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.prio-label {
+  @include field-label;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.prio-btn {
+  width: 100%;
+  // max-width: 136px;
+  height: calcClamp(41, 56, 1300, 430);
+  border-radius: 10px;
+  padding: 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 4px 0 #00000066;
+  background-color: $color-white;
+  font-size: calcClamp(16, 20, 1300, 1025);
+  line-height: 120%;
+
+  // @include responsive-flex {
+  //   height: calcClamp(48, 56, 1800, 700, height);
+  // }
+
+  @include tablet {
+    font-size: calcClamp(16, 20, 1024, 769);
+  }
+
+  @include mobile {
+    font-size: calcClamp(14, 20, 768, 350);
+  }
+
+  svg {
+    width: calcClamp(12, 20, 1300, 769);
+    aspect-ratio: 1 / 1;
+
+    @include mobile {
+      width: 20px;
+    }
+  }
+
+  &:hover:not(.active) {
+    box-shadow: 0 4px 4px 0 #00000040;
+  }
+
+  &:active,
+  &.active {
+    color: $text-light;
+    font-weight: 700;
+
+    svg {
+      color: $text-light;
+    }
+  }
+
+  &.active:hover {
+    box-shadow: none;
+  }
+
+  &--urgent {
+    svg {
+      color: $prio-urgent;
+    }
+    &.active,
+    &:active {
+      background-color: $prio-urgent;
+    }
+  }
+
+  &--medium {
+    svg {
+      color: $prio-medium;
+    }
+    &.active,
+    &:active {
+      background-color: $prio-medium;
+    }
+  }
+
+  &--low {
+    svg {
+      color: $prio-low;
+    }
+    &.active,
+    &:active {
+      background-color: $prio-low;
+    }
+  }
+}

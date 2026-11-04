@@ -1,0 +1,19 @@
+@if (btnIcon() && btnIconPos() === 'left') {
+  <svg class="icon">
+    <use [attr.href]="'./assets/icons/icons.svg#' + btnIcon()"></use>
+  </svg>
+}
+
+<span class="btn-label" [attr.data-text]="btnLabel()">
+  @if (btnLabel()) {
+    {{ btnLabel() }}
+  } @else {
+    <ng-content></ng-content>
+  }
+</span>
+
+@if (btnIcon() && btnIconPos() === 'right') {
+  <svg class="icon">
+    <use [attr.href]="'./assets/icons/icons.svg#' + btnIcon()"></use>
+  </svg>
+}

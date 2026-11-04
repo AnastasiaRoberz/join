@@ -1,0 +1,26 @@
+@if (label()) {
+  <label [attr.for]="fieldId()" [class.is-mobile]="responsiveService.isMobile()"
+    >{{ label() }}
+    @if (isRequired()) {
+      <span class="required">*</span>
+    }
+  </label>
+}
+
+<div class="input-container">
+  <input
+    type="text"
+    [id]="fieldId()"
+    [value]="value()"
+    (blur)="onTouched()"
+    (input)="onInputChange($event)"
+    #picker="appFlatpickr"
+    appFlatpickr
+    (dateChanged)="onDateSelect($event)"
+    placeholder="dd/mm/yyyy"
+    autocomplete="off"
+  />
+  <button appBtn preset="iconSmall" icon="calendar" (click)="picker.toggle()"></button>
+
+  <span class="error-msg">{{ showError() }}</span>
+</div>

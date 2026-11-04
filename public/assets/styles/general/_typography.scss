@@ -3,11 +3,13 @@
 html {
   font-family: 'Inter';
   font-size: 16px;
+  font-family: 'Inter';
+  font-weight: 400;
+  color: $text-normal;
 }
 
-// * --- h-TAGS --- *
 h2 {
-  font-size: calcClamp(40, 61);
+  font-size: #{min(calcClamp(48, 61), calcClamp(48, 61, 900, 350, height))};
   font-weight: 700;
   line-height: 0.75;
 }
@@ -21,20 +23,10 @@ h4 {
   font-size: 20px;
   font-weight: 700;
 }
-// * -------------- *
 
-// * --- GENERAL TAGS --- *
-p {
-  font-weight: 400;
-  color: $text-normal;
+* {
+  font-family: inherit;
 }
-
-button {
-  font-family: 'Inter';
-  font-size: 1rem;
-  line-height: 150%;
-}
-// * ------------ *
 
 /* ------------------------------------------------
             * --- CLASSES --- * 
@@ -42,15 +34,6 @@ button {
 // * --- texts --- *
 .subheading {
   font-size: calcClamp(16, 27);
-}
-
-.mail {
-  color: $mail;
-  width: 100%;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .highlighted-txt {

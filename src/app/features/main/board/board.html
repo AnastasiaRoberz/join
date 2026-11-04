@@ -1,1 +1,6 @@
-<p>board works!</p>
+<app-board-header></app-board-header>
+<!-- cdkDropListGroup = linking all the columns as drag and drop lists -->
+<app-board-container
+  cdkDropListGroup
+  [class.scroll-container]="boardBreakpoint() && !isShortHeight() && !responsiveService.isMobile()"
+></app-board-container>

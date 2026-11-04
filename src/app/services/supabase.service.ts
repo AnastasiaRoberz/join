@@ -1,0 +1,254 @@
+import { inject, Service } from '@angular/core';
+import { AuthError, AuthResponse, createClient, Session, User } from '@supabase/supabase-js';
+import { capitalizeFirstLetter } from '../utils/utils';
+import { FeedbackService } from './feedback.service';
+import { environment } from '../../environment/environment';
+import { UserInterface } from './user.service';
+
+/**
+ * Low-level database gateway and abstraction layer for the Supabase JavaScript client.
+ * Provides generic CRUD operations across all PostgreSQL tables, handles baseline error
+ * logging, and triggers user-facing notifications via `FeedbackService`.
+ */
+@Service()
+export class SupabaseService {
+  projectUrl = environment.supabaseUrl;
+  projectKey = environment.supabaseAnonKey;
+  supabase = createClient(this.projectUrl, this.projectKey);
+
+  feedbackService = inject(FeedbackService);
+
+  private readonly allowedFeedbackTables: Record<string, string> = {
+    tasks: 'Task',
+    contacts: 'Contact',
+  };
+
+  /**
+   * Retrieves an array of records from a specific table.
+   *
+   * @param table - The name of the database table to query
+   * @param selectedData - The SQL/PostgREST select pattern defining columns or joined tables. Defaults to `'*'`
+   * @returns A promise resolving to an array of matching rows, or `null` if the request encounters an error
+   *
+   * @example
+   * const contacts = await supabaseService.getData('contacts');
+   * const tasks = await supabaseService.getData('tasks', '*, subtasks(*)');
+   */
+  async getData(table: string, selectedData: string = '*'): Promise<any[] | null> {
+    let { data, error } = await this.supabase.from(table).select(selectedData);
+
+    if (error) {
+      return null;
+    }
+
+    return data;
+  }
+
+  /**
+   * Fetches a single record by its primary key ID.
+   *
+   * @remarks
+   * Relies on `.single()`, which enforces that exactly one row matches.
+   * If zero or multiple rows are found, PostgREST throws an error which is caught and logged.
+   *
+   * @param table - The name of the database table to query
+   * @param id - The primary key ID of the record
+   * @param selectedData - The SQL/PostgREST select pattern. Defaults to `'*'`
+   * @returns A promise resolving to the record object, or `null` if not found or on error
+   */
+  async getOneItem(table: string, id: number, selectedData: string = '*'): Promise<any | null> {
+    let { data, error } = await this.supabase
+      .from(table)
+      .select(selectedData)
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      return null;
+    }
+
+    return data;
+  }
+
+  /**
+   * Inserts a new record (or array of records) into a table and immediately selects and returns the created row(s).
+   * Automatically triggers a user-facing success or error notification via {@link FeedbackService}.
+   *
+   * @template T - The shape of the payload extending a key-value record
+   * @param data - The data object or array of objects to insert (omitting generated keys such as `id`)
+   * @param table - The target database table name
+   * @returns A promise resolving to the freshly created database row(s) (including server-generated values like `id`), or `null` on failure
+   */
+  async addData<T extends Record<string, any>>(data: T | T[], table: string): Promise<any | null> {
+    const isArray = Array.isArray(data);
+    const entityName = this.allowedFeedbackTables[table];
+
+    let query = this.supabase
+      .from(table)
+      .insert(data as any)
+      .select();
+    if (!isArray) query = query.single() as any;
+    const { data: result, error } = await query;
+    console.log(error);
+    console.log(data);
+
+    if (!error) {
+      if (entityName)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully created.`,
+        );
+      return result;
+    } else {
+      if (entityName) this.feedbackService.showError(`Create ${table.slice(0, -1)} failed.`);
+
+      return null;
+    }
+  }
+
+  /**
+   * Updates an existing database row identified by its primary key ID.
+   * Automatically triggers a user-facing success or error notification via {@link FeedbackService}.
+   *
+   * @template T - The shape of the entity being updated
+   * @param id - The primary key ID of the target record
+   * @param data - A partial or complete object of fields to be updated
+   * @param table - The target database table name
+   * @returns A promise resolving to `true` if the update succeeded, or `false` on failure
+   */
+  async updateData<T extends Record<string, any>>(
+    id: number,
+    data: Partial<T>,
+    table: string,
+    showFeedback: boolean = true,
+  ): Promise<boolean> {
+    const entityName = this.allowedFeedbackTables[table];
+    const { error } = await this.supabase
+      .from(table)
+      .update(data as any)
+      .eq('id', id);
+
+    if (!error) {
+      if (entityName && showFeedback)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully updated.`,
+        );
+      return true;
+    } else {
+      if (entityName && showFeedback)
+        this.feedbackService.showError(`Update ${table.slice(0, -1)} failed.`);
+      return false;
+    }
+  }
+
+  /**
+   * Removes a record from a database table based on its primary key ID.
+   * Automatically triggers a user-facing success or error notification via {@link FeedbackService}.
+   *
+   * @param id - The primary key ID of the record to delete
+   * @param table - The target database table name
+   * @returns A promise resolving to `true` if successfully deleted, or `false` on failure
+   */
+  async deleteData(id: number, table: string): Promise<boolean> {
+    const entityName = this.allowedFeedbackTables[table];
+    const { error } = await this.supabase.from(table).delete().eq('id', id);
+
+    if (!error) {
+      if (entityName)
+        this.feedbackService.showSuccess(
+          `${capitalizeFirstLetter(table.slice(0, -1))} succesfully deleted.`,
+        );
+      return true;
+    } else {
+      if (entityName) this.feedbackService.showError(`Delete ${table.slice(0, -1)} failed.`);
+      return false;
+    }
+  }
+
+  /**
+   * Deletes all subtask rows associated with a given parent task ID from the `subtasks` table.
+   * Used when synchronizing/replacing a task's subtasks in bulk.
+   *
+   * @param taskId - The parent task ID whose subtasks should be deleted
+   * @returns A promise that resolves once the deletion query has completed
+   */
+  async deleteTaskSubtasks(taskId: number): Promise<void> {
+    const { error } = await this.supabase.from('subtasks').delete().eq('task_id', taskId);
+  }
+
+  /**
+   * Deletes all contact assignment rows associated with a given task ID from the `task-assignment` join table.
+   * Used when synchronizing/replacing a task's assigned contacts in bulk.
+   *
+   * @param taskId - The target task ID whose assignments should be cleared
+   * @returns A promise that resolves once the deletion query has completed
+   */
+  async deleteTaskAssignments(taskId: number): Promise<void> {
+    const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
+  }
+
+  async userSignUp(
+    userData: UserInterface,
+  ): Promise<{ user: User | null; session: Session | null } | null> {
+    const { data, error } = await this.supabase.auth.signUp(userData);
+
+    if (!error) {
+      this.feedbackService.showSuccess(`New user succesfully created.`);
+      return data;
+    } else {
+      this.feedbackService.showError(`Create new user failed.`);
+      return null;
+    }
+  }
+
+  async signInWithEmail(userData: {
+    mail: string;
+    password: string;
+  }): Promise<{ user: User | null; session: Session | null } | null> {
+    const { data, error } = await this.supabase.auth.signInWithPassword({
+      email: userData.mail,
+      password: userData.password,
+    });
+
+    if (!error) {
+      return data;
+    } else {
+      this.feedbackService.showError(`LogIn failed.`);
+      return null;
+    }
+  }
+
+  async updateUser(userUid: string, userData: Partial<User>): Promise<User | null> {
+    const { data, error } = await this.supabase.auth.admin.updateUserById(userUid, userData);
+    if (!error) {
+      this.feedbackService.showError(`User successfully updated.`);
+      const { data, error } = await this.supabase.auth.refreshSession();
+      if (!error) {
+        return data.user;
+      } else {
+        this.feedbackService.showError(`Update current session failed.`);
+        return null;
+      }
+    } else {
+      this.feedbackService.showError(`Update user failed.`);
+      return null;
+    }
+  }
+
+  async logOut() {
+    const { error } = await this.supabase.auth.signOut();
+
+    if (error) console.log('Log Out Error: ', error);
+  }
+
+  async deleteUser(uid: string): Promise<boolean> {
+    const { data, error } = await this.supabase.auth.admin.deleteUser(uid);
+
+    if (!error) {
+      this.feedbackService.showSuccess(`User succesfully deleted.`);
+      return true;
+    } else {
+      this.feedbackService.showError(`Delete user failed.`);
+      return false;
+    }
+  }
+}

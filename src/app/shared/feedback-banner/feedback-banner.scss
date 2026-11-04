@@ -9,8 +9,9 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 20;
 
-  @include mobile {
+  @include tablet {
     padding-bottom: 100px;
   }
 }

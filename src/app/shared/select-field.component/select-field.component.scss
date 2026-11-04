@@ -1,0 +1,123 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  @include field-host(0px);
+}
+
+:host(.ng-invalid.ng-touched) .input-container {
+  border-color: $error;
+}
+
+label {
+  margin-bottom: 8px;
+  @include field-label;
+}
+
+.input-container {
+  @include field-container;
+  padding: calcClamp(4, 8, 768, 320) calcClamp(8, 16, 768, 320);
+  z-index: 3;
+}
+
+input {
+  @include field-input(width);
+
+  &::placeholder {
+    color: $text-dark;
+  }
+}
+
+.input-icon {
+  width: 24px;
+  height: 24px;
+  color: $input-icon;
+  cursor: pointer;
+
+  &.is-open {
+    transform: rotate(180deg);
+  }
+}
+
+.search-suffix {
+  @include flex-center;
+  gap: calcClamp(8, 16);
+
+  .divider {
+    width: 1px;
+    height: 31px;
+    background-color: $devider;
+    border: none;
+  }
+}
+
+.dropdown {
+  @include flex-start(column, both);
+  gap: 2px;
+  padding: 2px;
+  max-height: 302px;
+  width: 100%;
+  box-shadow: 0px 0px 14px 3px #00000024;
+  border-radius: 10px;
+  background-color: $color-white;
+  z-index: 2;
+  overflow-x: hidden;
+  margin: 2px 0;
+
+  li {
+    @include flex-center;
+    gap: 16px;
+    width: 100%;
+    padding: 8px 16px;
+    padding-right: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: Inter;
+    font-size: calcClamp(16, 20, 768, 320);
+
+    &.selected {
+      background-color: $dropdown-item-active;
+      color: $text-light;
+
+      &:hover,
+      &.is-active {
+        background-color: $dropdown-item-active-hover;
+      }
+    }
+
+    &:hover {
+      background-color: $input-select-hover;
+    }
+  }
+
+  .name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &.scroll-container {
+    --sb-width: 16px;
+
+    &::-webkit-scrollbar {
+      width: var(--sb-width);
+    }
+    &::-webkit-scrollbar-thumb {
+      border: 6px solid transparent;
+    }
+  }
+}
+
+.required {
+  color: $hint;
+}
+
+.no-results {
+  @include flex-center;
+  padding: 12px 16px;
+  cursor: default;
+}
+
+.error-msg {
+  @include field-error-msg;
+}

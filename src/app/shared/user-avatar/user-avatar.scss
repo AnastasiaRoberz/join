@@ -1,6 +1,6 @@
 @use '../../../../public/assets/styles' as *;
 
-.avatar-circle {
+:host {
   @include flex-center;
   flex-shrink: 0;
   border-radius: 50%;
@@ -14,25 +14,49 @@
   }
 
   &.size-medium {
-    width: 42px;
-    height: 42px;
+    width: calcClamp(32, 42);
+    height: calcClamp(32, 42);
     border-width: 2px;
+    font-size: calcClamp(14, 16, 769, 320);
   }
 
   &.size-large {
-    width: calcClamp(95, 120, 768, 330); //changed from 120px to clamp for dialog
-    aspect-ratio: 1 / 1;
+    width: calcClamp(80, 100, 768, 320); //changed from 120px to clamp for dialog
+    height: calcClamp(80, 100, 768, 320);
     border-width: 3px;
     font-size: $font-large;
     font-weight: 500;
     box-shadow: $avatar-shadow;
   }
 
+  // added for contact details
+  &.size-details {
+    width: calcClamp(80, 100, 1440, 769);
+    height: calcClamp(80, 100, 1440, 769);
+    border-width: 3px;
+    font-size: calcClamp(36, 47, 1440, 769);
+    font-weight: 500;
+    box-shadow: $avatar-shadow;
+  }
+
   &.size-header {
-    width: 56px;
-    height: 56px;
+    width: calcClamp(40, 56, 700, 350, height);
+    aspect-ratio: 1;
     border: 3px solid $main-color;
-    color: $main-color;
+    font-size: $font-medium;
+    font-weight: 700;
+    color: $text-lightblue;
+    background-color: transparent;
+
+    @include mobile {
+      width: 40px;
+      height: 40px;
+      border-width: 2px;
+    }
+
+    &:hover {
+      background-color: $avatar-hover;
+    }
   }
 
   .avatar-icon {

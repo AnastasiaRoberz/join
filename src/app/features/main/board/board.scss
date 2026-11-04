@@ -1,0 +1,43 @@
+@use '../../../../../public/assets/styles/' as *;
+
+:host {
+  --padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
+  --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
+  @include flex-start(column, both);
+  gap: #{min(calcClamp(24, 48), calcClamp(16, 48, 900, 350, height))};
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  padding-inline: var(--padding-inline);
+  padding-top: var(--padding-top);
+  padding-bottom: calcClamp(16, 64, 700, 500, height);
+
+  // compact layout: the columns are below each other, so the page scrolls up and down
+  @include responsive($board-breakpoint) {
+    // otherwise the top of the page is cut off when the content is higher than the page
+    justify-content: flex-start;
+    --padding-inline: #{calcClamp(16, 48, 1279, 768)};
+    app-board-container {
+      min-height: 0;
+    }
+  }
+
+  @include mobile {
+    gap: calcClamp(0, 20, 600, 320); // reduced gap in mobile
+    min-height: 0;
+    padding-right: calc(var(--padding-inline) - var(--sb-width));
+  }
+
+  @include short-height {
+    padding-right: calc(var(--padding-inline) - var(--sb-width));
+  }
+}
+
+app-board-header {
+  position: sticky;
+  top: calc(40px - 16px - 80px - var(--padding-top) - 1px); // 90px is header without searchbar
+  z-index: 1; // stays above the task cards
+  background: $color-grey-background; // otherwise cards show through
+  padding-bottom: 16px;
+  width: 100%;
+}

@@ -1,56 +1,58 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
-import { SupabaseService } from '../../../../../services/supabase';
-import { Contact } from '../../../../../interfaces/contact';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputField } from '../../../../../shared/input-field/input-field';
+import { TextField } from '../../../../../shared/text-field/text-field';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
-import { DialogService } from '../../../../../services/dialog';
-import { CustomValidators } from '../../../../../utils/custom-validators';
+import { DialogService } from '../../../../../services/dialog.service';
+import {
+  customMailValidator,
+  customNameValidator,
+  customPhoneValidator,
+  generalCustomValidators,
+  uniqueMailValidator,
+} from '../../../../../utils/custom-validators';
+import { ResponsiveService } from '../../../../../services/responsive.service';
+import { Buttons } from '../../../../../shared/button.component/button.component';
+import { ContactService } from '../../../../../services/contact.service';
+import { SupabaseService } from '../../../../../services/supabase.service';
+import { ConfirmService } from '../../../../../services/confirm.service';
+import { fullName, splitName } from '../../../../../utils/name-utils';
 
 @Component({
-  imports: [ReactiveFormsModule, InputField, UserAvatar],
+  imports: [ReactiveFormsModule, TextField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
   styleUrl: './contact-dialog.scss',
   templateUrl: './contact-dialog.html',
 })
 export class ContactDialog {
-  supabase = inject(SupabaseService);
-  fb = inject(FormBuilder);
+  supabaseService = inject(SupabaseService);
+  contactService = inject(ContactService);
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
+  fb = inject(FormBuilder);
+  confirmService = inject(ConfirmService);
   isSubmitting = signal<boolean>(false);
 
-  contact = input<Contact | null>(null);
+  contact = computed(() => this.dialogService.selectedItem() as ContactInterface);
 
   contactForm = this.fb.group({
     name: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.onlyLetters(),
-          CustomValidators.twoNames(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customNameValidator()],
       },
     ],
     mail: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.customEmail(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customMailValidator()],
+        asyncValidators: [uniqueMailValidator(this.supabaseService, () => this.contact()?.id)],
       },
     ],
     phone: [
       '',
       {
-        validators: [
-          Validators.required,
-          CustomValidators.noWhitespace(),
-          CustomValidators.phone(),
-        ],
+        validators: [Validators.required, generalCustomValidators(), customPhoneValidator()],
       },
     ],
   });
@@ -60,9 +62,9 @@ export class ContactDialog {
       const currentContact = this.contact();
       if (currentContact) {
         this.contactForm.setValue({
-          name: currentContact.firstname + ' ' + currentContact.surname,
+          name: fullName(currentContact), // starting to use fullName for display purposes
           mail: currentContact.mail,
-          phone: currentContact.phone ?? '',
+          phone: currentContact.phone,
         });
       } else {
         this.contactForm.reset();
@@ -71,49 +73,47 @@ export class ContactDialog {
   }
 
   async saveContact() {
-    if (this.isSubmitting()) return;
+    if (this.isSubmitting() || !this.contactForm.valid) return;
 
     this.isSubmitting.set(true);
     const { name, mail, phone } = this.contactForm.getRawValue();
-    const { firstname, surname } = this.splitName(name ?? '');
+    const { title, firstname, surname } = splitName(name ?? ''); // added title and using external splitName from name-utils
     const contactInfos = {
-      firstname: firstname,
-      surname: surname,
-      mail: mail ?? '',
-      phone: phone ?? '',
+      title,
+      firstname,
+      surname,
+      mail: mail?.trim() ?? '',
+      phone: phone?.trim() ?? '',
     };
 
     const existingContact = this.contact();
     if (existingContact) {
-      await this.supabase.updateContact(existingContact.id ?? null, contactInfos);
+      await this.contactService.updateContact(existingContact.id, contactInfos);
+      this.dialogService.selectContact(existingContact.id);
     } else {
-      await this.supabase.addContact(contactInfos);
+      // Wait for Supabase to return the created contact including its server-generated id
+      const newContact = await this.contactService.addContact(contactInfos);
+      if (newContact) {
+        // Pass the new contact's id to DialogService to trigger auto-selection and scroll
+        this.dialogService.selectContact(newContact.id);
+      }
     }
 
-    await this.supabase.getAllContacts();
     this.closeDialog();
     this.isSubmitting.set(false);
   }
 
-  splitName(name: string) {
-    const lastSpaceIndex = name.lastIndexOf(' ');
-
-    if (lastSpaceIndex === -1) return { firstname: name, surname: '' };
-
-    return {
-      firstname: name.substring(0, lastSpaceIndex).trim(),
-      surname: name.substring(lastSpaceIndex + 1).trim(),
-    };
-  }
+  // splitMame now moved to name-utils.ts
 
   async deleteAndClose() {
-    if (this.isSubmitting()) return;
+    const id = this.contact()?.id;
+    if (this.isSubmitting() || !id) return;
+    if (!(await this.confirmService.askDelete('Contact'))) return;
 
     this.isSubmitting.set(true);
-    const id = this.contact()?.id;
     if (!id) return;
 
-    await this.supabase.deleteContact(id);
+    await this.contactService.deleteContact(id);
     this.closeDialog();
     this.isSubmitting.set(false);
   }
