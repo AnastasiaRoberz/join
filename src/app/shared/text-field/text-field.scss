@@ -6,6 +6,14 @@
 
 :host(.ng-invalid.ng-touched) .input-container {
   border-color: $error;
+
+  &:focus-within,
+  &:has(input:not(:placeholder-shown)),
+  &:has(textarea:not(:placeholder-shown)) {
+    label.inner {
+      color: $error;
+    }
+  }
 }
 
 .char-count {
