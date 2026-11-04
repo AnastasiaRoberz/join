@@ -1,1 +1,44 @@
 @use '../../../../../public/assets/styles/' as *;
+
+.summary {
+  height: 100%;
+  width: 100%;
+
+  &__header {
+    display: flex;
+  }
+
+  &__content {
+    display: flex;
+
+    &__tiles {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      max-width: 670px;
+      gap: 32px;
+
+      .half {
+        grid-column: span 3;
+      } // 2 per row
+      .full {
+        grid-column: span 6;
+      } // 1 per row
+      .third {
+        grid-column: span 2;
+      } // 3 per row
+
+      a {
+        min-height: 168px;
+        border: 1px solid black;
+        border-radius: 20px;
+        gap: 20px;
+        padding: 28px;
+      }
+
+      .deadline {
+        width: 560px;
+        height: 168px;
+      }
+    }
+  }
+}
