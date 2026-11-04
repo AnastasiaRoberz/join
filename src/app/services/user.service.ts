@@ -52,7 +52,7 @@ export class UserService {
         surname: surname,
         mail: data.mail,
         phone: phone,
-        uid: newUser.user?.id,
+        user_uid: newUser.user?.id,
       };
       const newContact = await this.contactService.addContact(contactData);
       this.currentUser.set(newUser.user);
@@ -68,6 +68,8 @@ export class UserService {
       this.router.navigate(['/summary']);
       this.currentUser.set(data.user);
       this.currentSession.set(data.session);
+      console.log(data.session);
+      console.log(data.user);
     }
   }
 
