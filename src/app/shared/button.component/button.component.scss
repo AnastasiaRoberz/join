@@ -53,7 +53,7 @@
   }
 
   &.btn--medium {
-    font-size: $font-medium;
+    font-size: calcClamp(16, 20);
     padding-block: calcClamp(8, 16, 768, 320);
     padding-inline: calcClamp(12, 24, 768, 320);
     border-radius: 10px;
