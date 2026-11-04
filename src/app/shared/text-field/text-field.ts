@@ -72,6 +72,12 @@ export class TextField implements ControlValueAccessor {
   /** Placeholder text. The default single space keeps `:placeholder-shown` based styling working. */
   placeholder = input<string>(' ');
 
+  /** shows count for add-task-title-input */
+  showCharCount = input(false, { transform: booleanAttribute });
+
+  /** maxLength for title in add-task */
+  maxLength = input<number | null>(null);
+
   /** Current value displayed in the field. Updated by user input and by `writeValue()`. */
   value: string = '';
 

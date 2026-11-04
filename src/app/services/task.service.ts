@@ -385,5 +385,4 @@ export class TaskService {
 
     await this.getAllTasks();
   }
-  //#endregion
 }

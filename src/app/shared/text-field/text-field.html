@@ -7,6 +7,10 @@
   </label>
 }
 
+@if (showCharCount() && maxLength()) {
+  <span class="char-count">{{ value.length }}/{{ maxLength() }}</span>
+}
+
 <div class="input-container">
   @if (label() && labelPos() === 'inner') {
     <label [attr.for]="fieldId()" [class]="labelPos()">{{ label() }}</label>
