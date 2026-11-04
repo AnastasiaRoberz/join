@@ -204,4 +204,16 @@
             fill="currentColor"
         />
     </symbol>
+
+    <symbol id="dashboard-done" viewBox="0 0 69 69">
+        <circle cx="34.5" cy="34.5" r="34.5" fill="#2A3647"/>
+        <path d="M19.5283 34.5001L30.7571 45.5662L49.4717 23.4341" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke="white"/>
+
+    </symbol>
+</svg>
+
+
+<svg width="69" height="69" viewBox="0 0 69 69" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="34.5" cy="34.5" r="34.5" fill="#2A3647"/>
+<path d="M19.5283 34.5001L30.7571 45.5662L49.4717 23.4341" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke="white"/>
 </svg>
