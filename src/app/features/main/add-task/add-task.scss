@@ -41,12 +41,16 @@ form {
   }
 
   .task-container {
-    --col-gap: #{calcClamp(48, 96, 1440, 1025)};
+    // --col-gap: #{calcClamp(48, 96, 1440, 1025)}; // für before/ after Trennstrich
+    --col-gap: #{calcClamp(25, 96, 1440, 1025)}; // für divider-div
     max-height: 568px;
     display: flex;
     justify-content: space-between;
     gap: var(--col-gap);
     overflow-x: clip;
+
+    flex: 1;
+    align-items: stretch;
 
     @include mobile {
       max-height: none;
@@ -84,19 +88,43 @@ form {
   }
 }
 
-.task-left::after {
-  content: '';
-  position: absolute;
-  left: calc(100% + var(--col-gap) / 2);
-  top: 0;
-  height: 100%;
+// .task-left::after {
+//   content: '';
+//   position: absolute;
+//   left: calc(100% + var(--col-gap) / 2);
+//   top: 0;
+//   height: 100%;
+//   width: 1px;
+//   background-color: $input-placeholder;
+
+//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+//   @include mobile {
+//     display: none;
+//   }
+// }
+
+// .task-right::before {
+//   content: '';
+//   position: absolute;
+//   right: calc(100% + var(--col-gap) / 2);
+//   top: 0;
+//   height: 100%;
+//   width: 1px;
+//   background-color: $input-placeholder;
+
+//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+//   @include mobile {
+//     display: none;
+//   }
+// }
+
+.divider {
   width: 1px;
   background-color: $input-placeholder;
-
-  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include mobile {
-    display: none;
-  }
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: stretch;
 }
 
 .name {
@@ -152,10 +180,15 @@ form {
 
   @include responsive(971, height, max) {
     height: 85vh;
-    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    // padding-right: #{calc(var(--padding-inline) - var(--sb-width))}; // hier falsch gesetzt
 
     .task-container {
       height: auto;
+      // padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    }
+
+    .task-wrap {
+      height: 100%;
     }
   }
   // @include tablet {

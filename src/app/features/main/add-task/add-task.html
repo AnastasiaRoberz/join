@@ -50,6 +50,10 @@
       ></app-calendar-field>
     </div>
 
+    @if (!responsiveService.isMobile()) {
+      <div class="divider"></div>
+    }
+
     <div class="task-wrap task-right">
       <app-priority-btn
         formControlName="priority"
@@ -97,7 +101,7 @@
 
       <app-subtask-field
         [(subtasks)]="createdSubtasks"
-        [isScrollable]="!isMobileOrLandscape()"
+        [isScrollable]="!isMobileOrLandscape() && !isTabletSpecialHeight()"
         class="task-input"
       ></app-subtask-field>
     </div>
