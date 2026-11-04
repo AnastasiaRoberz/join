@@ -11,18 +11,16 @@
     }
   </div>
 
-  @if (totalSubtasks() > 0) {
+    @if (totalSubtasks() > 0) {
     <div class="task-card__progress">
-      <div
+      <!-- native progress element: value and max replace the two divs and the aria attributes -->
+      <progress
         class="task-card__bar"
-        role="progressbar"
         aria-label="Subtask progress"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        [attr.aria-valuenow]="progress()"
-      >
-        <div class="task-card__bar-fill" [style.width.%]="progress()"></div>
-      </div>
+        [value]="doneSubtasks()"
+        [max]="totalSubtasks()"
+        [title]="doneSubtasks() + ' of ' + totalSubtasks() + ' subtasks done'"
+      ></progress>
       <span class="task-card__count">{{ doneSubtasks() }}/{{ totalSubtasks() }} Subtasks</span>
     </div>
   }
