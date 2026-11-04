@@ -10,7 +10,7 @@
   height: 449px;
   padding-block: 48px;
   background-color: white;
-  padding-inline: 112px;
+  padding-inline: calcClamp(112, 16);
 }
 
 form {
@@ -20,7 +20,7 @@ form {
 
   .button-wrapper {
     @include flex-center;
-    gap: 32px;
+    gap: calcClamp(32, 20);
     margin-top: 24px;
   }
 }
