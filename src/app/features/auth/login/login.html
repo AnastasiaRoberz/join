@@ -1,5 +1,18 @@
+<h2>Log in</h2>
+
 <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <app-text-field label="Email" icon="mail" formControlName="mail" />
-  <app-text-field label="Password" icon="lock" formControlName="password" />
-  <button appBtn preset="primary" type="submit">Log in</button>
+  <app-text-field label="Email" icon="mail" fieldId="mail" formControlName="mail" />
+  <app-text-field
+    inputType="password"
+    label="Password"
+    icon="lock"
+    fieldId="password"
+    formControlName="password"
+  />
+  <div class="button-wrapper">
+    <button appBtn preset="primary" size="large" type="submit" [disabled]="!loginForm.valid">
+      Log in
+    </button>
+    <button appBtn preset="secondary" size="large">Guest Log in</button>
+  </div>
 </form>
