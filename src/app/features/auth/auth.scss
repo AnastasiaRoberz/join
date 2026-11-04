@@ -1,0 +1,38 @@
+@use '../../../../public/assets/styles' as *;
+
+:host {
+  width: 100%;
+  height: 100dvh;
+  background-color: $color-grey-background;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: calcClamp(16, 77, 1300, 500);
+
+  header {
+    width: 100%;
+    height: 122px;
+    position: absolute;
+    top: calcClamp(27, 67, 1300, 400);
+    padding-left: calcClamp(28, 77, 1300, 400);
+
+    svg {
+      width: calcClamp(64, 100, 1300, 500);
+      aspect-ratio: 100 / 122;
+    }
+  }
+
+  .auth-box {
+    width: 100%;
+    max-width: calcClamp(396, 652, 1300, 500);
+    height: auto;
+    border-radius: 30px;
+    box-shadow: 0 0 14px 3px #00000024;
+  }
+
+  footer {
+    position: absolute;
+    bottom: calcClamp(22, 38, 1300, 500);
+  }
+}
