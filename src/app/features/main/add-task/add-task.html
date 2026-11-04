@@ -99,7 +99,7 @@
 
       <app-subtask-field
         [(subtasks)]="createdSubtasks"
-        [isScrollable]="!isMobileOrLandscape()"
+        [isScrollable]="!isMobileOrLandscape() && !isTabletSpecialHeight()"
         class="task-input"
       ></app-subtask-field>
     </div>
