@@ -6,18 +6,18 @@
   </header>
   <div class="summary__content">
     <div class="summary__content__tiles">
-      <a href="" class="summary__stats todo half"></a>
-      <a href="" class="summary__stats done half"></a>
-      <a href="" class="summary__stats deadline full"></a>
-      <a href="" class="summary__stats board third"></a>
-      <a href="" class="summary__stats progress third"></a>
-      <a href="" class="summary__stats await third"></a>
+      <a href="" class="todo half"></a>
+      <a href="" class="done half"></a>
+      <a href="" class="deadline full"></a>
+      <a href="" class="board third"></a>
+      <a href="" class="progress third"></a>
+      <a href="" class="await third"></a>
     </div>
-    <div class="summary__greeting">
-      <p>
-        Good moring, <br />
-        Sofia Müller
-      </p>
-    </div>
+    @if (responsiveService.isDesktop()) {
+      <div class="welcome">
+        <p class="welcome__greeting">Good moring,</p>
+        <p class="welcome__name">Sofia Müller</p>
+      </div>
+    }
   </div>
 </section>
