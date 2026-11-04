@@ -1,29 +1,16 @@
 @use '../../../../../public/assets/styles/' as *;
 
 :host {
+  @include auth-page;
   @include flex-center(column);
   gap: 48px;
-  width: 100%;
-  height: 100%;
-  background-color: white;
+  //   width: 100%;
+  //   height: 100%;
+  width: 652px;
+  height: 449px;
   padding-block: 48px;
+  background-color: white;
   padding-inline: 112px;
-}
-
-h2 {
-  position: relative;
-  line-height: 1.2;
-
-  &::after {
-    content: '';
-    height: 3px;
-    width: 150px;
-    background-color: $text-underline;
-    position: absolute;
-    bottom: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }
 
 form {
