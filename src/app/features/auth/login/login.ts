@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
 import { TextField } from '../../../shared/text-field/text-field';
 import { UserService } from '../../../services/user.service';
+import { Buttons } from '../../../shared/button.component/button.component';
 
 @Component({
-  imports: [TextField, ReactiveFormsModule],
+  imports: [TextField, ReactiveFormsModule, Buttons],
   selector: 'app-login',
   styleUrl: './login.scss',
   templateUrl: './login.html',
@@ -16,8 +17,8 @@ export class Login {
   userService = inject(UserService);
 
   loginForm = this.privatefb.group({
-    mail: [''],
-    password: [''],
+    mail: ['', [Validators.required]],
+    password: ['', [Validators.required]],
   });
 
   async onLogin(): Promise<void> {
@@ -29,5 +30,6 @@ export class Login {
     };
 
     this.userService.logIn(userData);
+    this.loginForm.reset();
   }
 }

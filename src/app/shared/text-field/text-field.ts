@@ -69,6 +69,8 @@ export class TextField implements ControlValueAccessor {
   labelPos = input<string>('inner');
   /** Renders either a single-line `<input type="text">` or a multi-line `<textarea>`. */
   type = input<'input' | 'textarea'>('input');
+
+  inputType = input<string | null>('text');
   /** Placeholder text. The default single space keeps `:placeholder-shown` based styling working. */
   placeholder = input<string>(' ');
 
