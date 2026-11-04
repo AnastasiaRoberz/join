@@ -48,6 +48,9 @@ form {
     gap: var(--col-gap);
     overflow-x: clip;
 
+    flex: 1;
+    align-items: stretch;
+
     @include mobile {
       max-height: none;
       flex-direction: column;
@@ -84,19 +87,43 @@ form {
   }
 }
 
-.task-left::after {
-  content: '';
-  position: absolute;
-  left: calc(100% + var(--col-gap) / 2);
-  top: 0;
-  height: 100%;
+// .task-left::after {
+//   content: '';
+//   position: absolute;
+//   left: calc(100% + var(--col-gap) / 2);
+//   top: 0;
+//   height: 100%;
+//   width: 1px;
+//   background-color: $input-placeholder;
+
+//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+//   @include mobile {
+//     display: none;
+//   }
+// }
+
+// .task-right::before {
+//   content: '';
+//   position: absolute;
+//   right: calc(100% + var(--col-gap) / 2);
+//   top: 0;
+//   height: 100%;
+//   width: 1px;
+//   background-color: $input-placeholder;
+
+//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
+//   @include mobile {
+//     display: none;
+//   }
+// }
+
+.divider {
   width: 1px;
   background-color: $input-placeholder;
-
-  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-  @include mobile {
-    display: none;
-  }
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: stretch;
 }
 
 .name {
@@ -156,6 +183,10 @@ form {
 
     .task-container {
       height: auto;
+    }
+
+    .task-wrap {
+      height: 100%;
     }
   }
   // @include tablet {
