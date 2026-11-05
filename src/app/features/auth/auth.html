@@ -3,7 +3,9 @@
     <svg class="nav-logo">
       <use href="./assets/icons/icons.svg#logo-dark"></use>
     </svg>
-    @if (navService.currentUrl() === '/login' && !responsiveService.isMobile()) {
+    @if (
+      navService.currentUrl() === '/login' && !responsiveService.isMobile() && !isShortHeight()
+    ) {
       <div class="start-header__login">
         <span>Not a Join user?</span>
         <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
@@ -15,7 +17,9 @@
     <div class="auth-main__box">
       <router-outlet />
     </div>
-    @if (navService.currentUrl() === '/login' && responsiveService.isMobile()) {
+    @if (
+      (navService.currentUrl() === '/login' && responsiveService.isMobile()) || isShortHeight()
+    ) {
       <div class="start-header__login">
         <span>Not a Join user?</span>
         <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>

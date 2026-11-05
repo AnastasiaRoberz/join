@@ -16,4 +16,6 @@ export class Auth {
   navService = inject(NavigationService);
 
   responsiveService = inject(ResponsiveService);
+
+  isShortHeight = this.responsiveService.isMaxHeight(600);
 }
