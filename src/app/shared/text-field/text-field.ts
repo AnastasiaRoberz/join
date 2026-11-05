@@ -5,10 +5,12 @@ import {
   effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
 import { ControlValueAccessor, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
+import { Buttons } from '../button.component/button.component';
 
 /** Module-level counter used to generate a unique default DOM id for every TextField instance. */
 let nextId = 0;
@@ -44,7 +46,7 @@ let nextId = 0;
  * </form>
  */
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Buttons],
   selector: 'app-text-field',
   styleUrl: './text-field.scss',
   templateUrl: './text-field.html',
@@ -63,6 +65,8 @@ export class TextField implements ControlValueAccessor {
   label = input<string>();
   /** Name of a symbol in `assets/icons/icons.svg` shown inside the field. No icon if empty. */
   icon = input<string>();
+
+  passwordIcon = signal<'lock' | 'password-hidden' | 'password-visible'>('lock');
   /** DOM id of the input/textarea, linked to the label via `for`. Defaults to a unique generated id. */
   fieldId = input<string>(`app-input-${nextId++}`);
   /** Label position: `'inner'` (inside the field container, default) or `'top'` (above the field). */
@@ -82,6 +86,9 @@ export class TextField implements ControlValueAccessor {
 
   /** Current value displayed in the field. Updated by user input and by `writeValue()`. */
   value: string = '';
+
+  actualPassword: string = '';
+  passwortHidden = signal<boolean>(true);
 
   // requiredMsg = input(false, { transform: booleanAttribute });
 
@@ -147,9 +154,46 @@ export class TextField implements ControlValueAccessor {
    * @param event - The native input event.
    */
   onInput(event: Event): void {
-    const value = (event.target as HTMLInputElement | HTMLTextAreaElement).value;
-    this.value = value;
-    this.onChange(value);
+    const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
+
+    if (this.inputType() === 'password') {
+      if (inputElement.value.length < this.actualPassword.length) {
+        this.actualPassword = this.actualPassword.slice(0, inputElement.value.length);
+      } else {
+        const addedChar = inputElement.value.slice(this.actualPassword.length);
+        this.actualPassword += addedChar;
+      }
+
+      this.updatePasswordDisplay(inputElement as HTMLInputElement);
+      this.onChange(this.actualPassword);
+    } else {
+      this.value = inputElement.value;
+      this.onChange(this.value);
+    }
+  }
+
+  updatePasswordDisplay(inputElement?: HTMLInputElement) {
+    if (this.actualPassword.length === 0) {
+      this.value = '';
+      this.actualPassword = '';
+      this.passwordIcon.set('lock');
+    } else if (this.passwortHidden() && this.actualPassword.length > 0) {
+      this.value = '∗'.repeat(this.actualPassword.length);
+      this.passwordIcon.set('password-hidden');
+      console.log('test');
+    } else {
+      this.value = this.actualPassword;
+      this.passwordIcon.set('password-visible');
+    }
+
+    if (inputElement) {
+      inputElement.value = this.value;
+    }
+  }
+
+  togglePasswordHidden(): void {
+    this.passwortHidden.update((hidden) => !hidden);
+    this.updatePasswordDisplay();
   }
 
   /**
