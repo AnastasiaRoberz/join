@@ -7,7 +7,7 @@
 }
 
 <div class="nav">
-  @if (!(navService.currentUrl() === '/help' || responsiveService.isMobile())) {
+  @if (!(navService.currentUrl() === '/app/help' || responsiveService.isMobile())) {
     <a routerLink="/app/help">
       <svg class="help-icon">
         <use href="./assets/icons/icons.svg#help"></use>
@@ -24,14 +24,14 @@
     <ul>
       @if (responsiveService.isMobile()) {
         <li class="help-mobile" (click)="closeMenu()">
-          <a routerLink="/help">Help</a>
+          <a routerLink="/app/help">Help</a>
         </li>
       }
       <li (click)="closeMenu()">
-        <a routerLink="/legal-notice">Legal Notice</a>
+        <a routerLink="/app/legal-notice">Legal Notice</a>
       </li>
       <li (click)="closeMenu()">
-        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/app/privacy-policy">Privacy Policy</a>
       </li>
       <li (click)="closeMenu()">
         <a (click)="userService.logOut()">Log Out</a>
