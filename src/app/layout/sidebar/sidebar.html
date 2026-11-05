@@ -19,12 +19,22 @@
           </li>
         }
       } @else {
-        <a routerLink="/login" routerLinkActive="active">
-          <svg class="nav-icon">
-            <use href="./assets/icons/icons.svg#log-in"></use>
-          </svg>
-          <span>Log In</span>
-        </a>
+        <li>
+          <a routerLink="/login" routerLinkActive="active">
+            <svg class="nav-icon">
+              <use href="./assets/icons/icons.svg#log-in"></use>
+            </svg>
+            <span>Log In</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/register" routerLinkActive="active">
+            <svg class="nav-icon">
+              <use href="./assets/icons/icons.svg#sign-up"></use>
+            </svg>
+            <span>Sign up</span>
+          </a>
+        </li>
       }
     </ul>
   </nav>
