@@ -41,9 +41,9 @@ export const routes: Routes = [
       { path: 'help', component: Help },
 
       //Weiterleitung, wenn URL leer
-      { path: '', redirectTo: 'summary', pathMatch: 'full' },
+      // { path: '', redirectTo: 'summary', pathMatch: 'full' },
     ],
   },
 
-  { path: '**', redirectTo: 'login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
+  // { path: '**', redirectTo: 'login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
 ];
