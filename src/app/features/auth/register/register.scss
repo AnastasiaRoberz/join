@@ -2,7 +2,8 @@
 
 :host {
   @include auth-page;
-  --card-padding: 115px;
+  --card-padding: #{calcClamp(16, 115)};
+  gap: calcClamp(24, 48, 800, 350, height);
   padding-inline: var(--card-padding);
   background-color: white;
 }
@@ -16,14 +17,14 @@ header {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 68px;
+    left: calcClamp(36, 68);
     margin-block: auto;
   }
 }
 
 form {
   @include flex-center(column);
-  gap: 24px;
+  gap: calcClamp(16, 24, 800, 350, height);
   width: 100%;
 }
 
@@ -41,5 +42,5 @@ form {
 }
 
 button[type='submit'] {
-  margin-top: 8px;
+  margin-top: calcClamp(0, 8, 800, 350, height);
 }
