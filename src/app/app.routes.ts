@@ -10,6 +10,7 @@ import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { Auth } from './features/auth/auth';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   // Authentification: main-screen with login-page as standard and navigation to sign-up
@@ -34,11 +35,17 @@ export const routes: Routes = [
       { path: 'legal-notice', component: LegalNotice },
 
       //nur eingeloggt, canActivate kommt später
-      { path: 'summary', component: Dashboard },
-      { path: 'contacts', component: Contacts },
-      { path: 'add-task', component: AddTask },
-      { path: 'board', component: Board },
-      { path: 'help', component: Help },
+      // { path: 'summary', component: Dashboard },
+      // { path: 'contacts', component: Contacts },
+      // { path: 'add-task', component: AddTask },
+      // { path: 'board', component: Board },
+      // { path: 'help', component: Help },
+
+      { path: 'summary', component: Dashboard, canActivate: [authGuard] },
+      { path: 'contacts', component: Contacts, canActivate: [authGuard] },
+      { path: 'add-task', component: AddTask, canActivate: [authGuard] },
+      { path: 'board', component: Board, canActivate: [authGuard] },
+      { path: 'help', component: Help, canActivate: [authGuard] },
 
       //Weiterleitung, wenn URL leer
       // { path: '', redirectTo: 'summary', pathMatch: 'full' },
