@@ -1,7 +1,27 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSignup()">
+<header>
+  <a
+    appBtn
+    preset="iconMedium"
+    icon="arrow-back"
+    routerLink="../login"
+    aria-label="Back to log in"
+  ></a>
+  <h2 id="signup-heading">Sign up</h2>
+</header>
+
+<form [formGroup]="registerForm" aria-labelledby="signup-heading">
   <app-text-field fieldId="name" label="Name" icon="person" formControlName="name" />
   <app-text-field label="Email" icon="mail" formControlName="mail" />
   <app-text-field label="Password" icon="lock" formControlName="password" />
   <app-text-field label="Confirm Password" icon="lock" formControlName="confirmPassword" />
-  <button appBtn preset="primary" type="submit">Sign up</button>
+
+  <div class="privacy-row">
+    <app-checkbox fieldId="privacy" />
+    <label for="privacy">
+      I accept the
+      <a routerLink="/privacy-policy">Privacy policy</a>
+    </label>
+  </div>
+
+  <button appBtn preset="primary" size="medium" type="submit">Sign up</button>
 </form>
