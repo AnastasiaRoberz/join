@@ -55,6 +55,10 @@ hr {
   padding: 16px 24px;
   border-radius: 10px;
 
+  .name {
+    color: $text-dark;
+  }
+
   // hover action & no action on hover, when contact is active
   &:hover:not(.contact--active) {
     background: $btn-contact-hover;
