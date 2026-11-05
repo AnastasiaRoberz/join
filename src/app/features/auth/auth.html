@@ -1,25 +1,27 @@
-<header class="start-header">
-  <svg class="nav-logo">
-    <use href="./assets/icons/icons.svg#logo-dark"></use>
-  </svg>
-  @if (navService.currentUrl() === '/login' && !responsiveService.isMobile()) {
-    <div class="start-header__login">
-      <span>Not a Join user?</span>
-      <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
-    </div>
-  }
-</header>
-
 <div class="content">
-  <div class="auth-box">
-    <router-outlet />
-  </div>
-  @if (navService.currentUrl() === '/login' && responsiveService.isMobile()) {
-    <div class="start-header__login">
-      <span>Not a Join user?</span>
-      <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
-    </div>
-  }
-</div>
+  <header class="start-header">
+    <svg class="nav-logo">
+      <use href="./assets/icons/icons.svg#logo-dark"></use>
+    </svg>
+    @if (navService.currentUrl() === '/login' && !responsiveService.isMobile()) {
+      <div class="start-header__login">
+        <span>Not a Join user?</span>
+        <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
+      </div>
+    }
+  </header>
 
-<footer app-footer variant="auth"></footer>
+  <main class="auth-main">
+    <div class="auth-main__box">
+      <router-outlet />
+    </div>
+    @if (navService.currentUrl() === '/login' && responsiveService.isMobile()) {
+      <div class="start-header__login">
+        <span>Not a Join user?</span>
+        <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
+      </div>
+    }
+  </main>
+
+  <footer app-footer variant="auth"></footer>
+</div>
