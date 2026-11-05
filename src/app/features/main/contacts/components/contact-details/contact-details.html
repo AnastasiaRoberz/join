@@ -29,7 +29,9 @@
     <p>{{ contact.phone }}</p>
   </div>
 
-  @if (responsiveMobile()) {
+  @if (
+    responsiveMobile() && (!contact.user_uid || contact.user_uid === userService.currentUser()?.id)
+  ) {
     <button
       appBtn
       preset="iconMedium"
