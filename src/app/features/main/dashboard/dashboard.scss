@@ -59,7 +59,7 @@
     column-gap: calcClamp(40, 80, 1440, 1024);
 
     // Tablet: one column, greeting on top, tiles below (same gap as .summary)
-    @include tablet {
+    @include tablet(1100px) {
       grid-template-columns: minmax(0, 1fr);
       row-gap: calcClamp(24, 56);
     }
@@ -189,7 +189,7 @@
 // ---------- Greeting ----------
 .welcome {
   // Tablet: above the tiles, greeting and name on one line
-  @include tablet {
+  @include tablet(1100px) {
     order: -1; // moves it before the tiles, HTML stays the same
     display: flex;
     flex-wrap: wrap; // a long name drops to the next line
@@ -206,7 +206,7 @@
     font-weight: 500;
     color: $color-navy-800;
 
-    @include tablet {
+    @include tablet(1100px) {
       font-size: calcClamp(28, 40, 1024, 768);
     }
   }
@@ -216,7 +216,7 @@
     font-weight: 700;
     color: $color-cyan-700;
 
-    @include tablet {
+    @include tablet(1100px) {
       font-size: calcClamp(32, 40, 1024, 768); // same size as the greeting line
     }
   }
