@@ -29,7 +29,15 @@ export class Login {
       password: rawData.password!,
     };
 
-    this.userService.logIn(userData);
+    const success = await this.userService.logIn(userData);
+
+    if (!success) {
+      const passwordCtrl = this.loginForm.get('password');
+      passwordCtrl?.setValue('');
+      this.loginForm.get('password')?.setErrors({ invalidCredentials: true });
+      this.loginForm.get('password')?.markAsTouched();
+      return;
+    }
     this.loginForm.reset();
   }
 }
