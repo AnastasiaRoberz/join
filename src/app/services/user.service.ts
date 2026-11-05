@@ -57,20 +57,23 @@ export class UserService {
       const newContact = await this.contactService.addContact(contactData);
       this.currentUser.set(newUser.user);
       this.currentSession.set(newUser.session);
-      this.router.navigate(['/summary']);
+      this.router.navigate(['app//summary']);
     }
   }
 
-  async logIn(userData: { mail: string; password: string }) {
-    const data = await this.supabaseService.signInWithEmail(userData);
-
-    if (data) {
-      this.router.navigate(['/summary']);
-      this.currentUser.set(data.user);
-      this.currentSession.set(data.session);
-      console.log(data.session);
-      console.log(data.user);
+  async logIn(userData?: { mail: string; password: string }): Promise<boolean> {
+    let data;
+    if (userData) {
+      data = await this.supabaseService.signInWithEmail(userData);
+      if (!data) return false;
+    } else {
+      data = await this.supabaseService.anonymSignIn();
+      if (!data) return false;
     }
+    this.currentUser.set(data.user);
+    this.currentSession.set(data.session);
+    this.router.navigate(['app/summary']);
+    return true;
   }
 
   async updateUser(uid: string, userData: Partial<User>) {

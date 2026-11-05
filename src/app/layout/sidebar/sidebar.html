@@ -9,7 +9,7 @@
     <ul>
       @for (item of navList; track item.section) {
         <li>
-          <a [routerLink]="'/' + item.section" routerLinkActive="active">
+          <a [routerLink]="'/app/' + item.section" routerLinkActive="active">
             <svg class="nav-icon">
               <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
             </svg>

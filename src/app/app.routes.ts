@@ -9,13 +9,24 @@ import { Board } from './features/main/board/board';
 import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { Auth } from './features/auth/auth';
 
 export const routes: Routes = [
-  { path: 'login', component: Login }, //für später: login-page
-  { path: 'register', component: Register },
-  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen
+  // Authentification: main-screen with login-page as standard and navigation to sign-up
   {
     path: '',
+    component: Auth,
+    children: [
+      { path: 'login', component: Login },
+      { path: 'register', component: Register },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ],
+  },
+
+  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen (unten einfügen)
+  //Main
+  {
+    path: 'app',
     component: Main,
     children: [
       //immer erreichbar
@@ -30,8 +41,9 @@ export const routes: Routes = [
       { path: 'help', component: Help },
 
       //Weiterleitung, wenn URL leer
-      { path: '', redirectTo: 'summary', pathMatch: 'full' },
+      // { path: '', redirectTo: 'summary', pathMatch: 'full' },
     ],
   },
-  //   {path: '**', redirectTo: 'login'} //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
+
+  // { path: '**', redirectTo: 'login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
 ];

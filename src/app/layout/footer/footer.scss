@@ -1,6 +1,6 @@
 @use '../../../../public/assets/styles' as *;
 
-:host {
+:host.sidebar-variant {
   @include flex-start(column);
   gap: calcClamp(4, 8, 700, 500, height);
   margin-top: auto;
@@ -12,37 +12,55 @@
   @include short-height {
     margin-top: 0;
   }
+
+  a {
+    justify-content: flex-start;
+    padding: 8px 0;
+    width: 100%;
+    color: $sidebar-txt-default;
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
+
+    &::before {
+      content: '';
+      width: 100cqw;
+      height: 100%;
+      background-color: inherit;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      translate: -50% 0;
+      z-index: -1;
+    }
+
+    &:hover {
+      background-color: $sidebar-bg-hover;
+      color: $sidebar-txt-hover;
+    }
+
+    &.active,
+    &:active {
+      background-color: $sidebar-bg-active;
+      color: $text-light;
+    }
+  }
 }
 
-a {
-  justify-content: flex-start;
-  padding: 8px 0;
-  width: 100%;
-  color: $sidebar-txt-default;
-  white-space: nowrap;
-  position: relative;
-  z-index: 2;
+:host.auth-variant {
+  width: 246px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
 
-  &::before {
-    content: '';
-    width: 100cqw;
-    height: 100%;
-    background-color: inherit;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    translate: -50% 0;
-    z-index: -1;
-  }
+  margin-top: 0;
 
-  &:hover {
-    background-color: $sidebar-bg-hover;
-    color: $sidebar-txt-hover;
-  }
+  a {
+    color: $text-footer;
 
-  &.active,
-  &:active {
-    background-color: $sidebar-bg-active;
-    color: $text-light;
+    &:hover {
+      color: $text-lightblue;
+      font-weight: 700;
+    }
   }
 }

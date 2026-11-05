@@ -212,7 +212,17 @@ export class SupabaseService {
     if (!error) {
       return data;
     } else {
-      this.feedbackService.showError(`LogIn failed.`);
+      this.feedbackService.showError(`Log in failed.`);
+      return null;
+    }
+  }
+
+  async anonymSignIn() {
+    const { data, error } = await this.supabase.auth.signInAnonymously();
+    if (!error) {
+      return data;
+    } else {
+      this.feedbackService.showError(`Log in failed.`);
       return null;
     }
   }

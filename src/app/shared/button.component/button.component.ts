@@ -126,7 +126,7 @@ export class Buttons {
    * Native HTML button `type` attribute ('button', 'submit', 'reset').
    * Defaults to 'button'.
    */
-  type = input<BtnType | null>(null);
+  type = input<BtnType | null>('button');
 
   /**
    * When `true`, applies the `.btn--fab` class for round floating action button positioning.

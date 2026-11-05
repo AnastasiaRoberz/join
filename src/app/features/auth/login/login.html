@@ -5,7 +5,6 @@
   <app-text-field
     inputType="password"
     label="Password"
-    icon="lock"
     fieldId="password"
     formControlName="password"
   />
@@ -13,6 +12,8 @@
     <button appBtn preset="primary" size="medium" type="submit" [disabled]="!loginForm.valid">
       Log in
     </button>
-    <button appBtn preset="secondary" size="medium">Guest Log in</button>
+    <button appBtn preset="secondary" size="medium" (click)="userService.logIn()">
+      Guest Log in
+    </button>
   </div>
 </form>
