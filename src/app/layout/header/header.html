@@ -16,7 +16,11 @@
       </a>
     }
     <button type="button" (click)="toggleMenu()">
-      <app-user-avatar [user]="null" size="header" />
+      <app-user-avatar
+        [user]="userService.currentContact() ?? null"
+        size="header"
+        [style.background-color]=""
+      />
     </button>
   </div>
 }

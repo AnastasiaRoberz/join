@@ -1,4 +1,4 @@
-import { inject, Service, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { ContactService } from './contact.service';
 import { Router } from '@angular/router';
@@ -26,6 +26,9 @@ export class UserService {
 
   currentUser = signal<User | null>(null);
   currentSession = signal<Session | null>(null);
+  currentContact = computed(() => {
+    return this.contactService.contacts().find((item) => item.user_uid === this.currentUser()?.id);
+  });
 
   async userSignUp(data: { name: string; mail: string; password: string }): Promise<void> {
     const { title, firstname, surname } = splitName(data.name);
