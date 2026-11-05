@@ -217,6 +217,16 @@ export class SupabaseService {
     }
   }
 
+  async anonymSignIn() {
+    const { data, error } = await this.supabase.auth.signInAnonymously();
+    if (!error) {
+      return data;
+    } else {
+      this.feedbackService.showError(`Log in failed.`);
+      return null;
+    }
+  }
+
   async updateUser(userUid: string, userData: Partial<User>): Promise<User | null> {
     const { data, error } = await this.supabase.auth.admin.updateUserById(userUid, userData);
     if (!error) {
