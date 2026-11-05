@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 import { SubtaskInterface } from '../../../interfaces/subtask.interface';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { generalCustomValidators } from '../../../utils/custom-validators';
+import { UserService } from '../../../services/user.service';
 
 /**
  * Form component for creating a new task.
@@ -71,6 +72,7 @@ export class AddTask implements OnDestroy {
 
   /** Provides responsive layout information. */
   responsiveService = inject(ResponsiveService);
+  userService = inject(UserService);
   isMobile = this.responsiveService.isMobile;
   isMobileOrLandscape = this.responsiveService.isMobileOrLandscape;
   isMiddleHeight = this.responsiveService.observeQuery(

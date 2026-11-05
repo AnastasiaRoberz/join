@@ -16,6 +16,7 @@ import { AvatarGroupComponent } from '../../../../../shared/avatar-group.compone
 import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priority-btn';
 import { generalCustomValidators } from '../../../../../utils/custom-validators';
+import { UserService } from '../../../../../services/user.service';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -77,6 +78,7 @@ export class TaskEdit {
 
   /** Provides the reactive list of sorted contacts and their search strings for the assignment dropdown. */
   contactService = inject(ContactService);
+  userService = inject(UserService);
 
   /** Angular FormBuilder instance used to construct `taskForm`. */
   private fb = inject(FormBuilder);

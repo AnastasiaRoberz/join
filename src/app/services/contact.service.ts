@@ -2,6 +2,7 @@ import { computed, inject, Service, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { getRandomColor } from '../utils/utils';
+import { UserService } from './user.service';
 
 /**
  * Domain service managing contact data, reactive state storage, alphabetical sorting,
@@ -94,7 +95,9 @@ export class ContactService {
    * @param contactData - The contact information excluding server-managed properties (`id`, `badge_color`)
    * @returns A promise that resolves to the newly created contact with server-generated ID, or `null` on failure
    */
-  async addContact(contactData: Omit<ContactInterface, 'id' | 'badge_color'>): Promise<ContactInterface | null> {
+  async addContact(
+    contactData: Omit<ContactInterface, 'id' | 'badge_color'>,
+  ): Promise<ContactInterface | null> {
     const contact = {
       ...contactData,
       badge_color: getRandomColor(),

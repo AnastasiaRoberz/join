@@ -29,6 +29,14 @@ export class UserService {
   currentContact = computed(() => {
     return this.contactService.contacts().find((item) => item.user_uid === this.currentUser()?.id);
   });
+  assignableContacts = computed(() => {
+    const sorted = this.contactService.sortedContacts();
+    const currentContactId = this.currentContact()?.id;
+    if (!currentContactId) return sorted;
+    const userContact = sorted.find((c) => c.id === currentContactId);
+    if (!userContact) return sorted;
+    return [userContact, ...sorted.filter((c) => c.id !== currentContactId)];
+  });
 
   async userSignUp(data: { name: string; mail: string; password: string }): Promise<void> {
     const { title, firstname, surname } = splitName(data.name);
