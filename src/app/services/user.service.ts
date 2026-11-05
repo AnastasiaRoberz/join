@@ -68,7 +68,7 @@ export class UserService {
     const newContact = await this.contactService.addContact(contactData);
     this.currentUser.set(newUser.user);
     this.currentSession.set(newUser.session);
-    this.router.navigate(['app//summary']);
+    this.router.navigate(['app/summary']);
     return true;
   }
 
@@ -83,6 +83,7 @@ export class UserService {
     }
     this.currentUser.set(data.user);
     this.currentSession.set(data.session);
+    await this.contactService.getAllContacts();
     this.router.navigate(['app/summary']);
     return true;
   }
@@ -107,6 +108,7 @@ export class UserService {
       this.router.navigate(['/login']);
       this.currentUser.set(null);
       this.currentSession.set(null);
+      this.contactService.contacts.set([]);
     }
   }
 
