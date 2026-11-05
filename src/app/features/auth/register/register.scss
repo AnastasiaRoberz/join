@@ -1,0 +1,45 @@
+@use '../../../../../public/assets/styles/' as *;
+
+:host {
+  @include auth-page;
+  --card-padding: 115px;
+  padding-inline: var(--card-padding);
+  background-color: white;
+}
+
+header {
+  @include flex-center;
+  position: relative;
+  width: calc(100% + 2 * var(--card-padding));
+
+  a[appBtn] {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 68px;
+    margin-block: auto;
+  }
+}
+
+form {
+  @include flex-center(column);
+  gap: 24px;
+  width: 100%;
+}
+
+.privacy-row {
+  @include flex-center;
+  gap: 8px;
+
+  label {
+    cursor: pointer;
+  }
+
+  a {
+    color: $text-lightblue;
+  }
+}
+
+button[type='submit'] {
+  margin-top: 8px;
+}
