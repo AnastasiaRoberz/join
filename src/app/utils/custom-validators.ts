@@ -206,3 +206,31 @@ export function passwordMatchValidator(): ValidatorFn {
     return password.value === confirmPassword.value ? null : { passwordMismatch: true };
   };
 }
+
+export function customPasswordValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const rawValue = control.value;
+    if (!rawValue) return null;
+    // 1. Mindestlänge: mindestens 8 Zeichen
+    if (rawValue.length < 8) {
+      return { minPasswordLength: { requiredLength: 8, actualLength: rawValue.length } };
+    }
+    // 2. Mindestens ein Großbuchstabe
+    if (!/[A-Z]/.test(rawValue)) {
+      return { passwordMissingUppercase: true };
+    }
+    // 3. Mindestens ein Kleinbuchstabe
+    if (!/[a-z]/.test(rawValue)) {
+      return { passwordMissingLowercase: true };
+    }
+    // 4. Mindestens eine Zahl
+    if (!/[0-9]/.test(rawValue)) {
+      return { passwordMissingNumber: true };
+    }
+    // 5. Mindestens ein Sonderzeichen (alles außer Buchstaben und Zahlen)
+    if (!/[^a-zA-Z0-9]/.test(rawValue)) {
+      return { passwordMissingSpecialChar: true };
+    }
+    return null;
+  };
+}

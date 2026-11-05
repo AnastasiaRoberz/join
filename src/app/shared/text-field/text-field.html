@@ -11,9 +11,14 @@
   <span class="char-count">{{ value.length }}/{{ maxLength() }}</span>
 }
 
+<!-- <ng-content select="[password-info]" /> -->
+
 <div class="input-container">
   @if (label() && labelPos() === 'inner') {
-    <label [attr.for]="fieldId()" [class]="labelPos()">{{ label() }}</label>
+    <label [attr.for]="fieldId()" [class]="labelPos()">
+      {{ label() }}
+      <ng-content select="[password-info]" />
+    </label>
   }
 
   @if (type() === 'input') {

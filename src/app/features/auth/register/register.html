@@ -12,7 +12,35 @@
 <form [formGroup]="registerForm" aria-labelledby="signup-heading">
   <app-text-field fieldId="name" label="Name" icon="person" formControlName="name" />
   <app-text-field label="Email" icon="mail" formControlName="mail" />
-  <app-text-field label="Password" inputType="password" formControlName="password" />
+  <app-text-field
+    class="password-field"
+    label="Password"
+    inputType="password"
+    formControlName="password"
+  >
+    <div password-info class="password-info">
+      <div class="password-tooltip">
+        <strong>Password Requirements:</strong>
+        <ul class="password-rules">
+          @for (rule of passwordRules(); track rule.label) {
+            <li>
+              <svg class="status-icon" [class.valid]="rule.valid">
+                <use
+                  [attr.href]="
+                    rule.valid ? './assets/icons/icons.svg#check' : './assets/icons/icons.svg#x'
+                  "
+                ></use>
+              </svg>
+              <span>{{ rule.label }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+      <svg class="info-icon">
+        <use href="./assets/icons/icons.svg#info"></use>
+      </svg>
+    </div>
+  </app-text-field>
   <app-text-field label="Confirm Password" inputType="password" formControlName="confirmPassword" />
 
   <div class="privacy-row">

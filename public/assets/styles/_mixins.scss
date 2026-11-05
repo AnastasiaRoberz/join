@@ -42,6 +42,8 @@
 }
 
 @mixin field-label {
+  @include flex-start;
+  gap: 8px;
   font-size: calcClamp(16, 20, 768, 320);
   line-height: 120%;
 }
