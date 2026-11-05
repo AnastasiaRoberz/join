@@ -61,7 +61,7 @@ export class UserService {
     }
   }
 
-  async logIn(userData: { mail: string; password: string }) {
+  async logIn(userData: { mail: string; password: string }): Promise<boolean> {
     const data = await this.supabaseService.signInWithEmail(userData);
 
     if (data) {
@@ -70,7 +70,9 @@ export class UserService {
       this.currentSession.set(data.session);
       console.log(data.session);
       console.log(data.user);
+      return true;
     }
+    return false;
   }
 
   async updateUser(uid: string, userData: Partial<User>) {
