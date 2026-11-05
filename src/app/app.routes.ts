@@ -45,5 +45,5 @@ export const routes: Routes = [
     ],
   },
 
-  // { path: '**', redirectTo: 'login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
+  // { path: '**', redirectTo: '/login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
 ];
