@@ -30,7 +30,7 @@
 
 app-board-header {
   position: sticky;
-  top: calc(40px - 16px - 80px - var(--padding-top) - 1px); // 90px is header without searchbar
+  top: #{calc(calcClamp(0, 28, 600, 320) - var(--padding-top) - 40px - 8px)};
   z-index: 1; // stays above the task cards
   background: $color-grey-background; // otherwise cards show through
   padding-bottom: 16px;
