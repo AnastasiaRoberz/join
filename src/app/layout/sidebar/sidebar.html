@@ -7,15 +7,24 @@
 
   <nav>
     <ul>
-      @for (item of navList; track item.section) {
-        <li>
-          <a [routerLink]="'/app/' + item.section" routerLinkActive="active">
-            <svg class="nav-icon">
-              <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
-            </svg>
-            <span>{{ item.label }}</span>
-          </a>
-        </li>
+      @if (userService.currentSession()) {
+        @for (item of navList; track item.section) {
+          <li>
+            <a [routerLink]="'/app/' + item.section" routerLinkActive="active">
+              <svg class="nav-icon">
+                <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
+              </svg>
+              <span>{{ item.label }}</span>
+            </a>
+          </li>
+        }
+      } @else {
+        <a routerLink="/login" routerLinkActive="active">
+          <svg class="nav-icon">
+            <use href="./assets/icons/icons.svg#log-in"></use>
+          </svg>
+          <span>Log In</span>
+        </a>
       }
     </ul>
   </nav>
