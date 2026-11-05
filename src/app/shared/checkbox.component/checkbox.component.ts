@@ -58,7 +58,6 @@ let nextId = 0;
   styleUrl: './checkbox.component.scss',
   templateUrl: './checkbox.component.html',
   host: {
-    '[class.onlyIcon]': '!text()',
     '[class.selected]': 'checked()',
   },
 })
@@ -90,7 +89,6 @@ export class CheckboxComponent {
    * Automatically exposes both `[checked]` input and `(checkedChange)` output.
    */
   checked = model<boolean>(false);
-
   // ---------------------------------------------------------------------------
   // Computed Signals
   // ---------------------------------------------------------------------------
