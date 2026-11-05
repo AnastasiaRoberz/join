@@ -126,6 +126,8 @@ export class TextField implements ControlValueAccessor {
    */
   writeValue(value: string): void {
     this.value = value ?? '';
+    this.actualPassword = this.value;
+    if (this.inputType() === 'password') this.updatePasswordDisplay();
     this.cdr.markForCheck();
   }
 
