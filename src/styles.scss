@@ -110,11 +110,21 @@ button {
     padding-right: var(--ff-offset);
   }
 
-  .pages > .scroll-container {
-    --ff-space: #{calc((var(--padding-inline) - var(--ff-sb-width)) / 2)};
-    width: auto;
-    margin-right: var(--ff-space);
-    padding-right: #{calc(var(--ff-space) + var(--ff-sb-width))};
+  .pages {
+    > .scroll-container {
+      --ff-space: #{calc((var(--padding-inline) - var(--ff-sb-width)) / 2)};
+      width: auto;
+      margin-right: var(--ff-space);
+      padding-right: #{calc(var(--ff-space) + var(--ff-sb-width))};
+    }
+
+    app-board-column .tasks {
+      padding-right: 12px;
+    }
+  }
+
+  .cdk-overlay-container ul.dropdown {
+    padding-right: 12px;
   }
 }
 

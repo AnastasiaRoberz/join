@@ -25,11 +25,6 @@
   @include mobile {
     gap: calcClamp(0, 20, 600, 320); // reduced gap in mobile
     min-height: 0;
-    // padding-right: calc(var(--padding-inline) - var(--sb-width));
-  }
-
-  @include short-height {
-    // padding-right: calc(var(--padding-inline) - var(--sb-width));
   }
 }
 
