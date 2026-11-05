@@ -13,19 +13,34 @@
   padding-bottom: calcClamp(22, 38, 1300, 500);
 
   @include short-height(900px) {
-    padding-top: calcClamp(27, 67, 900, 300, height);
+    padding-top: calcClamp(10, 67, 900, 300, height);
+    padding-bottom: calcClamp(10, 38, 900, 300, height);
   }
 
-  header {
+  .start-header {
     width: 100%;
     padding-left: calcClamp(28, 77, 1300, 400);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 
     svg {
       width: calcClamp(64, 100, 1300, 500);
       aspect-ratio: 100 / 122;
 
       @include short-height(900px) {
-        width: calcClamp(48, 100, 900, 300, height);
+        width: calcClamp(16, 100, 900, 300, height);
+      }
+    }
+
+    &__login {
+      // width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 35px;
+
+      span {
+        font-size: 20px;
       }
     }
   }
@@ -44,6 +59,7 @@
       height: auto;
       border-radius: 30px;
       box-shadow: 0 0 14px 3px #00000024;
+      overflow: hidden;
     }
   }
 
