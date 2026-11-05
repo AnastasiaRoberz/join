@@ -28,6 +28,7 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+  color: $text-dark;
 
   &:disabled {
     cursor: none;
