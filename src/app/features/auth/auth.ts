@@ -1,11 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from '../../layout/footer/footer';
+import { NavigationService } from '../../services/navigation.service';
+import { Buttons } from '../../shared/button.component/button.component';
 
 @Component({
-  imports: [RouterOutlet, Footer],
+  imports: [RouterOutlet, Footer, Buttons],
   selector: 'app-auth',
   styleUrl: './auth.scss',
   templateUrl: './auth.html',
 })
-export class Auth {}
+export class Auth {
+  navService = inject(NavigationService);
+}

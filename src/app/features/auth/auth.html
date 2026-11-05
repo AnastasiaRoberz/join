@@ -1,7 +1,13 @@
-<header>
+<header class="start-header">
   <svg class="nav-logo">
     <use href="./assets/icons/icons.svg#logo-dark"></use>
   </svg>
+  @if (navService.currentUrl() === '/login') {
+    <div class="start-header__login">
+      <span>Not a Join user?</span>
+      <button appBtn variant="primary" size="medium">Sign Up</button>
+    </div>
+  }
 </header>
 
 <div class="content">
