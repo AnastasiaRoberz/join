@@ -1,199 +1,223 @@
 @use '../../../../../public/assets/styles/' as *;
 
 :host {
-  --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
-  padding-inline: var(--padding-inline);
-  padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
-  padding-bottom: #{min(calcClamp(24, 62), calcClamp(16, 62, 900, 350, height))};
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+  padding-top: calcClamp(32, 110);
+  padding-inline: calcClamp(16, 96);
+  padding-bottom: 48px;
 
   @include mobile {
-    --padding-inline: #{calcClamp(16, 40, 768, 320)};
+    padding-bottom: 24px;
   }
 }
 
 .summary {
-  height: 100%;
-  width: 100%;
-  @include flex-start(column);
-  gap: #{min(calcClamp(40, 48, 1440, 430, width), calcClamp(16, 40, 1024, 350, height))};
+  display: flex;
+  flex-direction: column;
+  gap: calcClamp(24, 56);
 
   &__header {
-    height: 100%;
     display: flex;
-    gap: 30px;
     align-items: center;
+    gap: 30px;
+
+    h2,
+    p {
+      margin: 0;
+    }
 
     hr {
-      border: none;
-      border-left: 3px solid $text-underline;
+      align-self: stretch; // as tall as the header, no height: 120% needed
+      transform: scaleY(1.2);
       width: 3px;
-      height: 120%;
+      margin: 0;
+      border: none;
+      background: $text-underline;
     }
 
     @include mobile {
       flex-direction: column;
       align-items: flex-start;
-      gap: 16px;
+      gap: 8px;
 
       hr {
-        order: 1;
-        border-left: none;
-        border-top: 3px solid $text-underline;
+        order: 1; // line under the slogan, HTML stays the same
+        align-self: auto;
         width: 90px;
-        margin-top: 8px;
+        height: 3px;
       }
     }
   }
 
+  // ---------- Tiles | greeting ----------
   &__content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    gap: 80px;
-    gap: calcClamp(40, 80, 1440, 1024);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto; // greeting takes what it needs, tiles the rest
     align-items: center;
+    column-gap: calcClamp(40, 80, 1440, 1024);
 
-    &__tiles {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      width: 62%;
-      height: 100%;
-      gap: calcClamp(16, 32);
-
-      @include mobile {
-        width: 100%;
-      }
-
-      .half {
-        grid-column: span 3; // 2 per row
-      }
-      .full {
-        grid-column: span 6; // 1 per row
-      }
-      .third {
-        grid-column: span 2;
-      } // 3 per row
-
-      .half,
-      .full,
-      .third {
-        // height: #{min(calcClamp(110, 168, 1440, 1024), calcClamp(110, 168, 1042, 600, height))};
-        height: calcClamp(110, 168, 1042, 600, height);
-        border: 1px solid $color-grey-500;
-        border-radius: 30px;
-        // gap: 20px;
-        gap: calcClamp(10, 20, 1440, 1024);
-        // padding: 28px;
-        padding-inline: calcClamp(24, 28, 1440, 1024);
-        padding-block: calcClamp(20, 28, 1000, 600, height);
-        background-color: $color-white;
-        box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-
-        .icon {
-          height: 69px;
-          width: 69px;
-          //   height: calcClamp(50, 69, 1440, 1024);
-          //   width: calcClamp(50, 69, 1440, 1024);
-        }
-
-        .details {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: space-between;
-
-          .amount {
-            color: $color-black;
-            font-size: 64px;
-            // font-size: calcClamp(50, 64, 1440, 1024);
-            font-weight: 600;
-            line-height: 1;
-          }
-
-          .type {
-            color: $color-navy-800;
-            text-align: center;
-            // font-size: 20px;
-            font-size: calcClamp(18, 20, 1440, 1024);
-            font-weight: 400;
-          }
-        }
-      }
-
-      .deadline {
-        .details {
-          flex-direction: column-reverse;
-          height: 100%;
-          display: flex;
-          justify-content: space-between;
-
-          .deadline-icon {
-            height: 40px;
-            width: 40px;
-          }
-
-          .amount {
-            font-size: 50px;
-            font-size: calcClamp(24, 50, 1000, 350, height);
-            // line-height: 1;
-          }
-        }
-
-        hr {
-          border: none;
-          border-left: 3px solid $color-grey-500;
-          width: 3px;
-          height: 100%;
-        }
-
-        .deadline__info {
-          display: flex;
-          flex-direction: column;
-          text-align: center;
-          color: $color-navy-800;
-          gap: 13px;
-
-          .date {
-            font-size: 21px;
-            font-size: calcClamp(20, 24, 1440, 1024);
-            font-weight: 700;
-          }
-
-          .headsup {
-            font-size: 16px;
-            font-size: calcClamp(16, 20, 1440, 1024);
-            font-weight: 400;
-          }
-        }
-      }
-
-      .third {
-        .details {
-          .amount {
-            // font-size: 64px;
-            font-size: calcClamp(42, 64, 1000, 350, height);
-          }
-        }
-      }
+    // Tablet: one column, greeting on top, tiles below (same gap as .summary)
+    @include tablet {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: calcClamp(24, 56);
     }
 
-    .welcome {
-      width: 38%;
-      &__greeting {
-        font-size: calcClamp(32, 47, 1440, 1024);
-        font-weight: 500;
-        color: $color-navy-800;
-      }
+    // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
+    &__tiles {
+      display: grid;
+      grid-template-columns: repeat(
+        6,
+        minmax(0, 1fr)
+      ); // minmax(0, …): long words can't stretch a column
+      max-width: 670px;
+      gap: calcClamp(12, 32);
+      container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
+    }
+  }
+}
 
-      &__name {
-        font-size: calcClamp(46, 64, 1440, 1024);
-        font-weight: 700;
-        color: $color-cyan-700;
-      }
+// ---------- One tile ----------
+.half,
+.full,
+.third {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calcClamp(8, 24);
+  min-height: calcClamp(110, 168); // min-height, not height: content may grow
+  padding: calcClamp(12, 28);
+  border: 1px solid $color-grey-500;
+  //   border-radius: calcClamp(20, 30);
+  border-radius: 30px;
+  background-color: $color-white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+
+  // for short mobile, such as Iphone SE
+  @media (max-height: 680px) {
+    min-height: 96px;
+    padding: 12px;
+  }
+}
+
+.half {
+  grid-column: span 3;
+}
+
+.full {
+  grid-column: span 6;
+}
+
+.third {
+  grid-column: span 2;
+}
+
+.icon {
+  flex-shrink: 0; // flex would squeeze it otherwise
+  width: calcClamp(44, 69);
+  height: calcClamp(44, 69);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.amount {
+  color: $color-black;
+  font-size: calcClamp(40, 64);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.type {
+  margin: 0;
+  color: $color-navy-800;
+  font-size: calcClamp(14, 20);
+  text-align: center;
+}
+
+// ---------- Deadline tile: 3 priorities | line | date ----------
+.deadline {
+  justify-content: space-evenly;
+
+  .details {
+    flex-direction: column-reverse; // number above the icon
+    gap: 8px;
+  }
+
+  .deadline-icon {
+    flex-shrink: 0; // this was the "icon shrinks" bug
+    width: calcClamp(28, 40);
+    height: calcClamp(28, 40);
+  }
+
+  // Smaller numbers than the other tiles (3/4 of .amount)
+  .amount {
+    font-size: calcClamp(30, 48);
+  }
+
+  hr {
+    align-self: stretch;
+    width: 2px;
+    margin: 0;
+    border: none;
+    background: $color-grey-500;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: $color-navy-800;
+    text-align: center;
+
+    .date {
+      font-size: calcClamp(14, 21);
+      font-weight: 700;
+    }
+
+    .headsup {
+      font-size: calcClamp(12, 16);
+    }
+  }
+}
+
+// ---------- Greeting ----------
+.welcome {
+  // Tablet: above the tiles, greeting and name on one line
+  @include tablet {
+    order: -1; // moves it before the tiles, HTML stays the same
+    display: flex;
+    flex-wrap: wrap; // a long name drops to the next line
+    align-items: baseline;
+    column-gap: 0.3em;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &__greeting {
+    font-size: calcClamp(28, 47, 1440, 1024);
+    font-weight: 500;
+    color: $color-navy-800;
+
+    @include tablet {
+      font-size: calcClamp(28, 40, 1024, 768);
+    }
+  }
+
+  &__name {
+    font-size: calcClamp(32, 64, 1440, 1024); // shrinks faster so the tiles keep room
+    font-weight: 700;
+    color: $color-cyan-700;
+
+    @include tablet {
+      font-size: calcClamp(32, 40, 1024, 768); // same size as the greeting line
     }
   }
 }
