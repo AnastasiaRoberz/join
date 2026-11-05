@@ -14,7 +14,7 @@ import { Auth } from './features/auth/auth';
 export const routes: Routes = [
   // Authentification: main-screen with login-page as standard and navigation to sign-up
   {
-    path: 'start',
+    path: '',
     component: Auth,
     children: [
       { path: 'login', component: Login },
@@ -26,7 +26,7 @@ export const routes: Routes = [
   //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen (unten einfügen)
   //Main
   {
-    path: '',
+    path: 'app',
     component: Main,
     children: [
       //immer erreichbar
