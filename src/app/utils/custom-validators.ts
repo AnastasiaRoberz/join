@@ -168,3 +168,41 @@ export function customPhoneValidator(): ValidatorFn {
     return null;
   };
 }
+
+export function passwordMatchValidator(): ValidatorFn {
+  let isSubscribed = false;
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const rawValue = control.value;
+    if (!rawValue) return null;
+
+    const form = control.parent;
+    if (!form) return null;
+
+    const passwordCtrl = form.get('password');
+    if (!passwordCtrl) return null;
+
+    if (!isSubscribed) {
+      passwordCtrl.valueChanges.subscribe(() => {
+        control.updateValueAndValidity({ onlySelf: true });
+      });
+      isSubscribed = true;
+    }
+
+    if (rawValue !== passwordCtrl.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  };
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password.value === confirmPassword.value ? null : { passwordMismatch: true };
+  };
+}
