@@ -3,7 +3,7 @@
 :host {
   @include auth-page;
   @include flex-center(column);
-  gap: calcClamp(24, 48, 500, 350, height);
+  gap: calcClamp(24, 48, 800, 350, height);
   width: 100%;
   height: 100%;
   background-color: white;
@@ -12,13 +12,13 @@
 
 form {
   @include flex-center(column);
-  gap: calcClamp(16, 32, 500, 350, height);
+  gap: calcClamp(16, 32, 800, 350, height);
   width: 100%;
 
   .button-wrapper {
     @include flex-center;
     gap: calcClamp(16, 32);
-    margin-top: calcClamp(0, 24, 500, 350, height);
+    margin-top: calcClamp(0, 24, 800, 350, height);
 
     @include mobile {
       flex-direction: column;
