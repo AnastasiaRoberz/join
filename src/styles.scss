@@ -139,8 +139,7 @@ button {
     color-scheme: light;
   }
 
-  .scroll-container,
-  .pages > .scroll-container {
+  .scroll-container {
     --ios-sb-width: 16px;
     --ios-space: #{calc((var(--padding-inline) - var(--ios-sb-width)) / 2)};
     color-scheme: light;
@@ -150,8 +149,16 @@ button {
     padding-right: #{calc(var(--ios-space) + var(--ios-sb-width))};
   }
 
-  .pages app-board-column .tasks {
-    padding-right: 12px;
+  .pages {
+    > .scroll-container {
+      width: auto;
+      margin-right: var(--ios-space);
+      padding-right: #{calc(var(--ios-space) + var(--ios-sb-width))};
+    }
+
+    app-board-column .tasks {
+      padding-right: 12px;
+    }
   }
 
   .cdk-overlay-container ul.dropdown {
