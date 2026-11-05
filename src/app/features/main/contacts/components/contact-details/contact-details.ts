@@ -6,6 +6,7 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName } from '../../../../../utils/name-utils';
+import { UserService } from '../../../../../services/user.service';
 // amount of loetter as of where a name is considered long
 const longNames = 10;
 
@@ -33,6 +34,7 @@ export class ContactDetails {
   contactService = inject(ContactService);
   dialogService = inject(DialogService);
   responsiveService = inject(ResponsiveService);
+  userService = inject(UserService);
 
   shortHeight = this.responsiveService.isMaxHeight(500);
   middleHeight = this.responsiveService.observeQuery('(min-height: 800px) and (max-height: 500px)');
