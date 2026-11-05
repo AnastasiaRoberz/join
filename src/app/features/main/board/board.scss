@@ -23,16 +23,18 @@
   }
 
   @include mobile {
-    gap: calcClamp(0, 20, 600, 320); // reduced gap in mobile
+    --gap-mobile: #{calcClamp(0, 20, 600, 320)};
+    gap: var(--gap-mobile); // reduced gap in mobile
     min-height: 0;
-  }
-}
 
-app-board-header {
-  position: sticky;
-  top: #{calc(calcClamp(0, 28, 600, 320) - var(--padding-top) - 40px - 8px)};
-  z-index: 1; // stays above the task cards
-  background: $color-grey-background; // otherwise cards show through
-  padding-bottom: 16px;
-  width: 100%;
+    app-board-header {
+      position: sticky;
+      top: #{calc(-32px - var(--padding-top) - var(--gap-mobile))};
+      // top: #{calc(calcClamp(0, 28, 600, 320) - var(--padding-top) - 40px - 8px)};
+      z-index: 1; // stays above the task cards
+      background: $color-grey-background; // otherwise cards show through
+      padding-bottom: 16px;
+      width: 100%;
+    }
+  }
 }
