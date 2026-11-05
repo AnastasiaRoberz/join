@@ -32,10 +32,15 @@ button {
   }
 }
 
+.pages > .scroll-container {
+  width: 100%;
+  padding-right: calc(var(--padding-inline) - var(--sb-width));
+}
+
 .scroll-container {
   overflow-y: auto;
   scrollbar-gutter: stable;
-  // overscroll-behavior-y: contain;
+
   --padding-right: var(--padding-inline, 40px);
   --sb-offset: calc((var(--padding-right) + var(--sb-width)) / 2);
   --sb-width: #{min(var(--padding-inline, 16px), 24px)};
@@ -91,6 +96,25 @@ button {
       width: 0;
       height: 0;
     }
+  }
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scroll-container {
+    --ff-sb-width: 8px;
+    --ff-offset: #{calc((var(--padding-inline, 24px) + var(--ff-sb-width)) / 2)};
+    scrollbar-width: thin;
+    scrollbar-color: $icon transparent;
+    scrollbar-gutter: auto;
+    width: calc(100% + var(--ff-offset));
+    padding-right: var(--ff-offset);
+  }
+
+  .pages > .scroll-container {
+    --ff-space: #{calc((var(--padding-inline) - var(--ff-sb-width)) / 2)};
+    width: auto;
+    margin-right: var(--ff-space);
+    padding-right: #{calc(var(--ff-space) + var(--ff-sb-width))};
   }
 }
 
