@@ -228,12 +228,12 @@
         />
     </symbol>
 
-    <symbol id="dashboard-done" width="69" height="69" viewBox="0 0 69 69">
+    <symbol id="dashboard-done" viewBox="0 0 69 69">
         <circle cx="34.5" cy="34.5" r="34.5" fill="#2A3647"/>
         <path d="M19.5283 34.5001L30.7571 45.5662L49.4717 23.4341" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" stroke="white"/>
     </symbol>
 
-    <symbol id="dashboard-todo" width="69" height="69" viewBox="0 0 69 69">
+    <symbol id="dashboard-todo" viewBox="0 0 69 69">
         <circle cx="34.5" cy="34.5" r="34.5" fill="#2A3647"/>
         <mask id="mask0_520455_5470" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="18" y="18" width="33" height="33">
             <rect x="18.5" y="18.5" width="32" height="32" fill="#D9D9D9"/> 
