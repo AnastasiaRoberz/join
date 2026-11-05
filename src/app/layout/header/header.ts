@@ -20,8 +20,7 @@ import { UserService } from '../../services/user.service';
   templateUrl: './header.html',
 })
 export class Header {
-  private elementRef = inject(ElementRef);
-  private userService = inject(UserService);
+  userService = inject(UserService);
   private menuRef = viewChild<ElementRef>('menuRef');
   navService = inject(NavigationService);
   responsiveService = inject(ResponsiveService);

@@ -4,6 +4,7 @@ import { SupabaseService } from '../../../services/supabase.service';
 import { TextField } from '../../../shared/text-field/text-field';
 import { UserService } from '../../../services/user.service';
 import { Buttons } from '../../../shared/button.component/button.component';
+import { AuthDraftService } from '../../../services/auth-draft.service';
 
 @Component({
   imports: [TextField, ReactiveFormsModule, Buttons],
@@ -15,11 +16,20 @@ export class Login {
   privatefb = inject(FormBuilder);
   supabaseService = inject(SupabaseService);
   userService = inject(UserService);
+  draftService = inject(AuthDraftService);
 
   loginForm = this.privatefb.group({
-    mail: ['', [Validators.required]],
-    password: ['', [Validators.required]],
+    mail: [this.draftService.loginDraft().mail ?? '', [Validators.required]],
+    password: [this.draftService.loginDraft().password ?? '', [Validators.required]],
   });
+
+  ngOnDestroy(): void {
+    const rawData = this.loginForm.getRawValue();
+    this.draftService.loginDraft.set({
+      mail: rawData.mail ?? '',
+      password: rawData.password ?? '',
+    });
+  }
 
   async onLogin(): Promise<void> {
     const rawData = this.loginForm.getRawValue();
@@ -38,6 +48,7 @@ export class Login {
       this.loginForm.get('password')?.markAsTouched();
       return;
     }
+    this.draftService.clearLogin();
     this.loginForm.reset();
   }
 }

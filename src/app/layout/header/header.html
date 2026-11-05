@@ -6,18 +6,20 @@
   <p class="title">Kanban Project Management Tool</p>
 }
 
-<div class="nav">
-  @if (!(navService.currentUrl() === '/app/help' || responsiveService.isMobile())) {
-    <a routerLink="/app/help">
-      <svg class="help-icon">
-        <use href="./assets/icons/icons.svg#help"></use>
-      </svg>
-    </a>
-  }
-  <button type="button" (click)="toggleMenu()">
-    <app-user-avatar [user]="null" size="header" />
-  </button>
-</div>
+@if (userService.currentSession()) {
+  <div class="nav">
+    @if (!(navService.currentUrl() === '/app/help' || responsiveService.isMobile())) {
+      <a routerLink="/app/help">
+        <svg class="help-icon">
+          <use href="./assets/icons/icons.svg#help"></use>
+        </svg>
+      </a>
+    }
+    <button type="button" (click)="toggleMenu()">
+      <app-user-avatar [user]="userService.currentContact() ?? null" size="header" />
+    </button>
+  </div>
+}
 
 @if (menuOpen()) {
   <nav #menuRef>

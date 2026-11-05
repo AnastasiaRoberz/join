@@ -20,14 +20,19 @@
       label="Assigned to"
       placeholder="Select contacts to assign"
       emptyText="No contacts found."
-      [options]="contactService.sortedContacts()"
+      [options]="userService.assignableContacts()"
       [multi]="true"
       [(value)]="selectedContactIds"
       [getSearchStrings]="contactService.contactSearchStrings"
     >
       <ng-template #optionTemplate let-contact let-selected="selected">
         <app-user-avatar [user]="contact" size="medium" />
-        <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+        <span class="name"
+          >{{ contact.firstname }} {{ contact.surname }}
+          @if (contact.id === userService.currentContact()?.id) {
+            (You)
+          }
+        </span>
         <app-checkbox [checked]="selected" (checkedChange)="toggleAssignment(contact.id, $event)" />
       </ng-template>
       <app-avatar-group

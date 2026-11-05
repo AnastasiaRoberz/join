@@ -1,6 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { ContactInterface } from '../../interfaces/contact.interface';
 import { ResponsiveService } from '../../services/responsive.service';
+import { User } from '@supabase/supabase-js';
 
 /**
  * Round avatar showing the initials of a contact on the contact's badge color.
@@ -28,7 +29,8 @@ import { ResponsiveService } from '../../services/responsive.service';
   templateUrl: './user-avatar.html',
   host: {
     '[class]': "'size-' + size()",
-    '[style.background-color]': 'user()?.badge_color',
+    '[style.background-color]': 'hostBackground()',
+    '[style.border-color]': 'hostBorder()',
   },
 })
 export class UserAvatar {
@@ -52,6 +54,25 @@ export class UserAvatar {
 
     const firstLetter = this.user()?.firstname?.charAt(0);
     const secondLetter = this.user()?.surname?.charAt(0);
+    if (!firstLetter || !secondLetter) return 'G';
     return `${firstLetter}${secondLetter}`;
   });
+
+  hostBackground() {
+    if (this.size() === 'header') {
+      return 'transparent';
+    } else {
+      return this.user()?.badge_color;
+    }
+  }
+
+  hostBorder() {
+    if (this.size() === 'header') {
+      return this.user()?.badge_color;
+    } else {
+      return 'transparent';
+    }
+  }
+
+  
 }

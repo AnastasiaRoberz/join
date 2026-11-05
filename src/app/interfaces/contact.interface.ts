@@ -6,5 +6,5 @@ export interface ContactInterface {
   mail: string;
   phone: string;
   badge_color: string;
-  uid?: string;
+  user_uid?: string;
 }

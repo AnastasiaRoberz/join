@@ -1,4 +1,4 @@
-import { inject, Service, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { ContactService } from './contact.service';
 import { Router } from '@angular/router';
@@ -26,6 +26,17 @@ export class UserService {
 
   currentUser = signal<User | null>(null);
   currentSession = signal<Session | null>(null);
+  currentContact = computed(() => {
+    return this.contactService.contacts().find((item) => item.user_uid === this.currentUser()?.id);
+  });
+  assignableContacts = computed(() => {
+    const sorted = this.contactService.sortedContacts();
+    const currentContactId = this.currentContact()?.id;
+    if (!currentContactId) return sorted;
+    const userContact = sorted.find((c) => c.id === currentContactId);
+    if (!userContact) return sorted;
+    return [userContact, ...sorted.filter((c) => c.id !== currentContactId)];
+  });
 
   async userSignUp(data: { name: string; mail: string; password: string }): Promise<void> {
     const { title, firstname, surname } = splitName(data.name);
@@ -79,7 +90,7 @@ export class UserService {
   async updateUser(uid: string, userData: Partial<User>) {
     const updatedUser = await this.supabaseService.updateUser(uid, userData);
     if (updatedUser) {
-      const currentContact = this.contactService.contacts().find((item) => item.uid === uid);
+      const currentContact = this.contactService.contacts().find((item) => item.user_uid === uid);
       if (currentContact) {
         const newData = {
           ...currentContact,
@@ -100,7 +111,7 @@ export class UserService {
   }
 
   async deleteUser(uid: string) {
-    const contact = this.contactService.contacts().find((item) => item.uid === uid);
+    const contact = this.contactService.contacts().find((item) => item.user_uid === uid);
     if (contact) {
       const success = await this.supabaseService.deleteUser(uid);
       if (success) await this.contactService.deleteContact(contact.id);

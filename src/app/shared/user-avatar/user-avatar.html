@@ -1,7 +1,5 @@
 @if (user()) {
   <span class="initials">{{ initials() }}</span>
-} @else if (size() === 'header') {
-  <span class="initials">G</span>
 } @else {
   <svg class="avatar-icon">
     <use href="./assets/icons/icons.svg#person"></use>
