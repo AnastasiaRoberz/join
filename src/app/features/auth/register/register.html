@@ -9,7 +9,7 @@
   <h2 id="signup-heading">Sign up</h2>
 </header>
 
-<form [formGroup]="registerForm" aria-labelledby="signup-heading">
+<form [formGroup]="registerForm" aria-labelledby="signup-heading" (ngSubmit)="onSignup()">
   <app-text-field fieldId="name" label="Name" icon="person" formControlName="name" />
   <app-text-field label="Email" icon="mail" formControlName="mail" />
   <app-text-field

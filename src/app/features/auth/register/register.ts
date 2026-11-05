@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthDraftService } from '../../../services/auth-draft.service';
 
 @Component({
   imports: [TextField, ReactiveFormsModule, Buttons, CheckboxComponent, RouterLink],
@@ -21,17 +22,37 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './register.html',
 })
 export class Register {
-  privatefb = inject(FormBuilder);
+  fb = inject(FormBuilder);
   supabaseService = inject(SupabaseService);
   userService = inject(UserService);
+  draftService = inject(AuthDraftService);
 
-  registerForm = this.privatefb.group({
-    name: ['', [Validators.required, generalCustomValidators(), customNameValidator()]],
-    mail: ['', [Validators.required, customMailValidator(), customMailValidator()]],
-    password: ['', [Validators.required]],
-    confirmPassword: ['', [Validators.required, passwordMatchValidator()]],
+  registerForm = this.fb.group({
+    name: [
+      this.draftService.registerDraft().name ?? '',
+      [Validators.required, generalCustomValidators(), customNameValidator()],
+    ],
+    mail: [
+      this.draftService.registerDraft().mail ?? '',
+      [Validators.required, customMailValidator(), customMailValidator()],
+    ],
+    password: [this.draftService.registerDraft().password ?? '', [Validators.required]],
+    confirmPassword: [
+      this.draftService.registerDraft().confirmPassword ?? '',
+      [Validators.required, passwordMatchValidator()],
+    ],
     privacy: [false, [Validators.requiredTrue]],
   });
+
+  ngOnDestroy(): void {
+    const rawData = this.registerForm.getRawValue();
+    this.draftService.registerDraft.set({
+      name: rawData.name ?? '',
+      mail: rawData.mail ?? '',
+      password: rawData.password ?? '',
+      confirmPassword: rawData.confirmPassword ?? '',
+    });
+  }
 
   passwordValue = toSignal(this.registerForm.controls.password.valueChanges, {
     initialValue: this.registerForm.controls.password.value ?? '',
@@ -49,6 +70,7 @@ export class Register {
   });
 
   async onSignup(): Promise<void> {
+    if (!this.registerForm.valid) return;
     const rawData = this.registerForm.getRawValue();
 
     const userData = {
@@ -57,6 +79,11 @@ export class Register {
       password: rawData.password!,
     };
 
-    this.userService.userSignUp(userData);
+    const success = await this.userService.userSignUp(userData);
+
+    if (success) {
+      this.draftService.clearRegister();
+      this.registerForm.reset();
+    }
   }
 }
