@@ -1,8 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { TextField } from '../../../shared/text-field/text-field';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
-import { customMailValidator, generalCustomValidators } from '../../../utils/custom-validators';
+import {
+  customMailValidator,
+  customNameValidator,
+  generalCustomValidators,
+  passwordMatchValidator,
+} from '../../../utils/custom-validators';
 import { UserService } from '../../../services/user.service';
 import { RouterLink } from '@angular/router';
 import { Buttons } from '../../../shared/button.component/button.component';
@@ -20,10 +25,11 @@ export class Register {
   userService = inject(UserService);
 
   registerForm = this.privatefb.group({
-    name: ['', [generalCustomValidators]],
-    mail: ['', [customMailValidator]],
-    password: [''],
-    confirmPassword: [''],
+    name: ['', [Validators.required, generalCustomValidators(), customNameValidator()]],
+    mail: ['', [Validators.required, customMailValidator(), customMailValidator()]],
+    password: ['', [Validators.required]],
+    confirmPassword: ['', [Validators.required, passwordMatchValidator()]],
+    privacy: ['', [Validators.required]],
   });
 
   async onSignup(): Promise<void> {

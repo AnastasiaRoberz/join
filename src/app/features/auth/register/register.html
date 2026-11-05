@@ -12,16 +12,18 @@
 <form [formGroup]="registerForm" aria-labelledby="signup-heading">
   <app-text-field fieldId="name" label="Name" icon="person" formControlName="name" />
   <app-text-field label="Email" icon="mail" formControlName="mail" />
-  <app-text-field label="Password" icon="lock" formControlName="password" />
-  <app-text-field label="Confirm Password" icon="lock" formControlName="confirmPassword" />
+  <app-text-field label="Password" inputType="password" formControlName="password" />
+  <app-text-field label="Confirm Password" inputType="password" formControlName="confirmPassword" />
 
   <div class="privacy-row">
-    <app-checkbox fieldId="privacy" />
+    <app-checkbox fieldId="privacy" formControlName="privacy" />
     <label for="privacy">
       I accept the
       <a routerLink="/privacy-policy">Privacy policy</a>
     </label>
   </div>
 
-  <button appBtn preset="primary" size="medium" type="submit">Sign up</button>
+  <button appBtn preset="primary" size="medium" type="submit" [disabled]="!registerForm.valid">
+    Sign up
+  </button>
 </form>
