@@ -125,7 +125,7 @@
         // Sets the logo to its calculated center position as the animation start point.
         &.intro-active {
           transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 1));
-          animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; //cubic-bazier: standard material-design, forwards: stop with last keyframe
           animation-delay: 0.2s;
         }
       }

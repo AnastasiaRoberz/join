@@ -7,8 +7,7 @@ export class IntroService {
   // constant that never changes
   private readonly STORAGE_KEY = 'intro-shown';
 
-  // Private signals — only this service can write to them.
-  // can't be touched from outside.
+  // Private signals — only this service can write to them - can't be touched from outside.
   private _active = signal(false);
   private _isMobile = signal(false);
 
