@@ -1,5 +1,8 @@
-@use '_variables.scss' as *;
-@use '_functions' as *;
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'breakpoints' as *;
+@use 'forms' as *;
+@use 'pages' as *;
 
 @mixin flex-center($direction: row) {
   display: flex;
@@ -42,6 +45,24 @@
     left: if($centered, 50%, 0);
     @if $centered {
       transform: translateX(-50%);
+    }
+  }
+}
+
+@mixin title-devider($break-at: null) {
+  border: none;
+  border-left: 3px solid $text-underline;
+  width: 3px;
+  height: 100%;
+
+  @if $break-at {
+    @include responsive($break-at) {
+      order: 1;
+      border-left: none;
+      border-top: 3px solid $text-underline;
+      width: 90px;
+      height: auto;
+      margin-top: 8px;
     }
   }
 }

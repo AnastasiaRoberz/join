@@ -1,63 +1,41 @@
-@use '_variables.scss' as *;
-@use '_functions' as *;
+@use 'sass:math';
 
-@mixin widescreen($height: 1800px) {
-  @media screen and (min-height: $height) {
-    @content;
-  }
-}
-
-@mixin desktop($width: 1025px) {
-  @media screen and (min-width: $width) {
-    @content;
-  }
-}
-
-@mixin tablet($width: 1024px) {
-  @media screen and (max-width: $width) {
-    @content;
-  }
-}
-
-@mixin mobile($width: 768px) {
-  @media screen and (max-width: $width) {
-    @content;
-  }
+@function to-px($value) {
+  @return if(math.is-unitless($value), #{$value}px, $value);
 }
 
 @mixin responsive($size, $direction: width, $value: max) {
-  @if ($value == 'max') {
-    @if ($direction == 'width') {
-      @media screen and (max-width: #{$size}px) {
-        @content;
-      }
-    } @else {
-      @media screen and (max-height: #{$size}px) {
-        @content;
-      }
-    }
-  } @else {
-    @if ($direction == 'width') {
-      @media screen and (min-width: #{$size}px) {
-        @content;
-      }
-    } @else {
-      @media screen and (min-height: #{$size}px) {
-        @content;
-      }
-    }
-  }
-}
-
-@mixin landscape($width: 1920, $height: 900) {
-  @media screen and (max-width: #{$width}px) and (max-height: #{$height}px) and (orientation: landscape) {
+  @media screen and (#{value}-#{direction}: to-px($size)) {
     @content;
   }
 }
 
-@mixin mobile-or-landscape($mobile-width: 768px, $ls-width: 1920, $ls-height: 971) {
-  @media screen and (max-width: $mobile-width),
-    screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
+@mixin mobile($width: 768) {
+  @include responsive($width, width, max) {
+    @content;
+  }
+}
+
+@mixin tablet($width: 1024) {
+  @include responsive($width, width, max) {
+    @content;
+  }
+}
+
+@mixin desktop($width: 1025) {
+  @include responsive($width, width, min) {
+    @content;
+  }
+}
+
+@mixin widescreen($height: 1800) {
+  @include responsive($height, height, min) {
+    @content;
+  }
+}
+
+@mixin short-height($height: 500) {
+  @include responsive($height, height, max) {
     @content;
   }
 }
@@ -65,12 +43,6 @@
 @mixin mobile-or-short($mobile-width: 768px, $ls-width: 1920, $ls-height: 500) {
   @media screen and (max-width: $mobile-width),
     screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
-    @content;
-  }
-}
-
-@mixin short-height($height: 500px) {
-  @media screen and (max-height: $height) {
     @content;
   }
 }

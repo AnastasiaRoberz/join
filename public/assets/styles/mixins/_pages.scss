@@ -1,4 +1,8 @@
-@use '../../styles/' as *;
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'layout' as *;
+@use 'forms' as *;
+@use 'breakpoints' as *;
 
 @mixin info-page {
   --padding-inline: #{calcClamp(16, 96)};
@@ -70,7 +74,7 @@
   padding-block: #{min(calcClamp(32, 48), calcClamp(24, 48, 500, 350, height))};
 
   h2 {
-    @include underlinde(150px, #{calcClamp(-8, -16, 500, 350, height)}, true);
+    @include underline(150px, #{calcClamp(-8, -16, 500, 350, height)}, true);
     position: relative;
     line-height: 1.2;
   }

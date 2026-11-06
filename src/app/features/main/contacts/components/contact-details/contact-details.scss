@@ -109,6 +109,8 @@ button.btn.btn-dots {
   // bottom: 112px;
 
   @include short-height {
-    @include circle-btn(48px, 16px, 16px);
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
   }
 }

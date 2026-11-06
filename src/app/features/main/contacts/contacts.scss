@@ -42,6 +42,7 @@ app-contact-details {
 
   &__title {
     @include flex-start;
+
     gap: calcClamp(15, 30, 1440, 768);
     height: 100%;
     padding: 8px 0;
@@ -51,24 +52,13 @@ app-contact-details {
     }
 
     hr {
-      border: none;
-      border-left: 3px solid $text-underline;
-      width: 3px;
-      height: 100%;
+      @include title-devider(1290);
     }
 
     @include responsive(1290) {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
-
-      hr {
-        order: 1;
-        border-left: none;
-        border-top: 3px solid $text-underline;
-        width: 90px;
-        margin-top: 8px;
-      }
     }
   }
 }

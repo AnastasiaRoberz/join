@@ -9,17 +9,11 @@
   gap: 56px;
 
   &__header {
+    @include title-devider;
     height: 100%;
     display: flex;
     gap: 30px;
     align-items: center;
-
-    hr {
-      border: none;
-      border-left: 3px solid $text-underline;
-      width: 3px;
-      height: 120%;
-    }
   }
 
   &__content {

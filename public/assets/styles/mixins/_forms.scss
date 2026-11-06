@@ -1,5 +1,8 @@
-@use '_variables.scss' as *;
-@use '_functions' as *;
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'layout' as *;
+@use 'breakpoints' as *;
+@use 'pages' as *;
 
 @mixin field-host($gap: 8px) {
   display: flex;
@@ -59,8 +62,8 @@
   position: absolute;
   bottom: $pos-bottom;
   right: $pos-right;
-  height: $size;
   width: $size;
+  aspect-ratio: 1;
   border-radius: 50%;
   background: $btn-primary-default;
   color: $color-white;
