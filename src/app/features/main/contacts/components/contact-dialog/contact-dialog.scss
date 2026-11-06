@@ -45,15 +45,14 @@
 
   &::before {
     content: url('../../../../../../../public/assets/icons/logo.svg');
-    height: 64px;
     width: 64px;
+    aspect-ratio: 1;
     position: absolute;
     top: -24px;
     transform: translateY(-100%);
     left: 0;
 
     @include responsive(500, height, max) {
-      height: 48px;
       width: 48px;
 
       right: 0;
@@ -126,7 +125,6 @@
     top: 0;
     transform: translateY(-50%);
     width: var(--avatar-size);
-    height: var(--avatar-size);
   }
 
   @include responsive(600, height, max) {

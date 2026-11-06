@@ -3,6 +3,7 @@
 :host {
   @include flex-center;
   flex-shrink: 0;
+  aspect-ratio: 1;
   border-radius: 50%;
   color: $text-light;
   border: 1px solid $color-white;
@@ -11,38 +12,32 @@
 
   &.size-small {
     width: 32px;
-    height: 32px;
   }
 
   &.size-medium {
     width: calcClamp(32, 42);
-    height: calcClamp(32, 42);
     border-width: 2px;
   }
 
   &.size-large {
     width: #{min(calcClamp(80, 120, 768, 320), calcClamp(80, 120, 700, 350, height))};
-    height: #{min(calcClamp(80, 120, 768, 320), calcClamp(80, 120, 700, 350, height))};
     border-width: 3px;
     box-shadow: $avatar-shadow;
 
     @include tablet {
       width: #{min(calcClamp(80, 120, 768, 320), calcClamp(60, 120, 700, 450, height))};
-      height: #{min(calcClamp(80, 120, 768, 320), calcClamp(60, 120, 700, 450, height))};
     }
   }
 
   // added for contact details
   &.size-details {
     width: calcClamp(80, 100, 1440, 769);
-    height: calcClamp(80, 100, 1440, 769);
     border-width: 3px;
     box-shadow: $avatar-shadow;
   }
 
   &.size-header {
     width: calcClamp(40, 56, 700, 350, height);
-    aspect-ratio: 1;
     border: 3px solid $main-color;
     font-size: $font-medium;
     font-weight: 700;
@@ -51,7 +46,6 @@
 
     @include mobile {
       width: 40px;
-      height: 40px;
       border-width: 2px;
     }
 
