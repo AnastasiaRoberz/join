@@ -36,11 +36,8 @@ export class Register {
       this.draftService.registerDraft().mail ?? '',
       [Validators.required, customMailValidator(), customMailValidator()],
     ],
-    password: [this.draftService.registerDraft().password ?? '', [Validators.required]],
-    confirmPassword: [
-      this.draftService.registerDraft().confirmPassword ?? '',
-      [Validators.required, passwordMatchValidator()],
-    ],
+    password: ['', [Validators.required]],
+    confirmPassword: ['', [Validators.required, passwordMatchValidator()]],
     privacy: [false, [Validators.requiredTrue]],
   });
 
@@ -49,8 +46,6 @@ export class Register {
     this.draftService.registerDraft.set({
       name: rawData.name ?? '',
       mail: rawData.mail ?? '',
-      password: rawData.password ?? '',
-      confirmPassword: rawData.confirmPassword ?? '',
     });
   }
 

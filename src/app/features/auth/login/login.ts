@@ -20,14 +20,13 @@ export class Login {
 
   loginForm = this.fb.group({
     mail: [this.draftService.loginDraft().mail ?? '', [Validators.required]],
-    password: [this.draftService.loginDraft().password ?? '', [Validators.required]],
+    password: ['', [Validators.required]],
   });
 
   ngOnDestroy(): void {
     const rawData = this.loginForm.getRawValue();
     this.draftService.loginDraft.set({
       mail: rawData.mail ?? '',
-      password: rawData.password ?? '',
     });
   }
 
