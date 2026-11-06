@@ -38,7 +38,7 @@
     --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
 
     @include mobile {
-      --padding-block-dialog: #{min(124px, calcClamp(16, 124, 800, 500, height))};
+      --padding-block-dialog: calcClamp(16, 124, 800, 500, height);
       --padding-inline-dialog: #{calcClamp(16, 24, 420, 320)};
     }
   }

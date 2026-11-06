@@ -2,8 +2,7 @@
 
 :host {
   @include flex-center;
-  width: 100%;
-  height: 100%;
+  @include size;
   max-width: 1212px;
 
   @include mobile {
@@ -52,9 +51,8 @@
     transform: translateY(-100%);
     left: 0;
 
-    @include responsive(500, height, max) {
+    @include short-height {
       width: 48px;
-
       right: 0;
       left: auto;
     }
@@ -77,7 +75,7 @@
     }
   }
 
-  @include responsive(450, height, max) {
+  @include short-height(450) {
     &:not(:has(.subheading)) {
       margin-block: 0;
     }
@@ -89,6 +87,10 @@
 }
 
 .content-section {
+  --form-gap: #{calcClamp(16, 32, 700, 350, height)};
+  --btn-margin: #{calcClamp(0, 16, 700, 350, height)};
+  --avatar-size: #{calcClamp(60, 120, 700, 450, height)};
+  --padding-short: #{calcClamp(16, 64, 700, 350, height)};
   @include flex-center(column);
   gap: 56px;
   padding-block: var(--padding-block-dialog);
@@ -101,19 +103,17 @@
     --avatar-size: #{calcClamp(60, 120, 700, 450, height)};
     width: 100%;
     padding-top: #{calc(var(--avatar-gap) + (var(--avatar-size) / 2))};
-    padding-bottom: #{min(64px, calcClamp(16, 64, 700, 350, height))};
+    padding-bottom: calcClamp(16, 64, 700, 350, height);
   }
 
-  @include responsive(600, height, max) {
+  @include short-height(600) {
     padding-top: #{min(64px, calcClamp(16, 64, 700, 350, height))};
   }
 }
 
 .avatar {
   --btn-size: #{calcClamp(41.33, 57.33, 500, 350, height)};
-  --btn-margin: #{calcClamp(0, 16, 700, 350, height)};
   --transform: #{calc((var(--btn-size) + var(--btn-margin) + var(--form-gap)) / -2)};
-  --form-gap: #{calcClamp(16, 32, 700, 350, height)};
   transform: translateY(var(--transform));
 
   @include tablet {
@@ -127,12 +127,12 @@
     width: var(--avatar-size);
   }
 
-  @include responsive(600, height, max) {
-    transform: translateY(calc(-100% - (var(--avatar-gap) / 2)));
-    right: calc(var(--avatar-gap) / 2);
+  @include short-height(600) {
+    transform: translateY(calc(-100% - (var(--form-gap) / 2)));
+    right: calc(var(--form-gap) / 2);
   }
 
-  @include responsive(450, height, max) {
+  @include short-height(450) {
     display: none;
   }
 }
@@ -143,12 +143,10 @@
   gap: calcClamp(48, 72, 1440, 1025);
 
   .form-section {
-    --form-gap: #{calcClamp(16, 32, 700, 350, height)};
     @include flex-start(column);
-    width: 100%;
+    @include size;
     gap: var(--form-gap);
     min-height: 0;
-    height: 100%;
 
     @include mobile {
       align-items: center;
@@ -164,7 +162,7 @@
 .buttons-wrapper {
   @include flex-start;
   gap: 24px;
-  margin-top: calcClamp(0, 16, 700, 350, height);
+  margin-top: var(--btn-margin);
 
   @include mobile {
     margin-top: 0;

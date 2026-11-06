@@ -197,7 +197,7 @@
       @include circle-btn(56px, 32px, 16px);
     }
 
-    @include responsive(500, height, max) {
+    @include short-height {
       @include circle-btn(48px, 16px, -8px);
     }
   }

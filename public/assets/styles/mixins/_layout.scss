@@ -27,6 +27,11 @@
   }
 }
 
+@mixin size($w: 100%, $h: 100%) {
+  width: $w;
+  height: $h;
+}
+
 @mixin text-ellipsis {
   width: 100%;
   white-space: nowrap;

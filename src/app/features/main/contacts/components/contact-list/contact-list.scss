@@ -3,8 +3,7 @@
 :host {
   --padding-inline: #{calcClamp(12, 24, 768, 320)};
   @include flex-start(column, both);
-  width: 100%;
-  height: 100%;
+  @include size;
   padding-block: calcClamp(16, 32, 768, 320) calcClamp(6, 12, 768, 320);
   padding-inline: var(--padding-inline);
   gap: 24px;
@@ -25,7 +24,7 @@
   @include flex-center;
   font-size: $font-medium;
   width: 42px;
-  height: 42px;
+  aspect-ratio: 1;
   padding: 8px 0;
   margin-left: 24px;
   line-height: 0.75;
