@@ -62,18 +62,6 @@ textarea {
       }
     }
   }
-
-  // &:has(input) {
-  //   height: calcClamp(40, 48, 769, 400);
-  // }
-
-  // &:has(.ng-invalid:is(.ng-touched)) {
-  //   border-color: $error;
-
-  //   label {
-  //     color: $error;
-  //   }
-  // }
 }
 
 label.top {
@@ -81,16 +69,16 @@ label.top {
 }
 
 label.inner {
-  font-size: calcClamp(16, 20, 768, 320);
+  @include field-label;
   position: absolute;
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: $main-color;
-  pointer-events: none;
   background-color: white;
   padding: 0 8px;
   transition: all 150ms ease-in-out;
+  cursor: text;
 
   @include mobile {
     padding: 0;

@@ -48,3 +48,73 @@ form {
 button[type='submit'] {
   margin-top: calcClamp(0, 8, 800, 350, height);
 }
+
+.password-field {
+  position: relative;
+}
+
+.password-info {
+  @include flex-center(column);
+  gap: 8px;
+  position: relative;
+
+  .info-icon {
+    width: 20px;
+    height: 20px;
+    color: $input-default-label;
+    cursor: pointer;
+  }
+
+  &:hover {
+    .password-tooltip {
+      visibility: visible;
+    }
+  }
+}
+
+.password-tooltip {
+  @include flex-start(column, both);
+  gap: 8px;
+  padding: 16px;
+  background-color: $main-color;
+  color: $text-light;
+  border-radius: 10px;
+  box-shadow: $overlay-shadow;
+  position: absolute;
+  bottom: 160%;
+  left: -100%;
+  font-size: 13px;
+  text-wrap: nowrap;
+
+  visibility: hidden;
+
+  ul {
+    @include flex-start(column, both);
+    gap: 8px;
+  }
+
+  li {
+    @include flex-start;
+    gap: 8px;
+  }
+
+  .status-icon {
+    width: 16px;
+    height: 16px;
+    color: $error;
+
+    &.valid {
+      color: $prio-low;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 19px; // Sitzt genau über dem (i)
+    border-width: 10px;
+    border-style: solid;
+    border-color: $main-color transparent transparent transparent;
+  }
+}

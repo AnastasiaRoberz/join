@@ -38,7 +38,7 @@ export class UserService {
     return [userContact, ...sorted.filter((c) => c.id !== currentContactId)];
   });
 
-  async userSignUp(data: { name: string; mail: string; password: string }): Promise<void> {
+  async userSignUp(data: { name: string; mail: string; password: string }): Promise<boolean> {
     const { title, firstname, surname } = splitName(data.name);
     const phone = '000000';
 
@@ -55,21 +55,21 @@ export class UserService {
     };
 
     const newUser = await this.supabaseService.userSignUp(userData);
+    if (!newUser) return false;
 
-    if (newUser) {
-      const contactData = {
-        title: title,
-        firstname: firstname,
-        surname: surname,
-        mail: data.mail,
-        phone: phone,
-        user_uid: newUser.user?.id,
-      };
-      const newContact = await this.contactService.addContact(contactData);
-      this.currentUser.set(newUser.user);
-      this.currentSession.set(newUser.session);
-      this.router.navigate(['app//summary']);
-    }
+    const contactData = {
+      title: title,
+      firstname: firstname,
+      surname: surname,
+      mail: data.mail,
+      phone: phone,
+      user_uid: newUser.user?.id,
+    };
+    const newContact = await this.contactService.addContact(contactData);
+    this.currentUser.set(newUser.user);
+    this.currentSession.set(newUser.session);
+    this.router.navigate(['app/summary']);
+    return true;
   }
 
   async logIn(userData?: { mail: string; password: string }): Promise<boolean> {
@@ -83,6 +83,7 @@ export class UserService {
     }
     this.currentUser.set(data.user);
     this.currentSession.set(data.session);
+    await this.contactService.getAllContacts();
     this.router.navigate(['app/summary']);
     return true;
   }
@@ -107,6 +108,7 @@ export class UserService {
       this.router.navigate(['/login']);
       this.currentUser.set(null);
       this.currentSession.set(null);
+      this.contactService.contacts.set([]);
     }
   }
 
