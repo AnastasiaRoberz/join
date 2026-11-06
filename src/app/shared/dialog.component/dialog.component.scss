@@ -28,9 +28,6 @@
 }
 
 .overlay-content {
-  --padding-block-dialog: 52px;
-  --padding-inline-dialog: 52px;
-
   &.contact {
     --dialog-height: #{min(95dvh, 592px)};
     --dialog-margin-top: auto;
@@ -39,6 +36,12 @@
         calcClamp(32, 80, 700, 350, height)
       )};
     --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
+
+    @include mobile {
+      --dialog-height: #{min(95dvh, 592px)};
+      --padding-block-dialog: #{min(124px, calcClamp(16, 124, 800, 500, height))};
+      --padding-inline-dialog: #{calcClamp(16, 24, 420, 320)};
+    }
   }
 
   &.task,
@@ -101,8 +104,8 @@
   .btn-close {
     position: absolute;
     --position: #{max(var(--padding-block-dialog), var(--padding-inline-dialog))};
-    top: #{min(var(--position), 76px)};
-    right: #{min(var(--position), 76px)};
+    top: clamp(36px, var(--position), 76px);
+    right: clamp(36px, var(--position), 76px);
     transform: translate(100%, -100%);
     // top: #{min(calcClamp(24, 52), calcClamp(16, 52, 700, 350, height))};
     // right: #{min(calcClamp(24, 52), calcClamp(8, 52, 700, 350, height))};
@@ -110,6 +113,11 @@
 
     &.white-btn.btn--icon {
       color: white;
+    }
+
+    @include mobile {
+      top: clamp(36px, var(--position), 48px);
+      right: clamp(36px, var(--position), 48px);
     }
   }
 }

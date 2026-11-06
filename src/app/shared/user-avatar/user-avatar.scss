@@ -7,6 +7,7 @@
   color: $text-light;
   border: 1px solid $color-white;
   background-color: $icon-bg;
+  container-type: inline-size;
 
   &.size-small {
     width: 32px;
@@ -17,16 +18,18 @@
     width: calcClamp(32, 42);
     height: calcClamp(32, 42);
     border-width: 2px;
-    font-size: calcClamp(14, 16, 769, 320);
   }
 
   &.size-large {
     width: #{min(calcClamp(80, 120, 768, 320), calcClamp(80, 120, 700, 350, height))};
-    aspect-ratio: 1;
+    height: #{min(calcClamp(80, 120, 768, 320), calcClamp(80, 120, 700, 350, height))};
     border-width: 3px;
-    font-size: $font-large;
-    font-weight: 500;
     box-shadow: $avatar-shadow;
+
+    @include tablet {
+      width: #{min(calcClamp(80, 120, 768, 320), calcClamp(60, 120, 700, 450, height))};
+      height: #{min(calcClamp(80, 120, 768, 320), calcClamp(60, 120, 700, 450, height))};
+    }
   }
 
   // added for contact details
@@ -34,8 +37,6 @@
     width: calcClamp(80, 100, 1440, 769);
     height: calcClamp(80, 100, 1440, 769);
     border-width: 3px;
-    font-size: calcClamp(36, 47, 1440, 769);
-    font-weight: 500;
     box-shadow: $avatar-shadow;
   }
 
@@ -57,6 +58,13 @@
     &:hover {
       background-color: $avatar-hover;
     }
+  }
+
+  .initials {
+    font-size: 45cqw;
+    line-height: 0.75;
+    font-weight: 500;
+    user-select: none;
   }
 
   .avatar-icon {
