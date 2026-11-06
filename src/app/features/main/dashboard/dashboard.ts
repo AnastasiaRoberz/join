@@ -9,4 +9,5 @@ import { ResponsiveService } from '../../../services/responsive.service';
 })
 export class Dashboard {
   responsiveService = inject(ResponsiveService);
+  isShortHeight = this.responsiveService.isMaxHeight(700);
 }

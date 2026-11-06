@@ -62,6 +62,10 @@
     @include tablet(1100px) {
       grid-template-columns: minmax(0, 1fr);
       row-gap: calcClamp(24, 56);
+
+      //   .welcome {
+      //     padding-left: 10px;
+      //   }
     }
 
     // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
