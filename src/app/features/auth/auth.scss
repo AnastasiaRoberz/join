@@ -26,19 +26,6 @@
   }
 }
 
-// Same movement as logo-intro — kept separate so duration and easing
-// can be adjusted independently for mobile if needed.
-@keyframes logo-intro-mobile {
-  0%,
-  20% {
-    transform: translate(var(--intro-x), var(--intro-y)) scale(var(--intro-scale));
-  }
-
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-}
-
 :host {
   width: 100%;
   height: 100dvh;
@@ -93,8 +80,6 @@
       // when .intro-active is removed (introService.isActive() becomes false).
       .start-header .main-logo.intro-active {
         --logo-main: white;
-        animation: logo-intro-mobile 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        animation-delay: 0.2s;
       }
     }
 
