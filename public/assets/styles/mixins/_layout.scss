@@ -30,3 +30,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin underline($width: 90px, $bottom: -16px, $centered: false) {
+  &::after {
+    content: '';
+    width: $width;
+    height: 3px;
+    background-color: $text-underline;
+    position: absolute;
+    bottom: $bottom;
+    left: if($centered, 50%, 0);
+    @if $centered {
+      transform: translateX(-50%);
+    }
+  }
+}
