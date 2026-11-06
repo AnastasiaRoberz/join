@@ -10,14 +10,12 @@
 
 app-contact-list {
   width: calcClamp(300, 424, 1440, 850);
-  max-width: calcClamp(300, 424, 1440, 850);
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
   z-index: 3;
   flex-shrink: 0;
 
   @include mobile {
     width: 100%;
-    max-width: 100%;
   }
 }
 
@@ -40,12 +38,6 @@ app-contact-details {
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-
-    .btn-icon,
-    .icon {
-      width: 32px;
-      height: 32px;
-    }
   }
 
   &__title {

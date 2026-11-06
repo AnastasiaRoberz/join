@@ -10,20 +10,15 @@
   gap: 24px;
   background-color: white;
   flex-shrink: 0;
+  position: relative;
 
   &.scroll-container {
     padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
   }
 
-  @include responsive(500, height, max) {
-    position: relative;
+  @include short-height {
     padding-top: calcClamp(12, 32, 700, 350, height);
   }
-}
-
-.icon {
-  width: 32px;
-  height: 32px;
 }
 
 .group-letter {
@@ -86,8 +81,6 @@ hr {
 .name {
   @include text-ellipsis;
   font-size: $font-medium;
-  text-align: left;
-  display: block;
 }
 
 .mail {

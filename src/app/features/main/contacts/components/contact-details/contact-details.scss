@@ -30,6 +30,14 @@
 
     .name {
       font-size: calcClamp(20, 38, 1440, 1025);
+
+      @include tablet {
+        font-size: calcClamp(22, 36, 1024, 769);
+      }
+
+      @include mobile {
+        font-size: calcClamp(20, 38, 768, 320);
+      }
     }
   }
 }
@@ -38,10 +46,7 @@
   @include flex-start;
   gap: 16px;
 
-  @include tablet {
-    // position: absolute;
-    // bottom: 16px;
-    // right: 8px;
+  @media screen and (max-width: 1024px), screen and (max-height: 500px) {
     position: fixed;
     bottom: 106px;
     right: 14px;
@@ -71,34 +76,10 @@
     }
   }
 
-  @include responsive(500, height, max) {
+  @include short-height {
     position: absolute;
     bottom: 12px;
     right: 12px;
-    z-index: 1; // covers the dots button while open
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding: 20px;
-    background: $color-white;
-    border-radius: 20px 20px 0 20px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-
-    // when closed: outside the wrapper to the right, hidden after the slide-out
-    transform: translateX(calc(100% + 16px));
-    visibility: hidden;
-    transition:
-      transform 150ms ease-in-out,
-      visibility 0s linear 150ms; // hide only once the slide-out is done
-
-    // when open: slide in, visible right away
-    &.is-open {
-      transform: translateX(0);
-      visibility: visible;
-      transition:
-        transform 150ms ease-in-out,
-        visibility 0s;
-    }
   }
 }
 
@@ -122,41 +103,12 @@
   }
 }
 
-@include tablet {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(22, 36, 1024, 769);
-      }
-    }
-  }
-}
-
-@include mobile {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(20, 38, 768, 320);
-      }
-    }
-  }
-}
-
 button.btn.btn-dots {
   @include circle-btn(56px, 112px, 16px);
-  @include flex-center;
   // position: fixed;
   // bottom: 112px;
 
-  .icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-  }
-
-  @include responsive(500, height, max) {
+  @include short-height {
     @include circle-btn(48px, 16px, 16px);
   }
 }

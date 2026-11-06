@@ -7,11 +7,7 @@
   </div>
 
   @if (!contact.user_uid || contact.user_uid === userService.currentUser()?.id) {
-    <div
-      class="btn-wrapper"
-      [class.is-tablet]="responsiveService.isTablet()"
-      [class.is-open]="menuOpen()"
-    >
+    <div class="btn-wrapper" [class.is-open]="menuOpen()">
       <button appBtn preset="edit" (click)="dialogService.openDialog('contact', contact)"></button>
       <button appBtn preset="delete" (click)="deleteContact(contact.id)"></button>
     </div>
