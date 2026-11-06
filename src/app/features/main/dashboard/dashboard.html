@@ -11,7 +11,7 @@
           <use [attr.href]="'./assets/icons/icons.svg#dashboard-todo'"></use>
         </svg>
         <div class="details">
-          <span class="amount">1</span>
+          <span class="amount">{{ filteredTasks().toDo }}</span>
           <p class="type">To-do</p>
         </div>
       </a>
@@ -20,7 +20,7 @@
           <use [attr.href]="'./assets/icons/icons.svg#dashboard-done'"></use>
         </svg>
         <div class="details">
-          <span class="amount">2</span>
+          <span class="amount">{{ filteredTasks().done }}</span>
           <p class="type">Done</p>
         </div>
       </a>
@@ -29,49 +29,49 @@
           <svg class="deadline-icon">
             <use [attr.href]="'./assets/icons/icons.svg#dashboard-urgent'"></use>
           </svg>
-          <span class="amount">1</span>
+          <span class="amount">{{ filteredTasks().urgend }}</span>
         </div>
         <div class="details">
           <svg class="deadline-icon">
             <use [attr.href]="'./assets/icons/icons.svg#dashboard-medium'"></use>
           </svg>
-          <span class="amount">2</span>
+          <span class="amount">{{ filteredTasks().medium }}</span>
         </div>
         <div class="details">
           <svg class="deadline-icon">
             <use [attr.href]="'./assets/icons/icons.svg#dashboard-low'"></use>
           </svg>
-          <span class="amount">3</span>
+          <span class="amount">{{ filteredTasks().low }}</span>
         </div>
         <hr />
         <div class="deadline__info">
-          <span class="date">October 16, 2022</span>
+          <span class="date">{{ filteredTasks().upcomingDeadline }}</span>
           <span class="headsup">Upcoming Deadline</span>
         </div>
       </a>
       <a href="" class="third">
         <div class="details">
-          <span class="amount">3</span>
+          <span class="amount">{{ filteredTasks().total }}</span>
           <p class="type">Tasks in Board</p>
         </div>
       </a>
       <a href="" class="third">
         <div class="details">
-          <span class="amount">4</span>
+          <span class="amount">{{ filteredTasks().inProgress }}</span>
           <p class="type">Tasks in Progress</p>
         </div>
       </a>
       <a href="" class="third">
         <div class="details">
-          <span class="amount">5</span>
+          <span class="amount">{{ filteredTasks().awaitFeedback }}</span>
           <p class="type">Awaiting Feedback</p>
         </div>
       </a>
     </div>
     @if (!responsiveService.isMobile()) {
       <div class="welcome">
-        <p class="welcome__greeting">Good morning,&nbsp;</p>
-        <p class="welcome__name">Sofia Müller</p>
+        <p class="welcome__greeting">{{ getDaytime() }}</p>
+        <p class="welcome__name">{{ user()?.firstname }} {{ user()?.surname }}</p>
       </div>
     }
   </div>
