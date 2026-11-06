@@ -1,46 +1,60 @@
 <section class="summary">
+  <!-- header -->
   <header class="summary__header">
     <h2>Join 360</h2>
     <hr />
     <p class="subheading summary__header__slogan">Key Metrics at a Glance</p>
   </header>
+
   <div class="summary__content">
     <div class="summary__content__tiles">
+      <!-- Todo and Done -->
       <a href="" class="half">
-        <svg class="icon">
-          <use [attr.href]="'./assets/icons/icons.svg#dashboard-todo'"></use>
-        </svg>
+        <span class="icon">
+          <svg>
+            <use [attr.href]="'./assets/icons/icons.svg#edit'"></use>
+          </svg>
+        </span>
         <div class="details">
           <span class="amount">1</span>
           <p class="type">To-do</p>
         </div>
       </a>
       <a href="" class="half">
-        <svg class="icon">
-          <use [attr.href]="'./assets/icons/icons.svg#dashboard-done'"></use>
-        </svg>
+        <span class="icon icon-bold">
+          <svg>
+            <use [attr.href]="'./assets/icons/icons.svg#check'"></use>
+          </svg>
+        </span>
         <div class="details">
           <span class="amount">2</span>
           <p class="type">Done</p>
         </div>
       </a>
+      <!-- priority and deadline -->
       <a href="" class="full deadline">
         <div class="details">
-          <svg class="deadline-icon">
-            <use [attr.href]="'./assets/icons/icons.svg#dashboard-urgent'"></use>
-          </svg>
+          <span class="deadline-icon deadline-icon--urgent">
+            <svg>
+              <use [attr.href]="'./assets/icons/icons.svg#urgent'"></use>
+            </svg>
+          </span>
           <span class="amount">1</span>
         </div>
         <div class="details">
-          <svg class="deadline-icon">
-            <use [attr.href]="'./assets/icons/icons.svg#dashboard-medium'"></use>
-          </svg>
+          <span class="deadline-icon deadline-icon--medium">
+            <svg>
+              <use [attr.href]="'./assets/icons/icons.svg#medium'"></use>
+            </svg>
+          </span>
           <span class="amount">2</span>
         </div>
         <div class="details">
-          <svg class="deadline-icon">
-            <use [attr.href]="'./assets/icons/icons.svg#dashboard-low'"></use>
-          </svg>
+          <span class="deadline-icon deadline-icon--low">
+            <svg>
+              <use [attr.href]="'./assets/icons/icons.svg#low'"></use>
+            </svg>
+          </span>
           <span class="amount">3</span>
         </div>
         <hr />
@@ -49,6 +63,7 @@
           <span class="headsup">Upcoming Deadline</span>
         </div>
       </a>
+      <!-- board, progress and feedback -->
       <a href="" class="third">
         <div class="details">
           <span class="amount">3</span>
@@ -68,6 +83,7 @@
         </div>
       </a>
     </div>
+    <!-- greeting -->
     @if (!isShortHeight()) {
       <div class="welcome">
         <p class="welcome__greeting">Good morning,&nbsp;</p>
