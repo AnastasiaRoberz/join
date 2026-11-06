@@ -182,7 +182,6 @@ export class TextField implements ControlValueAccessor {
     } else if (this.passwortHidden() && this.actualPassword.length > 0) {
       this.value = '∗'.repeat(this.actualPassword.length);
       this.passwordIcon.set('password-hidden');
-      console.log('test');
     } else {
       this.value = this.actualPassword;
       this.passwordIcon.set('password-visible');
