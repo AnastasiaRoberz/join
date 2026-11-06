@@ -1,7 +1,10 @@
-<div class="content">
+<div class="content" [class.intro-mobile]="introService.isMobile()">
+  @if (introService.isActive()) {
+    <div class="intro-overlay"></div>
+  }
   <header class="start-header">
-    <svg class="nav-logo">
-      <use href="./assets/icons/icons.svg#logo-dark"></use>
+    <svg class="main-logo" [class.intro-active]="introService.isActive()">
+      <use href="./assets/icons/icons.svg#logo"></use>
     </svg>
     @if (
       navService.currentUrl() === '/login' && !responsiveService.isMobile() && !isShortHeight()
@@ -18,7 +21,8 @@
       <router-outlet />
     </div>
     @if (
-      (navService.currentUrl() === '/login' && responsiveService.isMobile()) || isShortHeight()
+      (navService.currentUrl() === '/login' && responsiveService.isMobile()) ||
+      (isShortHeight() && navService.currentUrl() === '/login')
     ) {
       <div class="start-header__login">
         <span>Not a Join user?</span>
