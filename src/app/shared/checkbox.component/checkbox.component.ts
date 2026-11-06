@@ -1,5 +1,5 @@
 import { Component, computed, contentChild, effect, inject, input, model } from '@angular/core';
-import { NgControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { ErrorService } from '../../services/error.service';
 
 let nextId = 0;
@@ -61,7 +61,7 @@ let nextId = 0;
     '[class.selected]': 'checked()',
   },
 })
-export class CheckboxComponent {
+export class CheckboxComponent implements ControlValueAccessor {
   /** Service used to format form validation error messages when bound to an `NgControl`. */
   errorService = inject(ErrorService);
 
@@ -71,6 +71,9 @@ export class CheckboxComponent {
 
   /** Optional projected `NgControl` when used inside a reactive form wrapper. */
   ngControl = contentChild(NgControl);
+
+  onChange: (value: boolean) => void = () => {};
+  onTouched: () => void = () => {};
 
   /**
    * Unique HTML id attribute for the native (hidden) checkbox input element.
@@ -119,6 +122,18 @@ export class CheckboxComponent {
     });
   }
 
+  writeValue(value: boolean): void {
+    this.checked.set(Boolean(value));
+  }
+
+  registerOnChange(fn: (value: boolean) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
   // ---------------------------------------------------------------------------
   // Event Handlers & Public Methods
   // ---------------------------------------------------------------------------
@@ -134,6 +149,8 @@ export class CheckboxComponent {
     const target = event.target as HTMLInputElement;
     if (target) {
       this.checked.set(target.checked);
+      this.onChange(target.checked);
+      this.onTouched();
     }
   }
 

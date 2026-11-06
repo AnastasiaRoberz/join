@@ -168,3 +168,69 @@ export function customPhoneValidator(): ValidatorFn {
     return null;
   };
 }
+
+export function passwordMatchValidator(): ValidatorFn {
+  let isSubscribed = false;
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const rawValue = control.value;
+    if (!rawValue) return null;
+
+    const form = control.parent;
+    if (!form) return null;
+
+    const passwordCtrl = form.get('password');
+    if (!passwordCtrl) return null;
+
+    if (!isSubscribed) {
+      passwordCtrl.valueChanges.subscribe(() => {
+        control.updateValueAndValidity({ onlySelf: true });
+      });
+      isSubscribed = true;
+    }
+
+    if (rawValue !== passwordCtrl.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  };
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password.value === confirmPassword.value ? null : { passwordMismatch: true };
+  };
+}
+
+export function customPasswordValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const rawValue = control.value;
+    if (!rawValue) return null;
+    // 1. Mindestlänge: mindestens 8 Zeichen
+    if (rawValue.length < 8) {
+      return { minPasswordLength: { requiredLength: 8, actualLength: rawValue.length } };
+    }
+    // 2. Mindestens ein Großbuchstabe
+    if (!/[A-Z]/.test(rawValue)) {
+      return { passwordMissingUppercase: true };
+    }
+    // 3. Mindestens ein Kleinbuchstabe
+    if (!/[a-z]/.test(rawValue)) {
+      return { passwordMissingLowercase: true };
+    }
+    // 4. Mindestens eine Zahl
+    if (!/[0-9]/.test(rawValue)) {
+      return { passwordMissingNumber: true };
+    }
+    // 5. Mindestens ein Sonderzeichen (alles außer Buchstaben und Zahlen)
+    if (!/[^a-zA-Z0-9]/.test(rawValue)) {
+      return { passwordMissingSpecialChar: true };
+    }
+    return null;
+  };
+}
