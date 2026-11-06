@@ -84,19 +84,13 @@ hr {
 }
 
 .name {
+  @include text-ellipsis;
   font-size: $font-medium;
   text-align: left;
-  width: 100%;
   display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .mail {
+  @include text-ellipsis;
   color: $mail;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
