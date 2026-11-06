@@ -30,7 +30,8 @@
   </div>
 
   @if (
-    responsiveMobile() && (!contact.user_uid || contact.user_uid === userService.currentUser()?.id)
+    (responsiveService.isTablet() || shortHeight()) &&
+    (!contact.user_uid || contact.user_uid === userService.currentUser()?.id)
   ) {
     <button
       appBtn

@@ -5,29 +5,19 @@
   width: 100%;
   height: 100%;
   position: relative;
-
-  // @include short-height {
-  //   width: calc(100% + var(--sb-width) + calc(var(--sb-offset) - var(--sb-width)));
-  // }
+  overflow-x: hidden;
 }
 
 app-contact-list {
   width: calcClamp(300, 424, 1440, 850);
+  max-width: calcClamp(300, 424, 1440, 850);
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
   z-index: 3;
+  flex-shrink: 0;
 
   @include mobile {
     width: 100%;
     max-width: 100%;
-  }
-
-  @include short-height {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  @include landscape {
-    max-width: 35%;
   }
 }
 
@@ -36,14 +26,15 @@ app-contact-details {
 }
 
 .details {
+  --padding-inline: #{min(calcClamp(16, 88), calcClamp(32, 88, 700, 350, height))};
   @include flex-start(column);
   justify-content: flex-start;
   width: 100%;
+
   height: 100%;
   padding-block: #{min(calcClamp(48, 120), calcClamp(16, 48, 700, 350, height))};
-  padding-inline: calcClamp(16, 88);
+  padding-inline: var(--padding-inline);
   gap: #{min(calcClamp(32, 48), calcClamp(16, 32, 700, 350, height))};
-  overflow-x: hidden; // no scrollbar for animation of contact details sliding in
 
   &__title__container {
     display: flex;

@@ -34,6 +34,9 @@ import { fullName } from '../../../../../utils/name-utils';
   selector: 'app-contact-list',
   styleUrl: './contact-list.scss',
   templateUrl: './contact-list.html',
+  host: {
+    '[class.scroll-container]': 'shortHeight()',
+  },
 })
 export class ContactList {
   /**

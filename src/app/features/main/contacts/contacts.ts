@@ -24,7 +24,6 @@ export class Contacts {
   responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
   shortHeight = this.responsiveService.isMaxHeight(500);
-  isSinglePane = computed(() => this.responsiveService.isMobile() || this.shortHeight());
 
   /**
    * Id of the contact currently selected in the list.

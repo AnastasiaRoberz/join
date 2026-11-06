@@ -207,6 +207,21 @@
         display: none;
       }
     }
+
+    @include responsive(500, height, max) {
+      position: absolute;
+      bottom: 16px;
+      right: -8px;
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+      box-shadow: $btn-shadow;
+      padding: 0;
+
+      .btn-label {
+        display: none;
+      }
+    }
   }
 
   &.btn--addTask {

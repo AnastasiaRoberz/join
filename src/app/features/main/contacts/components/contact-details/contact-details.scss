@@ -4,10 +4,6 @@
   @include flex-start(column);
   justify-content: flex-start;
   gap: 21px;
-  width: 100%;
-  min-width: 0; // the component may get narrower than the long name
-  height: 100%;
-  position: relative;
 }
 
 .detail-header {
@@ -22,7 +18,7 @@
 
   .name {
     min-height: 105px;
-    font-size: calcClamp(20, 47);
+    font-size: #{min(calcClamp(20, 48), calcClamp(36, 48, 700, 350, height))};
     max-width: 100%; // never wider than the wrapper
     overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
     display: flex;
@@ -75,13 +71,43 @@
         visibility 0s;
     }
   }
+
+  @include responsive(500, height, max) {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 1; // covers the dots button while open
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px;
+    background: $color-white;
+    border-radius: 20px 20px 0 20px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+
+    // when closed: outside the wrapper to the right, hidden after the slide-out
+    transform: translateX(calc(100% + 16px));
+    visibility: hidden;
+    transition:
+      transform 150ms ease-in-out,
+      visibility 0s linear 150ms; // hide only once the slide-out is done
+
+    // when open: slide in, visible right away
+    &.is-open {
+      transform: translateX(0);
+      visibility: visible;
+      transition:
+        transform 150ms ease-in-out,
+        visibility 0s;
+    }
+  }
 }
 
 .info-heading {
   font-size: $font-medium;
   line-height: 0.75;
   padding: 10px 0;
-  margin-top: calcClamp(0, 33, 1200, 768);
+  margin-top: #{min(calcClamp(0, 32, 1200, 768), calcClamp(0, 32, 700, 350, height))};
 }
 
 .detail-info {
@@ -136,5 +162,20 @@ button.btn.btn-dots {
     width: 32px;
     height: 32px;
     flex-shrink: 0;
+  }
+
+  @include responsive(500, height, max) {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    box-shadow: $btn-shadow;
+    padding: 0;
+
+    .btn-label {
+      display: none;
+    }
   }
 }

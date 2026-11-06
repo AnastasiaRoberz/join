@@ -10,6 +10,16 @@
   padding-inline: var(--padding-inline);
   gap: 24px;
   background-color: white;
+  flex-shrink: 0;
+
+  &.scroll-container {
+    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+  }
+
+  @include responsive(500, height, max) {
+    position: relative;
+    padding-top: calcClamp(12, 32, 700, 350, height);
+  }
 }
 
 .icon {
