@@ -1,17 +1,21 @@
 @use '../../../../public/assets/styles' as *;
 
+// Fades out the overlay background after a short hold.
 @keyframes overlay-fade {
   0% {
     opacity: 1;
   }
   60% {
-    opacity: 1;
+    opacity: 1; // hold fully visible before fading
   }
   100% {
     opacity: 0;
   }
 }
 
+// Moves the logo from the calculated center position back to its natural header position.
+// CSS custom properties --intro-x, --intro-y, --intro-scale are set via TypeScript
+// based on the logo's actual DOM position at runtime.
 @keyframes logo-intro {
   0%,
   20% {
@@ -22,6 +26,8 @@
   }
 }
 
+// Same movement as logo-intro — kept separate so duration and easing
+// can be adjusted independently for mobile if needed.
 @keyframes logo-intro-mobile {
   0%,
   20% {
@@ -61,24 +67,30 @@
       padding-block: 16px;
     }
 
+    // Full-screen overlay that provides the colored background during the intro.
+    // position: fixed so it covers the whole viewport regardless of scroll or layout.
     .intro-overlay {
       position: fixed;
       inset: 0;
-      z-index: 999;
-      pointer-events: none;
-      opacity: 1;
+      z-index: 999; // below the logo (z-index: 1000) but above everything else
+      pointer-events: none; // prevent blocking clicks after animation ends
+      opacity: 1; // explicit start value so animation-delay doesn't flash transparent
 
-      background-color: #{$main-bg};
+      background-color: #{$main-bg}; //background for desktop-animation
       animation: overlay-fade 0.9s ease-in-out forwards;
-      animation-delay: 0.2s;
+      animation-delay: 0.2s; // small delay so the overlay is visible before fading
     }
 
+    // Mobile variant: navy background, white logo, slightly longer animation.
+    // .intro-mobile is set on .content via [class.intro-mobile]="introService.isMobile()".
     &.intro-mobile {
       .intro-overlay {
-        background-color: #{$main-color};
+        background-color: #{$main-color}; // navy background on mobile
         animation-duration: 1.2s;
       }
 
+      // On mobile the logo starts white and transitions to its default blue
+      // when .intro-active is removed (introService.isActive() becomes false).
       .start-header .main-logo.intro-active {
         --logo-main: white;
         animation: logo-intro-mobile 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -104,11 +116,13 @@
 
       .main-logo {
         height: 100%;
-        --logo-main: #{$main-color};
-        aspect-ratio: 100 / 122;
-        z-index: 1000;
-        position: relative;
+        --logo-main: #{$main-color}; // default logo color: navy blue
+        aspect-ratio: 56 / 67;
+        z-index: 1000; // above the overlay
+        position: relative; // required for z-index to take effect
 
+        // Active state during the intro animation.
+        // Sets the logo to its calculated center position as the animation start point.
         &.intro-active {
           transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 1));
           animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
