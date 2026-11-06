@@ -9,7 +9,7 @@
   ></button>
 </header>
 
-<div class="content" [class.scroll-container]="!isWidescreen()">
+<div class="content" [class.scroll-container]="!isWidescreen() && !isShortHeight()">
   <p>
     Welcome to the help page for <span class="highlighted-txt">Join</span>, your guide to using our
     kanban project management tool. Here, we'll provide an overview of what

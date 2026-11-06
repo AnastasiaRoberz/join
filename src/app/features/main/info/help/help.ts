@@ -8,10 +8,14 @@ import { Buttons } from '../../../../shared/button.component/button.component';
   selector: 'app-help',
   styleUrl: './help.scss',
   templateUrl: './help.html',
+  host: {
+    '[class.scroll-container]': 'isShortHeight()',
+  },
 })
 export class Help {
   navService = inject(NavigationService);
   responsiveService = inject(ResponsiveService);
 
   isWidescreen = this.responsiveService.observeQuery('(min-width: 1441px)');
+  isShortHeight = this.responsiveService.isMaxHeight(700);
 }
