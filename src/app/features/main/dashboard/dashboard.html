@@ -45,8 +45,12 @@
         </div>
         <hr />
         <div class="deadline__info">
-          <span class="date">{{ filteredTasks().upcomingDeadline }}</span>
-          <span class="headsup">Upcoming Deadline</span>
+          @if (filteredTasks().deadline) {
+            <span class="date">{{ filteredTasks().deadline?.date }}</span>
+            <span class="headsup">{{ filteredTasks().deadline?.text }}</span>
+          } @else {
+            <span>No Deadlines in your Board.</span>
+          }
         </div>
       </a>
       <a href="" class="third">

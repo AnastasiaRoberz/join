@@ -19,9 +19,9 @@ export class Dashboard {
 
   getDaytime = computed(() => {
     const hour = new Date().getHours();
-    const char = this.userService.currentContact() ? ',' : '!';
+    const char = this.userService.currentContact() ? ', ' : '!';
 
-    if (hour < 12) {
+    if (hour >= 5 && hour < 12) {
       return `Good morning${char}`;
     } else if (hour >= 12 && hour < 14) {
       return `Hey${char}`;
@@ -46,29 +46,31 @@ export class Dashboard {
       total: tasks.length,
       inProgress: tasks.filter((task) => task.status === 'In progress').length,
       awaitFeedback: tasks.filter((task) => task.status === 'Await feedback').length,
-      upcomingDeadline: this.upcomingDeadline(tasks),
+      deadline: this.deadline(tasks),
     };
   });
 
-  upcomingDeadline(tasks: TaskInterface[]) {
+  deadline(tasks: TaskInterface[]) {
     const today = new Date().setHours(0, 0, 0, 0);
 
-    const openTasksWithDate = tasks.filter((task) => {
-      if (!task.due_date || task.status === 'Done') return false;
+    const openTasksWithDate = tasks.filter((task) => task.due_date && task.status !== 'Done');
 
-      const taskDate = new Date(task.due_date);
-      return taskDate.setHours(0, 0, 0, 0) >= today;
-    });
     const sortedTasks = openTasksWithDate.sort(
       (a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime(),
     );
+    if (!sortedTasks[0]) return null;
 
-    if (!sortedTasks[0]) return 'No upcoming deadline.';
+    const date = new Date(sortedTasks[0].due_date);
+    const overdue = date.setHours(0, 0, 0, 0) < today;
+    const deadlineText = overdue ? 'Overdue Deadline' : 'Upcoming Deadline';
 
-    return new Date(sortedTasks[0].due_date).toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    return {
+      date: date.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+      text: deadlineText,
+    };
   }
 }
