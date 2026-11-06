@@ -63,9 +63,9 @@
       grid-template-columns: minmax(0, 1fr);
       row-gap: calcClamp(24, 56);
 
-      //   .welcome {
-      //     padding-left: 10px;
-      //   }
+      .welcome {
+        justify-content: center;
+      }
     }
 
     // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
