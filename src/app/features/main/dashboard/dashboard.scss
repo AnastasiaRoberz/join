@@ -147,15 +147,15 @@
 
   // Priority colours
   &--urgent {
-    background-color: #de3400;
+    background-color: $prio-urgent;
   }
 
   &--medium {
-    background-color: #df9500;
+    background-color: $prio-medium;
   }
 
   &--low {
-    background-color: #43a800;
+    background-color: $prio-low;
   }
 }
 
