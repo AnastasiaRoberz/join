@@ -19,15 +19,16 @@ export class Dashboard {
 
   getDaytime = computed(() => {
     const hour = new Date().getHours();
+    const char = this.userService.currentContact() ? ',' : '!';
 
     if (hour < 12) {
-      return 'Good morning,';
+      return `Good morning${char}`;
     } else if (hour >= 12 && hour < 14) {
-      return 'Hey,';
+      return `Hey${char}`;
     } else if (hour >= 14 && hour < 18) {
-      return 'Good afternoon,';
+      return `Good afternoon${char}`;
     } else if (hour >= 18 && hour < 22) {
-      return 'Good evening,';
+      return `Good evening${char}`;
     } else {
       return 'Hey!';
     }
