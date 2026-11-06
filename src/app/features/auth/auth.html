@@ -1,7 +1,10 @@
 <div class="content">
+  @if (showIntro()) {
+    <div class="intro-overlay"></div>
+  }
   <header class="start-header">
-    <svg class="nav-logo">
-      <use href="./assets/icons/icons.svg#logo-dark"></use>
+    <svg class="main-logo">
+      <use href="./assets/icons/icons.svg#logo"></use>
     </svg>
     @if (
       navService.currentUrl() === '/login' && !responsiveService.isMobile() && !isShortHeight()
