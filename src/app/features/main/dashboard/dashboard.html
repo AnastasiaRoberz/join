@@ -44,9 +44,9 @@
           <span class="amount">3</span>
         </div>
         <hr />
-        <div class="deadline__date">
-          <span>October 16, 2022</span>
-          <span>Upcoming Deadline</span>
+        <div class="deadline__info">
+          <span class="date">October 16, 2022</span>
+          <span class="headsup">Upcoming Deadline</span>
         </div>
       </a>
       <a href="" class="third">
@@ -68,9 +68,9 @@
         </div>
       </a>
     </div>
-    @if (responsiveService.isDesktop()) {
+    @if (!responsiveService.isMobile()) {
       <div class="welcome">
-        <p class="welcome__greeting">Good moring,</p>
+        <p class="welcome__greeting">Good morning,&nbsp;</p>
         <p class="welcome__name">Sofia Müller</p>
       </div>
     }
