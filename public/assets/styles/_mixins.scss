@@ -74,11 +74,11 @@
 }
 
 @mixin field-error-msg {
-  font-size: calcClamp(12, 16, 940, 400);
+  font-size: #{min(calcClamp(12, 16, 940, 400), calcClamp(12, 16, 700, 350, height))};
   color: $error;
   position: absolute;
   right: 0;
-  bottom: -8px;
+  bottom: #{min(calcClamp(-1, -8, 768, 320), calcClamp(-1, -8, 700, 350, height))};
   transform: translateY(100%);
 
   @include mobile {

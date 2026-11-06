@@ -53,6 +53,14 @@
     top: -24px;
     transform: translateY(-100%);
     left: 0;
+
+    @include responsive(500, height, max) {
+      height: 48px;
+      width: 48px;
+
+      right: 0;
+      left: auto;
+    }
   }
 
   &::after {
@@ -63,6 +71,10 @@
     position: absolute;
     bottom: -16px;
     left: 0;
+  }
+
+  .subheading {
+    color: $text-light;
   }
 
   @include mobile {
@@ -88,7 +100,8 @@
   flex: 1;
   gap: 56px;
   height: 100%;
-  padding: calcClamp(80, 136, 1440, 769) calcClamp(24, 48, 1440, 769);
+  padding-block: var(--padding-block-dialog);
+  padding-inline: var(--padding-inline-dialog);
   position: relative;
 
   @include mobile {
@@ -100,12 +113,15 @@
 }
 
 .avatar {
-  transform: translateY(-50%);
+  --btn-size: #{calcClamp(41.33, 57.33, 500, 350, height)};
+  --btn-margin: #{calcClamp(0, 16, 700, 350, height)};
+  --transform: #{calc((var(--btn-size) + var(--btn-margin) + var(--form-gap)) / -2)};
+  --form-gap: #{calcClamp(16, 32, 700, 350, height)};
+  transform: translateY(var(--transform));
 
   @include tablet {
     transform: none;
   }
-
   @include mobile {
     transform: translateY(0);
     position: absolute;
@@ -121,10 +137,11 @@
   gap: calcClamp(48, 72, 1440, 1025);
 
   .form-section {
+    --form-gap: #{calcClamp(16, 32, 700, 350, height)};
     @include flex-start(column);
     flex: 1;
     width: 100%;
-    gap: 32px;
+    gap: var(--form-gap);
 
     @include mobile {
       height: 100%;
@@ -149,7 +166,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: 24px;
-  margin-top: 16px;
+  margin-top: calcClamp(0, 16, 700, 350, height);
 
   @include mobile {
     margin-top: 0;

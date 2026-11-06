@@ -28,9 +28,17 @@
 }
 
 .overlay-content {
+  --padding-block-dialog: 52px;
+  --padding-inline-dialog: 52px;
+
   &.contact {
     --dialog-height: #{min(95dvh, 592px)};
     --dialog-margin-top: auto;
+    --padding-block-dialog: #{min(
+        calcClamp(80, 136, 1440, 769),
+        calcClamp(32, 80, 700, 350, height)
+      )};
+    --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
   }
 
   &.task,
@@ -92,8 +100,12 @@
 
   .btn-close {
     position: absolute;
-    top: calcClamp(24, 52);
-    right: calcClamp(24, 52);
+    --position: #{max(var(--padding-block-dialog), var(--padding-inline-dialog))};
+    top: #{min(var(--position), 76px)};
+    right: #{min(var(--position), 76px)};
+    transform: translate(100%, -100%);
+    // top: #{min(calcClamp(24, 52), calcClamp(16, 52, 700, 350, height))};
+    // right: #{min(calcClamp(24, 52), calcClamp(8, 52, 700, 350, height))};
     z-index: 20;
 
     &.white-btn.btn--icon {
