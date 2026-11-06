@@ -4,7 +4,7 @@
   display: block;
   height: 100%;
   overflow-y: auto;
-  padding-top: calcClamp(32, 110);
+  padding-top: #{min(calcClamp(32, 110, 900, 600, height), calcClamp(32, 110))};
   padding-inline: calcClamp(16, 96);
   padding-bottom: 48px;
 
@@ -16,7 +16,7 @@
 .summary {
   display: flex;
   flex-direction: column;
-  gap: calcClamp(24, 56);
+  gap: #{min(calcClamp(24, 56, 900, 500, height), calcClamp(24, 56))};
 
   &__header {
     display: flex;
@@ -75,7 +75,7 @@
         minmax(0, 1fr)
       ); // minmax(0, …): long words can't stretch a column
       max-width: 670px;
-      gap: calcClamp(12, 32);
+      gap: #{min(calcClamp(12, 32, 900, 600, height), calcClamp(12, 32))};
       container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
     }
   }
@@ -96,7 +96,7 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 
   // for short mobile, such as Iphone SE
-  @media (max-height: 680px) {
+  @media (max-height: 850px) {
     min-height: 96px;
     padding: 12px;
   }
@@ -129,7 +129,7 @@
 
 .amount {
   color: $color-black;
-  font-size: calcClamp(40, 64);
+  font-size: #{min(calcClamp(40, 64, 900, 500, height), calcClamp(40, 64))};
   font-weight: 600;
   line-height: 1;
 }
