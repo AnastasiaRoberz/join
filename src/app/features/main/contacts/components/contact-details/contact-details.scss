@@ -1,8 +1,7 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column);
-  justify-content: flex-start;
+  @include flex-start(column, both);
   gap: 21px;
 }
 

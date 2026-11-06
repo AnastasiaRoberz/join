@@ -27,8 +27,7 @@ app-contact-details {
 
 .details {
   --padding-inline: #{min(calcClamp(16, 88), calcClamp(32, 88, 700, 350, height))};
-  @include flex-start(column);
-  justify-content: flex-start;
+  @include flex-start(column, both);
   width: 100%;
 
   height: 100%;
