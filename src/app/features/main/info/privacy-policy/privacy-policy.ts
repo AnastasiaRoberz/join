@@ -17,5 +17,5 @@ export class PrivacyPolicy {
   responsiveService = inject(ResponsiveService);
 
   isWidescreen = this.responsiveService.observeQuery('(min-width: 1441px)');
-  isShortHeight = this.responsiveService.isMaxHeight(700);
+  isShortHeight = this.responsiveService.isMaxHeight(500);
 }

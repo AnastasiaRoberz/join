@@ -92,6 +92,7 @@
 
 @mixin info-page {
   --padding-inline: #{calcClamp(16, 96)};
+  --space-right: #{calc(100% - 1112px)};
   @include flex-start(column, both);
   gap: 24px;
   padding-inline: var(--padding-inline);
@@ -104,7 +105,11 @@
     @include flex-start(column, both);
     gap: 24px;
     padding-bottom: calcClamp(0, 32);
-    min-height: 0;
+
+    @include responsive(1441, width, min) {
+      width: 100%;
+      padding-right: var(--space-right);
+    }
   }
 
   .header {
@@ -124,6 +129,11 @@
         position: absolute;
         top: -100%;
         right: 0;
+      }
+
+      @include responsive(1441, width, min) {
+        width: 100%;
+        padding-right: var(--space-right);
       }
     }
   }
