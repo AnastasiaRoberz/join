@@ -1,5 +1,30 @@
 @use '../../../../../public/assets/styles/' as *;
 
+@keyframes overlay-fade {
+  0% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1; // hold fully visible before fading
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+// Moves the logo from the calculated center position back to its natural header position.
+// CSS custom properties --intro-x, --intro-y, --intro-scale are set via TypeScript
+// based on the logo's actual DOM position at runtime.
+@keyframes logo-intro {
+  0%,
+  20% {
+    transform: translate(var(--intro-x), var(--intro-y)) scale(var(--intro-scale));
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
 :host {
   display: block;
   height: 100%;
@@ -50,6 +75,20 @@
     }
   }
 
+  // Full-screen overlay that provides the colored background during the intro.
+  // position: fixed so it covers the whole viewport regardless of scroll or layout.
+  .greeter-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999; // below the logo (z-index: 1000) but above everything else
+    pointer-events: none; // prevent blocking clicks after animation ends
+    opacity: 1; // explicit start value so animation-delay doesn't flash transparent
+
+    background-color: #{$main-bg}; //background for desktop-animation
+    animation: overlay-fade 0.9s ease-in-out forwards;
+    animation-delay: 0.2s; // small delay so the overlay is visible before fading
+  }
+
   // ---------- Tiles | greeting ----------
   &__content {
     display: grid;
@@ -74,6 +113,14 @@
       gap: #{min(calcClamp(12, 32, 900, 600, height), calcClamp(12, 32))};
       container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
     }
+  }
+
+  // Active state during the intro animation.
+  // Sets the logo to its calculated center position as the animation start point.
+  &.greeter-active {
+    transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 1));
+    animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; //cubic-bazier: standard material-design, forwards: stop with last keyframe
+    animation-delay: 0.2s;
   }
 }
 

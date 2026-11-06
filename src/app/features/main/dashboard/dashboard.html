@@ -1,4 +1,7 @@
 <section class="summary">
+  @if (greeterService.isActive()) {
+    <div class="greeter-overlay"></div>
+  }
   <!-- header -->
   <header class="summary__header">
     <h2>Join 360</h2>
@@ -84,11 +87,12 @@
       </a>
     </div>
     <!-- greeting -->
-    @if (!isShortHeight()) {
-      <div class="welcome">
+
+    <div class="welcome" [class.greeter-active]="greeterService.isActive()">
+      @if (!isShortHeight()) {
         <p class="welcome__greeting">Good morning,&nbsp;</p>
         <p class="welcome__name">Sofia Müller</p>
-      </div>
-    }
+      }
+    </div>
   </div>
 </section>
