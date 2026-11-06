@@ -28,37 +28,6 @@
 }
 
 .overlay-content {
-  &.contact {
-    --dialog-height: #{min(95dvh, 592px)};
-    --dialog-margin-top: auto;
-    --padding-block-dialog: #{min(
-        calcClamp(80, 136, 1440, 769),
-        calcClamp(32, 80, 700, 350, height)
-      )};
-    --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
-
-    @include mobile {
-      --padding-block-dialog: calcClamp(16, 124, 800, 500, height);
-      --padding-inline-dialog: #{calcClamp(16, 24, 420, 320)};
-    }
-  }
-
-  &.task,
-  &.task-edit {
-    --dialog-max-height: #{min(95dvh, 1024px)};
-    --dialog-margin-top: #{calc((100dvh - var(--dialog-max-height, 95dvh)) / 2)};
-
-    .btn-close {
-      top: calcClamp(16, 24);
-      right: calcClamp(16, 24);
-    }
-  }
-
-  &.add-task {
-    --dialog-height: #{min(95dvh, 850px)};
-    --dialog-margin-top: auto;
-  }
-
   margin-top: var(--dialog-margin-top);
   max-height: var(--dialog-max-height, none);
   height: var(--dialog-height, auto);
@@ -118,5 +87,36 @@
       top: clamp(36px, var(--position), 48px);
       right: clamp(36px, var(--position), 48px);
     }
+  }
+
+  &.contact {
+    --dialog-height: #{min(95dvh, 592px)};
+    --dialog-margin-top: auto;
+    --padding-block-dialog: #{min(
+        calcClamp(80, 136, 1440, 769),
+        calcClamp(32, 80, 700, 350, height)
+      )};
+    --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
+
+    @include mobile {
+      --padding-block-dialog: calcClamp(16, 124, 800, 500, height);
+      --padding-inline-dialog: #{calcClamp(16, 24, 420, 320)};
+    }
+  }
+
+  &.task,
+  &.task-edit {
+    --dialog-max-height: #{min(95dvh, 1024px)};
+    --dialog-margin-top: #{calc((100dvh - var(--dialog-max-height, 95dvh)) / 2)};
+
+    .btn-close {
+      top: calcClamp(16, 24);
+      right: calcClamp(16, 24);
+    }
+  }
+
+  &.add-task {
+    --dialog-height: #{min(95dvh, 850px)};
+    --dialog-margin-top: auto;
   }
 }

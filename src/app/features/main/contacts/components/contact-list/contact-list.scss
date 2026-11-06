@@ -20,33 +20,33 @@
   }
 }
 
-.group-letter {
-  @include flex-center;
-  font-size: $font-medium;
-  width: 42px;
-  aspect-ratio: 1;
-  padding: 8px 0;
-  margin-left: 24px;
-  line-height: 0.75;
-}
-
-hr {
-  width: 100%;
-  margin: calcClamp(0, 4, 1440, 768) 0;
-  border: none;
-  border-top: 1px solid $color-grey-100;
-  border-radius: 3px;
-}
-
 .contact-list {
   @include flex-start(column, both);
   height: 100%;
-}
 
-.group-wrapper {
-  @include flex-center(column);
-  width: 100%;
-  margin-bottom: calcClamp(16, 24);
+  &__group-letter {
+    @include flex-center;
+    font-size: $font-medium;
+    width: 42px;
+    aspect-ratio: 1;
+    padding: 8px 0;
+    margin-left: 24px;
+    line-height: 0.75;
+  }
+
+  &__devider {
+    width: 100%;
+    margin: calcClamp(0, 4, 1440, 768) 0;
+    border: none;
+    border-top: 1px solid $color-grey-100;
+    border-radius: 3px;
+  }
+
+  &__group-wrapper {
+    @include flex-center(column);
+    width: 100%;
+    margin-bottom: calcClamp(16, 24);
+  }
 }
 
 .contact-card-btn {
@@ -57,32 +57,32 @@ hr {
   padding: 16px 24px;
   border-radius: 10px;
 
-  // hover action & no action on hover, when contact is active
-  &:hover:not(.contact--active) {
+  &:hover {
     background: $btn-contact-hover;
   }
-  &.contact--active {
+
+  &--active {
     background-color: $btn-contact-active;
 
     .name {
       color: $color-white;
     }
   }
-}
 
-.details {
-  @include flex-start(column);
-  gap: 4px;
-  min-width: 0;
-  text-align: left;
-}
+  &__details {
+    @include flex-start(column);
+    gap: 4px;
+    min-width: 0;
+    text-align: left;
+  }
 
-.name {
-  @include text-ellipsis;
-  font-size: $font-medium;
-}
+  &__name {
+    @include text-ellipsis;
+    font-size: $font-medium;
+  }
 
-.mail {
-  @include text-ellipsis;
-  color: $mail;
+  &__mail {
+    @include text-ellipsis;
+    color: $mail;
+  }
 }

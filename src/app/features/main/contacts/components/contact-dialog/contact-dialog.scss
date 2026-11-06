@@ -27,62 +27,62 @@
     padding-inline: var(--padding-inline-dialog);
     gap: 30px;
   }
-}
 
-.header {
-  @include flex-start(column);
-  @include underline();
-  gap: 16px;
-  position: relative;
-  color: $text-light;
-  margin-bottom: 16px;
+  &__header {
+    @include flex-start(column);
+    @include underline();
+    gap: 16px;
+    position: relative;
+    color: $text-light;
+    margin-bottom: 16px;
+
+    &::before {
+      content: url('../../../../../../../public/assets/icons/logo.svg');
+      width: 64px;
+      aspect-ratio: 1;
+      position: absolute;
+      top: -24px;
+      transform: translateY(-100%);
+      left: 0;
+
+      @include short-height {
+        width: 48px;
+        right: 0;
+        left: auto;
+      }
+    }
+
+    @include mobile {
+      gap: 8px;
+
+      &:not(:has(.subheading)) {
+        margin-top: 14px;
+        margin-bottom: 30px;
+      }
+
+      &::before {
+        display: none;
+      }
+    }
+
+    @include short-height(450) {
+      &:not(:has(.subheading)) {
+        margin-block: 0;
+      }
+      &::after,
+      .subheading {
+        display: none;
+      }
+    }
+  }
 
   h2 {
     line-height: 1;
     text-wrap: wrap;
   }
 
-  &::before {
-    content: url('../../../../../../../public/assets/icons/logo.svg');
-    width: 64px;
-    aspect-ratio: 1;
-    position: absolute;
-    top: -24px;
-    transform: translateY(-100%);
-    left: 0;
-
-    @include short-height {
-      width: 48px;
-      right: 0;
-      left: auto;
-    }
-  }
-
-  .subheading {
+  &__subheading {
     color: $text-light;
-  }
-
-  @include mobile {
-    gap: 8px;
-
-    &:not(:has(.subheading)) {
-      margin-top: 14px;
-      margin-bottom: 30px;
-    }
-
-    &::before {
-      display: none;
-    }
-  }
-
-  @include short-height(450) {
-    &:not(:has(.subheading)) {
-      margin-block: 0;
-    }
-    &::after,
-    .subheading {
-      display: none;
-    }
   }
 }
 
@@ -109,40 +109,19 @@
   @include short-height(600) {
     padding-top: #{min(64px, calcClamp(16, 64, 700, 350, height))};
   }
-}
 
-.avatar {
-  --btn-size: #{calcClamp(41.33, 57.33, 500, 350, height)};
-  --transform: #{calc((var(--btn-size) + var(--btn-margin) + var(--form-gap)) / -2)};
-  transform: translateY(var(--transform));
+  &__input-wrapper {
+    @include flex-center;
+    width: 100%;
+    gap: calcClamp(48, 72, 1440, 1025);
 
-  @include tablet {
-    transform: none;
+    @include tablet {
+      flex-direction: column;
+      gap: #{calcClamp(24, 72, 900, 350, height)};
+    }
   }
 
-  @include mobile {
-    position: absolute;
-    top: 0;
-    transform: translateY(-50%);
-    width: var(--avatar-size);
-  }
-
-  @include short-height(600) {
-    transform: translateY(calc(-100% - (var(--form-gap) / 2)));
-    right: calc(var(--form-gap) / 2);
-  }
-
-  @include short-height(450) {
-    display: none;
-  }
-}
-
-.input-wrapper {
-  @include flex-center;
-  width: 100%;
-  gap: calcClamp(48, 72, 1440, 1025);
-
-  .form-section {
+  &__form-section {
     @include flex-start(column);
     @include size;
     gap: var(--form-gap);
@@ -153,18 +132,39 @@
     }
   }
 
-  @include tablet {
-    flex-direction: column;
-    gap: #{calcClamp(24, 72, 900, 350, height)};
+  app-avatar-user {
+    --btn-size: #{calcClamp(41.33, 57.33, 500, 350, height)};
+    --transform: #{calc((var(--btn-size) + var(--btn-margin) + var(--form-gap)) / -2)};
+    transform: translateY(var(--transform));
+
+    @include tablet {
+      transform: none;
+    }
+
+    @include mobile {
+      position: absolute;
+      top: 0;
+      transform: translateY(-50%);
+      width: var(--avatar-size);
+    }
+
+    @include short-height(600) {
+      transform: translateY(calc(-100% - (var(--form-gap) / 2)));
+      right: calc(var(--form-gap) / 2);
+    }
+
+    @include short-height(450) {
+      display: none;
+    }
   }
-}
 
-.buttons-wrapper {
-  @include flex-start;
-  gap: 24px;
-  margin-top: var(--btn-margin);
+  &__buttons-wrapper {
+    @include flex-start;
+    gap: 24px;
+    margin-top: var(--btn-margin);
 
-  @include mobile {
-    margin-top: 0;
+    @include mobile {
+      margin-top: 0;
+    }
   }
 }
