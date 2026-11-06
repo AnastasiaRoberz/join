@@ -62,12 +62,12 @@ export class Dashboard {
       (a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime(),
     );
 
-    const formatedDate = new Date(sortedTasks[0].due_date).toLocaleDateString('en-US', {
+    if (!sortedTasks[0]) return 'No upcoming deadline.';
+
+    return new Date(sortedTasks[0].due_date).toLocaleDateString('en-US', {
       month: 'long',
       day: 'numeric',
       year: 'numeric',
     });
-
-    return formatedDate ?? 'No upcoming deadline.';
   }
 }
