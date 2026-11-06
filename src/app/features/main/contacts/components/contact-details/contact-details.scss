@@ -145,17 +145,10 @@
 }
 
 button.btn.btn-dots {
+  @include circle-btn(56px, 112px, 16px);
   @include flex-center;
-  position: fixed;
-  bottom: 112px;
-  right: 16px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: $btn-primary-default;
-  color: $color-white;
-  box-shadow: $btn-shadow;
-  // z-index: 2;
+  // position: fixed;
+  // bottom: 112px;
 
   .icon {
     width: 32px;
@@ -164,17 +157,6 @@ button.btn.btn-dots {
   }
 
   @include responsive(500, height, max) {
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
-    height: 48px;
-    width: 48px;
-    border-radius: 50%;
-    box-shadow: $btn-shadow;
-    padding: 0;
-
-    .btn-label {
-      display: none;
-    }
+    @include circle-btn(48px, 16px, 16px);
   }
 }

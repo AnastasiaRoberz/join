@@ -194,33 +194,11 @@
     width: 100%;
 
     @include mobile {
-      position: absolute;
-      bottom: 32px;
-      right: 16px;
-      height: 56px;
-      width: 56px;
-      border-radius: 50%;
-      box-shadow: $btn-shadow;
-      padding: 0;
-
-      .btn-label {
-        display: none;
-      }
+      @include circle-btn(56px, 32px, 16px);
     }
 
     @include responsive(500, height, max) {
-      position: absolute;
-      bottom: 16px;
-      right: -8px;
-      height: 48px;
-      width: 48px;
-      border-radius: 50%;
-      box-shadow: $btn-shadow;
-      padding: 0;
-
-      .btn-label {
-        display: none;
-      }
+      @include circle-btn(48px, 16px, -8px);
     }
   }
 

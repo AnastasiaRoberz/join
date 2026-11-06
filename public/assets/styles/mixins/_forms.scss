@@ -53,3 +53,21 @@
     bottom: -1px;
   }
 }
+
+@mixin circle-btn($size: 56px, $pos-bottom: 32px, $pos-right: 16px) {
+  @include flex-center;
+  position: absolute;
+  bottom: $pos-bottom;
+  right: $pos-right;
+  height: $size;
+  width: $size;
+  border-radius: 50%;
+  background: $btn-primary-default;
+  color: $color-white;
+  box-shadow: $btn-shadow;
+  padding: 0;
+
+  .btn-label {
+    display: none;
+  }
+}
