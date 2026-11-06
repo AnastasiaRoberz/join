@@ -8,11 +8,8 @@ export class AuthDraftService {
     mail?: string;
   }>({});
 
-  clearLogin(): void {
+  clearDrafts(): void {
     this.loginDraft.set({});
-  }
-
-  clearRegister(): void {
     this.registerDraft.set({});
   }
 }
