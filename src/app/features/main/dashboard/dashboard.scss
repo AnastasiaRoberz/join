@@ -110,10 +110,51 @@
   grid-column: span 2;
 }
 
-.icon {
+// ---------- icons design ----------
+.icon,
+.deadline-icon {
+  display: grid;
+  place-items: center;
   flex-shrink: 0; // flex would squeeze it otherwise
+  border-radius: 50%;
+  background-color: $color-navy-800;
+  color: $color-white; // -> fill of the symbol
+
+  svg {
+    width: 55%; // symbol size inside the circle
+    height: 55%;
+  }
+}
+
+.icon {
   width: calcClamp(44, 69);
   height: calcClamp(44, 69);
+
+  &-bold svg {
+    width: 65%;
+    height: 65%;
+    stroke: currentColor; // outline in the same white as the fill
+    stroke-width: 1.5; // thicker = higher number
+    stroke-linejoin: round; // rounded corners like the design
+  }
+}
+
+.deadline-icon {
+  width: calcClamp(28, 40);
+  height: calcClamp(28, 40);
+
+  // Priority colours (same as in the old dashboard-* symbols)
+  &--urgent {
+    background-color: #de3400;
+  }
+
+  &--medium {
+    background-color: #df9500;
+  }
+
+  &--low {
+    background-color: #43a800;
+  }
 }
 
 .details {
