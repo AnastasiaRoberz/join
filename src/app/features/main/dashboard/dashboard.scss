@@ -38,8 +38,7 @@
     }
 
     @include mobile {
-      flex-direction: column;
-      align-items: flex-start;
+      @include flex-start(column);
       gap: 8px;
 
       hr {
@@ -86,9 +85,7 @@
 .half,
 .full,
 .third {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   gap: calcClamp(8, 24);
   min-height: calcClamp(110, 168); // min-height, not height: content may grow
   padding: calcClamp(12, 28);
