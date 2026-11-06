@@ -120,8 +120,9 @@
   background-color: $color-navy-800;
   color: $color-white; // -> fill of the symbol
 
+  // symbol size inside the circle
   svg {
-    width: 55%; // symbol size inside the circle
+    width: 55%;
     height: 55%;
   }
 }
@@ -130,6 +131,7 @@
   width: calcClamp(44, 69);
   height: calcClamp(44, 69);
 
+  // done icon a bit thicker
   &-bold svg {
     width: 65%;
     height: 65%;
@@ -143,7 +145,7 @@
   width: calcClamp(28, 40);
   height: calcClamp(28, 40);
 
-  // Priority colours (same as in the old dashboard-* symbols)
+  // Priority colours
   &--urgent {
     background-color: #de3400;
   }
