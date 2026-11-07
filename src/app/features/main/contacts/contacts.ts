@@ -4,6 +4,7 @@ import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog.service';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { Buttons } from '../../../shared/button.component/button.component';
+import { ContactService } from '../../../services/contact.service';
 
 /**
  * Container component for the Contacts page.
@@ -23,6 +24,7 @@ import { Buttons } from '../../../shared/button.component/button.component';
 export class Contacts {
   responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
+  contactService = inject(ContactService);
   shortHeight = this.responsiveService.isMaxHeight(500);
   isSinglePane = computed(() => this.responsiveService.isMobile() || this.shortHeight());
 
@@ -32,8 +34,6 @@ export class Contacts {
    * and on mobile the list is shown.
    */
   selectedId = signal<number | undefined | null>(null);
-
-  lastSelectedId = signal<number | null>(null);
 
   /**
    * The rendered details component, read as its DOM element so it can be animated.
@@ -67,7 +67,6 @@ export class Contacts {
    */
   selectContact(id: number | undefined): void {
     this.selectedId.set(id);
-    if (id) this.lastSelectedId.set(id);
   }
 
   /**
@@ -79,8 +78,8 @@ export class Contacts {
     this.selectedId.set(null);
   }
 
-  onContactDelete(): void {
-    this.lastSelectedId.set(null);
+  onContactDeleted(): void {
+    this.contactService.savedScrollTop = 0;
     this.closeDetails();
   }
 

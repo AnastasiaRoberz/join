@@ -7,6 +7,7 @@ import {
   input,
   output,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
@@ -57,7 +58,6 @@ export class ContactList {
    * `null` when no contact is selected.
    */
   selectedId = input<number | undefined | null>(null);
-  lastSelectedId = input<number | null>(null);
 
   /**
    * Emits the id of the contact the user clicked.
@@ -68,6 +68,8 @@ export class ContactList {
 
   // Collects all <button #contactBtn> elements from the template into a queryable list
   @ViewChildren('contactBtn') contactButtons!: QueryList<ElementRef>;
+  @ViewChild('scrollContainer')
+  scrollContainer?: ElementRef<HTMLElement>;
 
   constructor() {
     /**
@@ -116,17 +118,23 @@ export class ContactList {
     });
   }
 
+  selectContact(id: number | undefined): void {
+    if (this.scrollContainer) {
+      this.contactService.savedScrollTop = this.scrollContainer.nativeElement.scrollTop;
+    }
+    this.contactSelected.emit(id);
+  }
+
   ngAfterViewInit(): void {
-    const id = this.lastSelectedId();
-    if (id) {
-      setTimeout(() => {
-        const allContacts = this.contactService.groupedContacts().flatMap((g) => g.contacts);
+    const scrollPos = this.contactService.savedScrollTop;
+    if (this.scrollContainer && scrollPos > 0) {
+      this.scrollContainer.nativeElement.scrollTop = scrollPos;
 
-        const index = allContacts.findIndex((contact) => contact.id === id);
-        const button = this.contactButtons?.toArray()[index];
-
-        button?.nativeElement.scrollIntoView({ behaviour: 'instant', block: 'center' });
-      }, 0);
+      requestAnimationFrame(() => {
+        if (this.scrollContainer) {
+          this.scrollContainer.nativeElement.scrollTop = scrollPos;
+        }
+      });
     }
   }
 }
