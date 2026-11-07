@@ -58,4 +58,8 @@ app-contact-details {
       gap: 8px;
     }
   }
+
+  &.scroll-container {
+    padding-right: calc(var(--padding-inline) - var(--sb-width));
+  }
 }
