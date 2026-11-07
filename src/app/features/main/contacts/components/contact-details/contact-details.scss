@@ -107,6 +107,10 @@ button.btn.btn-dots {
   --btn-pos-bottom: #{calcClamp(96, 112, 900, 600, height)};
   @include circle-btn(56px, var(--btn-pos-bottom), $pos: fixed);
 
+  @media screen and (min-width: 1025px) and (max-height: 600px) {
+    bottom: 16px;
+  }
+
   @include short-height {
     width: 48px;
   }
