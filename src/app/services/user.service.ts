@@ -70,7 +70,7 @@ export class UserService {
     const newContact = await this.contactService.addContact(contactData);
     this.currentUser.set(newUser.user);
     this.currentSession.set(newUser.session);
-    this.introService.requestGreeting(); // NEW: right before the redirect
+    this.introService.requestGreeting(); // greeting right before the redirect
     this.router.navigate(['app/summary']);
     return true;
   }
@@ -87,7 +87,7 @@ export class UserService {
     this.currentUser.set(data.user);
     this.currentSession.set(data.session);
     await this.contactService.getAllContacts();
-    this.introService.requestGreeting(); // NEW: right before the redirect
+    this.introService.requestGreeting(); // // greeting right before the redirect
     this.router.navigate(['app/summary']);
     return true;
   }

@@ -1,4 +1,5 @@
 <section class="summary">
+  <!-- Greeter Overlay -->
   @if (greeterService.isGreeting()) {
     <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
   }
@@ -87,17 +88,16 @@
       </a>
     </div>
     <!-- greeting -->
-
-    <div
-      #welcome
-      class="welcome"
-      [class.greeter-fly]="greeterService.isGreeting() && !isShortHeight()"
-      [class.greeter-fade]="greeterService.isGreeting() && isShortHeight()"
-    >
-      @if (!isShortHeight() || greeterService.isGreeting()) {
+    @if (!isShortHeight() || greeterService.isGreeting()) {
+      <div
+        #welcome
+        class="welcome"
+        [class.greeter-fly]="greeterService.isGreeting() && !isShortHeight()"
+        [class.greeter-fade]="greeterService.isGreeting() && isShortHeight()"
+      >
         <p class="welcome__greeting">Good morning,&nbsp;</p>
         <p class="welcome__name">Sofia Müller</p>
-      }
-    </div>
+      </div>
+    }
   </div>
 </section>
