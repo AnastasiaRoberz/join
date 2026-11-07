@@ -4,7 +4,6 @@
   @include flex-start(column);
   justify-content: flex-start;
   gap: 21px;
-  width: 100%;
   min-width: 0; // the component may get narrower than the long name
   height: 100%;
 }
@@ -17,23 +16,23 @@
   .name-wrapper {
     @include flex-start(column);
     gap: 8px;
+    flex: 1 1 auto;
+    height: 100%;
+    // height: calcClamp(120, 150, 1440, 1025);
+    max-height: calcClamp(120, 150, 1440, 1025);
+    min-width: 0;
   }
 
   .name {
-    min-height: 105px;
-    font-size: calcClamp(20, 47);
-    max-width: 100%; // never wider than the wrapper
-    overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
-    display: flex;
-    align-items: center;
-  }
+    font-size: #{min(calcClamp(36, 48), calcClamp(36, 48, 700, 350, height))};
+    max-height: 2lh;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    -webkit-hyphens: auto;
 
-  // long names design for icon and name position and size
-  &__long {
-    gap: calcClamp(16, 50, 1440, 1025);
-
-    .name {
-      font-size: calcClamp(20, 38, 1440, 1025);
+    @include tablet {
+      max-height: 3lh;
     }
   }
 }
@@ -90,28 +89,6 @@
     width: 100%;
     overflow-wrap: anywhere;
     color: $mail;
-  }
-}
-
-@include tablet {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(22, 36, 1024, 769);
-      }
-    }
-  }
-}
-
-@include mobile {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(20, 38, 768, 320);
-      }
-    }
   }
 }
 
