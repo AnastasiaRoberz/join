@@ -9,11 +9,14 @@
   gap: 56px;
 
   &__header {
-    @include title-devider;
     height: 100%;
     display: flex;
     gap: 30px;
     align-items: center;
+
+    hr {
+      @include title-devider;
+    }
   }
 
   &__content {
