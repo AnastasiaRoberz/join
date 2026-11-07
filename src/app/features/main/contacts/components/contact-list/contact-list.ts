@@ -57,6 +57,7 @@ export class ContactList {
    * `null` when no contact is selected.
    */
   selectedId = input<number | undefined | null>(null);
+  lastSelectedId = input<number | null>(null);
 
   /**
    * Emits the id of the contact the user clicked.
@@ -113,5 +114,19 @@ export class ContactList {
         }
       }, 50);
     });
+  }
+
+  ngAfterViewInit(): void {
+    const id = this.lastSelectedId();
+    if (id) {
+      setTimeout(() => {
+        const allContacts = this.contactService.groupedContacts().flatMap((g) => g.contacts);
+
+        const index = allContacts.findIndex((contact) => contact.id === id);
+        const button = this.contactButtons?.toArray()[index];
+
+        button?.nativeElement.scrollIntoView({ behaviour: 'instant', block: 'center' });
+      }, 0);
+    }
   }
 }

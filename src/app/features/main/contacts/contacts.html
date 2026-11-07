@@ -2,7 +2,11 @@
 <!-- container’s current selectedId value is handed to the list’s selectedId input.
      contactSelected calls selectContact(). $event is the value  -->
 @if (!(responsiveService.isMobile() && selectedId())) {
-  <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
+  <app-contact-list
+    [selectedId]="selectedId()"
+    [lastSelectedId]="lastSelectedId()"
+    (contactSelected)="selectContact($event)"
+  />
 }
 
 @if (!responsiveService.isMobile() || selectedId()) {
@@ -19,7 +23,7 @@
       }
     </div>
     @if (selectedId(); as id) {
-      <app-contact-details [selectedId]="id" (contactDeleted)="closeDetails()" />
+      <app-contact-details [selectedId]="id" (contactDeleted)="onContactDelete()" />
     }
   </div>
 }

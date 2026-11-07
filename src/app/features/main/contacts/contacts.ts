@@ -33,6 +33,8 @@ export class Contacts {
    */
   selectedId = signal<number | undefined | null>(null);
 
+  lastSelectedId = signal<number | null>(null);
+
   /**
    * The rendered details component, read as its DOM element so it can be animated.
    * `undefined` while no contact is selected.
@@ -65,6 +67,7 @@ export class Contacts {
    */
   selectContact(id: number | undefined): void {
     this.selectedId.set(id);
+    if (id) this.lastSelectedId.set(id);
   }
 
   /**
@@ -74,6 +77,11 @@ export class Contacts {
    */
   closeDetails(): void {
     this.selectedId.set(null);
+  }
+
+  onContactDelete(): void {
+    this.lastSelectedId.set(null);
+    this.closeDetails();
   }
 
   /**
