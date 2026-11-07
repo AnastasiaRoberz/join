@@ -4,7 +4,7 @@
   0% {
     opacity: 1;
   }
-  60% {
+  50% {
     opacity: 1; // hold fully visible before fading
   }
   100% {
@@ -12,20 +12,18 @@
   }
 }
 
-// Moves the logo from the calculated center position back to its natural header position.
-// CSS custom properties --intro-x, --intro-y, --intro-scale are set via TypeScript
-// based on the logo's actual DOM position at runtime.
-@keyframes logo-intro {
+@keyframes greeter-fly {
   0%,
-  20% {
-    transform: translate(var(--intro-x), var(--intro-y)) scale(var(--intro-scale));
+  60% {
+    transform: translate(var(--greeter-x), var(--greeter-y));
   }
   100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate(0, 0);
   }
 }
 
 :host {
+  position: relative;
   display: block;
   height: 100%;
   overflow-y: auto;
@@ -75,16 +73,16 @@
     }
   }
 
-  // Full-screen overlay that provides the colored background during the intro.
-  // position: fixed so it covers the whole viewport regardless of scroll or layout.
+  // Overlay that covers the page area during the greeting.
+  // CHANGED: absolute instead of fixed, so header, sidebar and nav stay visible (like in Figma).
   .greeter-overlay {
-    position: fixed;
+    position: absolute;
     inset: 0;
-    z-index: 999; // below the logo (z-index: 1000) but above everything else
+    z-index: 999; // below the greeting (z-index: 1000) but above everything else
     pointer-events: none; // prevent blocking clicks after animation ends
     opacity: 1; // explicit start value so animation-delay doesn't flash transparent
 
-    background-color: #{$main-bg}; //background for desktop-animation
+    background-color: #{$main-bg};
     animation: overlay-fade 0.9s ease-in-out forwards;
     animation-delay: 0.2s; // small delay so the overlay is visible before fading
   }
@@ -113,14 +111,6 @@
       gap: #{min(calcClamp(12, 32, 900, 600, height), calcClamp(12, 32))};
       container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
     }
-  }
-
-  // Active state during the intro animation.
-  // Sets the logo to its calculated center position as the animation start point.
-  &.greeter-active {
-    transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 1));
-    animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; //cubic-bazier: standard material-design, forwards: stop with last keyframe
-    animation-delay: 0.2s;
   }
 }
 
@@ -314,5 +304,26 @@
     @include mobile {
       font-size: calcClamp(24, 32);
     }
+  }
+
+  &.greeter-fly {
+    position: relative; // required for z-index
+    z-index: 1000; // above the overlay
+    transform: translate(var(--greeter-x, 0), var(--greeter-y, 0));
+    animation: greeter-fly 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.2s; // same timing as the overlay
+  }
+
+  // CHANGED (new): greeting is hidden (short height) -> centred on the page, fades out with the overlay
+  &.greeter-fade {
+    position: absolute; // out of the grid, so the tiles don't jump when it's removed
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: overlay-fade 0.9s ease-in-out forwards;
+    animation-delay: 0.2s;
   }
 }

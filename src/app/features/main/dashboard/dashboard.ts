@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, viewChild } from '@angular/core';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { IntroService } from '../../../services/intro.service';
 
@@ -13,37 +13,35 @@ export class Dashboard implements AfterViewInit {
   isShortHeight = this.responsiveService.isMaxHeight(768);
 
   //to manage intro-animation
-  introService = inject(IntroService);
-  isMobile = this.responsiveService.isMobile();
+  greeterService = inject(IntroService);
 
-  //only play intro-animation on first visit of website (session)
+  // The page itself (the scroll area next to sidebar/header) and the greeting box
+  private host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private welcome = viewChild<ElementRef<HTMLElement>>('welcome');
+
+  constructor() {
+    // Start BEFORE the first render, so the dashboard never flashes up
+    // for a moment without the overlay.
+    this.greeterService.startGreeting();
+  }
+
+  // Only needed for the "fly" variant: calculate how far the greeting is
+  // from the centre of the page, so it can start there.
   ngAfterViewInit(): void {
-    const logo = document.querySelector('.main-logo') as HTMLElement;
+    const welcome = this.welcome()?.nativeElement;
+    if (!this.greeterService.isGreeting() || !welcome || this.isShortHeight()) return;
 
-    if (logo) {
-      //gives information about logo-size and -positioning relative to viewport
-      const rect = logo.getBoundingClientRect();
-      // Calculate how far the logo needs to move to appear centered on screen.
-      // translate() moves relative to the element's current position,
-      // so we calculate the offset from the logo's actual position to the target center.
-      const toX = window.innerWidth / 2 - rect.left - rect.width / 2;
-      const toY = window.innerHeight * 0.45 - rect.top - rect.height / 2; //45% screenheight from top of screen
+    // Greeting box in its final spot (grid cell / above the tiles) ...
+    const rect = welcome.getBoundingClientRect();
+    // ... and the visible page area (without sidebar and header)
+    const area = this.host.nativeElement.getBoundingClientRect();
 
-      // Scale factor to reach the target size of 274px(desktop) or 100px(mobile) from the logo's current width.
-      const targetWidth = this.isMobile ? 100 : 274;
-      const scale = targetWidth / rect.width;
+    // translate() moves relative to its own position: offset = centre of area - centre of greeting
+    const toX = area.left + area.width / 2 - (rect.left + rect.width / 2);
+    const toY = area.top + area.height / 2 - (rect.top + rect.height / 2);
 
-      // Pass values to CSS so the keyframe animation can use them.
-      logo.style.setProperty('--intro-x', `${toX}px`);
-      logo.style.setProperty('--intro-y', `${toY}px`);
-      logo.style.setProperty('--intro-scale', `${scale}`);
-    }
-
-    this.introService.startIntro(this.isMobile);
-
-    // Wait for the animation to finish, then clean up.
-    // Mobile gets a longer duration to match its 1.2s animation.
-    const duration = this.isMobile ? 1200 : 900;
-    setTimeout(() => this.introService.finish(), duration);
+    // Pass values to CSS so the keyframe animation can use them.
+    welcome.style.setProperty('--greeter-x', `${toX}px`);
+    welcome.style.setProperty('--greeter-y', `${toY}px`);
   }
 }
