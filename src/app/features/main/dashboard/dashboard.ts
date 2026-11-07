@@ -63,6 +63,7 @@ export class Dashboard {
     const date = new Date(sortedTasks[0].due_date);
     const overdue = date.setHours(0, 0, 0, 0) < today;
     const deadlineText = overdue ? 'Overdue Deadline' : 'Upcoming Deadline';
+    const color = overdue ? '#e60026' : null;
 
     return {
       date: date.toLocaleDateString('en-US', {
@@ -71,6 +72,7 @@ export class Dashboard {
         year: 'numeric',
       }),
       text: deadlineText,
+      color: color,
     };
   }
 }

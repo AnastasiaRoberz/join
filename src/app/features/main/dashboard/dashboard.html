@@ -46,7 +46,9 @@
         <hr />
         <div class="deadline__info">
           @if (filteredTasks().deadline) {
-            <span class="date">{{ filteredTasks().deadline?.date }}</span>
+            <span class="date" [style.color]="filteredTasks().deadline?.color">{{
+              filteredTasks().deadline?.date
+            }}</span>
             <span class="headsup">{{ filteredTasks().deadline?.text }}</span>
           } @else {
             <span>No Deadlines in your Board.</span>
