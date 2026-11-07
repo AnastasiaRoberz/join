@@ -4,6 +4,7 @@
   @include flex-center;
   flex-shrink: 0;
   aspect-ratio: 1;
+  height: fit-content;
   border-radius: 50%;
   color: $text-light;
   border: 1px solid $color-white;

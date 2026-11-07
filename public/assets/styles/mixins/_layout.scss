@@ -1,8 +1,5 @@
 @use '../variables' as *;
-@use '../functions' as *;
 @use 'breakpoints' as *;
-@use 'forms' as *;
-@use 'pages' as *;
 
 @mixin flex-center($direction: row) {
   display: flex;

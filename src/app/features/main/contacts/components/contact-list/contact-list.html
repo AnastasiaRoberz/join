@@ -12,7 +12,7 @@
           #contactBtn
           class="contact-card-btn"
           type="button"
-          [class.--active]="contact.id === selectedId()"
+          [class.contact-card-btn--active]="contact.id === selectedId()"
           (click)="contactSelected.emit(contact.id)"
         >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>

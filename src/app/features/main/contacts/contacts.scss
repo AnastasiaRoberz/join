@@ -20,6 +20,7 @@ app-contact-list {
 
 app-contact-details {
   z-index: 4;
+  position: relative;
 }
 
 .details {
@@ -39,7 +40,6 @@ app-contact-details {
 
   &__title {
     @include flex-start;
-
     gap: calcClamp(15, 30, 1440, 768);
     height: 100%;
     padding: 8px 0;

@@ -104,13 +104,10 @@
 }
 
 button.btn.btn-dots {
-  @include circle-btn(56px, 112px, 16px);
-  // position: fixed;
-  // bottom: 112px;
+  --btn-pos-bottom: #{calcClamp(96, 112, 900, 600, height)};
+  @include circle-btn(56px, var(--btn-pos-bottom), $pos: fixed);
 
   @include short-height {
-    bottom: 16px;
-    right: 16px;
     width: 48px;
   }
 }

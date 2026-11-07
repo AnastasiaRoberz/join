@@ -5,7 +5,7 @@
 }
 
 @mixin responsive($size, $direction: width, $value: max) {
-  @media screen and (#{value}-#{direction}: to-px($size)) {
+  @media screen and (#{$value}-#{$direction}: to-px($size)) {
     @content;
   }
 }

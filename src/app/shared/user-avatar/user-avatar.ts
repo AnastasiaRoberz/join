@@ -70,9 +70,7 @@ export class UserAvatar {
     if (this.size() === 'header') {
       return this.user()?.badge_color;
     } else {
-      return 'transparent';
+      return 'white';
     }
   }
-
-  
 }

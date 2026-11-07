@@ -13,6 +13,7 @@
 
   &.scroll-container {
     padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    flex: none;
   }
 
   @include short-height {
@@ -57,16 +58,16 @@
   padding: 16px 24px;
   border-radius: 10px;
 
-  &:hover {
-    background: $btn-contact-hover;
-  }
-
   &--active {
     background-color: $btn-contact-active;
 
-    .name {
+    .contact-card-btn__name {
       color: $color-white;
     }
+  }
+
+  &:hover:not(&--active) {
+    background: $btn-contact-hover;
   }
 
   &__details {

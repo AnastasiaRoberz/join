@@ -2,7 +2,6 @@
 @use '../functions' as *;
 @use 'layout' as *;
 @use 'breakpoints' as *;
-@use 'pages' as *;
 
 @mixin field-host($gap: 8px) {
   display: flex;
@@ -57,9 +56,9 @@
   }
 }
 
-@mixin circle-btn($size: 56px, $pos-bottom: 32px, $pos-right: 16px) {
+@mixin circle-btn($size: 56px, $pos-bottom: 32px, $pos-right: 16px, $pos: absolute) {
   @include flex-center;
-  position: absolute;
+  position: $pos;
   bottom: $pos-bottom;
   right: $pos-right;
   width: $size;
