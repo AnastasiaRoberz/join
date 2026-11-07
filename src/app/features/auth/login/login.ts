@@ -48,7 +48,12 @@ export class Login {
       this.loginForm.get('password')?.markAsTouched();
       return;
     }
-    this.draftService.clearLogin();
+    this.draftService.clearDrafts();
     this.loginForm.reset();
+  }
+
+  async anonymLogin(): Promise<void> {
+    await this.userService.logIn();
+    this.draftService.clearDrafts();
   }
 }
