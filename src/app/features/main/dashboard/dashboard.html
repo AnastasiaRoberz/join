@@ -16,7 +16,7 @@
           </svg>
         </span>
         <div class="details">
-          <span class="amount">1</span>
+          <span class="amount">{{ filteredTasks().toDo }}</span>
           <p class="type">To-do</p>
         </div>
       </a>
@@ -27,7 +27,7 @@
           </svg>
         </span>
         <div class="details">
-          <span class="amount">2</span>
+          <span class="amount">{{ filteredTasks().done }}</span>
           <p class="type">Done</p>
         </div>
       </a>
@@ -59,36 +59,39 @@
         </div>
         <hr />
         <div class="deadline__info">
-          <span class="date">October 16, 2022</span>
-          <span class="headsup">Upcoming Deadline</span>
+          @if (filteredTasks().deadline) {
+            <span class="date" [style.color]="filteredTasks().deadline?.color">{{
+              filteredTasks().deadline?.date
+            }}</span>
+            <span class="headsup">{{ filteredTasks().deadline?.text }}</span>
+          } @else {
+            <span>No Deadlines in your Board.</span>
+          }
         </div>
       </a>
       <!-- board, progress and feedback -->
       <a routerLink="/app/board" routerLinkActive="active" class="third">
         <div class="details">
-          <span class="amount">3</span>
+          <span class="amount">{{ filteredTasks().total }}</span>
           <p class="type">Tasks in Board</p>
         </div>
       </a>
       <a routerLink="/app/board" routerLinkActive="active" class="third">
         <div class="details">
-          <span class="amount">4</span>
+          <span class="amount">{{ filteredTasks().inProgress }}</span>
           <p class="type">Tasks in Progress</p>
         </div>
       </a>
       <a routerLink="/app/board" routerLinkActive="active" class="third">
         <div class="details">
-          <span class="amount">5</span>
+          <span class="amount">{{ filteredTasks().awaitFeedback }}</span>
           <p class="type">Awaiting Feedback</p>
         </div>
       </a>
     </div>
     <!-- greeting -->
     @if (!isShortHeight()) {
-      <div class="welcome">
-        <p class="welcome__greeting">Good morning,&nbsp;</p>
-        <p class="welcome__name">Sofia Müller</p>
-      </div>
+      <p class="greeting" [innerHTML]="getDaytime()"></p>
     }
   </div>
 </section>
