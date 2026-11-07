@@ -10,6 +10,7 @@
   padding-inline: var(--padding-inline);
   gap: 24px;
   background-color: white;
+  position: relative;
 }
 
 .icon {
@@ -54,6 +55,10 @@ hr {
   gap: calcClamp(8, 32);
   padding: 16px 24px;
   border-radius: 10px;
+
+  .name {
+    color: $text-dark;
+  }
 
   // hover action & no action on hover, when contact is active
   &:hover:not(.contact--active) {

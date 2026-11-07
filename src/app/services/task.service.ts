@@ -211,7 +211,7 @@ export class TaskService {
   openAddTask(status: TaskInterface['status'] = 'To do') {
     this.addTaskStatus.set(status); // sets status received by signal, default = To do
     if (this.responsiveService.isMobile() || this.responsiveService.isTablet()) {
-      this.router.navigate(['/add-task']);
+      this.router.navigate(['/app/add-task']);
     } else {
       this.dialogService.openDialog('add-task');
     }

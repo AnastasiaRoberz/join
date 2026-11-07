@@ -65,6 +65,10 @@
     left: 0;
   }
 
+  .subheading {
+    color: $text-light;
+  }
+
   @include mobile {
     gap: 8px;
     &::before {
