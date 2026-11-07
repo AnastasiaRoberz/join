@@ -75,10 +75,11 @@
       </a>
     </div>
     @if (!responsiveService.isMobile()) {
-      <div class="welcome">
+      <!-- <div class="welcome">
         <p class="welcome__greeting">{{ getDaytime() }}</p>
         <p class="welcome__name">{{ user()?.firstname }} {{ user()?.surname }}</p>
-      </div>
+      </div> -->
+      <p class="greeting" [innerHTML]="getDaytime()"></p>
     }
   </div>
 </section>

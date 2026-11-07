@@ -54,13 +54,13 @@
   // ---------- Tiles | greeting ----------
   &__content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto; // greeting takes what it needs, tiles the rest
+    grid-template-columns: minmax(300px, 670px) auto; // greeting takes what it needs, tiles the rest
     align-items: center;
     column-gap: calcClamp(40, 80, 1440, 1024);
 
     // Tablet: one column, greeting on top, tiles below (same gap as .summary)
-    @include tablet(1100px) {
-      grid-template-columns: minmax(0, 1fr);
+    @include responsive(1100) {
+      grid-template-columns: 1fr;
       row-gap: calcClamp(24, 56);
     }
 
@@ -71,7 +71,6 @@
         6,
         minmax(0, 1fr)
       ); // minmax(0, …): long words can't stretch a column
-      max-width: 670px;
       gap: calcClamp(12, 32);
       container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
     }
@@ -187,31 +186,14 @@
 }
 
 // ---------- Greeting ----------
-.welcome {
-  // Tablet: above the tiles, greeting and name on one line
-  @include tablet(1100px) {
-    order: -1; // moves it before the tiles, HTML stays the same
-    display: flex;
-    flex-wrap: wrap; // a long name drops to the next line
-    align-items: baseline;
-    column-gap: 0.3em;
-  }
 
-  p {
-    margin: 0;
-  }
+.greeting {
+  font-size: calcClamp(28, 47, 1440, 1024);
+  font-weight: 500;
+  color: $color-navy-800;
+  word-wrap: break-word;
 
-  &__greeting {
-    font-size: calcClamp(28, 47, 1440, 1024);
-    font-weight: 500;
-    color: $color-navy-800;
-
-    @include tablet(1100px) {
-      font-size: calcClamp(28, 40, 1024, 768);
-    }
-  }
-
-  &__name {
+  ::ng-deep .name {
     font-size: calcClamp(32, 64, 1440, 1024); // shrinks faster so the tiles keep room
     font-weight: 700;
     color: $color-cyan-700;
@@ -221,3 +203,18 @@
     }
   }
 }
+// .greeting {
+//   font-size: calcClamp(28, 47, 1440, 1024);
+//   font-weight: 500;
+//   color: $color-navy-800;
+//   // Tablet: above the tiles, greeting and name on one line
+//   @include tablet(1100px) {
+//     order: -1; // moves it before the tiles, HTML stays the same
+//     display: flex;
+//     flex-wrap: wrap; // a long name drops to the next line
+//     align-items: baseline;
+//     column-gap: 0.3em;
+//     font-size: calcClamp(28, 40, 1024, 768);
+//   }
+// }
+// }
