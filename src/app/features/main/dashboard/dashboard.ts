@@ -36,12 +36,25 @@ export class Dashboard implements AfterViewInit {
     // ... and the visible page area (without sidebar and header)
     const area = this.host.nativeElement.getBoundingClientRect();
 
-    // translate() moves relative to its own position: offset = centre of area - centre of greeting
-    const toX = area.left + area.width / 2 - (rect.left + rect.width / 2);
-    const toY = area.top + area.height / 2 - (rect.top + rect.height / 2);
+    // Target = middle of the visible page
+    const centerX = area.left + area.width / 2;
+    const centerY = (Math.max(area.top, 0) + window.innerHeight) / 2;
 
-    // Pass values to CSS so the keyframe animation can use them.
-    welcome.style.setProperty('--greeter-x', `${toX}px`);
-    welcome.style.setProperty('--greeter-y', `${toY}px`);
+    const toX = centerX - (rect.left + rect.width / 2);
+    const toY = centerY - (rect.top + rect.height / 2);
+
+    // Start position as a string, e.g. "translate(-350px, -80px)"
+    const center = `translate(${toX}px, ${toY}px)`; // ← this line
+
+    // the numbers go straight into the animation, so it can't start before they exist.
+    // Timing matches .greeter-overlay: 0.2s delay, 1.8s total, hold until 50%, ease-in-out.
+    welcome.animate(
+      [
+        { transform: center }, // 0%: centre
+        { transform: center, offset: 0.5, easing: 'ease-in-out' }, // 50%: still centre, then slide
+        { transform: 'translate(0, 0)' }, // 100%: its spot
+      ],
+      { duration: 1800, delay: 200, fill: 'backwards' }, // backwards: stay in the centre during the delay
+    );
   }
 }
