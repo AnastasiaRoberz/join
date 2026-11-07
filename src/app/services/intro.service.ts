@@ -39,4 +39,35 @@ export class IntroService {
   finish(): void {
     this._active.set(false);
   }
+
+  // Separate from _active: the logo intro is "first visit per session",
+  // the greeting is "after every login". Sharing one flag would mean the
+  // greeting never plays, because 'intro-shown' is already set by then.
+  private _greeting = signal(false);
+  readonly isGreeting = computed(() => this._greeting());
+
+  // Set by the login, read by the dashboard. A plain field is enough:
+  // routing to /summary doesn't reload the page, so the service keeps it.
+  private greetingPending = false;
+
+  // Call this in the login component right after a successful login (also guest login).
+  requestGreeting(): void {
+    this.greetingPending = true;
+  }
+
+  // Called by the dashboard before its first render.
+  startGreeting(): void {
+    // ?greeting in the URL forces the animation (development only, like ?intro)
+    const forceGreeting = new URLSearchParams(window.location.search).has('greeting'); //remove after development
+
+    if (this.greetingPending || forceGreeting) {
+      this._greeting.set(true);
+      this.greetingPending = false; // only once per login
+    }
+  }
+
+  // Called when the overlay animation has finished.
+  finishGreeting(): void {
+    this._greeting.set(false);
+  }
 }

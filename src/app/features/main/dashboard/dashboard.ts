@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject } from '@angular/core';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { IntroService } from '../../../services/intro.service';
 
@@ -8,12 +8,12 @@ import { IntroService } from '../../../services/intro.service';
   styleUrl: './dashboard.scss',
   templateUrl: './dashboard.html',
 })
-export class Dashboard {
+export class Dashboard implements AfterViewInit {
   responsiveService = inject(ResponsiveService);
   isShortHeight = this.responsiveService.isMaxHeight(768);
 
   //to manage intro-animation
-  greeterService = inject(IntroService);
+  introService = inject(IntroService);
   isMobile = this.responsiveService.isMobile();
 
   //only play intro-animation on first visit of website (session)
@@ -39,11 +39,11 @@ export class Dashboard {
       logo.style.setProperty('--intro-scale', `${scale}`);
     }
 
-    this.greeterService.startIntro(this.isMobile);
+    this.introService.startIntro(this.isMobile);
 
     // Wait for the animation to finish, then clean up.
     // Mobile gets a longer duration to match its 1.2s animation.
     const duration = this.isMobile ? 1200 : 900;
-    setTimeout(() => this.greeterService.finish(), duration);
+    setTimeout(() => this.introService.finish(), duration);
   }
 }

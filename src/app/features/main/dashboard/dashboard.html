@@ -1,5 +1,5 @@
 <section class="summary">
-  @if (greeterService.isActive()) {
+  @if (introService.isActive()) {
     <div class="greeter-overlay"></div>
   }
   <!-- header -->
@@ -88,7 +88,7 @@
     </div>
     <!-- greeting -->
 
-    <div class="welcome" [class.greeter-active]="greeterService.isActive()">
+    <div class="welcome" [class.greeter-active]="introService.isActive()">
       @if (!isShortHeight()) {
         <p class="welcome__greeting">Good morning,&nbsp;</p>
         <p class="welcome__name">Sofia Müller</p>
