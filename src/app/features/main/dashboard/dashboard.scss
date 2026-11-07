@@ -228,4 +228,8 @@
       font-size: calcClamp(24, 32);
     }
   }
+
+  @include responsive(1100) {
+    order: -1;
+  }
 }
