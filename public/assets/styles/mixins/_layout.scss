@@ -1,0 +1,73 @@
+@use '../variables' as *;
+@use 'breakpoints' as *;
+
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start($direction: row, $alignment: single) {
+  display: flex;
+  flex-direction: $direction;
+
+  @if ($alignment == 'both') {
+    justify-content: flex-start;
+    align-items: flex-start;
+  } @else if ($direction == 'row') {
+    justify-content: flex-start;
+    align-items: center;
+  } @else if ($direction == 'column') {
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+@mixin size($w: 100%, $h: 100%) {
+  width: $w;
+  height: $h;
+}
+
+@mixin text-ellipsis {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin underline($width: 90px, $bottom: -16px, $centered: false) {
+  &::after {
+    content: '';
+    width: $width;
+    height: 3px;
+    background-color: $text-underline;
+    position: absolute;
+    bottom: $bottom;
+    left: if($centered, 50%, 0);
+    @if $centered {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@mixin title-devider($break-at: null) {
+  border: none;
+  border-left: 3px solid $text-underline;
+  width: 3px;
+  align-self: stretch;
+  margin-inline: 30px;
+
+  @if $break-at {
+    @include responsive($break-at) {
+      order: 1;
+      border-left: none;
+      border-top: 3px solid $text-underline;
+      width: 90px;
+      height: auto;
+      align-self: flex-start;
+      margin-top: 8px;
+      margin-inline: 0;
+    }
+  }
+}

@@ -1,12 +1,8 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column);
-  justify-content: flex-start;
+  @include flex-start(column, both);
   gap: 21px;
-  width: 100%;
-  min-width: 0; // the component may get narrower than the long name
-  height: 100%;
 }
 
 .detail-header {
@@ -21,7 +17,7 @@
 
   .name {
     min-height: 105px;
-    font-size: calcClamp(20, 47);
+    font-size: #{min(calcClamp(20, 48), calcClamp(36, 48, 700, 350, height))};
     max-width: 100%; // never wider than the wrapper
     overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
     display: flex;
@@ -34,6 +30,14 @@
 
     .name {
       font-size: calcClamp(20, 38, 1440, 1025);
+
+      @include tablet {
+        font-size: calcClamp(22, 36, 1024, 769);
+      }
+
+      @include mobile {
+        font-size: calcClamp(20, 38, 768, 320);
+      }
     }
   }
 }
@@ -42,10 +46,10 @@
   @include flex-start;
   gap: 16px;
 
-  @include tablet {
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
+  @media screen and (max-width: 1024px), screen and (max-height: 500px) {
+    position: fixed;
+    bottom: 106px;
+    right: 14px;
     z-index: 1; // covers the dots button while open
     flex-direction: column;
     align-items: flex-start;
@@ -71,13 +75,19 @@
         visibility 0s;
     }
   }
+
+  @include short-height {
+    position: fixed;
+    bottom: 12px;
+    right: 12px;
+  }
 }
 
 .info-heading {
   font-size: $font-medium;
   line-height: 0.75;
   padding: 10px 0;
-  margin-top: calcClamp(0, 33, 1200, 768);
+  margin-top: #{min(calcClamp(0, 32, 1200, 768), calcClamp(0, 32, 700, 350, height))};
 }
 
 .detail-info {
@@ -93,44 +103,15 @@
   }
 }
 
-@include tablet {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(22, 36, 1024, 769);
-      }
-    }
-  }
-}
-
-@include mobile {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(20, 38, 768, 320);
-      }
-    }
-  }
-}
-
 button.btn.btn-dots {
-  @include flex-center;
-  position: absolute;
-  bottom: 32px;
-  right: 16px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: $btn-primary-default;
-  color: $color-white;
-  box-shadow: $btn-shadow;
-  // z-index: 2;
+  --btn-pos-bottom: #{calcClamp(96, 112, 900, 600, height)};
+  @include circle-btn(56px, var(--btn-pos-bottom), $pos: fixed);
 
-  .icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
+  @media screen and (min-width: 1025px) and (max-height: 600px) {
+    bottom: 16px;
+  }
+
+  @include short-height {
+    width: 48px;
   }
 }

@@ -9,7 +9,7 @@ html {
 }
 
 h2 {
-  font-size: #{min(calcClamp(48, 61), calcClamp(36, 61, 900, 350, height))};
+  font-size: #{min(calcClamp(40, 61), calcClamp(36, 61, 900, 350, height))};
   font-weight: 700;
   line-height: 0.75;
 }

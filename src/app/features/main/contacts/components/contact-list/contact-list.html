@@ -2,9 +2,9 @@
 
 <div class="contact-list scroll-container">
   @for (group of contactService.groupedContacts(); track $index) {
-    <p class="group-letter">{{ group.letter }}</p>
-    <hr />
-    <div class="group-wrapper">
+    <p class="contact-list__group-letter">{{ group.letter }}</p>
+    <hr class="contact-list__devider" />
+    <div class="contact-list__group-wrapper">
       @for (contact of group.contacts; track $index) {
         <!-- Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container. -->
         <!-- (click) sends id to contacts.ts -->
@@ -12,13 +12,13 @@
           #contactBtn
           class="contact-card-btn"
           type="button"
-          [class.contact--active]="contact.id === selectedId()"
+          [class.contact-card-btn--active]="contact.id === selectedId()"
           (click)="contactSelected.emit(contact.id)"
         >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
-          <div class="details">
-            <p class="name">{{ fullName(contact) }}</p>
-            <p class="mail">{{ contact.mail }}</p>
+          <div class="contact-card-btn__details">
+            <p class="contact-card-btn__name">{{ fullName(contact) }}</p>
+            <p class="contact-card-btn__mail">{{ contact.mail }}</p>
           </div>
         </button>
       }

@@ -21,32 +21,14 @@
   &__header {
     display: flex;
     align-items: center;
-    gap: 30px;
+    height: 100%;
 
-    h2,
-    p {
-      margin: 0;
+    h2 {
+      line-height: 1;
     }
 
     hr {
-      align-self: stretch; // as tall as the header, no height: 120% needed
-      transform: scaleY(1.2);
-      width: 3px;
-      margin: 0;
-      border: none;
-      background: $text-underline;
-    }
-
-    @include mobile {
-      @include flex-start(column);
-      gap: 8px;
-
-      hr {
-        order: 1; // line under the slogan, HTML stays the same
-        align-self: auto;
-        width: 90px;
-        height: 3px;
-      }
+      @include title-devider;
     }
   }
 

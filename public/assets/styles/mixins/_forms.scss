@@ -1,0 +1,75 @@
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'layout' as *;
+@use 'breakpoints' as *;
+
+@mixin field-host($gap: 8px) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  gap: $gap;
+}
+
+@mixin field-label {
+  font-size: calcClamp(16, 20, 768, 320);
+  line-height: 120%;
+}
+
+@mixin field-container($height: calcClamp(40, 48, 769, 400)) {
+  @include flex-center;
+  height: $height;
+  border: 1px solid $input-default-border;
+  border-radius: 10px;
+  position: relative;
+  background-color: white;
+
+  &:focus-within {
+    border-color: $input-focus-border;
+  }
+}
+
+@mixin field-input($width: flex) {
+  border: none;
+  outline: none;
+  background: none;
+  @if ($width == width) {
+    width: 100%;
+  }
+  @if ($width == flex) {
+    flex: 1;
+  }
+  font-family: Inter;
+  font-size: calcClamp(16, 20, 768, 320);
+}
+
+@mixin field-error-msg {
+  font-size: #{min(calcClamp(12, 16, 940, 400), calcClamp(12, 16, 700, 350, height))};
+  color: $error;
+  position: absolute;
+  right: 0;
+  bottom: #{min(calcClamp(-1, -8, 768, 320), calcClamp(-1, -8, 700, 350, height))};
+  transform: translateY(100%);
+
+  @include mobile {
+    bottom: -1px;
+  }
+}
+
+@mixin circle-btn($size: 56px, $pos-bottom: 32px, $pos-right: 16px, $pos: absolute) {
+  @include flex-center;
+  position: $pos;
+  bottom: $pos-bottom;
+  right: $pos-right;
+  width: $size;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: $btn-primary-default;
+  color: $color-white;
+  box-shadow: $btn-shadow;
+  padding: 0;
+
+  .btn-label {
+    display: none;
+  }
+}

@@ -34,7 +34,6 @@ textarea {
 textarea {
   field-sizing: content;
   min-height: 96px;
-  // max-width: 100%;
   max-height: #{min(40cqh, 240px)};
   resize: none;
   overflow-wrap: anywhere;
@@ -48,7 +47,7 @@ textarea {
   --sb-border-width: 6px;
   @include field-container(auto);
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(8, 12, 768, 320);
+  padding-block: #{min(calcClamp(8, 12, 768, 320), calcClamp(8, 12, 700, 350, height))};
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),

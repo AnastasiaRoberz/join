@@ -9,10 +9,10 @@
   <div class="summary__content">
     <div class="summary__content__tiles">
       <!-- Todo and Done -->
-      <a href="" class="half">
+      <a routerLink="/app/board" routerLinkActive="active" class="half">
         <span class="icon">
           <svg>
-            <use [attr.href]="'./assets/icons/icons.svg#edit'"></use>
+            <use href="./assets/icons/icons.svg#edit"></use>
           </svg>
         </span>
         <div class="details">
@@ -20,10 +20,10 @@
           <p class="type">To-do</p>
         </div>
       </a>
-      <a href="" class="half">
+      <a routerLink="/app/board" routerLinkActive="active" class="half">
         <span class="icon icon-bold">
           <svg>
-            <use [attr.href]="'./assets/icons/icons.svg#check'"></use>
+            <use href="./assets/icons/icons.svg#check"></use>
           </svg>
         </span>
         <div class="details">
@@ -32,11 +32,11 @@
         </div>
       </a>
       <!-- priority and deadline -->
-      <a href="" class="full deadline">
+      <a routerLink="/app/board" routerLinkActive="active" class="full deadline">
         <div class="details">
           <span class="deadline-icon deadline-icon--urgent">
             <svg>
-              <use [attr.href]="'./assets/icons/icons.svg#urgent'"></use>
+              <use href="./assets/icons/icons.svg#urgent"></use>
             </svg>
           </span>
           <span class="amount">1</span>
@@ -44,7 +44,7 @@
         <div class="details">
           <span class="deadline-icon deadline-icon--medium">
             <svg>
-              <use [attr.href]="'./assets/icons/icons.svg#medium'"></use>
+              <use href="./assets/icons/icons.svg#medium"></use>
             </svg>
           </span>
           <span class="amount">2</span>
@@ -52,7 +52,7 @@
         <div class="details">
           <span class="deadline-icon deadline-icon--low">
             <svg>
-              <use [attr.href]="'./assets/icons/icons.svg#low'"></use>
+              <use href="./assets/icons/icons.svg#low"></use>
             </svg>
           </span>
           <span class="amount">3</span>
@@ -64,19 +64,19 @@
         </div>
       </a>
       <!-- board, progress and feedback -->
-      <a href="" class="third">
+      <a routerLink="/app/board" routerLinkActive="active" class="third">
         <div class="details">
           <span class="amount">3</span>
           <p class="type">Tasks in Board</p>
         </div>
       </a>
-      <a href="" class="third">
+      <a routerLink="/app/board" routerLinkActive="active" class="third">
         <div class="details">
           <span class="amount">4</span>
           <p class="type">Tasks in Progress</p>
         </div>
       </a>
-      <a href="" class="third">
+      <a routerLink="/app/board" routerLinkActive="active" class="third">
         <div class="details">
           <span class="amount">5</span>
           <p class="type">Awaiting Feedback</p>

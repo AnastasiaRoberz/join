@@ -36,6 +36,12 @@ app-header {
   width: 100%;
   max-width: 1208px;
 
+  &:has(app-legal-notice),
+  &:has(app-privacy-policy),
+  &:has(app-help) {
+    max-width: none;
+  }
+
   @include tablet {
     height: auto;
     flex: 1;

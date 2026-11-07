@@ -2,67 +2,44 @@
 
 :host {
   @include flex-start;
-  width: 100%;
-  height: 100%;
-
-  // @include short-height {
-  //   width: calc(100% + var(--sb-width) + calc(var(--sb-offset) - var(--sb-width)));
-  // }
+  @include size;
+  position: relative;
+  overflow-x: hidden;
 }
 
 app-contact-list {
   width: calcClamp(300, 424, 1440, 850);
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
   z-index: 3;
+  flex-shrink: 0;
 
   @include mobile {
     width: 100%;
-    max-width: 100%;
-  }
-
-  @include short-height {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  @include landscape {
-    max-width: 35%;
   }
 }
 
 app-contact-details {
   z-index: 4;
+  position: relative;
 }
 
 .details {
-  --padding-inline: #{calcClamp(16, 88)};
-  @include flex-start(column);
-  justify-content: flex-start;
-  width: 100%;
-  height: 100%;
-  padding-top: #{min(calcClamp(48, 120), calcClamp(16, 48, 700, 350, height))};
-  padding-bottom: #{min(calcClamp(24, 60), calcClamp(16, 48, 700, 350, height))};
+  --padding-inline: #{min(calcClamp(16, 88), calcClamp(32, 88, 700, 350, height))};
+  @include flex-start(column, both);
+  @include size;
+  padding-block: #{min(calcClamp(48, 120), calcClamp(16, 48, 700, 350, height))};
   padding-inline: var(--padding-inline);
   gap: #{min(calcClamp(32, 48), calcClamp(16, 32, 700, 350, height))};
-  position: relative;
-  overflow-x: clip; // no scrollbar for animation of contact details sliding in
 
   &__title__container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     width: 100%;
-
-    .btn-icon,
-    .icon {
-      width: 32px;
-      height: 32px;
-    }
   }
 
   &__title {
     @include flex-start;
-    gap: calcClamp(15, 30, 1440, 768);
     height: 100%;
     padding: 8px 0;
 
@@ -71,24 +48,17 @@ app-contact-details {
     }
 
     hr {
-      border: none;
-      border-left: 3px solid $text-underline;
-      width: 3px;
-      height: 100%;
+      @include title-devider(1290);
     }
 
     @include responsive(1290) {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
-
-      hr {
-        order: 1;
-        border-left: none;
-        border-top: 3px solid $text-underline;
-        width: 90px;
-        margin-top: 8px;
-      }
     }
+  }
+
+  &.scroll-container {
+    padding-right: calc(var(--padding-inline) - var(--sb-width));
   }
 }
