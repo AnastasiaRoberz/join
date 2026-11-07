@@ -12,28 +12,30 @@
   @include flex-start;
   gap: calcClamp(16, 54, 1440, 1290);
   max-width: 100%; // never wider than the component
+  overflow: visible;
+  padding-top: 16px;
 
   .name-wrapper {
     @include flex-start(column);
     gap: 8px;
     flex: 1 1 auto;
-    height: 100%;
-    // height: calcClamp(120, 150, 1440, 1025);
-    max-height: calcClamp(120, 150, 1440, 1025);
+    max-height: calcClamp(80, 120, 1440, 769);
     min-width: 0;
+    overflow: visible;
+
+    @include mobile {
+      max-height: calcClamp(60, 80, 768, 320);
+    }
   }
 
   .name {
     font-size: #{min(calcClamp(36, 48), calcClamp(36, 48, 700, 350, height))};
-    max-height: 2lh;
     word-break: normal;
     overflow-wrap: anywhere;
     hyphens: auto;
     -webkit-hyphens: auto;
-
-    @include tablet {
-      max-height: 3lh;
-    }
+    hyphenate-limit-chars: 13 4 4;
+    -webkit-hyphenate-limit-chars: 13 4 4;
   }
 }
 
