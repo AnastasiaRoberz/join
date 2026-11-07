@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   effect,
@@ -36,7 +37,7 @@ import { fullName } from '../../../../../utils/name-utils';
   styleUrl: './contact-list.scss',
   templateUrl: './contact-list.html',
 })
-export class ContactList {
+export class ContactList implements AfterViewInit {
   /**
    * Shared Contact service that provides the contact data
    * (e.g. `getGroupedContacts()` used in the template).

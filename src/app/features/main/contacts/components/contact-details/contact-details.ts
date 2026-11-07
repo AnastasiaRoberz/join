@@ -8,8 +8,6 @@ import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName } from '../../../../../utils/name-utils';
 import { UserService } from '../../../../../services/user.service';
 import { FitTextDirective } from '../../../../../directives/fit-text.directive';
-// amount of loetter as of where a name is considered long
-const longNames = 10;
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).

@@ -1,10 +1,17 @@
-import { AfterViewInit, Directive, ElementRef, HostListener, input, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+  OnDestroy,
+} from '@angular/core';
 
 @Directive({
   selector: '[appFitText]',
   standalone: true,
 })
-export class FitTextDirective implements AfterViewInit {
+export class FitTextDirective implements AfterViewInit, OnDestroy {
   @Input() maxSize: number = 61;
   @Input() minSize: number = 20;
   @Input() fitParent: boolean = false;
