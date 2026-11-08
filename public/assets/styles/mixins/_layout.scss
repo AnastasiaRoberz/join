@@ -52,23 +52,38 @@
   }
 }
 
-@mixin title-devider($break-at: null) {
-  border: none;
-  border-left: 3px solid $text-underline;
-  width: 3px;
-  align-self: stretch;
-  margin-inline: 30px;
+@mixin titleWithDevider($break-at: null) {
+  display: flex;
+  align-items: center;
+
+  h2 {
+    line-height: 1;
+  }
+
+  hr {
+    border: none;
+    border-left: 3px solid $text-underline;
+    width: 3px;
+    align-self: stretch;
+    margin-inline: 30px;
+  }
 
   @if $break-at {
     @include responsive($break-at) {
-      order: 1;
-      border-left: none;
-      border-top: 3px solid $text-underline;
-      width: 90px;
-      height: auto;
-      align-self: flex-start;
-      margin-top: 8px;
-      margin-inline: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      hr {
+        order: 1;
+        border-left: none;
+        border-top: 3px solid $text-underline;
+        width: 90px;
+        height: auto;
+        align-self: flex-start;
+        margin-top: 8px;
+        margin-inline: 0;
+      }
     }
   }
 }

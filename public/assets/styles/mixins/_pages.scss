@@ -15,7 +15,7 @@
   padding-bottom: calcClampMin((24, 64), (16, 64, 700, 350));
 
   @include tablet {
-    --padding-inline: #{calcClampMin((16, 48, 768, 320), (16, 64, 700, 350))};
+    --padding-inline: #{calcClampMin((16, 48, 1024, 769), (16, 64, 700, 350))};
   }
 
   @include mobile {

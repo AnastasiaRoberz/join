@@ -6,26 +6,10 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  height: 100%;
-
-  h2 {
-    line-height: 1;
-  }
-
-  hr {
-    @include title-devider(768);
-  }
-
-  @include mobile {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
+  @include titleWithDevider(768);
 }
 // ---------- Tiles | greeting ----------
-&__content {
+.content {
   display: grid;
   grid-template-columns: minmax(300px, 670px) auto; // greeting takes what it needs, tiles the rest
   align-items: center;
