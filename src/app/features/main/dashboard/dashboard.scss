@@ -28,7 +28,13 @@
     }
 
     hr {
-      @include title-devider;
+      @include title-devider(768);
+    }
+
+    @include mobile {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
     }
   }
 
