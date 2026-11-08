@@ -5,11 +5,11 @@
   width: 100%;
   height: 100%;
   padding-inline: var(--padding-inline);
-  padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
-  padding-bottom: #{min(calcClamp(24, 62), calcClamp(16, 62, 1024, 350, height))};
+  padding-top: calcClampMin((48, 80), (32, 80, 1024, 350));
+  padding-bottom: calcClampMin((24, 62), (16, 62, 1024, 350));
   display: flex;
   flex-direction: column;
-  gap: #{min(calcClamp(40, 48, 1440, 430, width), calcClamp(16, 40, 1024, 350, height))};
+  gap: calcClampMin((40, 48, 1440, 430), (16, 40, 1024, 350));
 
   @include mobile {
     --padding-inline: #{calcClamp(16, 40, 768, 320)};
@@ -23,7 +23,7 @@ form {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: #{min(calcClamp(24, 48), calcClamp(16, 40, 1024, 350, height))};
+  gap: calcClampMin((24, 48), (16, 40, 1024, 350));
 
   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include mobile {
@@ -87,36 +87,6 @@ form {
     max-height: none;
   }
 }
-
-// .task-left::after {
-//   content: '';
-//   position: absolute;
-//   left: calc(100% + var(--col-gap) / 2);
-//   top: 0;
-//   height: 100%;
-//   width: 1px;
-//   background-color: $input-placeholder;
-
-//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-//   @include mobile {
-//     display: none;
-//   }
-// }
-
-// .task-right::before {
-//   content: '';
-//   position: absolute;
-//   right: calc(100% + var(--col-gap) / 2);
-//   top: 0;
-//   height: 100%;
-//   width: 1px;
-//   background-color: $input-placeholder;
-
-//   // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
-//   @include mobile {
-//     display: none;
-//   }
-// }
 
 .divider {
   width: 1px;

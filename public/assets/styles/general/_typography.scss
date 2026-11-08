@@ -2,25 +2,32 @@
 
 html {
   font-family: 'Inter';
-  font-size: calcClamp(14, 16, 500, 350, height);
+  font-size: calcClamp(14, 16, 800, 350, height);
   font-family: 'Inter';
   font-weight: 400;
   color: $text-normal;
 }
 
+body,
+input,
+textarea,
+p {
+  font-size: 1rem;
+}
+
 h2 {
-  font-size: calcClampRem(48, 60);
+  font-size: calcClampMin((48, 60), (32, 60, 800, 350));
   font-weight: 700;
   line-height: 0.75;
 }
 
 h3 {
-  font-size: calcClampRem(18, 27);
+  font-size: calcClampMin((20, 28), (16, 28, 800, 350));
   font-weight: 700;
 }
 
 h4 {
-  font-size: calcClampRem(16, 20);
+  font-size: calcClampMin(16, 20);
   font-weight: 700;
 }
 
@@ -33,7 +40,7 @@ h4 {
 ------------------------------------------------ */
 // * --- texts --- *
 .subheading {
-  font-size: calcClampRem(16, 27);
+  font-size: calcClampMin(16, 27);
   color: $color-navy-800;
 }
 

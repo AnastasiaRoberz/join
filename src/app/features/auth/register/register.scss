@@ -14,14 +14,6 @@ header {
   position: relative;
   width: calc(100% + 2 * var(--card-padding));
 
-  h2 {
-    font-size: #{min(
-        calcClamp(36, 61),
-        calcClamp(36, 61, 1000, 600, height),
-        calcClamp(24, 36, 600, 350, height)
-      )};
-  }
-
   a[appBtn] {
     position: absolute;
     top: 0;
