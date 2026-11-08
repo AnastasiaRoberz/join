@@ -29,15 +29,15 @@ header {
 
 form {
   @include flex-center(column);
-  gap: calcClamp(14, 24, 1000, 600, height);
+  gap: calcClamp(16, 24, 600, 450, height);
   width: 100%;
 }
 
 .privacy-row {
   @include flex-center;
   gap: 8px;
-  font-size: calcClamp(14, 16, 500, 350, height);
-  margin-top: calcClamp(-6, 0, 500, 350, height);
+  font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
+  margin-top: calcClamp(-6, 0, 600, 450, height);
 
   label {
     cursor: pointer;

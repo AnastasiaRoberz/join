@@ -44,7 +44,7 @@
 @mixin field-label {
   @include flex-start;
   gap: 8px;
-  font-size: calcClampRem(16, 20, 768, 320);
+  font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
   line-height: 120%;
 }
 
@@ -72,7 +72,7 @@
     flex: 1;
   }
   font-family: Inter;
-  font-size: calcClampRem(16, 20, 768, 320);
+  font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
 }
 
 @mixin field-error-msg {
