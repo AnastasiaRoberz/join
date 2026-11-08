@@ -3,7 +3,7 @@
 :host {
   @include auth-page;
   --card-padding: #{calcClamp(16, 115)};
-  padding-block: min(calcClamp(24, 48), calcClamp(12, 48, 1000, 600, height));
+  padding-block: calcClampMin((24, 48), (12, 48, 100, 600));
   gap: calcClamp(12, 48, 1000, 600, height);
   padding-inline: var(--card-padding);
   background-color: white;

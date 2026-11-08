@@ -54,7 +54,7 @@
   }
 
   &.btn--medium {
-    font-size: calcClamp(16, 20);
+    font-size: calcClampRem(16, 20);
     padding-block: #{min(calcClamp(8, 16, 768, 320), calcClamp(4, 16, 500, 350, height))};
     padding-inline: calcClamp(12, 24, 768, 320);
     border-radius: 10px;

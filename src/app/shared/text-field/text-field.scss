@@ -17,7 +17,7 @@
 }
 
 .char-count {
-  font-size: calcClamp(12, 14, 940, 400);
+  font-size: calcClampMin((12, 14, 940, 400), (12, 14));
   color: $input-default-label;
   position: absolute;
   right: 0;
