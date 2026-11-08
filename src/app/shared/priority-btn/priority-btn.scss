@@ -23,17 +23,16 @@
 
 .prio-btn {
   width: 100%;
-  // max-width: 136px;
-  height: calcClamp(41, 56, 1300, 430);
   border-radius: 10px;
-  padding: 16px 10px;
+  padding-inline: 10px;
+  padding-block: calcClamp(8, 16, 500, 350, height);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   box-shadow: 0 0 4px 0 #00000066;
   background-color: $color-white;
-  font-size: calcClamp(16, 20, 1300, 1025);
+  font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
   line-height: 120%;
 
   // @include responsive-flex {
