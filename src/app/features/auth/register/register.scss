@@ -15,7 +15,11 @@ header {
   width: calc(100% + 2 * var(--card-padding));
 
   h2 {
-    font-size: #{min(calcClamp(36, 61), calcClamp(36, 61, 1000, 600, height))};
+    font-size: #{min(
+        calcClamp(36, 61),
+        calcClamp(36, 61, 1000, 600, height),
+        calcClamp(24, 36, 600, 350, height)
+      )};
   }
 
   a[appBtn] {
@@ -24,6 +28,10 @@ header {
     bottom: 0;
     left: calcClamp(24, 68);
     margin-block: auto;
+
+    &.btn--icon ::ng-deep .icon {
+      width: calcClamp(24, 32, 500, 350, height);
+    }
   }
 }
 
@@ -36,6 +44,8 @@ form {
 .privacy-row {
   @include flex-center;
   gap: 8px;
+  font-size: calcClamp(14, 16, 500, 350, height);
+  margin-top: calcClamp(-6, 0, 500, 350, height);
 
   label {
     cursor: pointer;
@@ -48,6 +58,18 @@ form {
 
 button[type='submit'] {
   margin-top: calcClamp(0, 8, 800, 350, height);
+
+  padding-block: calcClamp(4, 8, 500, 350, height);
+  margin-top: calcClamp(-6, 0, 500, 350, height);
+}
+
+app-text-field ::ng-deep .input-container {
+  padding-block: calcClamp(4, 8, 500, 350, height);
+
+  label,
+  input {
+    font-size: 14px;
+  }
 }
 
 .password-field {
@@ -113,7 +135,7 @@ button[type='submit'] {
     content: '';
     position: absolute;
     top: 100%;
-    left: 19px; // Sitzt genau über dem (i)
+    left: 19px;
     border-width: 10px;
     border-style: solid;
     border-color: $main-color transparent transparent transparent;

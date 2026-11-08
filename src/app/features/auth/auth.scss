@@ -39,21 +39,29 @@
     width: 100%;
     max-width: 1920px;
     height: 100%;
+    max-height: 900px;
+
     position: relative;
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas: 'top' 'box' 'bottom';
 
     padding-inline: calcClamp(16, 77, 1300, 500);
-    padding-block: calcClamp(16, 32);
+    padding-block: #{min(calcClamp(16, 32), calcClamp(8, 32, 800, 350, height))};
 
-    @include widescreen {
-      max-height: 900px;
+    @media screen and (max-height: 500px) and (max-width: 700px) {
+      padding-block: 0;
     }
 
-    @include short-height(700px) {
-      padding-block: 16px;
+    @include short-height {
+      grid-template-rows: auto 1fr auto;
+      gap: calcClamp(8, 16, 500, 350, height);
+
+      &.short-register {
+        padding-block: calcClamp(8, 16, 500, 350, height);
+      }
     }
 
     // Full-screen overlay that provides the colored background during the intro.
@@ -86,30 +94,33 @@
     }
 
     .start-header {
-      grid-area: 1/1;
-      align-self: start;
+      grid-area: top;
+      margin-top: #{min(
+          calcClamp(16, 64),
+          calcClamp(16, 64, 800, 500, height),
+          calcClamp(0, 0, 500, 350, height)
+        )};
       width: 100%;
-      height: 10dvh;
-      min-height: 40px;
-      max-height: 122px;
-      flex-shrink: 0;
-      padding-left: calcClamp(10, 77, 1300, 350);
-      margin-top: 32px;
+      height: 100%;
+      min-width: 0;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
 
-      @include short-height(700px) {
-        height: 8dvh;
-        padding-left: 0;
+      @media screen and (max-height: 500px) and (max-width: 700px) {
+        padding-block: 8px;
       }
 
       .main-logo {
-        height: 100%;
         --logo-main: #{$main-color}; // default logo color: navy blue
+        height: #{min(calcClamp(78, 122), calcClamp(60, 122, 800, 550, height))};
         aspect-ratio: 56 / 67;
         z-index: 1000; // above the overlay
         position: relative; // required for z-index to take effect
+
+        @include short-height {
+          height: 100%;
+        }
 
         // Active state during the intro animation.
         // Sets the logo to its calculated center position as the animation start point.
@@ -123,59 +134,59 @@
       &__login {
         display: flex;
         align-items: center;
-        gap: 35px;
-
-        @include mobile {
-          height: auto;
-        }
-
-        @include short-height(700px) {
-          height: auto;
-        }
+        align-self: flex-start;
+        gap: 32px;
 
         span {
           font-size: calcClamp(16, 20, 768, 400);
         }
+
+        @include short-height {
+          height: 100%;
+          span {
+            display: none;
+          }
+        }
       }
     }
 
-    .auth-main {
-      grid-area: 1/1;
-      place-self: center;
+    .auth-main-box {
+      grid-area: box;
+      justify-self: center;
+      pointer-events: auto;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      max-width: calcClamp(396, 652, 1300, 500);
+      height: auto;
+      border-radius: 30px;
+      box-shadow: 0 0 14px 3px #00000024;
+      overflow: hidden;
       z-index: 5;
-      pointer-events: none;
 
-      @include short-height(600px) {
-        margin-top: -100px;
-        padding-block: 10px;
-      }
-
-      &__box {
-        pointer-events: auto;
-        width: 100%;
-        max-width: calcClamp(396, 652, 1300, 500);
-        height: auto;
-        border-radius: 30px;
-        box-shadow: 0 0 14px 3px #00000024;
-        overflow: hidden;
+      &.short-register {
+        grid-row: top-start / box-end;
+        height: 100%;
       }
     }
 
+    .auth-mobile-signup {
+      grid-area: bottom;
+      align-self: center;
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 35px;
+      z-index: 5;
+      padding-bottom: 20px;
+    }
     footer {
-      grid-area: 1/1;
+      grid-area: bottom;
       align-self: end;
       justify-self: center;
       z-index: 10;
-      margin-top: auto;
       flex-shrink: 0;
 
-      @include widescreen {
-        margin-top: 0px;
+      @include short-height {
+        align-self: center;
       }
     }
   }
