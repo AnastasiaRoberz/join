@@ -4,14 +4,33 @@
 @use 'forms' as *;
 @use 'breakpoints' as *;
 
+@mixin main-styling {
+  --padding-inline: #{calcClampMin((16, 64, 1440, 1025), (16, 64, 700, 350))};
+  --padding-top: #{calcClampMin((48, 80), (16, 80, 700, 501))};
+  @include size;
+  display: flex;
+  flex-direction: column;
+  padding-inline: var(--padding-inline);
+  padding-top: var(--padding-top);
+  padding-bottom: calcClampMin((24, 64), (16, 64, 700, 350));
+
+  @include tablet {
+    --padding-inline: #{calcClampMin((16, 48, 768, 320), (16, 64, 700, 350))};
+  }
+
+  @include mobile {
+    --padding-inline: #{calcClampMin((16, 40, 768, 320), (16, 64, 700, 350))};
+  }
+}
+
 @mixin info-page {
-  --padding-inline: #{calcClamp(16, 96)};
   --space-right: #{calc(100% - 1112px)};
+  --padding-inline: #{calcClamp(16, 96)};
   @include flex-start(column, both);
-  gap: 24px;
   padding-inline: var(--padding-inline);
   padding-top: #{min(calcClamp(48, 116), calcClamp(24, 48, 700, 350, height))};
   padding-bottom: 24px;
+  gap: 24px;
   height: 100%;
   min-height: 0;
 

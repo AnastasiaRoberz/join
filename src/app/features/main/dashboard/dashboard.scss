@@ -1,66 +1,51 @@
 @use '../../../../../public/assets/styles/' as *;
 
 :host {
-  display: block;
-  height: 100%;
-  overflow-y: auto;
-  padding-top: calcClampMin((48, 80), calcClamp(32, 80, 1024, 350));
-  padding-inline: calcClamp(16, 64, 1440, 1280);
-  padding-bottom: calcClampMin((24, 62), (8, 30, 1024, 350));
-
-  @include mobile {
-    padding-bottom: 24px;
-  }
+  @include main-styling;
+  gap: calcClampMin((24, 56), (24, 56, 900, 500));
 }
 
-.summary {
+.header {
   display: flex;
-  flex-direction: column;
-  gap: calcClampMin((24, 56), (24, 56, 900, 500));
+  align-items: center;
+  height: 100%;
 
-  &__header {
-    display: flex;
-    align-items: center;
-    height: 100%;
-
-    h2 {
-      line-height: 1;
-    }
-
-    hr {
-      @include title-devider(768);
-    }
-
-    @include mobile {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
+  h2 {
+    line-height: 1;
   }
 
-  // ---------- Tiles | greeting ----------
-  &__content {
+  hr {
+    @include title-devider(768);
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+// ---------- Tiles | greeting ----------
+&__content {
+  display: grid;
+  grid-template-columns: minmax(300px, 670px) auto; // greeting takes what it needs, tiles the rest
+  align-items: center;
+  column-gap: calcClamp(40, 80, 1440, 1024);
+
+  // Tablet: one column, greeting on top, tiles below (same gap as .summary)
+  @include responsive(1100) {
+    grid-template-columns: 1fr;
+    row-gap: calcClamp(24, 56);
+  }
+
+  // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
+  &__tiles {
     display: grid;
-    grid-template-columns: minmax(300px, 670px) auto; // greeting takes what it needs, tiles the rest
-    align-items: center;
-    column-gap: calcClamp(40, 80, 1440, 1024);
-
-    // Tablet: one column, greeting on top, tiles below (same gap as .summary)
-    @include responsive(1100) {
-      grid-template-columns: 1fr;
-      row-gap: calcClamp(24, 56);
-    }
-
-    // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
-    &__tiles {
-      display: grid;
-      grid-template-columns: repeat(
-        6,
-        minmax(0, 1fr)
-      ); // minmax(0, …): long words can't stretch a column
-      gap: calcClampMin((12, 32), (12, 32, 900, 600, height));
-      container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
-    }
+    grid-template-columns: repeat(
+      6,
+      minmax(0, 1fr)
+    ); // minmax(0, …): long words can't stretch a column
+    gap: calcClampMin((12, 32), (12, 32, 900, 600, height));
+    container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
   }
 }
 
