@@ -58,18 +58,7 @@ form {
 
 button[type='submit'] {
   margin-top: calcClamp(0, 8, 800, 350, height);
-
-  padding-block: calcClamp(4, 8, 500, 350, height);
   margin-top: calcClamp(-6, 0, 500, 350, height);
-}
-
-app-text-field ::ng-deep .input-container {
-  padding-block: calcClamp(4, 8, 500, 350, height);
-
-  label,
-  input {
-    font-size: 14px;
-  }
 }
 
 .password-field {

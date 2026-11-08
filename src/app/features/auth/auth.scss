@@ -51,10 +51,6 @@
     padding-inline: calcClamp(16, 77, 1300, 500);
     padding-block: #{min(calcClamp(16, 32), calcClamp(8, 32, 800, 350, height))};
 
-    @media screen and (max-height: 500px) and (max-width: 700px) {
-      padding-block: 0;
-    }
-
     @include short-height {
       grid-template-rows: auto 1fr auto;
       gap: calcClamp(8, 16, 500, 350, height);
@@ -107,20 +103,12 @@
       justify-content: space-between;
       align-items: flex-start;
 
-      @media screen and (max-height: 500px) and (max-width: 700px) {
-        padding-block: 8px;
-      }
-
       .main-logo {
         --logo-main: #{$main-color}; // default logo color: navy blue
         height: #{min(calcClamp(78, 122), calcClamp(60, 122, 800, 550, height))};
         aspect-ratio: 56 / 67;
         z-index: 1000; // above the overlay
         position: relative; // required for z-index to take effect
-
-        @include short-height {
-          height: 100%;
-        }
 
         // Active state during the intro animation.
         // Sets the logo to its calculated center position as the animation start point.
@@ -143,9 +131,9 @@
 
         @include short-height {
           height: 100%;
-          span {
-            display: none;
-          }
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 8px;
         }
       }
     }
@@ -178,6 +166,7 @@
       z-index: 5;
       padding-bottom: 20px;
     }
+
     footer {
       grid-area: bottom;
       align-self: end;

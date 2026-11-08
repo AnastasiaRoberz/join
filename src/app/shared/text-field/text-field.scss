@@ -29,6 +29,7 @@ input,
 textarea {
   @include field-input(flex);
   min-width: 0;
+  font-size: calcClamp(14, 16, 500, 350, height);
 }
 
 textarea {
@@ -46,9 +47,8 @@ textarea {
   --padding-inline: #{calcClamp(12, 20, 768, 320)};
   --sb-width: 16px;
   --sb-border-width: 6px;
-  @include field-container(auto);
+  @include field-container;
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(8, 12, 768, 320);
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),

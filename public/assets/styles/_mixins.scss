@@ -44,17 +44,17 @@
 @mixin field-label {
   @include flex-start;
   gap: 8px;
-  font-size: calcClamp(16, 20, 768, 320);
+  font-size: #{min(calcClamp(16, 20, 768, 320), calcClamp(14, 16, 500, 350, height))};
   line-height: 120%;
 }
 
-@mixin field-container($height: calcClamp(40, 48, 769, 400)) {
+@mixin field-container() {
   @include flex-center;
-  height: $height;
   border: 1px solid $input-default-border;
   border-radius: 10px;
   position: relative;
   background-color: white;
+  padding-block: #{min(calcClamp(8, 12, 768, 320), calcClamp(4, 8, 500, 350, height))};
 
   &:focus-within {
     border-color: $input-focus-border;
@@ -72,7 +72,7 @@
     flex: 1;
   }
   font-family: Inter;
-  font-size: calcClamp(16, 20, 768, 320);
+  font-size: #{min(calcClamp(16, 20, 768, 320), calcClamp(14, 16, 500, 350, height))};
 }
 
 @mixin field-error-msg {
