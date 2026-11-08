@@ -76,7 +76,7 @@
 }
 
 @mixin field-error-msg {
-  font-size: calcClamp(12, 16, 940, 400);
+  font-size: calcClampMin((12, 16, 940, 400), (12, 16, 800, 350));
   color: $error;
   position: absolute;
   right: 0;
