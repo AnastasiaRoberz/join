@@ -29,7 +29,7 @@ header {
 
 form {
   @include flex-center(column);
-  gap: calcClamp(12, 24, 1000, 600, height);
+  gap: calcClamp(14, 24, 1000, 600, height);
   width: 100%;
 }
 
