@@ -1,6 +1,6 @@
 <button appBtn preset="addContact" (click)="dialogService.openDialog('contact')"></button>
 
-<div class="contact-list scroll-container">
+<div #scrollContainer class="contact-list scroll-container">
   @for (group of contactService.groupedContacts(); track $index) {
     <p class="contact-list__group-letter">{{ group.letter }}</p>
     <hr class="contact-list__devider" />
@@ -13,7 +13,7 @@
           class="contact-card-btn"
           type="button"
           [class.contact-card-btn--active]="contact.id === selectedId()"
-          (click)="contactSelected.emit(contact.id)"
+          (click)="selectContact(contact.id)"
         >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
           <div class="contact-card-btn__details">

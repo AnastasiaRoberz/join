@@ -30,6 +30,12 @@ app-contact-details {
   padding-block: #{min(calcClamp(48, 120), calcClamp(16, 48, 700, 350, height))};
   padding-inline: var(--padding-inline);
   gap: #{min(calcClamp(32, 48), calcClamp(16, 32, 700, 350, height))};
+  position: relative;
+  overflow-x: clip; // no scrollbar for animation of contact details sliding in
+
+  @include mobile {
+    --padding-inline: #{calcClamp(16, 24, 768, 320)};
+  }
 
   &__title__container {
     display: flex;

@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   computed,
   effect,
@@ -7,6 +8,7 @@ import {
   input,
   output,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
@@ -38,7 +40,7 @@ import { fullName } from '../../../../../utils/name-utils';
     '[class.scroll-container]': 'shortHeight()',
   },
 })
-export class ContactList {
+export class ContactList implements AfterViewInit {
   /**
    * Shared Contact service that provides the contact data
    * (e.g. `getGroupedContacts()` used in the template).
@@ -70,6 +72,8 @@ export class ContactList {
 
   // Collects all <button #contactBtn> elements from the template into a queryable list
   @ViewChildren('contactBtn') contactButtons!: QueryList<ElementRef>;
+  @ViewChild('scrollContainer')
+  scrollContainer?: ElementRef<HTMLElement>;
 
   constructor() {
     /**
@@ -116,5 +120,25 @@ export class ContactList {
         }
       }, 50);
     });
+  }
+
+  selectContact(id: number | undefined): void {
+    if (this.scrollContainer) {
+      this.contactService.savedScrollTop = this.scrollContainer.nativeElement.scrollTop;
+    }
+    this.contactSelected.emit(id);
+  }
+
+  ngAfterViewInit(): void {
+    const scrollPos = this.contactService.savedScrollTop;
+    if (this.scrollContainer && scrollPos > 0) {
+      this.scrollContainer.nativeElement.scrollTop = scrollPos;
+
+      requestAnimationFrame(() => {
+        if (this.scrollContainer) {
+          this.scrollContainer.nativeElement.scrollTop = scrollPos;
+        }
+      });
+    }
   }
 }

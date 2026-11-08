@@ -1,7 +1,8 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  --padding-inline: #{calcClamp(12, 24, 768, 320)};
+  --padding-inline: #{calcClamp(12, 24, 1440, 1025)};
+  --sb-width: #{calcClamp(12, 24, 1440, 1025)};
   @include flex-start(column, both);
   @include size;
   padding-block: calcClamp(16, 32, 768, 320) calcClamp(6, 12, 768, 320);

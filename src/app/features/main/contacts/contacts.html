@@ -19,7 +19,7 @@
       }
     </div>
     @if (selectedId(); as id) {
-      <app-contact-details [selectedId]="id" (contactDeleted)="closeDetails()" />
+      <app-contact-details [selectedId]="id" (contactDeleted)="onContactDeleted()" />
     }
   </div>
 }
