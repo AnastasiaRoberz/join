@@ -47,7 +47,7 @@
  * When building responsive layouts that must adapt to both narrow screens (width) and
  * short screens (height, e.g., landscape mobile or small laptops), we often need the
  * smaller of a width-based clamp and one or more height-based clamps.
- * Writing `#{min(calcClamp(...), calcClamp(..., height))}` repeatedly is verbose and error-prone.
+ * Writing `min(calcClamp(...), calcClamp(..., height))` repeatedly is verbose and error-prone.
  * This helper automates axis assignment, default breakpoints, and CSS `min()` string escaping.
  *
  * Default Axis & Breakpoint Rules:
