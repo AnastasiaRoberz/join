@@ -73,7 +73,12 @@ export class Dashboard implements AfterViewInit {
     const overlayAnimation = this.host.nativeElement
       .querySelector('.greeter-overlay')
       ?.getAnimations()[0];
-    if (overlayAnimation) animation.startTime = overlayAnimation.startTime;
+
+    // wait until the overlay animation has really started (mobiles start later)
+    overlayAnimation?.ready.then(() => {
+      // then start the greeting at exactly the same moment as the overlay
+      animation.startTime = overlayAnimation.startTime;
+    });
 
     welcome.style.visibility = ''; // show it again, now already in the middle
   }
