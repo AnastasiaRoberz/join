@@ -1,4 +1,5 @@
 @use '../variables' as *;
+@use '../functions' as *;
 @use 'breakpoints' as *;
 
 @mixin flex-center($direction: row) {
@@ -43,7 +44,7 @@
     height: 3px;
     background-color: $text-underline;
     position: absolute;
-    bottom: #{calc(calcClamp(2, 16, 800, 350, height) * -1)};
+    top: calc(100% + #{calcClamp(2, 16, 800, 350, height)});
     left: if($centered, 50%, 0);
     @if $centered {
       transform: translateX(-50%);
