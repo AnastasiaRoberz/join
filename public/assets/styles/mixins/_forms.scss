@@ -12,17 +12,19 @@
 }
 
 @mixin field-label {
-  font-size: calcClamp(16, 20, 768, 320);
-  line-height: 120%;
+  @include flex-start;
+  gap: 8px;
+  font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
+  line-height: 1;
 }
 
-@mixin field-container($height: calcClamp(40, 48, 769, 400)) {
+@mixin field-container {
   @include flex-center;
-  height: $height;
   border: 1px solid $input-default-border;
   border-radius: 10px;
   position: relative;
   background-color: white;
+  padding-block: calcClampMin((8, 12, 768, 320), (2, 8, 500, 350));
 
   &:focus-within {
     border-color: $input-focus-border;
@@ -40,15 +42,15 @@
     flex: 1;
   }
   font-family: Inter;
-  font-size: calcClamp(16, 20, 768, 320);
+  font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
 }
 
 @mixin field-error-msg {
-  font-size: #{min(calcClamp(12, 16, 940, 400), calcClamp(12, 16, 700, 350, height))};
+  font-size: calcClampMin((12, 16, 940, 400), (12, 16, 800, 350));
   color: $error;
   position: absolute;
   right: 0;
-  bottom: #{min(calcClamp(-1, -8, 768, 320), calcClamp(-1, -8, 700, 350, height))};
+  bottom: -2px;
   transform: translateY(100%);
 
   @include mobile {

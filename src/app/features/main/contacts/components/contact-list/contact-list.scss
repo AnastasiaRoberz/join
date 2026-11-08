@@ -28,8 +28,8 @@
 
   &__group-letter {
     @include flex-center;
-    font-size: $font-medium;
-    width: 42px;
+    font-size: calcClampMin(16, 20);
+    width: calcClamp(32, 42);
     aspect-ratio: 1;
     padding: 8px 0;
     margin-left: 24px;

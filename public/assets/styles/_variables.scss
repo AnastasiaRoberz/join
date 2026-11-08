@@ -144,6 +144,6 @@ $board-breakpoint: 1140;
 // ==========================================
 // FONT SIZES
 // ==========================================
-$font-default: 16px;
-$font-medium: 20px;
-$font-large: 47px;
+$font-default: toRem(16);
+$font-medium: toRem(20);
+$font-large: toRem(47);

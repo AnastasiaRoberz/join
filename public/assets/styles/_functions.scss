@@ -1,4 +1,36 @@
+@use 'sass:list';
+@use 'sass:meta';
+
+/**
+ * Calculates a fluid CSS `clamp()` value that scales linearly between a minimum
+ * and maximum pixel size across a defined viewport range.
+ *
+ * How the math works (Linear Interpolation):
+ * - Below `$end` (e.g., 320px), the value stays locked at `$min` (in px).
+ * - Above `$start` (e.g., 1440px), the value stays locked at `$max` (in px).
+ * - Between `$end` and `$start`, the value scales proportionally based on the
+ *   current viewport width (`100svw`) or height (`100svh`).
+ *
+ * Formula used in `calc()`:
+ *   `$min + ($viewport - $end) * ($max - $min) / ($start - $end)`
+ *
+ * @param {Number} $min - The minimum size in pixels (unitless, e.g., `16` for 16px).
+ * @param {Number} $max - The maximum size in pixels (unitless, e.g., `32` for 32px).
+ * @param {Number} $start [1440] - The upper viewport breakpoint in pixels where `$max` is reached (unitless).
+ * @param {Number} $end [320] - The lower viewport breakpoint in pixels where `$min` is reached (unitless).
+ * @param {String} $axis [width] - The viewport dimension to scale against (`width` uses `100svw`, `height` uses `100svh`).
+ * @returns {String} A CSS `clamp(min, preferred, max)` expression.
+ *
+ * @example
+ *   // Scales font-size from 16px (at 320px width) to 24px (at 1440px width)
+ *   font-size: calcClamp(16, 24);
+ *
+ * @example
+ *   // Scales gap from 8px (at 350px height) to 32px (at 800px height)
+ *   gap: calcClamp(8, 32, 800, 350, height);
+ */
 @function calcClamp($min, $max, $start: 1440, $end: 320, $axis: width) {
+  // Use Small Viewport units (svh / svw) to avoid layout jumps caused by dynamic mobile browser toolbars
   $viewport: if($axis == 'height', 100svh, 100svw);
 
   @return clamp(
@@ -6,4 +38,166 @@
     calc(($viewport - $end * 1px) * ($max - $min) / ($start - $end) + $min * 1px),
     $max * 1px
   );
+}
+
+/**
+ * Combines two or more fluid `calcClamp()` calculations inside a single CSS `min()` function.
+ *
+ * Why this function exists:
+ * When building responsive layouts that must adapt to both narrow screens (width) and
+ * short screens (height, e.g., landscape mobile or small laptops), we often need the
+ * smaller of a width-based clamp and one or more height-based clamps.
+ * Writing `min(calcClamp(...), calcClamp(..., height))` repeatedly is verbose and error-prone.
+ * This helper automates axis assignment, default breakpoints, and CSS `min()` string escaping.
+ *
+ * Default Axis & Breakpoint Rules:
+ * - **1st argument:** Defaults to `width` axis with range `1440px -> 320px`.
+ * - **2nd+ arguments:** Default to `height` axis with range `800px -> 350px`.
+ * - Any argument tuple can override its breakpoints or axis explicitly: `(min, max, start, end, axis)`.
+ *
+ * Supported Call Patterns:
+ * 1. **Shorthand (2 numbers):** `calcClampMin(16, 32)`
+ *    Applies the exact same min/max range (16px to 32px) to both width (1440->320) and height (800->350).
+ * 2. **2D Tuple (Width + Height):** `calcClampMin((16, 32), (8, 32))`
+ *    Scales 16->32px on width (1440->320) and 8->32px on height (800->350).
+ * 3. **Custom Breakpoints:** `calcClampMin((24, 48), (12, 48, 1000, 600))`
+ *    Uses custom height breakpoints (1000px -> 600px) for the second clamp.
+ * 4. **Multi-Stage Clamps (3+ arguments):** `calcClampMin((36, 61), (36, 61, 1000, 600), (24, 36, 600, 350))`
+ *    Combines 1 width clamp with multiple staged height clamps for fine-grained vertical control.
+ *
+ * @param {ArgList} $clamps... - Either two unitless numbers `(min, max)` as shorthand, or two or more
+ *   argument lists `(min, max, [start], [end], [axis])`, or pre-evaluated `calcClamp()` calls.
+ * @returns {String} An unquoted CSS `min(clamp(...), clamp(...), ...)` expression ready for direct assignment.
+ *
+ * @example
+ *   // 1. Shorthand: Identical min/max (16px to 32px) for both width and height
+ *   gap: calcClampMin(16, 32);
+ *
+ * @example
+ *   // 2. Standard 2D: Different min values, default breakpoints (Width: 1440->320, Height: 800->350)
+ *   padding-block: calcClampMin((16, 32), (8, 32));
+ *
+ * @example
+ *   // 3. Custom breakpoints for both width (768->320) and height (500->350)
+ *   font-size: calcClampMin((16, 20, 768, 320), (14, 16, 500, 350));
+ *
+ * @example
+ *   // 4. Multiple height stages (1x width + 2x height ranges)
+ *   font-size: calcClampMin((36, 61), (36, 61, 1000, 600), (24, 36, 600, 350));
+ */
+@function calcClampMin($clamps...) {
+  // Shorthand check: If exactly two plain numbers are passed (e.g., calcClampMin(16, 32)),
+  // apply those min/max values to both the default width clamp and default height clamp.
+  @if list.length($clamps) ==
+    2 and
+    meta.type-of(list.nth($clamps, 1)) ==
+    'number' and
+    meta.type-of(list.nth($clamps, 2)) ==
+    'number'
+  {
+    $min: list.nth($clamps, 1);
+    $max: list.nth($clamps, 2);
+    $clamp-w: calcClamp($min, $max, 1440, 320, width);
+    $clamp-h: calcClamp($min, $max, 800, 350, height);
+
+    // Return via unquote() so Sass outputs native CSS min() instead of attempting compile-time evaluation
+    @return unquote('min(#{$clamp-w}, #{$clamp-h})');
+  }
+
+  $resolved: ();
+
+  // Iterate through all passed arguments (Note: Sass lists are 1-indexed)
+  @for $i from 1 through list.length($clamps) {
+    $item: list.nth($clamps, $i);
+
+    // By convention: 1st argument scales with screen width, all subsequent arguments scale with screen height
+    $default-axis: if($i == 1, width, height);
+    $default-start: if($i == 1, 1440, 800);
+    $default-end: if($i == 1, 320, 350);
+
+    @if meta.type-of($item) == 'list' {
+      // Unpack the tuple list and resolve it into a calcClamp() expression
+      $resolved: list.append(
+        $resolved,
+        _resolveClamp($item, $default-axis, $default-start, $default-end),
+        comma
+      );
+    } @else {
+      // Fallback: If a pre-built clamp() string or CSS value was passed directly, append it as-is
+      $resolved: list.append($resolved, $item, comma);
+    }
+  }
+
+  // Wrap all resolved clamp expressions in a native CSS min() call without requiring #{} at the call site
+  @return unquote('min(#{$resolved})');
+}
+
+/**
+ * Calculates a fluid CSS `clamp()` where min and max are converted to `rem` units.
+ * This allows the clamp bounds to scale with the root `html` font-size.
+ *
+ * @param {Number} $min - Minimum size in pixels (e.g. 16).
+ * @param {Number} $max - Maximum size in pixels (e.g. 32).
+ * @param {Number} $start [1440] - Upper viewport breakpoint in pixels.
+ * @param {Number} $end [320] - Lower viewport breakpoint in pixels.
+ * @param {String} $axis [width] - Viewport axis ('width' or 'height').
+ * @param {Number} $base [16] - Root font-size base in pixels (default 16px = 1rem).
+ * @returns {String} CSS clamp() using rem for bounds.
+ */
+@function calcClampRem($min, $max, $start: 1440, $end: 320, $axis: width, $base: 16) {
+  $min-rem: ($min / $base) * 1rem;
+  $max-rem: ($max / $base) * 1rem;
+  $viewport: if($axis == 'height', 100svh, 100svw);
+  @return clamp(
+    $min-rem,
+    calc(($viewport - $end * 1px) * ($max - $min) / ($start - $end) + $min-rem),
+    $max-rem
+  );
+}
+
+/**
+ * Internal helper (adapter) function that unpacks a Sass list (tuple) of positional
+ * arguments, fills in any omitted optional parameters with context-aware defaults,
+ * and forwards them to `calcClamp()`.
+ *
+ * Expected Tuple Structure:
+ *   `($min, $max, [$start], [$end], [$axis])`
+ *   - Index 1 (`$min`): Required. Minimum pixel value.
+ *   - Index 2 (`$max`): Required. Maximum pixel value.
+ *   - Index 3 (`$start`): Optional. Upper viewport breakpoint in px (falls back to `$default-start`).
+ *   - Index 4 (`$end`): Optional. Lower viewport breakpoint in px (falls back to `$default-end`).
+ *   - Index 5 (`$axis`): Optional. Viewport axis `width` or `height` (falls back to `$default-axis`).
+ *
+ * @access private
+ * @param {List} $args - A Sass list containing 2 to 5 arguments for `calcClamp()`.
+ * @param {String} $default-axis [width] - Fallback axis if not specified at index 5.
+ * @param {Number} $default-start [1440] - Fallback upper breakpoint if not specified at index 3.
+ * @param {Number} $default-end [320] - Fallback lower breakpoint if not specified at index 4.
+ * @returns {String} The resulting `clamp()` expression from `calcClamp()`.
+ */
+@function _resolveClamp($args, $default-axis: width, $default-start: 1440, $default-end: 320) {
+  // Extract mandatory min and max values (Sass list indices start at 1)
+  $min: list.nth($args, 1);
+  $max: list.nth($args, 2);
+
+  // Extract optional breakpoint and axis overrides, or fall back to defaults if omitted
+  $start: if(list.length($args) >= 3, list.nth($args, 3), $default-start);
+  $end: if(list.length($args) >= 4, list.nth($args, 4), $default-end);
+  $axis: if(list.length($args) >= 5, list.nth($args, 5), $default-axis);
+
+  @return calcClamp($min, $max, $start, $end, $axis);
+}
+
+/**
+ * Converts a pixel value into the equivalent `rem` value based on a 16px root font.
+ *
+ * @param {Number} $px - Value in pixels (unitless, e.g. 24).
+ * @param {Number} $base [16] - Root font-size in pixels.
+ * @returns {Number} Value in rem (e.g. 1.5rem).
+ *
+ * @example
+ *   font-size: toRem(24); // Outputs: 1.5rem
+ */
+@function toRem($px, $base: 16) {
+  @return ($px / $base) * 1rem;
 }

@@ -70,11 +70,11 @@
   @include flex-center(column);
   @include size;
   gap: 48px;
-  padding-block: #{min(calcClamp(32, 48), calcClamp(24, 48, 500, 350, height))};
+  padding-block: calcClampMin((32, 48), (8, 48, 500, 350));
 
   h2 {
     @include underline(150px, #{calcClamp(-8, -16, 500, 350, height)}, true);
     position: relative;
-    line-height: 1.2;
+    line-height: 1;
   }
 }

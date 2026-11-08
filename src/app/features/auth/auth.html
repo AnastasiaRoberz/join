@@ -1,35 +1,39 @@
-<div class="content" [class.intro-mobile]="introService.isMobile()">
+<div
+  class="content"
+  [class.short-register]="navService.currentUrl() === '/register' && isShortHeight()"
+>
   @if (introService.isActive()) {
     <div class="intro-overlay"></div>
   }
-  <header class="start-header">
-    <svg class="main-logo" [class.intro-active]="introService.isActive()">
-      <use href="./assets/icons/icons.svg#logo"></use>
-    </svg>
-    @if (
-      navService.currentUrl() === '/login' && !responsiveService.isMobile() && !isShortHeight()
-    ) {
-      <div class="start-header__login">
-        <span>Not a Join user?</span>
-        <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
-      </div>
-    }
-  </header>
+  @if (!(navService.currentUrl() === '/register' && isShortHeight())) {
+    <header class="start-header">
+      <svg class="main-logo" [class.intro-active]="introService.isActive()">
+        <use href="./assets/icons/icons.svg#logo"></use>
+      </svg>
 
-  <main class="auth-main">
-    <div class="auth-main__box">
-      <router-outlet />
-    </div>
-    @if (
-      (navService.currentUrl() === '/login' && responsiveService.isMobile()) ||
-      (isShortHeight() && navService.currentUrl() === '/login')
-    ) {
-      <div class="start-header__login">
-        <span>Not a Join user?</span>
-        <a appBtn variant="primary" size="medium" routerLink="/register">Sign Up</a>
-      </div>
-    }
+      @if (
+        navService.currentUrl().startsWith('/login') &&
+        (!responsiveService.isMobile() || isShortHeight())
+      ) {
+        <div class="start-header__login">
+          <span>Not a Join user?</span>
+          <a appBtn preset="primary" size="medium" routerLink="/register">Sign Up</a>
+        </div>
+      }
+    </header>
+  }
+
+  <main class="auth-main-box">
+    <router-outlet />
   </main>
+  @if (
+    navService.currentUrl().startsWith('/login') && responsiveService.isMobile() && !isShortHeight()
+  ) {
+    <div class="auth-mobile-signup">
+      <span>Not a Join user?</span>
+      <a appBtn preset="primary" size="medium" routerLink="/register">Sign Up</a>
+    </div>
+  }
 
   <footer app-footer variant="auth"></footer>
 </div>

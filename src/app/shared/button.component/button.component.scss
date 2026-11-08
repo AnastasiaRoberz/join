@@ -49,13 +49,13 @@
   &.btn--small {
     font-size: $font-default;
     padding-inline: calcClamp(6, 12, 768, 320);
-    padding-block: #{min(calcClamp(4, 8, 768, 320), calcClamp(4, 8, 500, 350, height))};
+    padding-block: calcClampMin((4, 8, 768, 320), (4, 8, 500, 350));
     border-radius: 8px;
   }
 
   &.btn--medium {
-    font-size: calcClamp(16, 20);
-    padding-block: #{min(calcClamp(8, 16, 768, 320), calcClamp(8, 16, 500, 350, height))};
+    font-size: calcClampRem(16, 20);
+    padding-block: calcClampMin((8, 16, 768, 320), (4, 16, 500, 350));
     padding-inline: calcClamp(12, 24, 768, 320);
     border-radius: 10px;
   }
@@ -63,7 +63,7 @@
   &.btn--large {
     font-size: $font-medium;
     padding-inline: calcClamp(8, 16, 768, 320);
-    padding-block: #{min(calcClamp(8, 16, 768, 320), calcClamp(8, 16, 500, 350, height))};
+    padding-block: calcClampMin((8, 16, 768, 320), (4, 16, 500, 350));
     border-radius: 10px;
   }
 

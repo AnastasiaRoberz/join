@@ -4,9 +4,9 @@
   display: block;
   height: 100%;
   overflow-y: auto;
-  padding-top: #{min(calcClamp(48, 80), calcClamp(32, 80, 1024, 350, height))};
-  padding-inline: #{calcClamp(16, 64, 1440, 1280)};
-  padding-bottom: #{min(calcClamp(24, 62), calcClamp(8, 30, 1024, 350, height))};
+  padding-top: calcClampMin((48, 80), calcClamp(32, 80, 1024, 350));
+  padding-inline: calcClamp(16, 64, 1440, 1280);
+  padding-bottom: calcClampMin((24, 62), (8, 30, 1024, 350));
 
   @include mobile {
     padding-bottom: 24px;
@@ -16,7 +16,7 @@
 .summary {
   display: flex;
   flex-direction: column;
-  gap: #{min(calcClamp(24, 56, 900, 500, height), calcClamp(24, 56))};
+  gap: calcClampMin((24, 56), (24, 56, 900, 500));
 
   &__header {
     display: flex;
@@ -58,7 +58,7 @@
         6,
         minmax(0, 1fr)
       ); // minmax(0, …): long words can't stretch a column
-      gap: #{min(calcClamp(12, 32, 900, 600, height), calcClamp(12, 32))};
+      gap: calcClampMin((12, 32), (12, 32, 900, 600, height));
       container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
     }
   }
