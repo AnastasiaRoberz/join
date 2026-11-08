@@ -73,7 +73,7 @@
   padding-block: calcClampMin((32, 48), (8, 48, 500, 350));
 
   h2 {
-    @include underline(150px, #{calcClamp(-8, -16, 500, 350, height)}, true);
+    @include underline(150px, true);
     position: relative;
     line-height: 1;
   }
