@@ -133,6 +133,29 @@
 }
 
 /**
+ * Calculates a fluid CSS `clamp()` where min and max are converted to `rem` units.
+ * This allows the clamp bounds to scale with the root `html` font-size.
+ *
+ * @param {Number} $min - Minimum size in pixels (e.g. 16).
+ * @param {Number} $max - Maximum size in pixels (e.g. 32).
+ * @param {Number} $start [1440] - Upper viewport breakpoint in pixels.
+ * @param {Number} $end [320] - Lower viewport breakpoint in pixels.
+ * @param {String} $axis [width] - Viewport axis ('width' or 'height').
+ * @param {Number} $base [16] - Root font-size base in pixels (default 16px = 1rem).
+ * @returns {String} CSS clamp() using rem for bounds.
+ */
+@function calcClampRem($min, $max, $start: 1440, $end: 320, $axis: width, $base: 16) {
+  $min-rem: ($min / $base) * 1rem;
+  $max-rem: ($max / $base) * 1rem;
+  $viewport: if($axis == 'height', 100svh, 100svw);
+  @return clamp(
+    $min-rem,
+    calc(($viewport - $end * 1px) * ($max - $min) / ($start - $end) + $min-rem),
+    $max-rem
+  );
+}
+
+/**
  * Internal helper (adapter) function that unpacks a Sass list (tuple) of positional
  * arguments, fills in any omitted optional parameters with context-aware defaults,
  * and forwards them to `calcClamp()`.
@@ -163,4 +186,18 @@
   $axis: if(list.length($args) >= 5, list.nth($args, 5), $default-axis);
 
   @return calcClamp($min, $max, $start, $end, $axis);
+}
+
+/**
+ * Converts a pixel value into the equivalent `rem` value based on a 16px root font.
+ *
+ * @param {Number} $px - Value in pixels (unitless, e.g. 24).
+ * @param {Number} $base [16] - Root font-size in pixels.
+ * @returns {Number} Value in rem (e.g. 1.5rem).
+ *
+ * @example
+ *   font-size: toRem(24); // Outputs: 1.5rem
+ */
+@function toRem($px, $base: 16) {
+  @return ($px / $base) * 1rem;
 }
