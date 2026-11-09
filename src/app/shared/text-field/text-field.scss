@@ -29,7 +29,6 @@ input,
 textarea {
   @include field-input(flex);
   min-width: 0;
-  font-size: 1rem;
 }
 
 textarea {

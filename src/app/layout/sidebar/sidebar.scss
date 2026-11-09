@@ -84,7 +84,7 @@ nav {
 :host.is-tablet {
   padding: 2px;
 
-  height: calcClamp(70, 80, 700, 350, height);
+  height: calcClamp(60, 80, 700, 500, height);
   width: 100%;
   align-items: stretch;
 

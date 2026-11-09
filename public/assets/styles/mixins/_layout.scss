@@ -1,4 +1,5 @@
 @use '../variables' as *;
+@use '../functions' as *;
 @use 'breakpoints' as *;
 
 @mixin flex-center($direction: row) {
@@ -43,7 +44,7 @@
     height: 3px;
     background-color: $text-underline;
     position: absolute;
-    bottom: #{calc(calcClamp(2, 16, 800, 350, height) * -1)};
+    top: calc(100% + #{calcClamp(2, 16, 800, 350, height)});
     left: if($centered, 50%, 0);
     @if $centered {
       transform: translateX(-50%);
@@ -51,23 +52,51 @@
   }
 }
 
-@mixin title-devider($break-at: null) {
-  border: none;
-  border-left: 3px solid $text-underline;
-  width: 3px;
-  align-self: stretch;
-  margin-inline: 30px;
+@mixin titleWithDevider($break-at: null) {
+  display: flex;
+  align-items: center;
+
+  h2 {
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .subheading {
+    line-height: 1;
+    white-space: nowrap;
+
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
+  }
+
+  hr {
+    border: none;
+    border-left: 3px solid $text-underline;
+    width: 3px;
+    align-self: stretch;
+    margin-inline: calcClamp(15, 30, 768, 320);
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
+  }
 
   @if $break-at {
     @include responsive($break-at) {
-      order: 1;
-      border-left: none;
-      border-top: 3px solid $text-underline;
-      width: 90px;
-      height: auto;
-      align-self: flex-start;
-      margin-top: 8px;
-      margin-inline: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      hr {
+        order: 1;
+        border-left: none;
+        border-top: 3px solid $text-underline;
+        width: 90px;
+        height: auto;
+        align-self: flex-start;
+        margin-top: calcClampMin(0, 8);
+        margin-inline: 0;
+      }
     }
   }
 }

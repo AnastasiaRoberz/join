@@ -1,19 +1,8 @@
 @use '../../../../../public/assets/styles/' as *;
 
 :host {
-  --padding-inline: #{calcClamp(16, 64, 1440, 1280)};
-  width: 100%;
-  height: 100%;
-  padding-inline: var(--padding-inline);
-  padding-top: calcClampMin((48, 80), (32, 80, 1024, 350));
-  padding-bottom: calcClampMin((24, 62), (16, 62, 1024, 350));
-  display: flex;
-  flex-direction: column;
+  @include main-styling;
   gap: calcClampMin((40, 48, 1440, 430), (16, 40, 1024, 350));
-
-  @include mobile {
-    --padding-inline: #{calcClamp(16, 40, 768, 320)};
-  }
 }
 
 form {
