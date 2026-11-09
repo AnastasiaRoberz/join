@@ -1,3 +1,7 @@
+  <!-- Greeter Overlay -->
+  @if (greeterService.isGreeting()) {
+    <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
+  }
 <!-- header -->
 <header class="header">
   <h2>Join 360</h2>
@@ -46,7 +50,10 @@
     </a>
   </div>
   <!-- greeting -->
-  @if (!(responsiveService.isTablet() && isShortHeight())) {
-    <p class="greeting" [innerHTML]="getDaytime()"></p>
+  @if (!(responsiveService.isTablet() && isShortHeight()) || greeterService.isGreeting()) {
+    <p #welcome
+        class="welcome"
+        [class.greeter-fly]="greeterService.isGreeting() && !isShortHeight()"
+        [class.greeter-fade]="greeterService.isGreeting() && isShortHeight()" [innerHTML]="getDaytime()"></p>
   }
 </div>

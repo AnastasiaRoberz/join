@@ -4,6 +4,7 @@ import { ContactService } from './contact.service';
 import { Router } from '@angular/router';
 import { splitName } from '../utils/name-utils';
 import { Session, User } from '@supabase/supabase-js';
+import { IntroService } from './intro.service';
 
 export interface UserInterface {
   email: string;
@@ -23,6 +24,7 @@ export class UserService {
   supabase = this.supabaseService.supabase;
   contactService = inject(ContactService);
   router = inject(Router);
+  introService = inject(IntroService); // NEW, next to router = inject(Router)
 
   currentUser = signal<User | null>(null);
   currentSession = signal<Session | null>(null);
@@ -68,6 +70,7 @@ export class UserService {
     const newContact = await this.contactService.addContact(contactData);
     this.currentUser.set(newUser.user);
     this.currentSession.set(newUser.session);
+    this.introService.requestGreeting(); // greeting right before the redirect
     this.router.navigate(['app/summary']);
     return true;
   }
@@ -84,6 +87,7 @@ export class UserService {
     this.currentUser.set(data.user);
     this.currentSession.set(data.session);
     await this.contactService.getAllContacts();
+    this.introService.requestGreeting(); // // greeting right before the redirect
     this.router.navigate(['app/summary']);
     return true;
   }

@@ -39,4 +39,31 @@ export class IntroService {
   finish(): void {
     this._active.set(false);
   }
+
+  // is greeting animation running?
+  private greeting = signal(false);
+  // Public read-only access — components can read but never write directly.
+  readonly isGreeting = computed(() => this.greeting());
+
+  // Greeting is waiting to be shwon
+  private greetingPending = false;
+
+  // Called right after a successful login, greeting is then pending
+  requestGreeting(): void {
+    this.greetingPending = true;
+  }
+
+  // Called by the dashboard, starts the greeting if one is waiting.
+  startGreeting(): void {
+    if (this.greetingPending) {
+      this.greeting.set(true); // overlay + animation start
+      this.greetingPending = false; // only once per login
+    }
+  }
+
+  // Called when the overlay animation has finished
+  // removes the overlay, the greeting goes back to normal.
+  finishGreeting(): void {
+    this.greeting.set(false);
+  }
 }

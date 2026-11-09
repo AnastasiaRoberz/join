@@ -1,6 +1,20 @@
 @use '../../../../../public/assets/styles/' as *;
 
+// Fade-out used by the overlay and by the greeting on short screens
+@keyframes overlay-fade {
+  0% {
+    opacity: 1; // start: fully visible
+  }
+  50% {
+    opacity: 1; // still fully visible: first half of the animation is a pause
+  }
+  100% {
+    opacity: 0; // end: invisible, the dashboard underneath shows through
+  }
+}
+
 :host {
+  position: relative; // needed for animation
   @include main-styling;
   gap: calcClampMin((16, 56), (16, 56, 1024, 800));
 }
@@ -19,6 +33,19 @@
 
   @include tablet {
     flex-direction: column;
+  }
+  
+    // Overlay that covers the page area during the greeting.
+  .greeter-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 1;
+
+    background-color: #{$main-bg};
+    animation: overlay-fade 1.8s ease-in-out forwards;
+    animation-delay: 0.2s;
   }
 
   // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
@@ -281,5 +308,24 @@
 
   @include tablet {
     order: -1;
+  }
+  // for anything not short height
+  &.greeter-fly {
+    position: relative;
+    z-index: 1000;
+    width: fit-content;
+  }
+
+  // for short height, greeting does not stay
+  &.greeter-fade {
+    position: absolute;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: overlay-fade 1.8s ease-in-out forwards;
+    animation-delay: 0.2s;
   }
 }
