@@ -10,9 +10,9 @@ import {
 import { ResponsiveService } from '../../../services/responsive.service';
 import { IntroService } from '../../../services/intro.service';
 import { UserService } from '../../../services/user.service';
-import { TaskService } from '../../../services/task.service';
+import { BoardFilter, TaskService } from '../../../services/task.service';
 import { getGreeting } from '../../../utils/greeting-utils';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],
@@ -98,6 +98,7 @@ export class Dashboard implements AfterViewInit {
 
   userService = inject(UserService);
   taskService = inject(TaskService);
+  router = inject(Router);
 
   user = computed(() => this.userService.currentContact());
 
@@ -108,11 +109,43 @@ export class Dashboard implements AfterViewInit {
     const countStatus = (status: string) => tasks.filter((task) => task.status === status).length;
 
     return [
-      { area: 'todo', label: 'To-do', amount: countStatus('To do'), icon: 'edit' },
-      { area: 'done', label: 'Done', amount: countStatus('Done'), icon: 'check', bold: true },
-      { area: 'total', label: 'Tasks in Board', amount: tasks.length },
-      { area: 'progress', label: 'Tasks in Progress', amount: countStatus('In progress') },
-      { area: 'feedback', label: 'Awaiting Feedback', amount: countStatus('Await feedback') },
+      {
+        area: 'todo',
+        label: 'To-do',
+        amount: countStatus('To do'),
+        icon: 'edit',
+        filter: { type: 'status', status: 'To do', label: 'To-do' } as BoardFilter,
+      },
+      {
+        area: 'done',
+        label: 'Done',
+        amount: countStatus('Done'),
+        icon: 'check',
+        bold: true,
+        filter: { type: 'status', status: 'Done', label: 'Done' } as BoardFilter,
+      },
+      {
+        area: 'total',
+        label: 'Tasks in Board',
+        amount: tasks.length,
+        filter: null,
+      },
+      {
+        area: 'progress',
+        label: 'Tasks in Progress',
+        amount: countStatus('In progress'),
+        filter: { type: 'status', status: 'In progress', label: 'In Progress' } as BoardFilter,
+      },
+      {
+        area: 'feedback',
+        label: 'Awaiting Feedback',
+        amount: countStatus('Await feedback'),
+        filter: {
+          type: 'status',
+          status: 'Await feedback',
+          label: 'Awaiting Feedback',
+        } as BoardFilter,
+      },
     ];
   });
 
@@ -121,11 +154,37 @@ export class Dashboard implements AfterViewInit {
     const countPrio = (prio: string) => tasks.filter((task) => task.priority === prio).length;
 
     return [
-      { icon: 'urgent', amount: countPrio('urgent') },
-      { icon: 'medium', amount: countPrio('medium') },
-      { icon: 'low', amount: countPrio('low') },
+      {
+        icon: 'urgent',
+        amount: countPrio('urgent'),
+        filter: { type: 'priority', priority: 'urgent', label: 'Urgent' } as BoardFilter,
+      },
+      {
+        icon: 'medium',
+        amount: countPrio('medium'),
+        filter: { type: 'priority', priority: 'medium', label: 'Medium' } as BoardFilter,
+      },
+      {
+        icon: 'low',
+        amount: countPrio('low'),
+        filter: { type: 'priority', priority: 'low', label: 'Low' } as BoardFilter,
+      },
     ];
   });
+
+  onPriorityClick(filter: BoardFilter, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.taskService.setBoardFilter(filter);
+    this.router.navigate(['/app/board']);
+  }
+
+  onDeadlineTileClick(): void {
+    const currentDeadline = this.deadline();
+    this.taskService.setBoardFilter(
+      currentDeadline ? { type: 'deadline', label: currentDeadline.text } : null,
+    );
+  }
 
   deadline() {
     const tasks = this.taskService.tasks();

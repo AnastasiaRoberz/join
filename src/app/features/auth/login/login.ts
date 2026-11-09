@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
 import { TextField } from '../../../shared/text-field/text-field';
@@ -18,6 +18,8 @@ export class Login {
   userService = inject(UserService);
   draftService = inject(AuthDraftService);
 
+  isSubmitting = signal<boolean>(false);
+
   loginForm = this.fb.group({
     mail: [this.draftService.loginDraft().mail ?? '', [Validators.required]],
     password: ['', [Validators.required]],
@@ -31,7 +33,8 @@ export class Login {
   }
 
   async onLogin(): Promise<void> {
-    if (!this.loginForm.valid) return;
+    if (this.isSubmitting() || !this.loginForm.valid) return;
+    this.isSubmitting.set(true);
     const rawData = this.loginForm.getRawValue();
 
     const userData = {
@@ -50,10 +53,14 @@ export class Login {
     }
     this.draftService.clearDrafts();
     this.loginForm.reset();
+    this.isSubmitting.set(false);
   }
 
   async anonymLogin(): Promise<void> {
+    if (this.isSubmitting()) return;
+    this.isSubmitting.set(true);
     await this.userService.logIn();
     this.draftService.clearDrafts();
+    this.isSubmitting.set(false);
   }
 }

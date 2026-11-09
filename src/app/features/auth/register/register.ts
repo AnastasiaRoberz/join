@@ -1,10 +1,11 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TextField } from '../../../shared/text-field/text-field';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
 import {
   customMailValidator,
   customNameValidator,
+  customPasswordValidator,
   generalCustomValidators,
   passwordMatchValidator,
 } from '../../../utils/custom-validators';
@@ -26,6 +27,7 @@ export class Register {
   supabaseService = inject(SupabaseService);
   userService = inject(UserService);
   draftService = inject(AuthDraftService);
+  isSubmitting = signal<boolean>(false);
 
   registerForm = this.fb.group({
     name: [
@@ -36,7 +38,7 @@ export class Register {
       this.draftService.registerDraft().mail ?? '',
       [Validators.required, customMailValidator(), customMailValidator()],
     ],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, customPasswordValidator()]],
     confirmPassword: ['', [Validators.required, passwordMatchValidator()]],
     privacy: [false, [Validators.requiredTrue]],
   });
@@ -65,7 +67,8 @@ export class Register {
   });
 
   async onSignup(): Promise<void> {
-    if (!this.registerForm.valid) return;
+    if (this.isSubmitting() || !this.registerForm.valid) return;
+    this.isSubmitting.set(true);
     const rawData = this.registerForm.getRawValue();
 
     const userData = {
@@ -80,5 +83,6 @@ export class Register {
       this.draftService.clearDrafts();
       this.registerForm.reset();
     }
+    this.isSubmitting.set(false);
   }
 }

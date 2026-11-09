@@ -6,6 +6,11 @@ import { ResponsiveService } from './responsive.service';
 import { Router } from '@angular/router';
 import { DialogService } from './dialog.service';
 
+export type BoardFilter =
+  | { type: 'status'; status: TaskInterface['status']; label: string }
+  | { type: 'priority'; priority: TaskInterface['priority']; label: string }
+  | { type: 'deadline'; label: string };
+
 /**
  * Domain service managing tasks, subtasks, and user (contact) assignments.
  * Acts as the single source of truth for task state within the application using Angular Signals.
@@ -42,6 +47,31 @@ export class TaskService {
    * Filled by {@link TaskService.getAllTasks} and patched in place by the update/delete methods.
    */
   tasks = signal<TaskInterface[]>([]);
+
+  boardFilter = signal<BoardFilter | null>(null);
+
+  filteredTasks = computed<TaskInterface[]>(() => {
+    const tasks = this.tasks();
+    const filter = this.boardFilter();
+    if (!filter) return tasks;
+
+    switch (filter.type) {
+      case 'status':
+        return tasks.filter((task) => task.status === filter.status);
+      case 'priority':
+        return tasks.filter((task) => task.priority === filter.priority);
+      case 'deadline':
+        return tasks.filter((task) => Boolean(task.due_date) && task.status !== 'Done');
+    }
+  });
+
+  setBoardFilter(filter: BoardFilter | null): void {
+    this.boardFilter.set(filter);
+  }
+
+  clearBoardFilter(): void {
+    this.boardFilter.set(null);
+  }
 
   /**
    * Automatically fetches all tasks from Supabase upon service instantiation.
@@ -128,7 +158,7 @@ export class TaskService {
    * Recalculates automatically whenever `tasks` changes.
    */
   sortedTasks = computed(() => {
-    return [...this.tasks()].sort((a, b) => a.title.localeCompare(b.title));
+    return [...this.filteredTasks()].sort((a, b) => a.title.localeCompare(b.title));
   });
 
   /** Last task created on the board, so its column can scroll to it. */

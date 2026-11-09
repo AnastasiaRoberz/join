@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ResponsiveService } from '../../services/responsive.service';
 import { Footer } from '../footer/footer';
 import { UserService } from '../../services/user.service';
+import { TaskService } from '../../services/task.service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, Footer],
@@ -16,6 +17,7 @@ import { UserService } from '../../services/user.service';
 export class Sidebar {
   responsiveService = inject(ResponsiveService);
   userService = inject(UserService);
+  taskService = inject(TaskService);
   isShort = this.responsiveService.isMaxHeight(500);
   navList = [
     { section: 'summary', svgId: 'summary', label: 'Summary' },
@@ -23,4 +25,10 @@ export class Sidebar {
     { section: 'board', svgId: 'board', label: 'Board' },
     { section: 'contacts', svgId: 'contacts', label: 'Contacts' },
   ];
+
+  onNavClick(section: string): void {
+    if (section === 'board') {
+      this.taskService.clearBoardFilter();
+    }
+  }
 }
