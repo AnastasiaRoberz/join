@@ -8,6 +8,7 @@ import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName } from '../../../../../utils/name-utils';
 import { UserService } from '../../../../../services/user.service';
 import { FitTextDirective } from '../../../../../directives/fit-text.directive';
+import { ContactInterface } from '../../../../../interfaces/contact.interface';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -60,10 +61,10 @@ export class ContactDetails {
    *
    * @param id - Id of the contact to delete.
    */
-  async deleteContact(id: number): Promise<void> {
+  async deleteContact(contact: ContactInterface): Promise<void> {
     if (!(await this.confirmService.askDelete('Contact'))) return;
 
-    await this.contactService.deleteContact(id);
+    await this.userService.deleteUser(contact.id, contact?.user_uid);
     this.contactDeleted.emit();
   }
 

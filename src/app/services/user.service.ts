@@ -72,6 +72,7 @@ export class UserService {
     this.currentSession.set(newUser.session);
     this.introService.requestGreeting(); // greeting right before the redirect
     this.router.navigate(['app/summary']);
+    this.contactService.getAllContacts();
     return true;
   }
 
@@ -116,11 +117,17 @@ export class UserService {
     }
   }
 
-  async deleteUser(uid: string) {
-    const contact = this.contactService.contacts().find((item) => item.user_uid === uid);
-    if (contact) {
+  async deleteUser(id: number, uid?: string | null): Promise<void> {
+    const contactDeleted = await this.contactService.deleteContact(id);
+    if (!contactDeleted) return;
+
+    if (uid) {
+      const isSelf = this.currentUser()?.id === uid;
       const success = await this.supabaseService.deleteUser(uid);
-      if (success) await this.contactService.deleteContact(contact.id);
+
+      if (success && isSelf) {
+        await this.logOut();
+      }
     }
   }
 }

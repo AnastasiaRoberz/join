@@ -251,7 +251,7 @@ export class SupabaseService {
   }
 
   async deleteUser(uid: string): Promise<boolean> {
-    const { data, error } = await this.supabase.auth.admin.deleteUser(uid);
+    const { error } = await this.supabase.rpc('delete_auth_user', { target_uid: uid });
 
     if (!error) {
       this.feedbackService.showSuccess(`User succesfully deleted.`);

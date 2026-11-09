@@ -140,8 +140,9 @@ export class ContactService {
     if (success) {
       this.contacts.update((list) => list.filter((contact) => contact.id !== id));
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   /**
