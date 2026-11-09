@@ -88,7 +88,10 @@ export class TextField implements ControlValueAccessor {
   value: string = '';
 
   actualPassword: string = '';
-  passwortHidden = signal<boolean>(true);
+  passwordHidden = signal<boolean>(true);
+
+  //for aria-autocomplete html -> standard= off, can be changed when using component
+  autocomplete = input<string>('off');
 
   // requiredMsg = input(false, { transform: booleanAttribute });
 
@@ -179,7 +182,7 @@ export class TextField implements ControlValueAccessor {
       this.value = '';
       this.actualPassword = '';
       this.passwordIcon.set('lock');
-    } else if (this.passwortHidden() && this.actualPassword.length > 0) {
+    } else if (this.passwordHidden() && this.actualPassword.length > 0) {
       this.value = '∗'.repeat(this.actualPassword.length);
       this.passwordIcon.set('password-hidden');
     } else {
@@ -193,7 +196,7 @@ export class TextField implements ControlValueAccessor {
   }
 
   togglePasswordHidden(): void {
-    this.passwortHidden.update((hidden) => !hidden);
+    this.passwordHidden.update((hidden) => !hidden);
     this.updatePasswordDisplay();
   }
 
