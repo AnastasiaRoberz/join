@@ -18,6 +18,8 @@ export class BoardHeader {
   dialogService = inject(DialogService);
   exTask = signal<TaskInterface | null>(null);
 
+  mobileView = this.responsiveService.isMaxWidth(500);
+
   /** Formats a task option in the search dropdown using its title. */
   taskLabelFn = (task: TaskInterface): string => task.title;
 
