@@ -42,7 +42,7 @@ export class UserService {
 
   async userSignUp(data: { name: string; mail: string; password: string }): Promise<boolean> {
     const { title, firstname, surname } = splitName(data.name);
-    const phone = '000000';
+    const phone = '---';
 
     const userData: UserInterface = {
       email: data.mail,
