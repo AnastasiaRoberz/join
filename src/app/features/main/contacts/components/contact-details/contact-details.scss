@@ -42,7 +42,7 @@
 
   @media screen and (max-width: 1024px), screen and (max-height: 500px) {
     position: fixed;
-    bottom: 106px;
+    bottom: 90px;
     right: 14px;
     z-index: 1; // covers the dots button while open
     flex-direction: column;
@@ -70,10 +70,13 @@
     }
   }
 
-  @include short-height {
-    position: fixed;
+  @media screen and (min-width: 1025px) and (max-height: 500px) {
     bottom: 12px;
     right: 12px;
+  }
+
+  @include tablet {
+    bottom: calc(calcClamp(60, 80, 700, 500, height) + 12px);
   }
 }
 
