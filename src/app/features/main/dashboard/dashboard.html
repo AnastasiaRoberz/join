@@ -5,7 +5,7 @@
 <!-- header -->
 <header class="header">
   <h2>Join 360</h2>
-  <hr />
+  <hr aria-hidden="true" />
   <p class="subheading">Key Metrics at a Glance</p>
 </header>
 
@@ -18,10 +18,11 @@
         class="tile"
         [class]="tile.area"
         [style.grid-area]="tile.area"
+        [attr.aria-label]="tile.amount + ' ' + tile.label + ' – Go to Board'"
         (click)="taskService.setBoardFilter(tile.filter)"
       >
         @if (tile.icon) {
-          <svg class="icon" [class.icon--bold]="tile.bold">
+          <svg class="icon" [class.icon--bold]="tile.bold" aria-hidden="true" focusable="false">
             <use [attr.href]="'./assets/icons/icons.svg#' + tile.icon"></use>
           </svg>
         }
@@ -33,15 +34,21 @@
     }
 
     <!-- priority and deadline -->
-    <a routerLink="/app/board" routerLinkActive="active" class="tile deadline">
+    <a
+      routerLink="/app/board"
+      routerLinkActive="active"
+      class="tile deadline"
+      aria-label="Priority overview – Go to Board"
+    >
       <div class="prios">
         @for (prio of priorities(); track prio.icon) {
           <div
             class="details prio-item"
+            [attr.aria-label]="prio.amount + ' ' + prio.icon + ' priority'"
             [style.--prio-color]="'var(--prio-' + prio.icon + ')'"
             (click)="onPriorityClick(prio.filter, $event)"
           >
-            <svg class="icon prio-icon">
+            <svg class="icon prio-icon" aria-hidden="true" focusable="false">
               <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
             </svg>
             <span class="amount" [class]="prio.icon">{{ prio.amount }}</span>
@@ -49,7 +56,7 @@
         }
       </div>
 
-      <hr />
+      <hr aria-hidden="true" />
       <div class="deadline__info" (click)="onDeadlineTileClick()">
         @if (deadline(); as deadline) {
           <span class="date" [style.color]="deadline.color">{{ deadline.date }} </span>

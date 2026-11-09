@@ -13,7 +13,7 @@
   }
 </header>
 
-<div class="tasks scroll-container" #taskList>
+<div class="tasks scroll-container" #taskList role="list" [attr.aria-label]="status() + ' tasks'">
   @for (task of tasks(); track task.id) {
     <!-- cdkDrag = making the task cards drag and drop items, pointer down to start visualization-->
     <app-task-card
@@ -26,7 +26,7 @@
   } @empty {
     <!-- hidden while the column shows the placeholder -->
     @if (!showDropHint()) {
-      <p class="tasks__empty">No tasks {{ status() }}</p>
+      <p class="tasks__empty" aria-live="polite">No tasks {{ status() }}</p>
     }
   }
   <!-- show drop placeholder with size of actual card clicked inside the column -->
@@ -35,6 +35,7 @@
       class="tasks__placeholder tasks__drop-hint"
       [style.width.px]="dropHintSize().width"
       [style.height.px]="dropHintSize().height"
+      aria-hidden="true"
     ></div>
   }
 </div>

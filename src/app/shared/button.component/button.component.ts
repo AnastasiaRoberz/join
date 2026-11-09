@@ -88,6 +88,7 @@ export interface BtnInterface {
   host: {
     '[class]': 'hostClasses()',
     '[attr.type]': 'btnType()',
+    '[attr.aria-label]': 'ariaLabel() || null',
   },
 })
 export class Buttons {
@@ -121,6 +122,9 @@ export class Buttons {
    * Overrides or defines the text label. If omitted, projected `<ng-content>` is used.
    */
   label = input<string | null>(null);
+
+  //for icon-only-buttons having no names with icon: aria-hidden
+  ariaLabel = input<string>('');
 
   /**
    * Native HTML button `type` attribute ('button', 'submit', 'reset').

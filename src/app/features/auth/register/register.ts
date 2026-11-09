@@ -85,4 +85,18 @@ export class Register {
     }
     this.isSubmitting.set(false);
   }
+
+  tooltipVisible = signal(false);
+
+  showTooltip(): void {
+    this.tooltipVisible.set(true);
+  }
+
+  hideTooltip(): void {
+    this.tooltipVisible.set(false);
+  }
+
+  toggleTooltip(): void {
+    this.tooltipVisible.update((v) => !v);
+  }
 }

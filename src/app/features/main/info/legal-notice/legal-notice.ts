@@ -5,7 +5,7 @@ import { Buttons } from '../../../../shared/button.component/button.component';
 
 @Component({
   imports: [Buttons],
-  selector: 'app-legal-notice',
+  selector: 'article[app-legal-notice]',
   styleUrl: './legal-notice.scss',
   templateUrl: './legal-notice.html',
   host: {

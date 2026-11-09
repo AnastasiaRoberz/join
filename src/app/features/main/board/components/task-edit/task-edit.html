@@ -1,4 +1,4 @@
-<form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable>
+<form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable aria-label="Edit task">
   <div class="form-content-wrapper scroll-container" cdkScrollable>
     <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
 
@@ -52,5 +52,7 @@
     <app-subtask-field [(subtasks)]="currentSubtasks" />
   </div>
 
-  <button class="btn-submit" appBtn type="submit" preset="check">Ok</button>
+  <button class="btn-submit" appBtn type="submit" preset="check" aria-label="Save task changes">
+    Ok
+  </button>
 </form>

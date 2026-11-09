@@ -1,3 +1,9 @@
-<div class="feedback-toast" [class]="feedback().type">
+<div
+  class="feedback-toast"
+  [class]="feedback().type"
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+>
   <span>{{ feedback().message }}</span>
 </div>

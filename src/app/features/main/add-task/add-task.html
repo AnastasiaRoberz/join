@@ -1,8 +1,9 @@
-<h2 class="task-header">Add Task</h2>
+<h2 class="task-header" id="add-task-heading">Add Task</h2>
 
 <form
   [formGroup]="taskForm"
   (ngSubmit)="onSubmit()"
+  aria-labelledby="add-task-heading"
   [class.scroll-container]="isMiddleHeight()"
   cdkScrollable
 >
@@ -46,7 +47,7 @@
     </div>
 
     @if (!responsiveService.isMobile()) {
-      <div class="divider"></div>
+      <div class="divider" aria-hidden="true"></div>
     }
 
     <div class="task-wrap task-right">
@@ -108,7 +109,7 @@
   </div>
 
   <div class="task-footer">
-    <span><span class="required">*</span>This field is required</span>
+    <span> <span aria-hidden="true" class="required">*</span>This field is required </span>
     <div class="task-footer__buttons">
       <button appBtn preset="cancel" label="Clear" (click)="onClear()"></button>
       <button
@@ -117,6 +118,7 @@
         type="submit"
         label="Create Task"
         [disabled]="taskForm.invalid"
+        [attr.aria-disabled]="taskForm.invalid"
       ></button>
     </div>
   </div>

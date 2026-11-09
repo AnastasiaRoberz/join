@@ -87,4 +87,20 @@ export class DialogComponent {
       this.dialogService.closeDialog();
     }
   }
+
+  //dynamic aria-label for every type
+  dialogLabel = computed(() => {
+    switch (this.dialogService.dialogType()) {
+      case 'contact':
+        return 'Contact details';
+      case 'task':
+        return 'Task details';
+      case 'task-edit':
+        return 'Edit task';
+      case 'add-task':
+        return 'Add task';
+      default:
+        return 'Dialog';
+    }
+  });
 }

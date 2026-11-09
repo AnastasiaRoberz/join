@@ -1,5 +1,5 @@
 @if (responsiveService.isMobile()) {
-  <svg class="logo">
+  <svg class="logo" role="img" aria-label="Join Logo">
     <use href="./assets/icons/icons.svg#logo"></use>
   </svg>
 } @else {
@@ -9,20 +9,26 @@
 @if (userService.currentSession()) {
   <div class="nav">
     @if (!(navService.currentUrl() === '/app/help' || responsiveService.isMobile())) {
-      <a routerLink="/app/help">
-        <svg class="help-icon">
+      <a routerLink="/app/help" aria-label="Help">
+        <svg class="help-icon" aria-hidden="true" focusable="false">
           <use href="./assets/icons/icons.svg#help"></use>
         </svg>
       </a>
     }
-    <button type="button" (click)="toggleMenu()">
+    <button
+      type="button"
+      (click)="toggleMenu()"
+      aria-label="Open user menu"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="header-menu"
+    >
       <app-user-avatar [user]="userService.currentContact() ?? null" size="header" />
     </button>
   </div>
 }
 
 @if (menuOpen()) {
-  <nav #menuRef>
+  <nav #menuRef id="header-menu" aria-label="User menu">
     <ul>
       @if (responsiveService.isMobile()) {
         <li class="help-mobile" (click)="closeMenu()">

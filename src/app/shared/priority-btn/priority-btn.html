@@ -1,17 +1,19 @@
-<span class="prio-label">Priority</span>
-<div class="btn-wrapper">
+<span class="prio-label" id="priority-label">Priority</span>
+<div class="btn-wrapper" role="group" aria-labelledby="priority-label">
   @for (prio of priorities; track prio.value) {
     <button
       type="button"
       class="prio-btn"
       [class]="'prio-btn--' + prio.value"
       [class.active]="activePriority() === prio.value"
+      [attr.aria-pressed]="activePriority() === prio.value"
+      [attr.aria-label]="prio.label + ' priority'"
       (click)="selectPriority(prio.value)"
     >
       @if (!hideBtnText()) {
         <span>{{ prio.label }}</span>
       }
-      <svg class="prio-icon">
+      <svg class="prio-icon" aria-hidden="true" focusable="false">
         <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
       </svg>
     </button>

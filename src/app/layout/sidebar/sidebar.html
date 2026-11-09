@@ -1,6 +1,6 @@
 <div class="sidebar-wrapper">
   @if (!responsiveService.isTablet() && !isShort()) {
-    <svg class="nav-logo">
+    <svg class="nav-logo" role="img" aria-label="Join Logo">
       <use href="./assets/icons/icons.svg#logo"></use>
     </svg>
   }
@@ -15,7 +15,7 @@
               routerLinkActive="active"
               (click)="onNavClick(item.section)"
             >
-              <svg class="nav-icon">
+              <svg class="nav-icon" aria-hidden="true" focusable="false">
                 <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
               </svg>
               <span>{{ item.label }}</span>
@@ -25,7 +25,7 @@
       } @else {
         <li>
           <a routerLink="/login" routerLinkActive="active">
-            <svg class="nav-icon">
+            <svg class="nav-icon" aria-hidden="true" focusable="false">
               <use href="./assets/icons/icons.svg#log-in"></use>
             </svg>
             <span>Log In</span>
@@ -33,7 +33,7 @@
         </li>
         <li>
           <a routerLink="/register" routerLinkActive="active">
-            <svg class="nav-icon">
+            <svg class="nav-icon" aria-hidden="true" focusable="false">
               <use href="./assets/icons/icons.svg#sign-up"></use>
             </svg>
             <span>Sign up</span>

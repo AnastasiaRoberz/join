@@ -1,12 +1,19 @@
-<h2>Log in</h2>
+<h2 id="login-heading">Log in</h2>
 
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <app-text-field label="Email" icon="mail" fieldId="mail" formControlName="mail" />
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" aria-labelledby="login-heading">
+  <app-text-field
+    label="Email"
+    icon="mail"
+    fieldId="mail"
+    formControlName="mail"
+    autocomplete="email"
+  />
   <app-text-field
     inputType="password"
     label="Password"
     fieldId="password"
     formControlName="password"
+    autocomplete="current-password"
   />
   <div class="button-wrapper">
     <button
@@ -14,10 +21,13 @@
       preset="primary"
       size="medium"
       type="submit"
+      [attr.aria-disabled]="!loginForm.valid"
       [disabled]="!loginForm.valid || isSubmitting()"
     >
       Log in
     </button>
-    <button appBtn preset="secondary" size="medium" (click)="anonymLogin()">Guest Log in</button>
+    <button appBtn preset="secondary" size="medium" (click)="anonymLogin()" type="button">
+      Guest Log in
+    </button>
   </div>
 </form>

@@ -5,7 +5,7 @@ import { Buttons } from '../../../../shared/button.component/button.component';
 
 @Component({
   imports: [Buttons],
-  selector: 'app-privacy-policy',
+  selector: 'article[app-privacy-policy]',
   styleUrl: './privacy-policy.scss',
   templateUrl: './privacy-policy.html',
   host: {

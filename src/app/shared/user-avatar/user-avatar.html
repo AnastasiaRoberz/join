@@ -1,7 +1,9 @@
 @if (user()) {
-  <span class="initials">{{ initials() }}</span>
+  <span class="initials" [attr.aria-label]="user()!.firstname + ' ' + user()!.surname">{{
+    initials()
+  }}</span>
 } @else {
-  <svg class="avatar-icon">
+  <svg class="avatar-icon" aria-hidden="true" focusable="false">
     <use href="./assets/icons/icons.svg#person"></use>
   </svg>
 }

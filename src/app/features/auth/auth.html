@@ -3,11 +3,16 @@
   [class.short-register]="navService.currentUrl() === '/register' && isShortHeight()"
 >
   @if (introService.isActive()) {
-    <div class="intro-overlay"></div>
+    <div class="intro-overlay" aria-hidden="true"></div>
   }
   @if (!(navService.currentUrl() === '/register' && isShortHeight())) {
     <header class="start-header">
-      <svg class="main-logo" [class.intro-active]="introService.isActive()">
+      <svg
+        class="main-logo"
+        [class.intro-active]="introService.isActive()"
+        role="img"
+        aria-label="Join Logo"
+      >
         <use href="./assets/icons/icons.svg#logo"></use>
       </svg>
 
@@ -31,7 +36,9 @@
   ) {
     <div class="auth-mobile-signup">
       <span>Not a Join user?</span>
-      <a appBtn preset="primary" size="medium" routerLink="/register">Sign Up</a>
+      <a appBtn preset="primary" size="medium" routerLink="/register" aria-label="Sign up for Join"
+        >Sign Up</a
+      >
     </div>
   }
 
