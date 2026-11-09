@@ -6,16 +6,27 @@
 }
 
 @if (!responsiveService.isMobile() || selectedId()) {
-  <div class="details" [class.scroll-container]="shortHeight()">
+  <div
+    class="details"
+    [class.scroll-container]="shortHeight()"
+    role="region"
+    aria-label="Contact details"
+  >
     <div class="details__title__container">
       <div class="details__title">
         <h2>Contacts</h2>
-        <hr />
+        <hr aria-hidden="true" />
         <p class="subheading">Better with a team</p>
       </div>
       <!-- Back arrow: only visible on mobile (contacts.scss) -->
       @if (responsiveService.isMobile()) {
-        <button appBtn preset="iconMedium" icon="arrow-back" (click)="closeDetails()"></button>
+        <button
+          appBtn
+          preset="iconMedium"
+          icon="arrow-back"
+          ariaLabel="Back to contact list"
+          (click)="closeDetails()"
+        ></button>
       }
     </div>
     @if (selectedId(); as id) {

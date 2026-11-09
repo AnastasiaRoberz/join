@@ -1,10 +1,19 @@
-<button appBtn preset="addContact" (click)="dialogService.openDialog('contact')"></button>
+<button
+  appBtn
+  preset="addContact"
+  ariaLabel="Add new contact"
+  (click)="dialogService.openDialog('contact')"
+></button>
 
 <div #scrollContainer class="contact-list scroll-container">
   @for (group of contactService.groupedContacts(); track $index) {
-    <p class="contact-list__group-letter">{{ group.letter }}</p>
-    <hr class="contact-list__devider" />
-    <div class="contact-list__group-wrapper">
+    <p class="contact-list__group-letter" id="group-{{ group.letter }}">{{ group.letter }}</p>
+    <hr class="contact-list__devider" aria-hidden="true" />
+    <div
+      class="contact-list__group-wrapper"
+      role="group"
+      [attr.aria-labelledby]="'group-' + group.letter"
+    >
       @for (contact of group.contacts; track $index) {
         <!-- Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container. -->
         <!-- (click) sends id to contacts.ts -->
@@ -13,6 +22,8 @@
           class="contact-card-btn"
           type="button"
           [class.contact-card-btn--active]="contact.id === selectedId()"
+          [attr.aria-pressed]="contact.id === selectedId()"
+          [attr.aria-label]="fullName(contact) + ', ' + contact.mail"
           (click)="selectContact(contact.id)"
         >
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>

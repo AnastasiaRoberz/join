@@ -14,9 +14,15 @@
           <button
             appBtn
             preset="edit"
+            [attr.aria-label]="'Edit contact: ' + fullName(contact)"
             (click)="dialogService.openDialog('contact', contact)"
           ></button>
-          <button appBtn preset="delete" (click)="deleteContact(contact.id)"></button>
+          <button
+            appBtn
+            preset="delete"
+            [attr.aria-label]="'Delete contact: ' + fullName(contact)"
+            (click)="deleteContact(contact.id)"
+          ></button>
         </div>
       }
     </div>
@@ -43,6 +49,8 @@
       preset="iconMedium"
       icon="dots-menu"
       class="btn-dots"
+      ariaLabel="More options"
+      [attr.aria-expanded]="menuOpen()"
       (click)="toggleMenu($event)"
     ></button>
   }
