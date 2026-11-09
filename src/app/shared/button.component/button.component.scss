@@ -24,6 +24,7 @@
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    user-select: none;
 
     &:hover,
     &:active {

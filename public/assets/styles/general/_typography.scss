@@ -15,17 +15,11 @@ p {
   font-size: 1rem;
 }
 
-body,
-input,
-textarea,
-p {
-  font-size: 1rem;
-}
-
 h2 {
   font-size: calcClampMin((48, 60), (32, 60, 800, 350));
   font-weight: 700;
   line-height: 0.75;
+  user-select: none;
 }
 
 h3 {
