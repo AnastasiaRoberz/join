@@ -5,7 +5,7 @@ import { Buttons } from '../../../../shared/button.component/button.component';
 
 @Component({
   imports: [Buttons],
-  selector: 'app-help',
+  selector: 'article[app-help]',
   styleUrl: './help.scss',
   templateUrl: './help.html',
   host: {
