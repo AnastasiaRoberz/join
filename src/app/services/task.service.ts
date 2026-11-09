@@ -9,7 +9,7 @@ import { DialogService } from './dialog.service';
 export type BoardFilter =
   | { type: 'status'; status: TaskInterface['status']; label: string }
   | { type: 'priority'; priority: TaskInterface['priority']; label: string }
-  | { type: 'deadline'; label: string };
+  | { type: 'deadline'; dueDate?: string; label: string };
 
 /**
  * Domain service managing tasks, subtasks, and user (contact) assignments.
@@ -61,6 +61,14 @@ export class TaskService {
       case 'priority':
         return tasks.filter((task) => task.priority === filter.priority);
       case 'deadline':
+        return tasks.filter((task) => {
+          if (task.status === 'Done') return false;
+
+          if (filter.dueDate) {
+            return task.due_date.slice(0, 10) === filter.dueDate.slice(0, 10);
+          }
+          return true;
+        });
         return tasks.filter((task) => Boolean(task.due_date) && task.status !== 'Done');
     }
   });
