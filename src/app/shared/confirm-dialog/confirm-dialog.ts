@@ -1,4 +1,12 @@
-import { Component, inject } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  viewChild,
+} from '@angular/core';
 import { ConfirmService } from '../../services/confirm.service';
 import { Buttons } from '../button.component/button.component';
 
@@ -17,4 +25,25 @@ import { Buttons } from '../button.component/button.component';
 })
 export class ConfirmDialog {
   confirmService = inject(ConfirmService);
+
+  //für afterNextRender
+  injector = inject(Injector);
+
+  // Referenz auf die <section> im Template
+  dialogBox = viewChild<ElementRef>('dialogBox');
+
+  constructor() {
+    //setzt Fokus auf den Dialog nach dem Öffnen
+    effect(() => {
+      if (this.confirmService.request()) {
+        // afterNextRender: wartet bis Angular das DOM aktualisiert hat
+        afterNextRender(
+          () => {
+            this.dialogBox()?.nativeElement.focus();
+          },
+          { injector: this.injector },
+        );
+      }
+    });
+  }
 }
