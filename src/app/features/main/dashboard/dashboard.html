@@ -58,7 +58,7 @@
     </a>
   </div>
   <!-- greeting -->
-  @if (!(responsiveService.isTablet() && isShortHeight())) {
+  @if (!hideGreeting()) {
     <p class="greeting" [innerHTML]="getDaytime()"></p>
   }
 </div>

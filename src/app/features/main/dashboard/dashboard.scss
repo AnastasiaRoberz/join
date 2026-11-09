@@ -23,8 +23,9 @@
 
   &__tiles {
     display: grid;
-    grid-template-columns: repeat(
-      6,
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(
+      3,
       minmax(0, 1fr)
     ); // minmax(0, …): long words can't stretch a column
     grid-template-areas:
@@ -172,7 +173,7 @@
   .details {
     flex-direction: column-reverse; // number above the icon
 
-    @media screen and (max-width: 500px) and (max-height: 500px) {
+    @media screen and (max-height: 700px) {
       flex-direction: row;
       gap: 8px;
     }
@@ -216,18 +217,23 @@
       font-size: calcClamp(14, 16, 768, 320);
       color: $text-dark;
     }
+
+    @media screen and (max-width: 499px) and (max-height: 500px) {
+      width: 100%;
+      max-width: none;
+    }
   }
 }
 
 // ---------- Greeting ----------
 .greeting {
-  font-size: calcClampMin((28, 47, 1440, 1024), (24, 47, 500, 350));
+  font-size: calcClampMin((28, 47, 1440, 1024), (20, 47, 600, 450));
   font-weight: 500;
   color: $color-navy-800;
   word-wrap: break-word;
 
   ::ng-deep .name {
-    font-size: calcClampMin((32, 64, 1440, 1024), (32, 64, 500, 350));
+    font-size: calcClampMin((32, 64, 1440, 1024), (24, 64, 600, 450));
     font-weight: 700;
     color: $color-cyan-700;
   }
