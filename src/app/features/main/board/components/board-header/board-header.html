@@ -2,6 +2,7 @@
 <app-select-field
   variant="search"
   placeholder="Find Task"
+  aria-label="Search tasks"
   emptyText="No tasks found."
   [options]="taskService.sortedTasks()"
   [labelFn]="taskLabelFn"
@@ -10,4 +11,9 @@
   (valueChange)="onTaskSelected($event)"
 />
 <!-- added method dialogService.openAddTask() in click (new in DialogService)-->
-<button appBtn preset="addTask" (click)="taskService.openAddTask()"></button>
+<button
+  appBtn
+  preset="addTask"
+  ariaLabel="Add new task"
+  (click)="taskService.openAddTask()"
+></button>

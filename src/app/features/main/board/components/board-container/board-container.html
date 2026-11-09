@@ -17,5 +17,6 @@
     (cardPressed)="pressedColumnIndex.set($index); pressedCardSize.set($event)"
     [status]="column.status"
     [tasks]="column.tasks"
+    [attr.aria-label]="column.status + ' column'"
   />
 }

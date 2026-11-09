@@ -28,6 +28,7 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
   selector: 'app-board-column',
   styleUrl: './board-column.scss',
   templateUrl: './board-column.html',
+  host: { role: 'listitem' },
 })
 export class BoardColumn {
   /** Status of the column, also used as its title (e.g. "To do"). */
