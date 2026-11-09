@@ -254,19 +254,22 @@
 
 // ---------- Greeting ----------
 .welcome {
-  font-size: calcClampMin((28, 47, 1440, 1024), (20, 47, 600, 450));
-  font-weight: 500;
-  color: $color-navy-800;
-  word-wrap: break-word;
-
-  ::ng-deep .name {
-    font-size: calcClampMin((32, 64, 1440, 1024), (24, 64, 600, 450));
-    font-weight: 700;
-    color: $color-cyan-700;
-  }
-
   @include tablet {
     order: -1;
+    align-self: flex-start;
+  }
+
+  .greeting {
+    font-size: calcClampMin((28, 47, 1440, 1024), (20, 47, 600, 450));
+    font-weight: 500;
+    color: $color-navy-800;
+    word-wrap: break-word;
+
+    ::ng-deep .name {
+      font-size: calcClampMin((32, 64, 1440, 1024), (24, 64, 600, 450));
+      font-weight: 700;
+      color: $color-cyan-700;
+    }
   }
   // for anything not short height
   &.greeter-fly {

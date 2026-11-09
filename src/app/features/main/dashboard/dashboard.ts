@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, inject, viewChild, computed } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  inject,
+  viewChild,
+  computed,
+  viewChildren,
+} from '@angular/core';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { IntroService } from '../../../services/intro.service';
 import { UserService } from '../../../services/user.service';
@@ -16,14 +24,13 @@ export class Dashboard implements AfterViewInit {
   responsiveService = inject(ResponsiveService);
   hideGreeting = this.responsiveService.observeQuery('(max-width: 451px) and (max-height: 501px)');
   noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
-  // isShortHeight = this.responsiveService.isMaxHeight(768);
 
   //to manage intro-animation
   greeterService = inject(IntroService);
 
   // Reference to <app-dashboard>
   private host = inject<ElementRef<HTMLElement>>(ElementRef);
-  // Reference to the greeting box in the template <div #welcome>
+  // Reference to the welcome div box in the template <div #welcome>
   private welcome = viewChild<ElementRef<HTMLElement>>('welcome');
 
   constructor() {
@@ -88,7 +95,7 @@ export class Dashboard implements AfterViewInit {
 
     welcome.style.visibility = ''; // show it again, now already in the middle
   }
-  // isShortHeight = this.responsiveService.isMaxHeight(700);
+
   userService = inject(UserService);
   taskService = inject(TaskService);
 

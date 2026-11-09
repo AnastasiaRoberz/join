@@ -63,12 +63,13 @@
   </div>
   <!-- greeting -->
   @if (!hideGreeting() || greeterService.isGreeting()) {
-    <p
+    <div
       #welcome
       class="welcome"
-      [class.greeter-fly]="greeterService.isGreeting() && hideGreeting()"
-      [class.greeter-fade]="greeterService.isGreeting() && !hideGreeting()"
-      [innerHTML]="getDaytime()"
-    ></p>
+      [class.greeter-fly]="greeterService.isGreeting() && !hideGreeting()"
+      [class.greeter-fade]="greeterService.isGreeting() && hideGreeting()"
+    >
+      <p class="greeting" [innerHTML]="getDaytime()"></p>
+    </div>
   }
 </div>
