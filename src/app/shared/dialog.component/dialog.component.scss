@@ -28,10 +28,6 @@
 }
 
 .overlay-content {
-  &:has(.scroll-container) {
-    --padding-block-dialog: 16px;
-  }
-
   &.contact {
     --dialog-height: #{min(95dvh, 592px)};
     --dialog-margin-top: auto;
@@ -53,8 +49,9 @@
   &.task-edit {
     --dialog-max-height: #{min(95dvh, 1024px)};
     --dialog-margin-top: #{calc((100dvh - var(--dialog-max-height, 95dvh)) / 2)};
-    --padding-block-dialog: #{calcClampMin((24, 48, 769, 320), (24, 48, 800, 450))};
+    --padding-block-dialog: #{calcClampMin((8, 48, 769, 320), (24, 48, 800, 450))};
     --padding-inline-dialog: #{calcClamp(24, 48, 769, 320)};
+    padding-block: 16px;
   }
 
   &.add-task {
