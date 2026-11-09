@@ -1,8 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { TaskInterface } from '../../interfaces/task.interface';
-import { AvatarGroupComponent } from '../avatar-group.component/avatar-group.component';
-import { DialogService } from '../../services/dialog.service';
-import { CATEGORIES } from '../../utils/categories-list';
+import { TaskInterface } from '../../../../../interfaces/task.interface';
+import { AvatarGroupComponent } from '../../../../../shared/avatar-group.component/avatar-group.component';
+import { DialogService } from '../../../../../services/dialog.service';
+import { CATEGORIES } from '../../../../../utils/categories-list';
 
 /**
  * Shows one task as a card on the board: category, title, description preview,

@@ -8,7 +8,7 @@ import {
   afterRenderEffect,
 } from '@angular/core';
 import { TaskInterface } from '../../../../../interfaces/task.interface';
-import { TaskCard } from '../../../../../shared/task-card/task-card';
+import { TaskCard } from '../task-card/task-card';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { CdkDrag, CdkDragStart } from '@angular/cdk/drag-drop';
 import { DialogService } from '../../../../../services/dialog.service';
