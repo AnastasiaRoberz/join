@@ -28,6 +28,7 @@
           preset="iconMedium"
           icon="delete"
           class="btn-delete-user"
+          [attr.aria-label]="'Remove ' + user.firstname + ' ' + user.surname"
           (click)="onDelete(user.id, $event)"
         ></button>
       }
@@ -39,7 +40,9 @@
     class="group-item remaining-count"
     [class]="'size-' + size()"
     [appCursorTooltip]="remainingUsers()"
+    role="img"
+    [attr.aria-label]="'+' + remainingUsersCount() + ' more users'"
   >
-    <span>+{{ remainingUsersCount() }}</span>
+    <span aria-hidden="true">+{{ remainingUsersCount() }}</span>
   </div>
 }
