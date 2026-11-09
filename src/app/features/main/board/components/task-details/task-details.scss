@@ -115,6 +115,11 @@ table {
     padding-right: 24px;
   }
 
+  .overdue {
+    color: $error;
+    font-weight: 600;
+  }
+
   .priority {
     @include flex-start;
     gap: 10px;

@@ -110,6 +110,18 @@ export class TaskDetails {
     return this.taskService.tasks().find((task) => task.id === targetId);
   });
 
+  isOverdue = computed(() => {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const dueDateTask = this.selectedTask();
+    if (dueDateTask) {
+      const matchingDate = new Date(dueDateTask?.due_date).setHours(0, 0, 0, 0);
+
+      return matchingDate < today;
+    } else {
+      return false;
+    }
+  });
+
   /** Background color associated with the current task's category tag. */
   categoryColor = computed(() => {
     const currentCategory = this.selectedTask()?.category;
