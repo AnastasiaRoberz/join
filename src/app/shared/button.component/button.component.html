@@ -1,5 +1,5 @@
 @if (btnIcon() && btnIconPos() === 'left') {
-  <svg class="icon">
+  <svg class="icon" aria-hidden="true" focusable="false">
     <use [attr.href]="'./assets/icons/icons.svg#' + btnIcon()"></use>
   </svg>
 }
@@ -13,7 +13,7 @@
 </span>
 
 @if (btnIcon() && btnIconPos() === 'right') {
-  <svg class="icon">
+  <svg class="icon" aria-hidden="true" focusable="false">
     <use [attr.href]="'./assets/icons/icons.svg#' + btnIcon()"></use>
   </svg>
 }
