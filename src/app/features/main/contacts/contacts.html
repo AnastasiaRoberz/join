@@ -6,7 +6,7 @@
 }
 
 @if (!responsiveService.isMobile() || selectedId()) {
-  <div class="details">
+  <div class="details" [class.scroll-container]="shortHeight()">
     <div class="details__title__container">
       <div class="details__title">
         <h2>Contacts</h2>
@@ -14,12 +14,12 @@
         <p class="subheading">Better with a team</p>
       </div>
       <!-- Back arrow: only visible on mobile (contacts.scss) -->
-      @if (isSinglePane()) {
+      @if (responsiveService.isMobile()) {
         <button appBtn preset="iconMedium" icon="arrow-back" (click)="closeDetails()"></button>
       }
     </div>
     @if (selectedId(); as id) {
-      <app-contact-details [selectedId]="id" (contactDeleted)="closeDetails()" />
+      <app-contact-details [selectedId]="id" (contactDeleted)="onContactDeleted()" />
     }
   </div>
 }

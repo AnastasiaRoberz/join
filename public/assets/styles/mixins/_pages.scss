@@ -1,0 +1,99 @@
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'layout' as *;
+@use 'forms' as *;
+@use 'breakpoints' as *;
+
+@mixin main-styling {
+  --padding-inline: #{calcClampMin((16, 64, 1440, 1025), (16, 64, 700, 350))};
+  --padding-top: #{calcClampMin((48, 80), (16, 80, 900, 700))};
+  @include size;
+  display: flex;
+  flex-direction: column;
+  padding-inline: var(--padding-inline);
+  padding-top: var(--padding-top);
+  padding-bottom: calcClampMin((24, 64), (16, 48, 800, 350));
+
+  @include tablet {
+    --padding-inline: #{calcClampMin((16, 48, 1024, 769), (16, 64, 700, 350))};
+  }
+
+  @include mobile {
+    --padding-inline: #{calcClampMin((16, 40, 768, 320), (16, 64, 700, 350))};
+  }
+}
+
+@mixin info-page {
+  --space-right: #{calc(100% - 1112px)};
+  --padding-inline: #{calcClamp(16, 96)};
+  @include flex-start(column, both);
+  padding-inline: var(--padding-inline);
+  padding-top: #{min(calcClamp(48, 116), calcClamp(24, 48, 700, 350, height))};
+  padding-bottom: 24px;
+  gap: 24px;
+  height: 100%;
+  min-height: 0;
+
+  .content {
+    @include flex-start(column, both);
+    gap: 24px;
+    padding-bottom: calcClamp(0, 32);
+
+    @include responsive(1441, width, min) {
+      width: 100%;
+      padding-right: var(--space-right);
+    }
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    position: relative;
+
+    .btn-back {
+      display: none;
+      width: 32px;
+      height: 32px;
+
+      @include mobile {
+        display: flex;
+        position: absolute;
+        top: -100%;
+        right: 0;
+      }
+
+      @include responsive(1441, width, min) {
+        width: 100%;
+        padding-right: var(--space-right);
+      }
+    }
+  }
+
+  &.scroll-container {
+    .content {
+      padding-bottom: 24px;
+      min-height: auto;
+    }
+  }
+
+  @include responsive(1441, width, min) {
+    overflow-y: auto;
+    padding-right: 0;
+    width: 100%;
+  }
+}
+
+@mixin auth-page {
+  @include flex-center(column);
+  @include size;
+  gap: 48px;
+  padding-block: calcClampMin((32, 48), (8, 48, 500, 350));
+
+  h2 {
+    @include underline(150px, true);
+    position: relative;
+    line-height: 1;
+  }
+}

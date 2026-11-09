@@ -1,0 +1,54 @@
+@use 'sass:math';
+
+@function to-px($value) {
+  @return if(math.is-unitless($value), #{$value}px, $value);
+}
+
+@mixin responsive($size, $direction: width, $value: max) {
+  @media screen and (#{$value}-#{$direction}: to-px($size)) {
+    @content;
+  }
+}
+
+@mixin mobile($width: 768) {
+  @include responsive($width, width, max) {
+    @content;
+  }
+}
+
+@mixin tablet($width: 1024) {
+  @include responsive($width, width, max) {
+    @content;
+  }
+}
+
+@mixin desktop($width: 1025) {
+  @include responsive($width, width, min) {
+    @content;
+  }
+}
+
+@mixin widescreen($height: 1800) {
+  @include responsive($height, height, min) {
+    @content;
+  }
+}
+
+@mixin short-height($height: 500) {
+  @include responsive($height, height, max) {
+    @content;
+  }
+}
+
+@mixin mobile-or-short($mobile-width: 768px, $ls-width: 1920, $ls-height: 500) {
+  @media screen and (max-width: $mobile-width),
+    screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin middle-height($min: 501px, $max: 700px) {
+  @media screen and (min-height: $min) and (max-height: $max) {
+    @content;
+  }
+}

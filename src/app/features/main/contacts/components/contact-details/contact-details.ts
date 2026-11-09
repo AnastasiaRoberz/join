@@ -7,8 +7,7 @@ import { Buttons } from '../../../../../shared/button.component/button.component
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName } from '../../../../../utils/name-utils';
 import { UserService } from '../../../../../services/user.service';
-// amount of loetter as of where a name is considered long
-const longNames = 10;
+import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 
 /**
  * Shows the details of one contact (avatar, name, email, phone).
@@ -20,14 +19,14 @@ const longNames = 10;
  * <app-contact-details [selectedId]="id" />
  */
 @Component({
-  imports: [UserAvatar, Buttons],
+  imports: [UserAvatar, Buttons, FitTextDirective],
   selector: 'app-contact-details',
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
   host: {
     // Any click anywhere on the page closes the mobile menu (listener)
     '(document:click)': 'closeMenu()',
-    '[class.scroll-container]': 'scrollHeight()',
+    '[class.scroll-container]': 'middleHeight()',
   },
 })
 export class ContactDetails {
@@ -37,9 +36,7 @@ export class ContactDetails {
   userService = inject(UserService);
 
   shortHeight = this.responsiveService.isMaxHeight(500);
-  middleHeight = this.responsiveService.observeQuery('(min-height: 800px) and (max-height: 500px)');
-  isSinglePane = computed(() => this.responsiveService.isTablet() || this.shortHeight());
-  scrollHeight = this.responsiveService.isMaxHeight(800);
+  middleHeight = this.responsiveService.observeQuery('(min-height: 501px) and (max-height: 700px)');
 
   /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
   contactDeleted = output<void>();
@@ -50,9 +47,6 @@ export class ContactDetails {
 
   /** Whether the mobile Edit/Delete menu is open. */
   menuOpen = signal<boolean>(false);
-  responsiveMobile = computed(
-    () => this.responsiveService.isMobile() || this.responsiveService.isTablet(),
-  );
 
   /**
    * Id of the contact to display, passed in by the Contacts container.
@@ -81,13 +75,6 @@ export class ContactDetails {
    */
   selectedContact = computed(() => {
     return this.contactService.contacts().find((item) => item.id === this.selectedId());
-  });
-
-  // true if full name is longer than 20 characters
-  isLongName = computed(() => {
-    const contact = this.selectedContact();
-    if (!contact) return false;
-    return contact.firstname.length > longNames || contact.surname.length > longNames;
   });
 
   /**

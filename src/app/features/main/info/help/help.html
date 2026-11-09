@@ -9,7 +9,7 @@
   ></button>
 </header>
 
-<div class="content" [class.scroll-container]="!isWidescreen()">
+<div class="content" [class.scroll-container]="!isShortHeight()">
   <p>
     Welcome to the help page for <span class="highlighted-txt">Join</span>, your guide to using our
     kanban project management tool. Here, we'll provide an overview of what
@@ -69,6 +69,20 @@
       <p>
         As the task moves from one stage to another, you can reflect that on the board by dragging
         and dropping the card from one list to another.
+      </p>
+    </li>
+    <li class="content__list-item">
+      <h4>Deleting Cards</h4>
+      <p>
+        Once a task is completed, you can either move it to the "Done" list or delete it. Deleting a
+        card will permanently remove it from the board. Please exercise caution when deleting crads,
+        as this action is irreversible.
+        <br /><br />
+        Remember that using Join effectively requires consistent updates from you and your team to
+        ensure the board reflects the current state of your project.
+        <br /><br />
+        Have more questions about Join? Feel free to contact us at [CONTACT EMAIL]. We're here to
+        help you!
       </p>
     </li>
   </ol>

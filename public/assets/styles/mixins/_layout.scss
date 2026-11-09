@@ -1,0 +1,102 @@
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'breakpoints' as *;
+
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start($direction: row, $alignment: single) {
+  display: flex;
+  flex-direction: $direction;
+
+  @if ($alignment == 'both') {
+    justify-content: flex-start;
+    align-items: flex-start;
+  } @else if ($direction == 'row') {
+    justify-content: flex-start;
+    align-items: center;
+  } @else if ($direction == 'column') {
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+@mixin size($w: 100%, $h: 100%) {
+  width: $w;
+  height: $h;
+}
+
+@mixin text-ellipsis {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin underline($width: 90px, $centered: false) {
+  &::after {
+    content: '';
+    width: $width;
+    height: 3px;
+    background-color: $text-underline;
+    position: absolute;
+    top: calc(100% + #{calcClamp(2, 16, 800, 350, height)});
+    left: if($centered, 50%, 0);
+    @if $centered {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@mixin titleWithDevider($break-at: null) {
+  display: flex;
+  align-items: center;
+
+  h2 {
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .subheading {
+    line-height: 1;
+    white-space: nowrap;
+
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
+  }
+
+  hr {
+    border: none;
+    border-left: 3px solid $text-underline;
+    width: 3px;
+    align-self: stretch;
+    margin-inline: calcClamp(15, 30, 768, 320);
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
+  }
+
+  @if $break-at {
+    @include responsive($break-at) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      hr {
+        order: 1;
+        border-left: none;
+        border-top: 3px solid $text-underline;
+        width: 90px;
+        height: auto;
+        align-self: flex-start;
+        margin-top: calcClampMin(0, 8);
+        margin-inline: 0;
+      }
+    }
+  }
+}

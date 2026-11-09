@@ -1,103 +1,59 @@
-<section class="summary">
   <!-- Greeter Overlay -->
   @if (greeterService.isGreeting()) {
     <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
   }
-  <!-- header -->
-  <header class="summary__header">
-    <h2>Join 360</h2>
-    <hr />
-    <p class="subheading summary__header__slogan">Key Metrics at a Glance</p>
-  </header>
+<!-- header -->
+<header class="header">
+  <h2>Join 360</h2>
+  <hr />
+  <p class="subheading">Key Metrics at a Glance</p>
+</header>
 
-  <div class="summary__content">
-    <div class="summary__content__tiles">
-      <!-- Todo and Done -->
-      <a href="" class="half">
-        <span class="icon">
-          <svg>
-            <use [attr.href]="'./assets/icons/icons.svg#edit'"></use>
+<div class="content">
+  <div class="content__tiles">
+    @for (tile of tiles(); track tile.label) {
+      <a routerLink="/app/board" routerLinkActive="active" class="tile" [class]="tile.size">
+        @if (tile.icon) {
+          <svg class="icon" [class.icon--bold]="tile.bold">
+            <use [attr.href]="'./assets/icons/icons.svg#' + tile.icon"></use>
           </svg>
-        </span>
+        }
         <div class="details">
-          <span class="amount">1</span>
-          <p class="type">To-do</p>
+          <span class="amount">{{ tile.amount }}</span>
+          <p class="type">{{ tile.label }}</p>
         </div>
       </a>
-      <a href="" class="half">
-        <span class="icon icon-bold">
-          <svg>
-            <use [attr.href]="'./assets/icons/icons.svg#check'"></use>
-          </svg>
-        </span>
-        <div class="details">
-          <span class="amount">2</span>
-          <p class="type">Done</p>
-        </div>
-      </a>
-      <!-- priority and deadline -->
-      <a href="" class="full deadline">
-        <div class="details">
-          <span class="deadline-icon deadline-icon--urgent">
-            <svg>
-              <use [attr.href]="'./assets/icons/icons.svg#urgent'"></use>
+    }
+
+    <!-- priority and deadline -->
+    <a routerLink="/app/board" routerLinkActive="active" class="tile deadline">
+      <div class="prios">
+        @for (prio of priorities(); track prio.icon) {
+          <div class="details">
+            <svg class="icon prio-icon" [style.background-color]="'var(--prio-' + prio.icon + ')'">
+              <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
             </svg>
-          </span>
-          <span class="amount">1</span>
-        </div>
-        <div class="details">
-          <span class="deadline-icon deadline-icon--medium">
-            <svg>
-              <use [attr.href]="'./assets/icons/icons.svg#medium'"></use>
-            </svg>
-          </span>
-          <span class="amount">2</span>
-        </div>
-        <div class="details">
-          <span class="deadline-icon deadline-icon--low">
-            <svg>
-              <use [attr.href]="'./assets/icons/icons.svg#low'"></use>
-            </svg>
-          </span>
-          <span class="amount">3</span>
-        </div>
-        <hr />
-        <div class="deadline__info">
-          <span class="date">October 16, 2022</span>
-          <span class="headsup">Upcoming Deadline</span>
-        </div>
-      </a>
-      <!-- board, progress and feedback -->
-      <a href="" class="third">
-        <div class="details">
-          <span class="amount">3</span>
-          <p class="type">Tasks in Board</p>
-        </div>
-      </a>
-      <a href="" class="third">
-        <div class="details">
-          <span class="amount">4</span>
-          <p class="type">Tasks in Progress</p>
-        </div>
-      </a>
-      <a href="" class="third">
-        <div class="details">
-          <span class="amount">5</span>
-          <p class="type">Awaiting Feedback</p>
-        </div>
-      </a>
-    </div>
-    <!-- greeting -->
-    @if (!isShortHeight() || greeterService.isGreeting()) {
-      <div
-        #welcome
+            <span class="amount" [class]="prio.icon">{{ prio.amount }}</span>
+          </div>
+        }
+      </div>
+
+      <hr />
+      <div class="deadline__info">
+        @if (deadline(); as deadline) {
+          <span class="date" [style.color]="deadline.color">{{ deadline.date }} </span>
+          <span class="headsup">{{ deadline.text }}</span>
+        } @else {
+          <span>No Deadlines in your Board.</span>
+        }
+      </div>
+    </a>
+  </div>
+  <!-- greeting -->
+  @if (!(responsiveService.isTablet() && isShortHeight()) || greeterService.isGreeting()) {
+    <p #welcome
         class="welcome"
         [class.greeter-fly]="greeterService.isGreeting() && !isShortHeight()"
-        [class.greeter-fade]="greeterService.isGreeting() && isShortHeight()"
-      >
-        <p class="welcome__greeting">Good morning,&nbsp;</p>
-        <p class="welcome__name">Sofia Müller</p>
-      </div>
-    }
-  </div>
-</section>
+        [class.greeter-fade]="greeterService.isGreeting() && isShortHeight()" [innerHTML]="getDaytime()"></p>
+  }
+</div>

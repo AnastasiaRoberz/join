@@ -19,7 +19,7 @@ export class Auth implements AfterViewInit {
   introService = inject(IntroService);
 
   responsiveService = inject(ResponsiveService);
-  isShortHeight = this.responsiveService.isMaxHeight(600);
+  isShortHeight = this.responsiveService.isMaxHeight(500);
   isMobile = this.responsiveService.isMobile();
 
   //only play intro-animation on first visit of website (session)

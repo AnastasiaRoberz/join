@@ -20,6 +20,8 @@ export class ContactService {
    */
   contacts = signal<ContactInterface[]>([]);
 
+  savedScrollTop = 0;
+
   /**
    * Initializes the service and triggers the initial fetch of all contacts.
    */

@@ -4,6 +4,7 @@ import { ContactDetails } from './components/contact-details/contact-details';
 import { DialogService } from '../../../services/dialog.service';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { Buttons } from '../../../shared/button.component/button.component';
+import { ContactService } from '../../../services/contact.service';
 
 /**
  * Container component for the Contacts page.
@@ -23,8 +24,8 @@ import { Buttons } from '../../../shared/button.component/button.component';
 export class Contacts {
   responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
+  contactService = inject(ContactService);
   shortHeight = this.responsiveService.isMaxHeight(500);
-  isSinglePane = computed(() => this.responsiveService.isMobile() || this.shortHeight());
 
   /**
    * Id of the contact currently selected in the list.
@@ -74,6 +75,11 @@ export class Contacts {
    */
   closeDetails(): void {
     this.selectedId.set(null);
+  }
+
+  onContactDeleted(): void {
+    this.contactService.savedScrollTop = 0;
+    this.closeDetails();
   }
 
   /**

@@ -1,26 +1,30 @@
 <div class="header-section">
-  <div class="header">
+  <div class="header-section__header">
     @if (contact()) {
       <h2>Edit contact</h2>
     } @else {
       <h2>Add contact</h2>
-      <span class="subheading">Tasks are better with a team!</span>
+      <span class="header-section__subheading">Tasks are better with a team!</span>
     }
   </div>
 </div>
 
 <div class="content-section">
-  <div class="input-wrapper">
-    <app-user-avatar class="avatar" [user]="contact()" size="large" />
+  <div class="content-section__input-wrapper">
+    <app-user-avatar [user]="contact()" size="large" />
 
-    <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
+    <form
+      class="content-section__form-section"
+      [formGroup]="contactForm"
+      (ngSubmit)="saveContact()"
+    >
       <app-text-field label="Name" formControlName="name" icon="person" fieldId="name" />
 
       <app-text-field label="Mail" formControlName="mail" icon="mail" fieldId="mail" />
 
       <app-text-field label="Phone" formControlName="phone" icon="phone" fieldId="phone" />
 
-      <div class="buttons-wrapper">
+      <div class="content-section__buttons-wrapper">
         @if (contact()) {
           <button appBtn preset="secondary" (click)="deleteAndClose()">Delete</button>
           <button

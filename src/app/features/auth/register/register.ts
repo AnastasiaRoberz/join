@@ -77,7 +77,7 @@ export class Register {
     const success = await this.userService.userSignUp(userData);
 
     if (success) {
-      this.draftService.clearRegister();
+      this.draftService.clearDrafts();
       this.registerForm.reset();
     }
   }

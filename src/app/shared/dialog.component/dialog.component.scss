@@ -31,17 +31,24 @@
   &.contact {
     --dialog-height: #{min(95dvh, 592px)};
     --dialog-margin-top: auto;
+    --padding-block-dialog: #{min(
+        calcClamp(80, 136, 1440, 769),
+        calcClamp(32, 80, 700, 350, height)
+      )};
+    --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
+    width: min(95vw, 1212px);
+
+    @include mobile {
+      --dialog-height: #{min(95dvh, 760px)};
+      --padding-block-dialog: #{calcClamp(16, 124, 800, 500, height)};
+      --padding-inline-dialog: #{calcClamp(16, 24, 420, 320)};
+    }
   }
 
   &.task,
   &.task-edit {
     --dialog-max-height: #{min(95dvh, 1024px)};
     --dialog-margin-top: #{calc((100dvh - var(--dialog-max-height, 95dvh)) / 2)};
-
-    .btn-close {
-      top: calcClamp(16, 24);
-      right: calcClamp(16, 24);
-    }
   }
 
   &.add-task {
@@ -52,6 +59,7 @@
   margin-top: var(--dialog-margin-top);
   max-height: var(--dialog-max-height, none);
   height: var(--dialog-height, auto);
+
   margin-bottom: auto;
   @include flex-start(column, both);
   background-color: white;
@@ -83,8 +91,7 @@
   }
 
   @include mobile {
-    --dialog-max-height: #{min(95dvh, 760px)};
-    height: auto;
+    height: var(--dialog-height, auto);
     max-height: var(--dialog-max-height, none);
     width: 90vw;
     flex-direction: column;
@@ -92,12 +99,19 @@
 
   .btn-close {
     position: absolute;
-    top: calcClamp(24, 52);
-    right: calcClamp(24, 52);
+    --position: #{max(var(--padding-block-dialog), var(--padding-inline-dialog))};
+    top: clamp(36px, var(--position), 76px);
+    right: clamp(36px, var(--position), 76px);
+    transform: translate(100%, -100%);
     z-index: 20;
 
     &.white-btn.btn--icon {
       color: white;
+    }
+
+    @include mobile {
+      top: clamp(36px, var(--position, 40px), 48px);
+      right: clamp(36px, var(--position, 40px), 48px);
     }
   }
 }

@@ -17,7 +17,7 @@
 }
 
 .char-count {
-  font-size: calcClamp(12, 14, 940, 400);
+  font-size: calcClampMin((12, 14, 940, 400), (12, 14));
   color: $input-default-label;
   position: absolute;
   right: 0;
@@ -34,7 +34,6 @@ textarea {
 textarea {
   field-sizing: content;
   min-height: 96px;
-  // max-width: 100%;
   max-height: #{min(40cqh, 240px)};
   resize: none;
   overflow-wrap: anywhere;
@@ -46,9 +45,8 @@ textarea {
   --padding-inline: #{calcClamp(12, 20, 768, 320)};
   --sb-width: 16px;
   --sb-border-width: 6px;
-  @include field-container(auto);
+  @include field-container;
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(8, 12, 768, 320);
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
@@ -57,7 +55,7 @@ textarea {
       transform: translateY(-150%);
       color: $input-focus-label;
 
-      @include mobile {
+      @media screen and (max-width: 768px), screen and (max-height: 500px) {
         display: none;
       }
     }
