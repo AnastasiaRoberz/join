@@ -215,7 +215,6 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
    * Optional extractor for additional strings on an option item that should be matched
    * via case-insensitive `includes()` against `searchTerm()` (e.g., task descriptions).
    */
-  getIncludeStrings = input<((item: T) => (string | undefined | null)[]) | undefined>(undefined);
 
   required = input<boolean>(false);
 
@@ -282,12 +281,7 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
    * and optional `getIncludeStrings()` (`includes`).
    */
   filteredOptions = computed(() =>
-    filterInput(
-      this.options(),
-      this.searchTerm(),
-      this.getSearchStrings(),
-      this.getIncludeStrings(),
-    ),
+    filterInput(this.options(), this.searchTerm(), this.getSearchStrings()),
   );
 
   /**

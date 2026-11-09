@@ -39,18 +39,16 @@ export function filterInput<T>(
   items: T[],
   searchTerm: string,
   getSearchStrings: (item: T) => (string | undefined | null)[],
-  getIncludeStrings?: (item: T) => (string | undefined | null)[],
 ): T[] {
   const term = searchTerm.trim().toLowerCase();
   if (!term) return items;
 
   return items.filter((item) => {
-    const matchesStartsWith = getSearchStrings(item).some((value) =>
-      value?.toLowerCase().startsWith(term),
-    );
-    const matchesIncludes =
-      getSearchStrings?.(item).some((value) => value?.toLowerCase().includes(term)) ?? false;
+    // const matchesStartsWith = getSearchStrings(item).some((value) =>
+    //   value?.toLowerCase().startsWith(term),
+    // );
+    const matches = getSearchStrings?.(item).some((value) => value?.toLowerCase().includes(term));
 
-    return matchesStartsWith || matchesIncludes;
+    return matches;
   });
 }

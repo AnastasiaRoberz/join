@@ -31,6 +31,10 @@ form {
   @include flex-center(column);
   gap: calcClamp(16, 24, 600, 450, height);
   width: 100%;
+
+  app-text-field ::ng-deep .input-container {
+    padding-block: calcClampMin((8, 12, 768, 320), (2, 8, 500, 350));
+  }
 }
 
 .privacy-row {

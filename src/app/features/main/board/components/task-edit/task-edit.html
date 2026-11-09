@@ -1,5 +1,5 @@
 <form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable aria-label="Edit task">
-  <div class="form-content-wrapper scroll-container" cdkScrollable>
+  <div class="form-content-wrapper" [class.scroll-container]="!isShortHeight()" cdkScrollable>
     <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
 
     <app-text-field

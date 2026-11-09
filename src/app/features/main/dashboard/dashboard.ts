@@ -13,6 +13,7 @@ import { UserService } from '../../../services/user.service';
 import { BoardFilter, TaskService } from '../../../services/task.service';
 import { getGreeting } from '../../../utils/greeting-utils';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive],
@@ -22,7 +23,8 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Dashboard implements AfterViewInit {
   responsiveService = inject(ResponsiveService);
-  hideGreeting = this.responsiveService.observeQuery('(max-width: 451px) and (max-height: 501px)');
+  dialogService = inject(DialogService);
+  hideGreeting = this.responsiveService.observeQuery('(max-width: 768px) and (max-height: 601px)');
   noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
 
   //to manage intro-animation
@@ -179,11 +181,34 @@ export class Dashboard implements AfterViewInit {
     this.router.navigate(['/app/board']);
   }
 
-  onDeadlineTileClick(): void {
+  onDeadlineTileClick(event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+
     const currentDeadline = this.deadline();
-    this.taskService.setBoardFilter(
-      currentDeadline ? { type: 'deadline', label: currentDeadline.text } : null,
+    if (!currentDeadline) return;
+
+    const targetDueDate = currentDeadline.rawDate;
+    const tasks = this.taskService.tasks();
+
+    const filteredTasks = tasks.filter(
+      (task) =>
+        task.due_date?.slice(0, 10) === targetDueDate?.slice(0, 10) && task.status !== 'Done',
     );
+
+    if (filteredTasks.length === 1) {
+      this.router.navigate(['/app/board']);
+      this.dialogService.openDialog('task', filteredTasks[0]);
+    } else if (filteredTasks.length > 1) {
+      this.taskService.setBoardFilter({
+        type: 'deadline',
+        dueDate: targetDueDate,
+        label: `Deadline: ${currentDeadline.formattedDate}`,
+      });
+      this.router.navigate(['/app/board']);
+    }
   }
 
   deadline() {
@@ -200,7 +225,8 @@ export class Dashboard implements AfterViewInit {
     const overdue = date.setHours(0, 0, 0, 0) < today;
 
     return {
-      date: date.toLocaleDateString('en-US', {
+      rawDate: nextTask.due_date,
+      formattedDate: date.toLocaleDateString('en-US', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',

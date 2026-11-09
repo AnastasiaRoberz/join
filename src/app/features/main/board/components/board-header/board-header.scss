@@ -27,3 +27,12 @@ app-select-field {
     width: 100%;
   }
 }
+
+@include mobile(500) {
+  .filter-btn {
+    padding: 4px;
+    ::ng-deep span {
+      display: none;
+    }
+  }
+}

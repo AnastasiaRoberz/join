@@ -54,7 +54,7 @@ nav {
 
   li {
     width: 100%;
-    height: 46px;
+    height: calcClampMin((32, 48), (24, 48, 600, 450));
     @include flex-start;
     cursor: pointer;
 
