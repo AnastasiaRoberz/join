@@ -29,7 +29,7 @@
             <svg class="icon prio-icon" [style.background-color]="'var(--prio-' + prio.icon + ')'">
               <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
             </svg>
-            <span class="amount">{{ prio.amount }}</span>
+            <span class="amount" [class]="prio.icon">{{ prio.amount }}</span>
           </div>
         }
       </div>
