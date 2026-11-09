@@ -1,16 +1,28 @@
 @use '../../../../../../../public/assets/styles/' as *;
 
 :host {
-  --dialog-max-height: #{min(95dvh, 1024px)};
-  --padding-inline: #{calcClamp(24, 40, 769, 320)};
   @include flex-start(column, both);
   gap: calcClamp(16, 24);
   width: 525px;
-  max-height: var(--dialog-max-height);
   min-height: 0;
-  padding-inline: var(--padding-inline);
-  padding-top: calcClamp(32, 48, 769, 320);
+  height: 100%;
+  padding-inline: var(--padding-inline-dialog);
+  padding-top: var(--padding-block-dialog);
   padding-bottom: calcClamp(16, 24, 769, 320);
+
+  &.scroll-container {
+    width: 100%;
+    padding-right: calc(var(--padding-inline-dialog) - var(--sb-width) + 4px);
+
+    form {
+      min-height: auto;
+      height: auto;
+    }
+
+    .form-content-wrapper {
+      width: 100%;
+    }
+  }
 
   @include mobile {
     width: 100%;

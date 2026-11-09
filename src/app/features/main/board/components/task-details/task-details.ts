@@ -44,6 +44,9 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
+  host: {
+    '[class.scroll-container]': 'isShortHeight()',
+  },
 })
 export class TaskDetails {
   // ---------------------------------------------------------------------------
@@ -60,15 +63,14 @@ export class TaskDetails {
   /** Manages closing the detail modal or switching to the `task-edit` dialog. */
   dialogService = inject(DialogService);
 
+  isShortHeight = this.responsiveService.isMaxHeight(600);
+
   /** Helper function exposed to the template for formatting priority labels. */
   capitalizeFirstLetter = capitalizeFirstLetter;
 
   // ---------------------------------------------------------------------------
   // Inputs & View Queries
   // ---------------------------------------------------------------------------
-
-  /** Maximum height of the description text in its collapsed state (e.g. `'140px'`). */
-  collapsedHeight = input<string>('140px');
 
   /** Reference to the description paragraph element used to measure text overflow. */
   container = viewChild<ElementRef<HTMLElement>>('container');

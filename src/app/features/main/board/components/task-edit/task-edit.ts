@@ -17,6 +17,7 @@ import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
 import { Priority, PriorityBtn } from '../../../../../shared/priority-btn/priority-btn';
 import { generalCustomValidators } from '../../../../../utils/custom-validators';
 import { UserService } from '../../../../../services/user.service';
+import { ResponsiveService } from '../../../../../services/responsive.service';
 
 /**
  * Dialog form component for editing an existing task's properties
@@ -65,6 +66,9 @@ import { UserService } from '../../../../../services/user.service';
   selector: 'app-task-edit',
   styleUrl: './task-edit.scss',
   templateUrl: './task-edit.html',
+  host: {
+    '[class.scroll-container]': 'isShortHeight()',
+  },
 })
 export class TaskEdit {
   /**
@@ -72,6 +76,7 @@ export class TaskEdit {
    * (used by the close button and after saving to return to the detail view).
    */
   dialogService = inject(DialogService);
+  responsiveService = inject(ResponsiveService);
 
   /** Handles persisting task, assignment and subtask updates to Supabase (only called from `saveTask()`). */
   taskService = inject(TaskService);
@@ -79,6 +84,8 @@ export class TaskEdit {
   /** Provides the reactive list of sorted contacts and their search strings for the assignment dropdown. */
   contactService = inject(ContactService);
   userService = inject(UserService);
+
+  isShortHeight = this.responsiveService.isMaxHeight(600);
 
   /** Angular FormBuilder instance used to construct `taskForm`. */
   private fb = inject(FormBuilder);

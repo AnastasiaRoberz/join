@@ -11,7 +11,7 @@
     {{ task.category }}
   </p>
 
-  <div class="scroll-container content-wrapper" #scrollTop>
+  <div class="content-wrapper" #scrollTop [class.scroll-container]="!isShortHeight()">
     <h2 appFitText>{{ task.title }}</h2>
 
     @if (task.description) {
