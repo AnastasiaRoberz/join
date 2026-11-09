@@ -24,7 +24,7 @@ import { DialogService } from '../../../services/dialog.service';
 export class Dashboard implements AfterViewInit {
   responsiveService = inject(ResponsiveService);
   dialogService = inject(DialogService);
-  hideGreeting = this.responsiveService.observeQuery('(max-width: 451px) and (max-height: 701px)');
+  hideGreeting = this.responsiveService.observeQuery('(max-width: 768px) and (max-height: 601px)');
   noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
 
   //to manage intro-animation
