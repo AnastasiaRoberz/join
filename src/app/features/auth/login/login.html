@@ -9,7 +9,13 @@
     formControlName="password"
   />
   <div class="button-wrapper">
-    <button appBtn preset="primary" size="medium" type="submit" [disabled]="!loginForm.valid">
+    <button
+      appBtn
+      preset="primary"
+      size="medium"
+      type="submit"
+      [disabled]="!loginForm.valid || isSubmitting()"
+    >
       Log in
     </button>
     <button appBtn preset="secondary" size="medium" (click)="anonymLogin()">Guest Log in</button>
