@@ -1,6 +1,6 @@
-<h2>Log in</h2>
+<h2 id="login-heading">Log in</h2>
 
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()" aria-label="Login form">
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" aria-labelledby="login-heading">
   <app-text-field
     label="Email"
     icon="mail"

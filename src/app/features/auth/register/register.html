@@ -64,7 +64,12 @@
       </button>
     </div>
   </app-text-field>
-  <app-text-field label="Confirm Password" inputType="password" formControlName="confirmPassword" />
+  <app-text-field
+    label="Confirm Password"
+    inputType="password"
+    formControlName="confirmPassword"
+    autocomplete="new-password"
+  />
 
   <div class="privacy-row">
     <app-checkbox fieldId="privacy" formControlName="privacy" />
