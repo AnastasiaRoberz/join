@@ -1,17 +1,33 @@
 <h2>Log in</h2>
 
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <app-text-field label="Email" icon="mail" fieldId="mail" formControlName="mail" />
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" aria-label="Login form">
+  <app-text-field
+    label="Email"
+    icon="mail"
+    fieldId="mail"
+    formControlName="mail"
+    autocomplete="email"
+  />
   <app-text-field
     inputType="password"
     label="Password"
     fieldId="password"
     formControlName="password"
+    autocomplete="current-password"
   />
   <div class="button-wrapper">
-    <button appBtn preset="primary" size="medium" type="submit" [disabled]="!loginForm.valid">
+    <button
+      appBtn
+      preset="primary"
+      size="medium"
+      type="submit"
+      [disabled]="!loginForm.valid"
+      [attr.aria-disabled]="!loginForm.valid"
+    >
       Log in
     </button>
-    <button appBtn preset="secondary" size="medium" (click)="anonymLogin()">Guest Log in</button>
+    <button appBtn preset="secondary" size="medium" (click)="anonymLogin()" type="button">
+      Guest Log in
+    </button>
   </div>
 </form>
