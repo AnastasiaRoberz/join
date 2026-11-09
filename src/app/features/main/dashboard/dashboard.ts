@@ -14,7 +14,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Dashboard implements AfterViewInit {
   responsiveService = inject(ResponsiveService);
-  isShortHeight = this.responsiveService.isMaxHeight(768);
+  hideGreeting = this.responsiveService.observeQuery('(max-width: 451px) and (max-height: 501px)');
+  noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
+  // isShortHeight = this.responsiveService.isMaxHeight(768);
 
   //to manage intro-animation
   greeterService = inject(IntroService);
@@ -34,7 +36,7 @@ export class Dashboard implements AfterViewInit {
   // from the centre of the page, so it can start there.
   ngAfterViewInit(): void {
     const welcome = this.welcome()?.nativeElement;
-    if (!this.greeterService.isGreeting() || !welcome || this.isShortHeight()) return;
+    if (!this.greeterService.isGreeting() || !welcome || !this.hideGreeting()) return;
 
     // Hide the greeting until the web font has loaded: with the fallback font the text
     // has a different size, so measuring now would give a slightly wrong centre.
@@ -99,11 +101,11 @@ export class Dashboard implements AfterViewInit {
     const countStatus = (status: string) => tasks.filter((task) => task.status === status).length;
 
     return [
-      { size: 'half', label: 'To-do', amount: countStatus('To do'), icon: 'edit' },
-      { size: 'half', label: 'Done', amount: countStatus('Done'), icon: 'check', bold: true },
-      { size: 'third', label: 'Tasks in Board', amount: tasks.length },
-      { size: 'third', label: 'Tasks in Progress', amount: countStatus('In progress') },
-      { size: 'third', label: 'Awaiting Feedback', amount: countStatus('Await feedback') },
+      { area: 'todo', label: 'To-do', amount: countStatus('To do'), icon: 'edit' },
+      { area: 'done', label: 'Done', amount: countStatus('Done'), icon: 'check', bold: true },
+      { area: 'total', label: 'Tasks in Board', amount: tasks.length },
+      { area: 'progress', label: 'Tasks in Progress', amount: countStatus('In progress') },
+      { area: 'feedback', label: 'Awaiting Feedback', amount: countStatus('Await feedback') },
     ];
   });
 
