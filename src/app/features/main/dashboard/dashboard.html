@@ -2,94 +2,51 @@
 <header class="header">
   <h2>Join 360</h2>
   <hr />
-  <p class="subheading header__slogan">Key Metrics at a Glance</p>
+  <p class="subheading">Key Metrics at a Glance</p>
 </header>
 
 <div class="content">
   <div class="content__tiles">
-    <!-- Todo and Done -->
-    <a routerLink="/app/board" routerLinkActive="active" class="half">
-      <span class="icon">
-        <svg>
-          <use href="./assets/icons/icons.svg#edit"></use>
-        </svg>
-      </span>
-      <div class="details">
-        <span class="amount">{{ filteredTasks().toDo }}</span>
-        <p class="type">To-do</p>
-      </div>
-    </a>
-    <a routerLink="/app/board" routerLinkActive="active" class="half">
-      <span class="icon icon-bold">
-        <svg>
-          <use href="./assets/icons/icons.svg#check"></use>
-        </svg>
-      </span>
-      <div class="details">
-        <span class="amount">{{ filteredTasks().done }}</span>
-        <p class="type">Done</p>
-      </div>
-    </a>
+    @for (tile of tiles(); track tile.label) {
+      <a routerLink="/app/board" routerLinkActive="active" class="tile" [class]="tile.size">
+        @if (tile.icon) {
+          <svg class="icon" [class.icon--bold]="tile.bold">
+            <use [attr.href]="'./assets/icons/icons.svg#' + tile.icon"></use>
+          </svg>
+        }
+        <div class="details">
+          <span class="amount">{{ tile.amount }}</span>
+          <p class="type">{{ tile.label }}</p>
+        </div>
+      </a>
+    }
+
     <!-- priority and deadline -->
-    <a routerLink="/app/board" routerLinkActive="active" class="full deadline">
-      <div class="details">
-        <span class="deadline-icon deadline-icon--urgent">
-          <svg>
-            <use href="./assets/icons/icons.svg#urgent"></use>
-          </svg>
-        </span>
-        <span class="amount">1</span>
+    <a routerLink="/app/board" routerLinkActive="active" class="tile deadline">
+      <div class="prios">
+        @for (prio of priorities(); track prio.icon) {
+          <div class="details">
+            <svg class="icon prio-icon" [style.background-color]="'var(--prio-' + prio.icon + ')'">
+              <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
+            </svg>
+            <span class="amount">{{ prio.amount }}</span>
+          </div>
+        }
       </div>
-      <div class="details">
-        <span class="deadline-icon deadline-icon--medium">
-          <svg>
-            <use href="./assets/icons/icons.svg#medium"></use>
-          </svg>
-        </span>
-        <span class="amount">2</span>
-      </div>
-      <div class="details">
-        <span class="deadline-icon deadline-icon--low">
-          <svg>
-            <use href="./assets/icons/icons.svg#low"></use>
-          </svg>
-        </span>
-        <span class="amount">3</span>
-      </div>
+
       <hr />
       <div class="deadline__info">
-        @if (filteredTasks().deadline) {
-          <span class="date" [style.color]="filteredTasks().deadline?.color">{{
-            filteredTasks().deadline?.date
-          }}</span>
-          <span class="headsup">{{ filteredTasks().deadline?.text }}</span>
+        @if (deadline(); as deadline) {
+          <span class="date" [style.color]="deadline.color">{{ deadline.date }} </span>
+          <span class="headsup">{{ deadline.text }}</span>
         } @else {
           <span>No Deadlines in your Board.</span>
         }
       </div>
     </a>
-    <!-- board, progress and feedback -->
-    <a routerLink="/app/board" routerLinkActive="active" class="third">
-      <div class="details">
-        <span class="amount">{{ filteredTasks().total }}</span>
-        <p class="type">Tasks in Board</p>
-      </div>
-    </a>
-    <a routerLink="/app/board" routerLinkActive="active" class="third">
-      <div class="details">
-        <span class="amount">{{ filteredTasks().inProgress }}</span>
-        <p class="type">Tasks in Progress</p>
-      </div>
-    </a>
-    <a routerLink="/app/board" routerLinkActive="active" class="third">
-      <div class="details">
-        <span class="amount">{{ filteredTasks().awaitFeedback }}</span>
-        <p class="type">Awaiting Feedback</p>
-      </div>
-    </a>
   </div>
   <!-- greeting -->
-  @if (!isShortHeight()) {
+  @if (!(responsiveService.isTablet() && isShortHeight())) {
     <p class="greeting" [innerHTML]="getDaytime()"></p>
   }
 </div>

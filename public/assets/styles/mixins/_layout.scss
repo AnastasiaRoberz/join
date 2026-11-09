@@ -58,6 +58,16 @@
 
   h2 {
     line-height: 1;
+    white-space: nowrap;
+  }
+
+  .subheading {
+    line-height: 1;
+    white-space: nowrap;
+
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
   }
 
   hr {
@@ -65,7 +75,10 @@
     border-left: 3px solid $text-underline;
     width: 3px;
     align-self: stretch;
-    margin-inline: 30px;
+    margin-inline: calcClamp(15, 30, 768, 320);
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
   }
 
   @if $break-at {
@@ -81,7 +94,7 @@
         width: 90px;
         height: auto;
         align-self: flex-start;
-        margin-top: 8px;
+        margin-top: calcClampMin(0, 8);
         margin-inline: 0;
       }
     }

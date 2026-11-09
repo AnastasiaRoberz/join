@@ -2,23 +2,23 @@
 
 :host {
   @include main-styling;
-  gap: calcClampMin((24, 56), (24, 56, 900, 500));
+  gap: calcClampMin((16, 56), (16, 56, 1024, 800));
 }
 
 .header {
-  @include titleWithDevider(768);
+  @include titleWithDevider(480);
 }
 // ---------- Tiles | greeting ----------
 .content {
-  display: grid;
-  grid-template-columns: minmax(300px, 670px) auto; // greeting takes what it needs, tiles the rest
+  display: flex;
   align-items: center;
-  column-gap: calcClamp(40, 80, 1440, 1024);
+  gap: calcClampMin((16, 80, 1440, 1024), (24, 80, 1024, 800));
+  width: 100%;
+  height: 100%;
+  max-height: 560px;
 
-  // Tablet: one column, greeting on top, tiles below (same gap as .summary)
-  @include responsive(1100) {
-    grid-template-columns: 1fr;
-    row-gap: calcClamp(24, 56);
+  @include tablet {
+    flex-direction: column;
   }
 
   // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
@@ -28,109 +28,119 @@
       6,
       minmax(0, 1fr)
     ); // minmax(0, …): long words can't stretch a column
-    gap: calcClampMin((12, 32), (12, 32, 900, 600, height));
-    container-type: inline-size; // tiles can ask "how wide is the grid?" (@container below)
+    gap: calcClampMin((16, 32, 1440, 1025), (8, 32, 900, 450));
+    width: 85%;
+    max-width: 560px;
+    height: 100%;
+
+    @media screen and (min-width: 769px) and (max-width: 1024px) and (max-height: 500px) {
+      width: 100%;
+      max-width: none;
+      grid-template-columns: 1.2fr repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(2, 1fr);
+      gap: calcClampMin((16, 32, 1024, 768), (16, 32, 900, 600));
+    }
+
+    @include tablet {
+      width: 100%;
+      max-width: none;
+    }
+
+    // @include mobile {
+    //   grid-template-columns: repeat(4, minmax(0, 1fr));
+    // }
   }
 }
 
 // ---------- One tile ----------
-.half,
-.full,
-.third {
+.tile {
   @include flex-center;
   gap: calcClamp(8, 24);
-  min-height: calcClamp(110, 168); // min-height, not height: content may grow
-  padding: calcClamp(12, 28);
+  // height: calcClampMin((110, 170), (80, 170, 800, 350));
+  height: 100%;
   border: 1px solid $color-grey-500;
-  //   border-radius: calcClamp(20, 30);
-  border-radius: 30px;
+  border-radius: calcClampMin((20, 30, 768, 320), (8, 30, 800, 350));
   background-color: $color-white;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 4px 0px #00000066;
+  padding-inline: calcClampMin((4, 40, 1440, 1025), (16, 40, 800, 350));
 
-  // for short mobile, such as Iphone SE
-  @media (max-height: 850px) {
-    min-height: 96px;
-    padding: 12px;
+  &.half {
+    grid-column: span 3;
+
+    @media screen and (min-width: 769px) and (max-width: 1024px) and (max-height: 500px) {
+      grid-column: 1;
+      &:first-of-type {
+        grid-row: 1;
+      }
+
+      &:nth-of-type(2) {
+        grid-row: 2;
+      }
+    }
+
+    @include short-height {
+      .details {
+        flex-direction: row;
+      }
+    }
   }
-}
 
-.half {
-  grid-column: span 3;
-}
+  &.third {
+    grid-column: span 2;
 
-.full {
-  grid-column: span 6;
-}
-
-.third {
-  grid-column: span 2;
-}
-
-// ---------- icons design ----------
-.icon,
-.deadline-icon {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0; // flex would squeeze it otherwise
-  border-radius: 50%;
-  background-color: $color-navy-800;
-  color: $color-white; // -> fill of the symbol
-
-  // symbol size inside the circle
-  svg {
-    width: 55%;
-    height: 55%;
+    @media screen and (min-width: 769px) and (max-width: 1024px) and (max-height: 500px) {
+      grid-column: span 1;
+      grid-row: 2;
+      &:first-of-type {
+        grid-column-start: 2;
+      }
+    }
   }
 }
 
 .icon {
-  width: calcClamp(44, 69);
-  height: calcClamp(44, 69);
+  width: calcClampMin((40, 69), (32, 69, 800, 500));
+  height: calcClampMin((40, 69), (32, 69, 800, 500));
+  border-radius: 50%;
+  background-color: $main-color;
+  color: $color-white;
+  padding: calcClampMin(8, 18);
+  padding: calcClampMin((8, 18), (6, 18, 800, 500));
+  flex-shrink: 0;
 
   // done icon a bit thicker
-  &-bold svg {
-    width: 65%;
-    height: 65%;
+  &--bold {
+    padding: calcClampMin(4, 12);
     stroke: currentColor; // outline in the same white as the fill
     stroke-width: 1.5; // thicker = higher number
     stroke-linejoin: round; // rounded corners like the design
   }
 }
 
-.deadline-icon {
-  width: calcClamp(28, 40);
-  height: calcClamp(28, 40);
-
-  // Priority colours
-  &--urgent {
-    background-color: $prio-urgent;
-  }
-
-  &--medium {
-    background-color: $prio-medium;
-  }
-
-  &--low {
-    background-color: $prio-low;
-  }
+.prio-icon {
+  width: calcClampMin((40, 60), (32, 60, 800, 500));
+  height: calcClampMin((40, 60), (32, 60, 800, 500));
+  padding: calcClampMin((9, 12), (4, 12, 800, 500));
 }
 
 .details {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-center(column);
   gap: 4px;
+
+  @media screen and (min-width: 400px) and (max-height: 800px) {
+    flex-direction: row;
+    gap: 8px;
+  }
 }
 
 .amount {
   color: $color-black;
-  font-size: #{min(calcClamp(40, 64, 900, 500, height), calcClamp(40, 64))};
+  font-size: calcClampMin((32, 64), (24, 64, 800, 500));
   font-weight: 600;
-  line-height: 1;
+  line-height: 0.75;
 }
 
 .type {
-  margin: 0;
   color: $color-navy-800;
   font-size: calcClamp(14, 20);
   text-align: center;
@@ -138,46 +148,87 @@
 
 // ---------- Deadline tile: 3 priorities | line | date ----------
 .deadline {
+  --prio-urgent: #{$prio-urgent};
+  --prio-medium: #{$prio-medium};
+  --prio-low: #{$prio-low};
+  grid-row: 2;
+  grid-column: span 6;
   justify-content: space-evenly;
+  gap: 0;
+
+  @media screen and (min-width: 769px) and (max-width: 1024px) and (max-height: 500px) {
+    grid-column: 2 / span 3;
+    grid-row: 1;
+
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1024px) and (max-height: 500px) {
+    flex-direction: row;
+  }
+
+  @include mobile {
+    flex-direction: column;
+    justify-content: center;
+  }
 
   .details {
     flex-direction: column-reverse; // number above the icon
-    gap: 8px;
-  }
 
-  .deadline-icon {
-    flex-shrink: 0; // this was the "icon shrinks" bug
-    width: calcClamp(28, 40);
-    height: calcClamp(28, 40);
+    @media screen and (min-width: 400px) and (max-height: 800px) {
+      flex-direction: row;
+      gap: 8px;
+    }
+
+    @include mobile {
+      flex-direction: row;
+      gap: 8px;
+    }
   }
 
   // Smaller numbers than the other tiles (3/4 of .amount)
   .amount {
-    font-size: calcClamp(30, 48);
+    font-size: calcClampMin((32, 48), (24, 48, 800, 500));
+  }
+
+  .prios {
+    @include flex-center;
+    gap: 24px;
   }
 
   hr {
     align-self: stretch;
     width: 2px;
-    margin: 0;
+    margin-block: calcClamp(16, 32, 900, 600, height);
+    margin-inline: 24px;
     border: none;
     background: $color-grey-500;
+
+    @include mobile {
+      width: 100%;
+      height: 2px;
+      margin-block: calcClamp(4, 24, 800, 700, height);
+      margin-inline: calcClamp(8, 32, 1024, 769);
+      align-self: auto;
+    }
   }
 
   &__info {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    color: $color-navy-800;
+    gap: calcClamp(4, 8, 500, 350, height);
+    // color: $color-navy-800;
     text-align: center;
 
     .date {
-      font-size: calcClamp(14, 21);
+      font-size: calcClamp(16, 20);
       font-weight: 700;
     }
 
     .headsup {
-      font-size: calcClamp(12, 16);
+      font-size: calcClamp(14, 16);
+      color: $text-dark;
     }
   }
 }
@@ -185,26 +236,18 @@
 // ---------- Greeting ----------
 
 .greeting {
-  font-size: calcClamp(28, 47, 1440, 1024);
+  font-size: calcClampMin((28, 47, 1440, 1024), (24, 47, 500, 350));
   font-weight: 500;
   color: $color-navy-800;
   word-wrap: break-word;
 
   ::ng-deep .name {
-    font-size: calcClamp(32, 64, 1440, 1024); // shrinks faster so the tiles keep room
+    font-size: calcClampMin((32, 64, 1440, 1024), (32, 64, 500, 350));
     font-weight: 700;
     color: $color-cyan-700;
-
-    @include tablet(1100px) {
-      font-size: calcClamp(32, 40, 1024, 768); // same size as the greeting line
-    }
-
-    @include mobile {
-      font-size: calcClamp(24, 32);
-    }
   }
 
-  @include responsive(1100) {
+  @include tablet {
     order: -1;
   }
 }

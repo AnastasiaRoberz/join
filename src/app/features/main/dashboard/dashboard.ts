@@ -2,18 +2,18 @@ import { Component, computed, inject } from '@angular/core';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { UserService } from '../../../services/user.service';
 import { TaskService } from '../../../services/task.service';
-import { TaskInterface } from '../../../interfaces/task.interface';
 import { getGreeting } from '../../../utils/greeting-utils';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   selector: 'app-dashboard',
   styleUrl: './dashboard.scss',
   templateUrl: './dashboard.html',
 })
 export class Dashboard {
   responsiveService = inject(ResponsiveService);
-  isShortHeight = this.responsiveService.isMaxHeight(768);
+  isShortHeight = this.responsiveService.isMaxHeight(700);
   userService = inject(UserService);
   taskService = inject(TaskService);
 
@@ -21,36 +21,42 @@ export class Dashboard {
 
   getDaytime = computed(() => getGreeting(this.user()?.firstname));
 
-  filteredTasks = computed(() => {
+  tiles = computed(() => {
     const tasks = this.taskService.tasks();
+    const countStatus = (status: string) => tasks.filter((task) => task.status === status).length;
 
-    return {
-      toDo: tasks.filter((task) => task.status === 'To do').length,
-      done: tasks.filter((task) => task.status === 'Done').length,
-      urgend: tasks.filter((task) => task.priority === 'urgent').length,
-      medium: tasks.filter((task) => task.priority === 'medium').length,
-      low: tasks.filter((task) => task.priority === 'low').length,
-      total: tasks.length,
-      inProgress: tasks.filter((task) => task.status === 'In progress').length,
-      awaitFeedback: tasks.filter((task) => task.status === 'Await feedback').length,
-      deadline: this.deadline(tasks),
-    };
+    return [
+      { size: 'half', label: 'To-do', amount: countStatus('To do'), icon: 'edit' },
+      { size: 'half', label: 'Done', amount: countStatus('Done'), icon: 'check', bold: true },
+      { size: 'third', label: 'Tasks in Board', amount: tasks.length },
+      { size: 'third', label: 'Tasks in Progress', amount: countStatus('In progress') },
+      { size: 'third', label: 'Awaiting Feedback', amount: countStatus('Await feedback') },
+    ];
   });
 
-  deadline(tasks: TaskInterface[]) {
+  priorities = computed(() => {
+    const tasks = this.taskService.tasks();
+    const countPrio = (prio: string) => tasks.filter((task) => task.priority === prio).length;
+
+    return [
+      { icon: 'urgent', amount: countPrio('urgent') },
+      { icon: 'medium', amount: countPrio('medium') },
+      { icon: 'low', amount: countPrio('low') },
+    ];
+  });
+
+  deadline() {
+    const tasks = this.taskService.tasks();
     const today = new Date().setHours(0, 0, 0, 0);
 
-    const openTasksWithDate = tasks.filter((task) => task.due_date && task.status !== 'Done');
+    const nextTask = tasks
+      .filter((task) => task.due_date && task.status !== 'Done')
+      .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())[0];
 
-    const sortedTasks = openTasksWithDate.sort(
-      (a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime(),
-    );
-    if (!sortedTasks[0]) return null;
+    if (!nextTask) return null;
 
-    const date = new Date(sortedTasks[0].due_date);
+    const date = new Date(nextTask.due_date);
     const overdue = date.setHours(0, 0, 0, 0) < today;
-    const deadlineText = overdue ? 'Overdue Deadline' : 'Upcoming Deadline';
-    const color = overdue ? '#e60026' : null;
 
     return {
       date: date.toLocaleDateString('en-US', {
@@ -58,8 +64,8 @@ export class Dashboard {
         day: 'numeric',
         year: 'numeric',
       }),
-      text: deadlineText,
-      color: color,
+      text: overdue ? 'Overdue Deadline' : 'Upcoming Deadline',
+      color: overdue ? '#e60026' : null,
     };
   }
 }

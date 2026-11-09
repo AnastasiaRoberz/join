@@ -5,7 +5,7 @@
   width: 100%;
   height: 100dvh;
   grid-template-columns: calcClamp(190, 232, 1300, 1025) minmax(0, 1fr);
-  grid-template-rows: 96px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas:
     'sidebar header'
     'sidebar pages';

@@ -6,13 +6,13 @@
 
 @mixin main-styling {
   --padding-inline: #{calcClampMin((16, 64, 1440, 1025), (16, 64, 700, 350))};
-  --padding-top: #{calcClampMin((48, 80), (16, 80, 700, 501))};
+  --padding-top: #{calcClampMin((48, 80), (16, 80, 900, 700))};
   @include size;
   display: flex;
   flex-direction: column;
   padding-inline: var(--padding-inline);
   padding-top: var(--padding-top);
-  padding-bottom: calcClampMin((24, 64), (16, 64, 700, 350));
+  padding-bottom: calcClampMin((24, 64), (16, 48, 800, 350));
 
   @include tablet {
     --padding-inline: #{calcClampMin((16, 48, 1024, 769), (16, 64, 700, 350))};
