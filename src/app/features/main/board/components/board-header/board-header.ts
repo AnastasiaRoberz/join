@@ -24,10 +24,8 @@ export class BoardHeader {
   taskLabelFn = (task: TaskInterface): string => task.title;
 
   /** Fields matched via `startsWith` (task title). */
-  taskTitleSearch = (task: TaskInterface): string[] => [task.title];
-
-  /** Fields matched via `includes` (task description). */
-  taskDescriptionSearch = (task: TaskInterface): (string | undefined | null)[] => [
+  taskSearchStrings = (task: TaskInterface): (string | undefined | null)[] => [
+    task.title,
     task.description,
   ];
 
