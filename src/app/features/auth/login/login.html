@@ -21,8 +21,8 @@
       preset="primary"
       size="medium"
       type="submit"
-      [disabled]="!loginForm.valid"
       [attr.aria-disabled]="!loginForm.valid"
+      [disabled]="!loginForm.valid || isSubmitting()"
     >
       Log in
     </button>

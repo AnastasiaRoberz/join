@@ -162,14 +162,23 @@ export class TextField implements ControlValueAccessor {
     const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
 
     if (this.inputType() === 'password') {
-      if (inputElement.value.length < this.actualPassword.length) {
-        this.actualPassword = this.actualPassword.slice(0, inputElement.value.length);
-      } else {
-        const addedChar = inputElement.value.slice(this.actualPassword.length);
-        this.actualPassword += addedChar;
+      const cursor = inputElement.selectionStart ?? inputElement.value.length;
+      const oldLength = this.actualPassword.length;
+      const newLength = inputElement.value.length;
+      if (newLength < oldLength) {
+        const deletedCount = oldLength - newLength;
+        this.actualPassword =
+          this.actualPassword.slice(0, cursor) + this.actualPassword.slice(cursor + deletedCount);
+      } else if (newLength > oldLength) {
+        const addedCount = newLength - oldLength;
+        const addedText = inputElement.value.slice(cursor - addedCount, cursor);
+        this.actualPassword =
+          this.actualPassword.slice(0, cursor - addedCount) +
+          addedText +
+          this.actualPassword.slice(cursor - addedCount);
       }
 
-      this.updatePasswordDisplay(inputElement as HTMLInputElement);
+      this.updatePasswordDisplay(cursor, inputElement as HTMLInputElement);
       this.onChange(this.actualPassword);
     } else {
       this.value = inputElement.value;
@@ -177,7 +186,7 @@ export class TextField implements ControlValueAccessor {
     }
   }
 
-  updatePasswordDisplay(inputElement?: HTMLInputElement) {
+  updatePasswordDisplay(cursor?: number, inputElement?: HTMLInputElement) {
     if (this.actualPassword.length === 0) {
       this.value = '';
       this.actualPassword = '';
@@ -192,6 +201,9 @@ export class TextField implements ControlValueAccessor {
 
     if (inputElement) {
       inputElement.value = this.value;
+      if (cursor !== undefined) {
+        inputElement?.setSelectionRange(cursor, cursor);
+      }
     }
   }
 

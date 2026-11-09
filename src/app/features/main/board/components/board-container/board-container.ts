@@ -35,7 +35,7 @@ export class BoardContainer {
   responsiveService = inject(ResponsiveService);
 
   columns = computed(() => {
-    const tasks = this.taskService.tasks();
+    const tasks = this.taskService.filteredTasks();
     return COLUMN_STATUSES.map((status) => ({
       status,
       tasks: tasks.filter((task) => task.status === status).sort((a, b) => a.position - b.position),

@@ -1,3 +1,7 @@
+<!-- Greeter Overlay -->
+@if (greeterService.isGreeting()) {
+  <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
+}
 <!-- header -->
 <header class="header">
   <h2>Join 360</h2>
@@ -12,8 +16,10 @@
         routerLink="/app/board"
         routerLinkActive="active"
         class="tile"
-        [class]="tile.size"
+        [class]="tile.area"
+        [style.grid-area]="tile.area"
         [attr.aria-label]="tile.amount + ' ' + tile.label + ' – Go to Board'"
+        (click)="taskService.setBoardFilter(tile.filter)"
       >
         @if (tile.icon) {
           <svg class="icon" [class.icon--bold]="tile.bold" aria-hidden="true" focusable="false">
@@ -36,13 +42,13 @@
     >
       <div class="prios">
         @for (prio of priorities(); track prio.icon) {
-          <div class="details" [attr.aria-label]="prio.amount + ' ' + prio.icon + ' priority'">
-            <svg
-              class="icon prio-icon"
-              [style.background-color]="'var(--prio-' + prio.icon + ')'"
-              aria-hidden="true"
-              focusable="false"
-            >
+          <div
+            class="details prio-item"
+            [attr.aria-label]="prio.amount + ' ' + prio.icon + ' priority'"
+            [style.--prio-color]="'var(--prio-' + prio.icon + ')'"
+            (click)="onPriorityClick(prio.filter, $event)"
+          >
+            <svg class="icon prio-icon" aria-hidden="true" focusable="false">
               <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
             </svg>
             <span class="amount" [class]="prio.icon">{{ prio.amount }}</span>
@@ -51,7 +57,7 @@
       </div>
 
       <hr aria-hidden="true" />
-      <div class="deadline__info">
+      <div class="deadline__info" (click)="onDeadlineTileClick()">
         @if (deadline(); as deadline) {
           <span class="date" [style.color]="deadline.color">{{ deadline.date }} </span>
           <span class="headsup">{{ deadline.text }}</span>
@@ -62,7 +68,14 @@
     </a>
   </div>
   <!-- greeting -->
-  @if (!(responsiveService.isTablet() && isShortHeight())) {
-    <p class="greeting" [innerHTML]="getDaytime()"></p>
+  @if (!hideGreeting() || greeterService.isGreeting()) {
+    <div
+      #welcome
+      class="welcome"
+      [class.greeter-fly]="greeterService.isGreeting() && !hideGreeting()"
+      [class.greeter-fade]="greeterService.isGreeting() && hideGreeting()"
+    >
+      <p class="greeting" [innerHTML]="getDaytime()"></p>
+    </div>
   }
 </div>
