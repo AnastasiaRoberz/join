@@ -9,6 +9,12 @@
   @include flex-center;
   width: 32px;
   height: 32px;
+  transition: transform 200ms ease; // the button itself has no transition yet
+
+  &:hover,
+  &:focus-visible {
+    transform: translateX(-6px); // button = circle + arrow, both nudge left
+  }
 }
 
 .content {
