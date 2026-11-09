@@ -8,7 +8,12 @@
 <div class="content">
   <div class="content__tiles">
     @for (tile of tiles(); track tile.label) {
-      <a routerLink="/app/board" routerLinkActive="active" class="tile" [class]="tile.size">
+      <a
+        routerLink="/app/board"
+        routerLinkActive="active"
+        class="tile"
+        [style.grid-area]="tile.area"
+      >
         @if (tile.icon) {
           <svg class="icon" [class.icon--bold]="tile.bold">
             <use [attr.href]="'./assets/icons/icons.svg#' + tile.icon"></use>

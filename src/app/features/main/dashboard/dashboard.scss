@@ -24,10 +24,12 @@
   // ---------- Tile grid: 6 columns, tiles span 3 / 6 / 2 ----------
   &__tiles {
     display: grid;
-    grid-template-columns: repeat(
-      6,
-      minmax(0, 1fr)
-    ); // minmax(0, …): long words can't stretch a column
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-areas:
+      'todo todo todo done done done'
+      'deadline deadline deadline deadline deadline deadline'
+      'total total progress progress feedback feedback';
+    // minmax(0, …): long words can't stretch a column
     gap: calcClampMin((16, 32, 1440, 1025), (8, 32, 900, 450));
     width: 85%;
     max-width: 560px;
@@ -38,12 +40,18 @@
       max-width: none;
       grid-template-columns: 1.2fr repeat(3, minmax(0, 1fr));
       grid-template-rows: repeat(2, 1fr);
+      grid-template-areas:
+        'todo deadline deadline deadline'
+        'done total progress feedback';
       gap: calcClampMin((16, 32, 1024, 768), (16, 32, 900, 600));
     }
 
     @media screen and (max-width: 450px) and (max-height: 500px) {
       grid-template-columns: repeat(6, minmax(0, 1fr));
       grid-template-rows: repeat(2, 1fr);
+      grid-template-areas:
+        'todo  done  deadline deadline deadline deadline'
+        'total total progress progress feedback feedback';
     }
 
     @include tablet {
@@ -64,43 +72,6 @@
   background-color: $color-white;
   box-shadow: 0px 0px 4px 0px #00000066;
   padding-inline: calcClampMin((4, 40, 1440, 1025), (16, 40, 800, 350));
-
-  &.half {
-    grid-column: span 3;
-
-    @media screen and (min-width: 451px) and (max-width: 1024px) and (max-height: 500px) {
-      grid-column: 1;
-      &:first-of-type {
-        grid-row: 1;
-      }
-
-      &:nth-of-type(2) {
-        grid-row: 2;
-      }
-    }
-
-    @media screen and (max-width: 450px) and (max-height: 500px) {
-      grid-row: 1;
-      grid-column: span 1;
-    }
-  }
-
-  &.third {
-    grid-column: span 2;
-
-    @media screen and (min-width: 451px) and (max-width: 1024px) and (max-height: 500px) {
-      grid-column: span 1;
-      grid-row: 2;
-      &:first-of-type {
-        grid-column-start: 2;
-      }
-    }
-
-    @media screen and (max-width: 450px) and (max-height: 500px) {
-      grid-row: 2;
-      grid-column: span 2;
-    }
-  }
 }
 
 .icon {
@@ -160,22 +131,14 @@
   --prio-urgent: #{$prio-urgent};
   --prio-medium: #{$prio-medium};
   --prio-low: #{$prio-low};
-  grid-row: 2;
-  grid-column: span 6;
+  grid-area: deadline;
+
   justify-content: space-evenly;
   gap: 0;
 
   @media screen and (max-width: 1024px) and (max-height: 500px) {
-    grid-column: 2 / span 3;
-    grid-row: 1;
-
     flex-direction: column;
     justify-content: center;
-  }
-
-  @media screen and (max-width: 450px) and (max-height: 500px) {
-    grid-row: 1;
-    grid-column: span 4;
   }
 
   @media screen and (min-width: 500px) and (max-width: 1024px) and (max-height: 500px) {

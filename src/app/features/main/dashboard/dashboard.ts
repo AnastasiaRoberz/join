@@ -26,11 +26,11 @@ export class Dashboard {
     const countStatus = (status: string) => tasks.filter((task) => task.status === status).length;
 
     return [
-      { size: 'half', label: 'To-do', amount: countStatus('To do'), icon: 'edit' },
-      { size: 'half', label: 'Done', amount: countStatus('Done'), icon: 'check', bold: true },
-      { size: 'third', label: 'Tasks in Board', amount: tasks.length },
-      { size: 'third', label: 'Tasks in Progress', amount: countStatus('In progress') },
-      { size: 'third', label: 'Awaiting Feedback', amount: countStatus('Await feedback') },
+      { area: 'todo', label: 'To-do', amount: countStatus('To do'), icon: 'edit' },
+      { area: 'done', label: 'Done', amount: countStatus('Done'), icon: 'check', bold: true },
+      { area: 'total', label: 'Tasks in Board', amount: tasks.length },
+      { area: 'progress', label: 'Tasks in Progress', amount: countStatus('In progress') },
+      { area: 'feedback', label: 'Awaiting Feedback', amount: countStatus('Await feedback') },
     ];
   });
 
