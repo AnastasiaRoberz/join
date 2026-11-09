@@ -11,8 +11,12 @@
   }
 }
 
-h2 {
+.title-group {
   flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: calcClamp(12, 24);
 }
 
 app-select-field {

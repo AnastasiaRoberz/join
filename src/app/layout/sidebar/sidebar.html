@@ -10,7 +10,11 @@
       @if (userService.currentSession()) {
         @for (item of navList; track item.section) {
           <li>
-            <a [routerLink]="'/app/' + item.section" routerLinkActive="active">
+            <a
+              [routerLink]="'/app/' + item.section"
+              routerLinkActive="active"
+              (click)="onNavClick(item.section)"
+            >
               <svg class="nav-icon">
                 <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
               </svg>

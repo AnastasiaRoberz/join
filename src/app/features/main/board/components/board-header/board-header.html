@@ -1,4 +1,17 @@
-<h2>Board</h2>
+<div class="title-group">
+  <h2>Board</h2>
+  @if (taskService.boardFilter(); as filter) {
+    <button
+      appBtn
+      preset="cancel"
+      size="small"
+      iconPos="right"
+      (click)="taskService.clearBoardFilter()"
+    >
+      {{ filter.label }}
+    </button>
+  }
+</div>
 <app-select-field
   variant="search"
   placeholder="Find Task"
