@@ -20,7 +20,7 @@
 }
 
 .header {
-  @include titleWithDevider(480);
+  @include titleWithDevider(500);
 }
 
 // Overlay that covers the page area during the greeting.
@@ -72,6 +72,10 @@
     @include tablet {
       width: 100%;
       max-width: none;
+    }
+
+    @include short-height(800) {
+      grid-template-rows: repeat(3, auto);
     }
 
     @media screen and (min-width: 451px) and (max-width: 1024px) and (max-height: 500px) {
@@ -241,7 +245,7 @@
   .details {
     flex-direction: column-reverse; // number above the icon
 
-    @media screen and (max-height: 700px) {
+    @media screen and (min-width: 500px) and (max-height: 700px), screen and (max-height: 500px) {
       flex-direction: row;
       gap: 8px;
     }

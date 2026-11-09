@@ -22,7 +22,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Dashboard implements AfterViewInit {
   responsiveService = inject(ResponsiveService);
-  hideGreeting = this.responsiveService.observeQuery('(max-width: 451px) and (max-height: 501px)');
+  hideGreeting = this.responsiveService.observeQuery('(max-width: 451px) and (max-height: 701px)');
   noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
 
   //to manage intro-animation
