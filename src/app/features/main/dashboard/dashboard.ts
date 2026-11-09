@@ -14,6 +14,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export class Dashboard {
   responsiveService = inject(ResponsiveService);
   isShortHeight = this.responsiveService.isMaxHeight(700);
+  noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
   userService = inject(UserService);
   taskService = inject(TaskService);
 

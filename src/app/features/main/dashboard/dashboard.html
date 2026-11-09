@@ -12,6 +12,7 @@
         routerLink="/app/board"
         routerLinkActive="active"
         class="tile"
+        [class]="tile.area"
         [style.grid-area]="tile.area"
       >
         @if (tile.icon) {
@@ -31,7 +32,13 @@
       <div class="prios">
         @for (prio of priorities(); track prio.icon) {
           <div class="details">
-            <svg class="icon prio-icon" [style.background-color]="'var(--prio-' + prio.icon + ')'">
+            <svg
+              class="icon prio-icon"
+              [style.background-color]="
+                !noPrioBg() ? 'var(--prio-' + prio.icon + ')' : 'transparent'
+              "
+              [style.color]="noPrioBg() ? 'var(--prio-' + prio.icon + ')' : 'white'"
+            >
               <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
             </svg>
             <span class="amount" [class]="prio.icon">{{ prio.amount }}</span>
