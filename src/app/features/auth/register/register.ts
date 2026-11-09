@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { TextField } from '../../../shared/text-field/text-field';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../services/supabase.service';
@@ -80,5 +80,19 @@ export class Register {
       this.draftService.clearDrafts();
       this.registerForm.reset();
     }
+  }
+
+  tooltipVisible = signal(false);
+
+  showTooltip(): void {
+    this.tooltipVisible.set(true);
+  }
+
+  hideTooltip(): void {
+    this.tooltipVisible.set(false);
+  }
+
+  toggleTooltip(): void {
+    this.tooltipVisible.update((v) => !v);
   }
 }

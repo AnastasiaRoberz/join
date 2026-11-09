@@ -10,21 +10,33 @@
 </header>
 
 <form [formGroup]="registerForm" aria-labelledby="signup-heading" (ngSubmit)="onSignup()">
-  <app-text-field fieldId="name" label="Name" icon="person" formControlName="name" />
-  <app-text-field label="Email" icon="mail" formControlName="mail" />
+  <app-text-field
+    fieldId="name"
+    label="Name"
+    icon="person"
+    formControlName="name"
+    autocomplete="name"
+  />
+  <app-text-field label="Email" icon="mail" formControlName="mail" autocomplete="email" />
   <app-text-field
     class="password-field"
     label="Password"
     inputType="password"
     formControlName="password"
+    autocomplete="new-password"
   >
     <div password-info class="password-info">
-      <div class="password-tooltip">
+      <div
+        class="password-tooltip"
+        role="tooltip"
+        id="password-requirements"
+        [class.visible]="tooltipVisible()"
+      >
         <strong>Password Requirements:</strong>
-        <ul class="password-rules">
+        <ul class="password-rules" aria-label="Password rules">
           @for (rule of passwordRules(); track rule.label) {
-            <li>
-              <svg class="status-icon" [class.valid]="rule.valid">
+            <li [attr.aria-label]="rule.label + (rule.valid ? ': valid' : ': invalid')">
+              <svg class="status-icon" [class.valid]="rule.valid" aria-hidden="true">
                 <use
                   [attr.href]="
                     rule.valid ? './assets/icons/icons.svg#check' : './assets/icons/icons.svg#x'
@@ -36,9 +48,20 @@
           }
         </ul>
       </div>
-      <svg class="info-icon">
-        <use href="./assets/icons/icons.svg#info"></use>
-      </svg>
+      <button
+        type="button"
+        class="info-icon-btn"
+        aria-label="Show password requirements"
+        [attr.aria-expanded]="tooltipVisible()"
+        aria-controls="password-requirements"
+        (click)="toggleTooltip()"
+        (mouseenter)="showTooltip()"
+        (mouseleave)="hideTooltip()"
+      >
+        <svg class="info-icon" aria-hidden="true" focusable="false">
+          <use href="./assets/icons/icons.svg#info"></use>
+        </svg>
+      </button>
     </div>
   </app-text-field>
   <app-text-field label="Confirm Password" inputType="password" formControlName="confirmPassword" />
@@ -51,7 +74,14 @@
     </label>
   </div>
 
-  <button appBtn preset="primary" size="medium" type="submit" [disabled]="!registerForm.valid">
+  <button
+    appBtn
+    preset="primary"
+    size="medium"
+    type="submit"
+    [disabled]="!registerForm.valid"
+    [attr.aria-disabled]="!registerForm.valid"
+  >
     Sign up
   </button>
 </form>

@@ -76,6 +76,19 @@ button[type='submit'] {
   }
 }
 
+.info-icon-btn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+
+  &:focus-visible {
+    outline: 2px solid $main-color;
+    outline-offset: 2px;
+  }
+}
+
 .password-tooltip {
   @include flex-start(column, both);
   gap: 8px;
@@ -91,6 +104,10 @@ button[type='submit'] {
   text-wrap: nowrap;
 
   visibility: hidden;
+
+  &.visible {
+    visibility: visible;
+  }
 
   ul {
     @include flex-start(column, both);
