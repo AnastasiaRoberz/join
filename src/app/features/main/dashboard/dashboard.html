@@ -18,6 +18,7 @@
         class="tile"
         [class]="tile.area"
         [style.grid-area]="tile.area"
+        (click)="taskService.setBoardFilter(tile.filter)"
       >
         @if (tile.icon) {
           <svg class="icon" [class.icon--bold]="tile.bold">
@@ -35,14 +36,12 @@
     <a routerLink="/app/board" routerLinkActive="active" class="tile deadline">
       <div class="prios">
         @for (prio of priorities(); track prio.icon) {
-          <div class="details">
-            <svg
-              class="icon prio-icon"
-              [style.background-color]="
-                !noPrioBg() ? 'var(--prio-' + prio.icon + ')' : 'transparent'
-              "
-              [style.color]="noPrioBg() ? 'var(--prio-' + prio.icon + ')' : 'white'"
-            >
+          <div
+            class="details prio-item"
+            [style.--prio-color]="'var(--prio-' + prio.icon + ')'"
+            (click)="onPriorityClick(prio.filter, $event)"
+          >
+            <svg class="icon prio-icon">
               <use [attr.href]="'./assets/icons/icons.svg#' + prio.icon"></use>
             </svg>
             <span class="amount" [class]="prio.icon">{{ prio.amount }}</span>
@@ -51,7 +50,7 @@
       </div>
 
       <hr />
-      <div class="deadline__info">
+      <div class="deadline__info" (click)="onDeadlineTileClick()">
         @if (deadline(); as deadline) {
           <span class="date" [style.color]="deadline.color">{{ deadline.date }} </span>
           <span class="headsup">{{ deadline.text }}</span>

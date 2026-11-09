@@ -37,12 +37,17 @@
 }
 
 .content {
+  --scale: 1.1;
   flex: 1;
   min-height: 0;
   display: flex;
   align-items: center;
   gap: calcClampMin((16, 80, 1440, 1024), (24, 80, 1024, 800));
   max-height: 560px;
+
+  @media screen and (max-width: 1200px) {
+    --scale: 1.05;
+  }
 
   @include tablet {
     flex-direction: column;
@@ -105,6 +110,28 @@
   border-radius: calcClampMin((20, 30, 768, 320), (8, 30, 800, 350));
   background-color: $color-white;
   box-shadow: $overlay-shadow;
+  transition:
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover:not(.deadline) {
+    transform: scale(var(--scale));
+    background-color: $main-color;
+    border-color: $main-color;
+    box-shadow: 0px 0px 4px 0px $main-color;
+
+    .icon {
+      background-color: white;
+      color: $main-color;
+    }
+
+    .amount,
+    .type {
+      color: $text-light;
+    }
+  }
 }
 
 .icon {
@@ -129,9 +156,12 @@
   width: calcClampMin((40, 60), (32, 60, 800, 500));
   height: calcClampMin((40, 60), (32, 60, 800, 500));
   padding: calcClampMin((9, 12), (4, 12, 800, 500));
+  background-color: var(--prio-color);
+  color: $color-white;
 
   @media screen and (max-width: 450px) and (max-height: 500px) {
     background-color: transparent;
+    color: var(--prio-color);
     padding: 0;
   }
 }
@@ -187,6 +217,17 @@
     flex-direction: column;
   }
 
+  &:hover {
+    transform: scale(var(--scale));
+    background-color: $main-color;
+
+    .amount,
+    .date,
+    .headsup {
+      color: white;
+    }
+  }
+
   .prios {
     @include flex-center;
     gap: calcClamp(12, 24, 768, 320);
@@ -203,6 +244,21 @@
     @media screen and (max-height: 700px) {
       flex-direction: row;
       gap: 8px;
+    }
+  }
+
+  .prio-item {
+    transition: transform 0.15s ease;
+    position: relative;
+    z-index: 0;
+
+    &:hover {
+      transform: scale(var(--scale));
+
+      .icon {
+        background-color: $color-white;
+        color: var(--prio-color);
+      }
     }
   }
 
@@ -243,6 +299,24 @@
     .headsup {
       font-size: calcClamp(14, 16, 768, 320);
       color: $text-dark;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: -16px;
+        background-color: $main-color;
+        border-radius: 10px;
+        z-index: -1;
+      }
+
+      .date,
+      .headsup {
+        color: white;
+      }
     }
 
     @media screen and (max-width: 499px) and (max-height: 500px) {
