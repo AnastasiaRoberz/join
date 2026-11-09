@@ -85,6 +85,7 @@ export class Dashboard implements AfterViewInit {
     });
 
     welcome.style.visibility = ''; // show it again, now already in the middle
+  }
   // isShortHeight = this.responsiveService.isMaxHeight(700);
   userService = inject(UserService);
   taskService = inject(TaskService);
