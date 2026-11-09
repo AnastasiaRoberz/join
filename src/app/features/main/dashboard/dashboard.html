@@ -66,8 +66,8 @@
     <p
       #welcome
       class="welcome"
-      [class.greeter-fly]="greeterService.isGreeting() && !hideGreeting()"
-      [class.greeter-fade]="greeterService.isGreeting() && hideGreeting()"
+      [class.greeter-fly]="greeterService.isGreeting() && hideGreeting()"
+      [class.greeter-fade]="greeterService.isGreeting() && !hideGreeting()"
       [innerHTML]="getDaytime()"
     ></p>
   }

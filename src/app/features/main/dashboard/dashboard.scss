@@ -23,6 +23,19 @@
   @include titleWithDevider(480);
 }
 
+// Overlay that covers the page area during the greeting.
+.greeter-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 1;
+
+  background-color: #{$main-bg};
+  animation: overlay-fade 1.8s ease-in-out forwards;
+  animation-delay: 0.2s;
+}
+
 .content {
   flex: 1;
   min-height: 0;
@@ -33,19 +46,6 @@
 
   @include tablet {
     flex-direction: column;
-  }
-
-  // Overlay that covers the page area during the greeting.
-  .greeter-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 999;
-    pointer-events: none;
-    opacity: 1;
-
-    background-color: #{$main-bg};
-    animation: overlay-fade 1.8s ease-in-out forwards;
-    animation-delay: 0.2s;
   }
 
   &__tiles {

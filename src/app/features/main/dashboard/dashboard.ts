@@ -36,7 +36,7 @@ export class Dashboard implements AfterViewInit {
   // from the centre of the page, so it can start there.
   ngAfterViewInit(): void {
     const welcome = this.welcome()?.nativeElement;
-    if (!this.greeterService.isGreeting() || !welcome || !this.hideGreeting()) return;
+    if (!this.greeterService.isGreeting() || !welcome || this.hideGreeting()) return;
 
     // Hide the greeting until the web font has loaded: with the fallback font the text
     // has a different size, so measuring now would give a slightly wrong centre.
