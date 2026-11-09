@@ -10,9 +10,6 @@ import { TaskService } from '../../services/task.service';
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
-  host: {
-    '[class.is-tablet]': 'responsiveService.isTablet()',
-  },
 })
 export class Sidebar {
   responsiveService = inject(ResponsiveService);
