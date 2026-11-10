@@ -15,8 +15,11 @@ import { authGuard } from './auth.guard';
 /**
  * Application routes.
  * - `''`: authentication shell with `login` (default) and `register`.
- * - `app`: main shell. Privacy policy and legal notice are always reachable,
- *   all other pages are protected by `authGuard` (logged-in users only).
+ * - `'app'`: main shell.
+ *   - `''` redirects to `summary`.
+ *   - `privacy-policy` and `legal-notice` are always reachable (no guard).
+ *   - All other pages are protected by `authGuard` (logged-in users only).
+ * - `'**'`: catch-all, redirects to `/login` for unknown URLs.
  */
 export const routes: Routes = [
   {
@@ -32,6 +35,7 @@ export const routes: Routes = [
     path: 'app',
     component: Main,
     children: [
+      { path: '', redirectTo: 'summary', pathMatch: 'full' },
       { path: 'privacy-policy', component: PrivacyPolicy },
       { path: 'legal-notice', component: LegalNotice },
       { path: 'summary', component: Dashboard, canActivate: [authGuard] },
@@ -41,4 +45,6 @@ export const routes: Routes = [
       { path: 'help', component: Help, canActivate: [authGuard] },
     ],
   },
+
+  { path: '**', redirectTo: '/login' },
 ];
