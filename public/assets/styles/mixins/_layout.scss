@@ -100,3 +100,66 @@
     }
   }
 }
+
+/// Shared hover sweep and smooth active transition for sidebar navigation & footer links.
+@mixin sidebar-link-hover {
+  position: relative;
+  z-index: 2;
+  transition: color 0.18s ease;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -2;
+    background-image: linear-gradient(
+      90deg,
+      $sidebar-bg-hover 0%,
+      $sidebar-bg-hover 40%,
+      rgba($color-cyan-500, 0.16) 50%,
+      transparent 60%,
+      transparent 100%
+    );
+    background-size: 250% 100%;
+    background-position: 100% 0;
+    transition: background-position 0.18s ease-out;
+  }
+
+  &::after {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+    background-color: $sidebar-bg-active;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease;
+  }
+
+  &:hover {
+    color: $sidebar-txt-hover;
+
+    &::before {
+      background-position: 0% 0;
+      transition: background-position 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  &.active,
+  &:active {
+    color: $text-light;
+
+    &::after {
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+  }
+}

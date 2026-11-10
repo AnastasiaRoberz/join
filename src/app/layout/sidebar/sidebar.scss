@@ -90,30 +90,7 @@ nav {
     width: 100%;
     padding: 8px 0;
     color: $sidebar-txt-default;
-    position: relative;
-    z-index: 2;
-
-    &::before {
-      content: '';
-      width: 100cqw;
-      height: 100%;
-      background-color: inherit;
-      position: absolute;
-      left: 50%;
-      translate: -50% 0;
-      z-index: -1;
-    }
-
-    &:hover {
-      background-color: $sidebar-bg-hover;
-      color: $sidebar-txt-hover;
-    }
-
-    &.active,
-    &:active {
-      background-color: $sidebar-bg-active;
-      color: $text-light;
-    }
+    @include sidebar-link-hover;
 
     @include tablet {
       flex-direction: column;
@@ -127,9 +104,22 @@ nav {
       border-radius: 8px;
       white-space: nowrap;
       padding: 0;
+      transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
 
-      &::before {
+      &::before,
+      &::after {
         display: none;
+      }
+
+      &:hover {
+        background-color: $sidebar-bg-hover;
+      }
+
+      &.active,
+      &:active {
+        background-color: $sidebar-bg-active;
       }
     }
   }
