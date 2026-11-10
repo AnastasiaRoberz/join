@@ -2,6 +2,7 @@
 
 :host {
   @include field-host;
+  position: relative;
 
   &.ng-invalid.ng-touched .input-container {
     border-color: $error;
