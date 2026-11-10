@@ -55,6 +55,9 @@ export class Header {
     }
   }
 
+  /**
+   * Closes the user menu and logs out the current user.
+   */
   logout(): void {
     this.closeMenu();
     this.userService.logOut();
