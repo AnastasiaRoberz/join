@@ -1,15 +1,5 @@
 @use '../../../../public/assets/styles' as *;
 
-@keyframes logo-intro {
-  0%,
-  20% {
-    transform: translate(var(--intro-x), var(--intro-y)) scale(var(--intro-scale));
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-}
-
 :host {
   width: 100%;
   height: 100dvh;
