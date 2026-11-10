@@ -11,7 +11,7 @@ import { ResponsiveService } from '../../../services/responsive.service';
 import { IntroService } from '../../../services/intro.service';
 import { UserService } from '../../../services/user.service';
 import { BoardFilter, TaskService } from '../../../services/task.service';
-import { getGreeting, GreetingParts } from '../../../utils/greeting-utils';
+import { getGreetingFormatter, GreetingParts } from '../../../utils/greeting-utils';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
 import { TaskInterface } from '../../../interfaces/task.interface';
@@ -83,9 +83,12 @@ export class Dashboard implements OnInit, AfterViewInit {
   /** Current logged in user contact. */
   protected readonly user = computed(() => this.userService.currentContact());
 
-  /** Formatted daytime greeting object based on current hour. */
+  /** Stable slogan formatter chosen once per component initialization. */
+  private readonly greetingFormatter = getGreetingFormatter();
+
+  /** Formatted daytime greeting object based on stable formatter and current user firstname. */
   protected readonly getDaytime = computed<GreetingParts>(() =>
-    getGreeting(this.user()?.firstname),
+    this.greetingFormatter(this.user()?.firstname),
   );
 
   /** Dashboard metrics tiles for task statuses. */

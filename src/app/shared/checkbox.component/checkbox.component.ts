@@ -1,6 +1,5 @@
-import { Component, computed, contentChild, effect, inject, input, model } from '@angular/core';
+import { Component, computed, contentChild, effect, input, model } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
-import { ErrorService } from '../../services/error.service';
 
 /** Global counter used to generate unique DOM IDs for checkbox instances. */
 let nextId = 0;
@@ -58,9 +57,6 @@ let nextId = 0;
   },
 })
 export class CheckboxComponent implements ControlValueAccessor {
-  /** Service used to format form validation error messages when bound to an `NgControl`. */
-  private readonly errorService = inject(ErrorService);
-
   // ---------------------------------------------------------------------------
   // Content Queries, Inputs & Models
   // ---------------------------------------------------------------------------
@@ -155,19 +151,6 @@ export class CheckboxComponent implements ControlValueAccessor {
       this.onChange(target.checked);
       this.onTouched();
     }
-  }
-
-  /**
-   * Returns a human-readable validation error message if a projected `NgControl`
-   * is invalid and has been touched by the user.
-   *
-   * @returns The formatted error message string, or `null` if valid/untouched.
-   */
-  public showError(): string | null {
-    const ctrl = this.ngControl()?.control;
-    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
-
-    return this.errorService.getErrorMessage(ctrl.errors, '');
   }
 
   /**

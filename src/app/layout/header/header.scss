@@ -57,11 +57,16 @@ nav {
     @include flex-start;
     cursor: pointer;
 
-    a {
+    a,
+    button {
       @include size;
       @include flex-start;
       color: $text-muted;
       padding-left: 16px;
+      background: transparent;
+      border: none;
+      font: inherit;
+      cursor: pointer;
     }
 
     &:hover {

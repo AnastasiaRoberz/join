@@ -156,11 +156,6 @@ export class TaskService {
    * Updates an existing task row and, on success, patches the local `tasks` signal without a re-fetch.
    * Existing `subtasks` and `assigned_users` of the local task are kept if not provided in `taskData`.
    *
-   * @remarks
-   * The whole `taskData` object is sent to the `tasks` table, so it must only contain real columns.
-   * Use {@link TaskService.setTaskSubtasks} and {@link TaskService.setTaskAssignments} for the relations.
-   * `SupabaseService.updateData` shows a success or error toast. On failure the local signal is untouched.
-   *
    * @param id - The ID of the task to update
    * @param taskData - A partial task entity containing only the fields to change
    * @returns A promise that resolves after the remote update and local signal modification
@@ -254,64 +249,74 @@ export class TaskService {
   }
 
   /**
-   * Replaces ALL subtasks of a task with the given list ("delete all, then re-insert")
-   * and reloads all tasks via {@link TaskService.getAllTasks}.
-   * Called once when the user confirms the main task in the edit form.
+   * Replaces all subtasks of a task with error verification and optional reload.
    *
-   * @remarks
-   * Only `title`, `is_done` (default `false`) and `task_id` are written. The list is inserted in
-   * REVERSED order, so the first item receives the highest database ID and, as subtasks are
-   * displayed sorted by ID descending, appears on top. All subtasks get NEW IDs on every save.
-   *
-   * There is no transaction: if the insert fails after the delete succeeded, the task ends up
-   * without subtasks. No exception is thrown and no toast is shown for the `subtasks` table.
-   *
-   * @param taskId - The ID of the task the subtasks belong to
-   * @param subtasks - The complete new list of subtasks in display order (top item first).
-   *                   An empty array removes all subtasks of the task
-   * @returns A promise that resolves after the database was updated and the tasks were reloaded
+   * @param taskId - The ID of the parent task.
+   * @param subtasks - Subtasks in display order.
+   * @param reload - Whether to trigger `getAllTasks()` on completion.
+   * @returns A promise resolving to `true` on success, or `false` on failure.
    */
-  public async setTaskSubtasks(taskId: number, subtasks: Omit<SubtaskInterface, 'id'>[]): Promise<void> {
-    await this.supabaseService.deleteTaskSubtasks(taskId);
+  public async setTaskSubtasks(
+    taskId: number,
+    subtasks: Omit<SubtaskInterface, 'id'>[],
+    reload: boolean = true,
+  ): Promise<boolean> {
+    const deleted = await this.supabaseService.deleteTaskSubtasks(taskId);
+    if (!deleted) return false;
     if (subtasks.length > 0) {
       const data = [...subtasks].reverse().map((s) => ({
         title: s.title,
         is_done: s.is_done ?? false,
         task_id: taskId,
       }));
-
-      await this.supabaseService.addData(data, 'subtasks');
+      const added = await this.supabaseService.addData(data, 'subtasks');
+      if (!added) return false;
     }
-    await this.getAllTasks();
+    if (reload) await this.getAllTasks();
+    return true;
   }
 
   /**
-   * Replaces ALL contact assignments of a task with the given list ("delete all, then re-insert")
-   * and reloads all tasks via {@link TaskService.getAllTasks} so `assigned_users` is up to date.
-   * Called once when the user confirms the main task in the edit form.
+   * Replaces all contact assignments of a task with error verification and optional reload.
    *
-   * @remarks
-   * There is no transaction: if the insert fails after the delete succeeded, the task ends up
-   * without assignments. No exception is thrown and no toast is shown for the `task-assignment` table.
-   *
-   * @param taskId - The ID of the task to update
-   * @param contactIds - The complete new list of contact IDs assigned to the task.
-   *                     An empty array removes all assignments of the task
-   * @returns A promise that resolves after the database was updated and the tasks were reloaded
+   * @param taskId - The ID of the task to update.
+   * @param contactIds - The new array of assigned contact IDs.
+   * @param reload - Whether to trigger `getAllTasks()` on completion.
+   * @returns A promise resolving to `true` on success, or `false` on failure.
    */
-  public async setTaskAssignments(taskId: number, contactIds: number[]): Promise<void> {
-    await this.supabaseService.deleteTaskAssignments(taskId);
-
+  public async setTaskAssignments(
+    taskId: number,
+    contactIds: number[],
+    reload: boolean = true,
+  ): Promise<boolean> {
+    const deleted = await this.supabaseService.deleteTaskAssignments(taskId);
+    if (!deleted) return false;
     if (contactIds.length > 0) {
-      const newData = contactIds.map((contactId) => ({
-        task_id: taskId,
-        contact_id: contactId,
-      }));
-
-      await this.supabaseService.addData(newData, 'task-assignment');
+      const data = contactIds.map((contactId) => ({ task_id: taskId, contact_id: contactId }));
+      const added = await this.supabaseService.addData(data, 'task-assignment');
+      if (!added) return false;
     }
+    if (reload) await this.getAllTasks();
+    return true;
+  }
 
+  /**
+   * Persists both assignments and subtasks for a task with a single table reload.
+   *
+   * @param taskId - The ID of the target task.
+   * @param contactIds - Assigned contact IDs.
+   * @param subtasks - Subtasks list.
+   * @returns A promise resolving to `true` if both operations succeeded.
+   */
+  public async saveTaskRelations(
+    taskId: number,
+    contactIds: number[],
+    subtasks: Omit<SubtaskInterface, 'id'>[],
+  ): Promise<boolean> {
+    const assignmentsOk = await this.setTaskAssignments(taskId, contactIds, false);
+    const subtasksOk = await this.setTaskSubtasks(taskId, subtasks, false);
     await this.getAllTasks();
+    return assignmentsOk && subtasksOk;
   }
 
   /**

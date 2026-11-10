@@ -230,8 +230,7 @@ export class AddTask implements OnDestroy {
   private async saveTaskRelationsAndFinalize(newTaskId: number): Promise<void> {
     const contactIds = this.selectedContactIds();
     const subtasks = this.createdSubtasks();
-    await this.taskService.setTaskAssignments(newTaskId, contactIds);
-    await this.taskService.setTaskSubtasks(newTaskId, subtasks);
+    await this.taskService.saveTaskRelations(newTaskId, contactIds, subtasks);
     this.onClear();
     this.returnToBoard();
   }

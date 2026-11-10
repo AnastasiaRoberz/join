@@ -97,17 +97,8 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
    */
   private readonly containerWidth = signal<number>(0);
 
-  /** Tracks current viewport width to compute the responsive avatar size matching `calcClamp(32, 42)`. */
-  private readonly windowWidth = signal<number>(
-    typeof window !== 'undefined' ? window.innerWidth : 1440,
-  );
-
-  /** Window resize listener to keep `windowWidth` reactive. */
-  private readonly onWindowResize = (): void => {
-    if (typeof window !== 'undefined') {
-      this.windowWidth.set(window.innerWidth);
-    }
-  };
+  /** Measured DOM width of an rendered avatar item in pixels, or 0 if not yet measured. */
+  private readonly measuredAvatarWidth = signal<number>(0);
 
   // ---------------------------------------------------------------------------
   // Inputs & Outputs
@@ -145,14 +136,12 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   /**
-   * Clamped pixel size of a single avatar matching SCSS `calcClamp(32, 42)`.
-   * For 'small' it is always 32px; for 'medium' it scales between 32px (320px viewport) and 42px (1440px+ viewport).
+   * Effective pixel size of a single avatar: dynamically read from DOM, falling back to 32px or 42px.
    */
   private readonly avatarSize = computed<number>(() => {
-    if (this.size() === 'small') return 32;
-    const vw = this.windowWidth();
-    const clamped = 32 + ((vw - 320) * (42 - 32)) / (1440 - 320);
-    return Math.min(42, Math.max(32, Math.round(clamped)));
+    const measured = this.measuredAvatarWidth();
+    if (measured > 0) return measured;
+    return this.size() === 'small' ? 32 : 42;
   });
 
   /**
@@ -213,25 +202,22 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   // Lifecycle
   // ---------------------------------------------------------------------------
 
-  /** Starts a `ResizeObserver` on the host element and listens for window resize events. */
+  /** Starts a `ResizeObserver` on the host element and measures avatar dimensions. */
   public ngOnInit(): void {
-    if (typeof window !== 'undefined') {
-      this.windowWidth.set(window.innerWidth);
-      window.addEventListener('resize', this.onWindowResize);
-    }
     this.resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         this.containerWidth.set(entry.contentRect.width);
+      }
+      const avatarEl = this.element.nativeElement.querySelector('.group-item') as HTMLElement | null;
+      if (avatarEl && avatarEl.offsetWidth > 0) {
+        this.measuredAvatarWidth.set(avatarEl.offsetWidth);
       }
     });
     this.resizeObserver.observe(this.element.nativeElement);
   }
 
-  /** Disconnects the `ResizeObserver` and window listener when the component is destroyed. */
+  /** Disconnects the `ResizeObserver` when the component is destroyed. */
   public ngOnDestroy(): void {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', this.onWindowResize);
-    }
     this.resizeObserver?.disconnect();
   }
 

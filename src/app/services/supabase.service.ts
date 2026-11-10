@@ -162,10 +162,15 @@ export class SupabaseService {
    * Used when synchronizing/replacing a task's subtasks in bulk.
    *
    * @param taskId - The parent task ID whose subtasks should be deleted
-   * @returns A promise that resolves once the deletion query has completed
+   * @returns A promise resolving to `true` on success, or `false` on failure
    */
-  public async deleteTaskSubtasks(taskId: number): Promise<void> {
-    await this.supabase.from('subtasks').delete().eq('task_id', taskId);
+  public async deleteTaskSubtasks(taskId: number): Promise<boolean> {
+    const { error } = await this.supabase.from('subtasks').delete().eq('task_id', taskId);
+    if (error) {
+      this.feedbackService.showError('Deleting subtasks failed.');
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -173,10 +178,15 @@ export class SupabaseService {
    * Used when synchronizing/replacing a task's assigned contacts in bulk.
    *
    * @param taskId - The target task ID whose assignments should be cleared
-   * @returns A promise that resolves once the deletion query has completed
+   * @returns A promise resolving to `true` on success, or `false` on failure
    */
-  public async deleteTaskAssignments(taskId: number): Promise<void> {
-    await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
+  public async deleteTaskAssignments(taskId: number): Promise<boolean> {
+    const { error } = await this.supabase.from('task-assignment').delete().eq('task_id', taskId);
+    if (error) {
+      this.feedbackService.showError('Updating task assignments failed.');
+      return false;
+    }
+    return true;
   }
 
   /**

@@ -187,7 +187,10 @@ export class TaskEdit {
       due_date: rawValue.dueDate!,
       priority: rawValue.priority,
     });
-    await this.taskService.setTaskAssignments(taskId, this.selectedContactIds());
-    await this.taskService.setTaskSubtasks(taskId, this.currentSubtasks());
+    await this.taskService.saveTaskRelations(
+      taskId,
+      this.selectedContactIds(),
+      this.currentSubtasks(),
+    );
   }
 }

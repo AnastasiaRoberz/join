@@ -6,7 +6,7 @@ export interface GreetingParts {
 }
 
 /** Builds a slogan, optionally with the user's firstname. */
-type SloganFormatter = (firstname?: string) => GreetingParts;
+export type SloganFormatter = (firstname?: string) => GreetingParts;
 
 /** Helper creating a slogan formatter with name interpolation and optional fallback. */
 function slogan(prefix: string, suffix: string, noName?: string): SloganFormatter {
@@ -67,6 +67,28 @@ function pickRandom(list: SloganFormatter[]): SloganFormatter {
 }
 
 /**
+ * Selects and returns a stable slogan formatter for the current time of day.
+ *
+ * @param currentHour - Hour of the day (0–23). Defaults to the current hour.
+ * @returns A randomly chosen slogan formatter for the given daytime period.
+ */
+export function getGreetingFormatter(
+  currentHour: number = new Date().getHours(),
+): SloganFormatter {
+  if (currentHour >= 5 && currentHour < 11) {
+    return pickRandom(MORNING_SLOGANS);
+  } else if (currentHour >= 11 && currentHour < 14) {
+    return pickRandom(LUNCH_SLOGANS);
+  } else if (currentHour >= 14 && currentHour < 18) {
+    return pickRandom(AFTERNOON_SLOGANS);
+  } else if (currentHour >= 18 && currentHour < 22) {
+    return pickRandom(EVENING_SLOGANS);
+  } else {
+    return pickRandom(NIGHT_SLOGANS);
+  }
+}
+
+/**
  * Returns a random greeting object for the time of day (05–11 morning, 11–14 lunch, 14–18 afternoon,
  * 18–22 evening, otherwise night). Safe for template interpolation without innerHTML.
  *
@@ -78,15 +100,5 @@ export function getGreeting(
   firstname?: string,
   currentHour: number = new Date().getHours(),
 ): GreetingParts {
-  if (currentHour >= 5 && currentHour < 11) {
-    return pickRandom(MORNING_SLOGANS)(firstname);
-  } else if (currentHour >= 11 && currentHour < 14) {
-    return pickRandom(LUNCH_SLOGANS)(firstname);
-  } else if (currentHour >= 14 && currentHour < 18) {
-    return pickRandom(AFTERNOON_SLOGANS)(firstname);
-  } else if (currentHour >= 18 && currentHour < 22) {
-    return pickRandom(EVENING_SLOGANS)(firstname);
-  } else {
-    return pickRandom(NIGHT_SLOGANS)(firstname);
-  }
+  return getGreetingFormatter(currentHour)(firstname);
 }

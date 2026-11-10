@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
 import { RouterOutlet, RouterLinkWithHref } from '@angular/router';
 import { Footer } from '../../layout/footer/footer';
 import { NavigationService } from '../../services/navigation.service';
@@ -15,7 +15,7 @@ import { IntroService } from '../../services/intro.service';
   styleUrl: './auth.scss',
   templateUrl: './auth.html',
 })
-export class Auth implements AfterViewInit {
+export class Auth implements AfterViewInit, OnDestroy {
   /** Navigation service for current route checks. */
   protected readonly navService = inject(NavigationService);
 
@@ -31,6 +31,9 @@ export class Auth implements AfterViewInit {
   /** Snapshot of mobile viewport state at component initialization. */
   private readonly isMobile = this.responsiveService.isMobile();
 
+  /** Timer handle for scheduled intro animation completion. */
+  private introTimer?: ReturnType<typeof setTimeout>;
+
   /** Plays intro animation on initial session visit. */
   public ngAfterViewInit(): void {
     const logo = document.querySelector('.main-logo') as HTMLElement;
@@ -40,7 +43,14 @@ export class Auth implements AfterViewInit {
 
     this.introService.startIntro(this.isMobile);
     const duration = this.isMobile ? 1200 : 900;
-    setTimeout(() => this.introService.finish(), duration);
+    this.introTimer = setTimeout(() => this.introService.finish(), duration);
+  }
+
+  /** Cleans up any pending intro timer when leaving the auth view. */
+  public ngOnDestroy(): void {
+    if (this.introTimer) {
+      clearTimeout(this.introTimer);
+    }
   }
 
   /**

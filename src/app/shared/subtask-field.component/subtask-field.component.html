@@ -58,7 +58,8 @@
           <input
             #editInput
             type="text"
-            id="editInput"
+            [id]="fieldId() + '-edit'"
+            aria-label="Edit subtask"
             [value]="subtask.title"
             autocomplete="off"
             (keydown.enter)="$event.preventDefault(); updateSubtaskTitle(editInput, subtask.id)"
