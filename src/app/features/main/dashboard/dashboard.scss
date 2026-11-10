@@ -291,20 +291,6 @@
 
     &:hover {
       transform: scale(1.1);
-
-      &::after {
-        content: '';
-        position: absolute;
-        inset: -16px;
-        background-color: $main-color;
-        border-radius: $radius-md;
-        z-index: $z-below;
-      }
-
-      .date,
-      .headsup {
-        color: $text-light;
-      }
     }
 
     @media screen and (max-width: 499px) and (max-height: 500px) {
