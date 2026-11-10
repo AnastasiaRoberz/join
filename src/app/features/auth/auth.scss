@@ -56,7 +56,7 @@
   .intro-overlay {
     position: fixed;
     inset: 0;
-    z-index: 999;
+    z-index: $z-intro-overlay;
     pointer-events: none;
     opacity: 1;
 
@@ -127,10 +127,10 @@
     width: 100%;
     max-width: calcClamp(396, 652, 1300, 500);
     height: auto;
-    border-radius: 30px;
-    box-shadow: 0 0 14px 3px #00000024;
+    border-radius: $radius-dialog;
+    box-shadow: $dropdown-shadow;
     overflow: hidden;
-    z-index: 5;
+    z-index: $z-shell;
   }
 
   .auth-mobile-signup {
@@ -140,7 +140,7 @@
     display: flex;
     align-items: center;
     gap: 35px;
-    z-index: 5;
+    z-index: $z-shell;
     padding-bottom: 20px;
   }
 
@@ -148,7 +148,7 @@
     grid-area: bottom;
     align-self: end;
     justify-self: center;
-    z-index: 10;
+    z-index: $z-dialog-backdrop;
     flex-shrink: 0;
 
     @include short-height {

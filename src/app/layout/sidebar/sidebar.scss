@@ -10,8 +10,8 @@
   background-color: $sidebar-main-theme;
   color: $text-muted;
   container-type: inline-size;
-  position: relative; // z-index only works on a positioned element
-  z-index: 5; // above the dragged card (4), below dialogs (10)
+  position: relative;
+  z-index: $z-shell;
 
   @include short-height {
     justify-content: center;
@@ -50,35 +50,7 @@ nav {
     }
   }
   a {
-    @include flex-start;
-    gap: 8px;
-    width: 100%;
-    padding: 8px 0;
-    color: $sidebar-txt-default;
-    position: relative;
-    z-index: 2;
-
-    &::before {
-      content: '';
-      width: 100cqw;
-      height: 100%;
-      background-color: inherit;
-      position: absolute;
-      left: 50%;
-      translate: -50% 0;
-      z-index: -1;
-    }
-
-    &:hover {
-      background-color: $sidebar-bg-hover;
-      color: $sidebar-txt-hover;
-    }
-
-    &.active,
-    &:active {
-      background-color: $sidebar-bg-active;
-      color: $text-light;
-    }
+    @include sidebar-nav-link;
   }
 }
 

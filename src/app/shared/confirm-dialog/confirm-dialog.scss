@@ -5,9 +5,9 @@
   @include flex-center;
   position: fixed;
   inset: 0;
-  z-index: 20;
-  background-color: rgba($color: #000000, $alpha: 0.2);
-  backdrop-filter: blur(2px);
+  z-index: $z-confirm-toast;
+  background-color: $backdrop-bg;
+  backdrop-filter: $backdrop-blur;
 
   &__box {
     @include flex-start(column);
@@ -17,7 +17,7 @@
     max-width: 450px;
     margin-inline: 16px;
     padding: 32px 40px;
-    border-radius: 30px;
+    border-radius: $radius-dialog;
     background-color: $color-white;
   }
 

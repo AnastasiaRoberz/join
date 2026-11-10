@@ -44,9 +44,7 @@ span {
     }
 
     hr {
-      border: none;
-      border-left: 1px solid $divider;
-      height: 24px;
+      @include vertical-divider(24px);
     }
   }
 }
@@ -88,9 +86,7 @@ ul {
       visibility: hidden;
 
       hr {
-        border: none;
-        border-left: 1px solid $divider;
-        height: 24px;
+        @include vertical-divider(24px);
       }
 
       @include tablet {

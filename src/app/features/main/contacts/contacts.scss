@@ -10,7 +10,7 @@
 app-contact-list {
   width: calcClamp(300, 424, 1440, 850);
   box-shadow: 4px 0 4px rgba(0, 0, 0, 0.1);
-  z-index: 3;
+  z-index: $z-input-active;
   flex-shrink: 0;
 
   @include mobile {
@@ -19,7 +19,7 @@ app-contact-list {
 }
 
 app-contact-details {
-  z-index: 4;
+  z-index: $z-drag-preview;
   position: relative;
 }
 
@@ -30,9 +30,7 @@ app-contact-details {
   overflow-x: clip;
 
   &__title__container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    @include flex-between(row, flex-start);
     width: 100%;
   }
 

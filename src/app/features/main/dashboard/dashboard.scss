@@ -14,7 +14,7 @@
 .greeter-overlay {
   position: absolute;
   inset: 0;
-  z-index: 999;
+  z-index: $z-intro-overlay;
   pointer-events: none;
   opacity: 1;
 
@@ -337,14 +337,14 @@
 
   &.greeter-fly {
     position: relative;
-    z-index: 1000;
+    z-index: $z-intro-element;
     width: fit-content;
   }
 
   &.greeter-fade {
     position: absolute;
     inset: 0;
-    z-index: 1000;
+    z-index: $z-intro-element;
     display: flex;
     flex-direction: column;
     justify-content: center;

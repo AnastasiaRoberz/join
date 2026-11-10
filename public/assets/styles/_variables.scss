@@ -120,8 +120,50 @@ $avatar-hover: $color-bluish-grey;
 $avatar-shadow: 0px 0px 4px 0px #00000066;
 $icon-bg: $color-grey-300;
 
-// OVERLAY
+// OVERLAY & SHADOWS
 $overlay-shadow: 0px 0px 4px 0px #00000066;
+$dropdown-shadow: 0px 0px 14px 3px #00000024;
+$task-card-shadow: 0px 0px 10px 3px #0000000a;
+$surface-shadow: 0 4px 4px 0 #0000001a;
+$toast-shadow: 0px 0px 4px 0px #00000026;
+
+// Z-INDEX SCALE
+$z-below: -1;
+$z-sticky-header: 1;
+$z-dropdown: 2;
+$z-input-active: 3;
+$z-drag-preview: 4;
+$z-shell: 5;
+$z-dialog-backdrop: 10;
+$z-confirm-toast: 20;
+$z-dialog-content: 100;
+$z-intro-overlay: 999;
+$z-intro-element: 1000;
+$z-tooltip: 9999;
+
+// BORDER RADII
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 10px;
+$radius-lg: 20px;
+$radius-xl: 24px;
+$radius-dialog: 30px;
+$radius-round: 50%;
+$radius-pill: 9999px;
+
+// MODAL BACKDROP
+$backdrop-bg: rgba($color-black, 0.2);
+$backdrop-blur: blur(2px);
+
+// BREAKPOINTS
+$bp-mobile-min: 320;
+$bp-mobile: 768;
+$bp-tablet: 1024;
+$bp-desktop: 1025;
+$bp-max-content: 1440;
+$bp-short-height: 500;
+$bp-middle-height: 700;
+$bp-tall-height: 800;
 
 // BOARD & TASK CARD
 $task-card-width: 252px;

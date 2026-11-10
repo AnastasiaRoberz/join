@@ -1,17 +1,15 @@
 @use '../../../../public/assets/styles' as *;
 
 :host {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-between;
   width: 100%;
   max-height: 96px;
   padding-block: calcClamp(8, 20, 700, 350, height);
   padding-right: calcClamp(16, 40, 1440, 769);
   padding-left: calcClamp(16, 96, 1440, 769);
-  box-shadow: 0 4px 4px 0 #0000001a;
+  box-shadow: $surface-shadow;
   position: relative;
-  z-index: 5;
+  z-index: $z-shell;
   background-color: $color-white;
 }
 

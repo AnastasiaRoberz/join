@@ -10,8 +10,7 @@
 
 // same height with and without the add button, so all columns start on one line
 .header {
-  @include flex-start;
-  justify-content: space-between;
+  @include flex-between;
   gap: calcClamp(8, 12);
   min-height: 24px;
   padding-left: 4px;

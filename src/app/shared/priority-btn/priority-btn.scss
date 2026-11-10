@@ -12,8 +12,7 @@
 }
 
 .btn-wrapper {
-  display: flex;
-  justify-content: space-between;
+  @include flex-between;
   gap: 16px;
   width: 100%;
   padding: 0 4px;
@@ -21,7 +20,7 @@
 
 .prio-btn {
   width: 100%;
-  border-radius: 10px;
+  border-radius: $radius-md;
   padding-inline: 10px;
   padding-block: calcClamp(8, 16, 500, 350, height);
   @include flex-center;

@@ -117,9 +117,7 @@ form {
 
 .task-footer {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  @include flex-between(row, flex-end);
   margin-top: auto;
   flex-shrink: 0;
 

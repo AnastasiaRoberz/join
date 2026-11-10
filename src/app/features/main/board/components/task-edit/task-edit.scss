@@ -1,17 +1,11 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column, both);
-  gap: calcClamp(16, 24);
-  width: 525px;
-  min-height: 0;
-  height: 100%;
-  padding-inline: var(--padding-inline-dialog);
+  @include task-dialog-shell;
   padding-top: var(--padding-block-dialog);
   padding-bottom: calcClamp(16, 24, 769, 320);
 
   &.scroll-container {
-    width: 100%;
     padding-right: calc(var(--padding-inline-dialog) - var(--sb-width) + 4px);
 
     form {
@@ -22,10 +16,6 @@
     .form-content-wrapper {
       width: 100%;
     }
-  }
-
-  @include mobile {
-    width: 100%;
   }
 }
 

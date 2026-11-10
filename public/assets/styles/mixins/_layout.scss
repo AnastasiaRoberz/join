@@ -25,6 +25,13 @@
   }
 }
 
+@mixin flex-between($direction: row, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: space-between;
+  align-items: $align;
+}
+
 @mixin size($w: 100%, $h: $w) {
   width: $w;
   height: $h;
@@ -35,6 +42,90 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin vertical-divider($height: 24px, $color: $divider, $width: 1px) {
+  border: none;
+  width: $width;
+  height: $height;
+  background-color: $color;
+}
+
+@mixin slide-in-drawer($offset-x: 100dvw, $duration-transform: 0.4s, $duration-opacity: 0.2s) {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX($offset-x);
+  transition:
+    opacity $duration-opacity ease,
+    transform $duration-transform ease,
+    visibility 0s linear $duration-opacity;
+
+  :host.is-open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+    transition:
+      opacity $duration-opacity ease,
+      transform $duration-transform ease,
+      visibility 0s linear 0s;
+  }
+}
+
+@mixin sidebar-nav-link {
+  @include flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0;
+  color: $sidebar-txt-default;
+  position: relative;
+  z-index: 2;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    background-color: inherit;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+  }
+
+  &:hover {
+    background-color: $sidebar-bg-hover;
+    color: $sidebar-txt-hover;
+  }
+
+  &.active,
+  &:active {
+    background-color: $sidebar-bg-active;
+    color: $text-light;
+  }
+}
+
+@mixin task-dialog-shell {
+  @include flex-start(column, both);
+  gap: calcClamp(16, 24);
+  width: 525px;
+  min-height: 0;
+  height: 100%;
+  padding-inline: var(--padding-inline-dialog);
+
+  &.scroll-container {
+    width: 100%;
+  }
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 @mixin underline($width: 90px, $centered: false) {

@@ -12,7 +12,7 @@
     app-board-header {
       position: sticky;
       top: #{calc(-42px - var(--padding-top) - var(--gap-mobile))};
-      z-index: 1;
+      z-index: $z-sticky-header;
       background: $color-grey-background;
       padding-bottom: 16px;
       width: 100%;

@@ -44,14 +44,14 @@
     position: fixed;
     bottom: 106px;
     right: 14px;
-    z-index: 1;
+    z-index: $z-sticky-header;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
     padding: 20px;
     background: $color-white;
-    border-radius: 20px 20px 0 20px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: $radius-lg $radius-lg 0 $radius-lg;
+    box-shadow: $surface-shadow;
 
     transform: translateX(calc(100% + 16px));
     visibility: hidden;

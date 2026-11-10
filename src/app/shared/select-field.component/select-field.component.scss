@@ -16,7 +16,7 @@ label {
 .input-container {
   @include field-container;
   padding: calcClamp(4, 8, 768, 320) calcClamp(8, 16, 768, 320);
-  z-index: 3;
+  z-index: $z-input-active;
 }
 
 input {
@@ -32,10 +32,7 @@ input {
   gap: calcClamp(8, 16);
 
   .divider {
-    width: 1px;
-    height: 31px;
-    background-color: $divider;
-    border: none;
+    @include vertical-divider(31px);
   }
 }
 
@@ -45,10 +42,10 @@ input {
   padding: 2px;
   max-height: 302px;
   width: 100%;
-  box-shadow: 0px 0px 14px 3px #00000024;
-  border-radius: 10px;
+  box-shadow: $dropdown-shadow;
+  border-radius: $radius-md;
   background-color: $color-white;
-  z-index: 2;
+  z-index: $z-dropdown;
   overflow-x: hidden;
   margin: 2px 0;
 
@@ -62,7 +59,7 @@ input {
     width: 100%;
     padding: 8px 16px;
     padding-right: 8px;
-    border-radius: 10px;
+    border-radius: $radius-md;
     cursor: pointer;
     font-family: Inter;
     font-size: calcClamp(16, 20, 768, 320);

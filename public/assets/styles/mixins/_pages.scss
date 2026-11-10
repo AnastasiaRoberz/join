@@ -35,9 +35,7 @@
 
   .header {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    @include flex-between(row, flex-start);
     position: relative;
 
     .btn-back {

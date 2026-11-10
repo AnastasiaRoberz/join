@@ -30,6 +30,10 @@
  *   gap: calcClamp(8, 32, 800, 350, height);
  */
 @function calcClamp($min, $max, $start: 1440, $end: 320, $axis: width) {
+  @if $start <= $end {
+    @error "calcClamp: $start (#{$start}) must be greater than $end (#{$end}).";
+  }
+
   // Use Small Viewport units (svh / svw) to avoid layout jumps caused by dynamic mobile browser toolbars
   $viewport: if($axis == 'height', 100svh, 100svw);
 
@@ -145,6 +149,10 @@
  * @returns {String} CSS clamp() using rem for bounds.
  */
 @function calcClampRem($min, $max, $start: 1440, $end: 320, $axis: width, $base: 16) {
+  @if $start <= $end {
+    @error "calcClampRem: $start (#{$start}) must be greater than $end (#{$end}).";
+  }
+
   $min-rem: ($min / $base) * 1rem;
   $max-rem: ($max / $base) * 1rem;
   $viewport: if($axis == 'height', 100svh, 100svw);
@@ -153,6 +161,62 @@
     calc(($viewport - $end * 1px) * ($max - $min) / ($start - $end) + $min-rem),
     $max-rem
   );
+}
+
+/**
+ * Combines two or more fluid `calcClampRem()` calculations inside a single CSS `min()` function,
+ * allowing 2D fluid typography scaling with rem-based bounds.
+ *
+ * @param {ArgList} $clamps... - Shorthand (min, max) or tuple lists (min, max, [start], [end], [axis]).
+ * @returns {String} Native CSS min(clamp(...rem, ..., ...rem), ...) expression.
+ */
+@function calcClampMinRem($clamps...) {
+  @if list.length($clamps) ==
+    2 and
+    meta.type-of(list.nth($clamps, 1)) ==
+    'number' and
+    meta.type-of(list.nth($clamps, 2)) ==
+    'number'
+  {
+    $min: list.nth($clamps, 1);
+    $max: list.nth($clamps, 2);
+    $clamp-w: calcClampRem($min, $max, 1440, 320, width);
+    $clamp-h: calcClampRem($min, $max, 800, 350, height);
+
+    @return unquote('min(#{$clamp-w}, #{$clamp-h})');
+  }
+
+  $resolved: ();
+
+  @for $i from 1 through list.length($clamps) {
+    $item: list.nth($clamps, $i);
+
+    $default-axis: if($i == 1, width, height);
+    $default-start: if($i == 1, 1440, 800);
+    $default-end: if($i == 1, 320, 350);
+
+    @if meta.type-of($item) == 'list' {
+      $resolved: list.append(
+        $resolved,
+        _resolveClampRem($item, $default-axis, $default-start, $default-end),
+        comma
+      );
+    } @else {
+      $resolved: list.append($resolved, $item, comma);
+    }
+  }
+
+  @return unquote('min(#{$resolved})');
+}
+
+@function _resolveClampRem($args, $default-axis: width, $default-start: 1440, $default-end: 320, $base: 16) {
+  $min: list.nth($args, 1);
+  $max: list.nth($args, 2);
+  $start: if(list.length($args) >= 3, list.nth($args, 3), $default-start);
+  $end: if(list.length($args) >= 4, list.nth($args, 4), $default-end);
+  $axis: if(list.length($args) >= 5, list.nth($args, 5), $default-axis);
+
+  @return calcClampRem($min, $max, $start, $end, $axis, $base);
 }
 
 /**

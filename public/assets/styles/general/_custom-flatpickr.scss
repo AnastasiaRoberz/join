@@ -4,15 +4,15 @@
 .flatpickr-calendar {
   display: none;
   position: absolute;
-  z-index: 1000;
+  z-index: $z-intro-element;
 
   &.open {
     @include flex-center(column);
     gap: 4px;
     width: auto !important;
     background-color: $color-white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 14px 3px #00000024;
+    border-radius: $radius-md;
+    box-shadow: $dropdown-shadow;
     padding: 8px;
     font-family: inherit;
     user-select: none;
@@ -20,9 +20,7 @@
 }
 
 .flatpickr-months {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between;
   width: 100%;
 
   .flatpickr-month {
