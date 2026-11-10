@@ -22,6 +22,21 @@ input[type='checkbox'] {
       text-decoration: line-through;
     }
   }
+
+  &.whiteIcon {
+    border-radius: 50%;
+    padding: 0;
+
+    &.selected {
+      label svg {
+        color: $text-light;
+      }
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 label {
@@ -33,20 +48,5 @@ label {
   svg {
     width: 24px;
     height: 24px;
-  }
-}
-
-:host.whiteIcon {
-  border-radius: 50%;
-  padding: 0;
-
-  &.selected {
-    label svg {
-      color: $text-light;
-    }
-
-    &:hover {
-      background-color: transparent;
-    }
   }
 }

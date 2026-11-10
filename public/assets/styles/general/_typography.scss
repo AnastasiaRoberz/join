@@ -3,16 +3,8 @@
 html {
   font-family: 'Inter';
   font-size: calcClamp(14, 16, 800, 350, height);
-  font-family: 'Inter';
   font-weight: 400;
   color: $text-normal;
-}
-
-body,
-input,
-textarea,
-p {
-  font-size: 1rem;
 }
 
 body,

@@ -28,7 +28,7 @@
   --padding-inline: #{calcClamp(16, 96)};
   @include flex-start(column, both);
   padding-inline: var(--padding-inline);
-  padding-top: #{min(calcClamp(48, 116), calcClamp(24, 48, 700, 350, height))};
+  padding-top: calcClampMin((48, 116), (24, 48, 700, 350));
   padding-bottom: 24px;
   gap: 24px;
   height: 100%;
@@ -62,11 +62,6 @@
         position: absolute;
         top: -100%;
         right: 0;
-      }
-
-      @include responsive(1441, width, min) {
-        width: 100%;
-        margin-right: var(--space-right);
       }
     }
   }

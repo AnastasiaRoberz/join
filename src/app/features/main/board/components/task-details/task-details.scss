@@ -1,4 +1,4 @@
-@use '../../../../../../../public/assets/styles/' as *;
+@use '../../../../../../../public/assets/styles' as *;
 
 :host {
   @include flex-start(column, both);
@@ -27,11 +27,6 @@
   gap: calcClamp(16, 24);
   height: auto;
   width: 100%;
-
-  &:has(.description.expanded) {
-    // width: calc(100% + 32px);
-    // padding-right: 8px;
-  }
 }
 
 .task-tag {
@@ -84,7 +79,7 @@ h2 {
 
   .show-more-btn {
     --btn-gap: 0;
-    margin-bottom: calcClamp(-24, 0, 320, 769);
+    margin-bottom: calcClamp(-24, 0, 769, 320);
     padding: 0 8px;
     border-radius: 6px;
     font-weight: 500;
@@ -186,7 +181,7 @@ ul {
 
 .btn-toggle-items {
   --btn-gap: 0;
-  --font-size-textbtn: calcClamp(13, 16, 1440, 768);
+  --font-size-textbtn: #{calcClamp(13, 16, 1440, 768)};
 }
 
 .show-more-btn,

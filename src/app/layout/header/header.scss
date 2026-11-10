@@ -1,23 +1,24 @@
-@use '../../../../public/assets/styles/' as *;
+@use '../../../../public/assets/styles' as *;
 
 :host {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-height: 96px;
   padding-block: calcClamp(8, 20, 700, 350, height);
   padding-right: calcClamp(16, 40, 1440, 769);
   padding-left: calcClamp(16, 96, 1440, 769);
   box-shadow: 0 4px 4px 0 #0000001a;
   position: relative;
   z-index: 5;
-  background-color: white;
+  background-color: $color-white;
 }
 
 .logo {
   width: 32px;
   height: 40px;
-  --logo-main: $main-color;
+  --logo-main: #{$main-color};
 }
 
 .title {
@@ -50,7 +51,7 @@ nav {
   bottom: 0;
   transform: translateY(100%);
   right: 16px;
-  box-shadow: 0 0 4px 0 #00000066;
+  box-shadow: $overlay-shadow;
 
   li {
     width: 100%;
@@ -59,11 +60,9 @@ nav {
     cursor: pointer;
 
     a {
-      width: 100%;
-      height: 100%;
+      @include size;
+      @include flex-start;
       color: $text-muted;
-      display: flex;
-      align-items: center;
       padding-left: 16px;
     }
 

@@ -5,16 +5,14 @@
   @include flex-start(column);
   align-items: stretch;
   justify-content: flex-start;
-  // height: 100%;
   gap: calcClamp(12, 16);
-  // flex: 1;
 }
 
 // same height with and without the add button, so all columns start on one line
 .header {
   @include flex-start;
   justify-content: space-between;
-  gap: calcClamp(8, 12); // keeps the title and the plus button apart
+  gap: calcClamp(8, 12);
   min-height: 24px;
   padding-left: 4px;
 
@@ -25,62 +23,21 @@
 }
 
 // takes the rest of the column height and scrolls if there are too many cards
-// (scroll-container = scrollbar style of the project)
 .tasks {
   @include flex-start(column);
   align-items: stretch;
   justify-content: flex-start;
-  // height: auto;
   width: calc(100% + var(--sb-width));
   flex: 1;
   gap: calcClamp(12, 16);
-  min-height: calc(100dvh - 410px); // fix height, due to drag box needed for now
+  min-height: calc(100dvh - 410px);
   scroll-behavior: smooth;
   padding-right: 0;
-
-  // compact layout: cards in a row, scrolling sideways
-  @include responsive($board-breakpoint) {
-    flex: none;
-    flex-direction: row;
-    align-items: stretch;
-    height: auto;
-    min-height: auto; // the fixed height from above is only for the desktop layout
-    width: 100%;
-    padding-block: 6px;
-
-    app-task-card {
-      flex: 0 0 $task-card-width;
-      width: $task-card-width;
-    }
-
-    .board-column__empty {
-      flex: 1;
-    }
-  }
-
-  @include short-height() {
-    flex: none;
-    flex-direction: row;
-    align-items: stretch;
-    height: auto;
-    min-height: auto; // the fixed height from above is only for the desktop layout
-    width: 100%;
-    padding-block: 6px;
-
-    app-task-card {
-      flex: 0 0 $task-card-width;
-      width: $task-card-width;
-    }
-
-    .board-column__empty {
-      flex: 1;
-    }
-  }
 
   // placeholder upon mouse click
   &__placeholder {
     border: 1px dashed $color-grey-400;
-    border-radius: 24px; // same as your task card
+    border-radius: 24px;
     background-color: transparent;
   }
 
@@ -99,19 +56,46 @@
     text-align: center;
   }
 
+  // compact layout: cards in a row, scrolling sideways
   @include responsive($board-breakpoint) {
-    height: auto;
     flex: none;
+    flex-direction: row;
+    align-items: stretch;
+    height: auto;
+    min-height: auto;
+    width: 100%;
+    padding-block: 6px;
+
+    app-task-card {
+      flex: 0 0 $task-card-width;
+      width: $task-card-width;
+    }
+
+    .tasks__empty {
+      flex: 1;
+    }
+  }
+
+  @include short-height() {
+    flex: none;
+    flex-direction: row;
+    align-items: stretch;
+    height: auto;
+    min-height: auto;
+    width: 100%;
+    padding-block: 6px;
+
+    app-task-card {
+      flex: 0 0 $task-card-width;
+      width: $task-card-width;
+    }
+
+    .tasks__empty {
+      flex: 1;
+    }
   }
 }
 
 .scroll-container {
   --sb-width: 16px;
-
-  &::-webkit-scrollbar {
-    width: var(--sb-width);
-  }
-  &::-webkit-scrollbar-thumb {
-    border: 6px solid transparent;
-  }
 }

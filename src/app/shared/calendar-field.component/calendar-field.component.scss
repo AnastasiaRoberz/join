@@ -2,10 +2,10 @@
 
 :host {
   @include field-host;
-}
 
-:host(.ng-invalid.ng-touched) .input-container {
-  border-color: $error;
+  &.ng-invalid.ng-touched .input-container {
+    border-color: $error;
+  }
 }
 
 input {
@@ -23,13 +23,6 @@ label {
 
 .required {
   color: $hint;
-}
-
-.input-icon {
-  width: 24px;
-  height: 24px;
-  color: $main-color;
-  pointer-events: none;
 }
 
 .error-msg {

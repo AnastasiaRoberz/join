@@ -28,13 +28,43 @@
 }
 
 .overlay-content {
+  margin-top: var(--dialog-margin-top);
+  max-height: var(--dialog-max-height, none);
+  height: var(--dialog-height, auto);
+
+  margin-bottom: auto;
+  @include flex-start(column, both);
+  background-color: $color-white;
+  border-radius: 30px;
+  box-shadow: $overlay-shadow;
+  z-index: 100;
+  overflow: hidden;
+  position: relative;
+
+  // dialog closed: invisible + slides out
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(100dvw);
+  transition:
+    opacity 0.2s ease,
+    transform 0.4s ease,
+    visibility 0s linear 0.2s;
+
+  // dialog open: visible + slides in
+  :host.is-open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+    transition:
+      opacity 0.2s ease,
+      transform 0.4s ease,
+      visibility 0s linear 0s;
+  }
+
   &.contact {
     --dialog-height: #{min(95dvh, 592px)};
     --dialog-margin-top: auto;
-    --padding-block-dialog: #{min(
-        calcClamp(80, 136, 1440, 769),
-        calcClamp(32, 80, 700, 350, height)
-      )};
+    --padding-block-dialog: #{calcClampMin((80, 136, 1440, 769), (32, 80, 700, 350))};
     --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
     width: min(95vw, 1212px);
 
@@ -59,40 +89,6 @@
     --dialog-margin-top: auto;
   }
 
-  margin-top: var(--dialog-margin-top);
-  max-height: var(--dialog-max-height, none);
-  height: var(--dialog-height, auto);
-
-  margin-bottom: auto;
-  @include flex-start(column, both);
-  background-color: white;
-  border-radius: 30px;
-  box-shadow: $overlay-shadow;
-  z-index: 100;
-  overflow: hidden;
-  position: relative;
-
-  // dialog closed: invisible + slides out
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(100dvw);
-  transition:
-    opacity 0.2s ease,
-    transform 0.4s ease,
-    visibility 0s linear 0.2s;
-
-  // dialog open: visible + slides in
-  :host.is-open & {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-    transform: translateY(0);
-    transition:
-      opacity 0.2s ease,
-      transform 0.4s ease,
-      visibility 0s linear 0s;
-  }
-
   @include mobile {
     height: var(--dialog-height, auto);
     max-height: var(--dialog-max-height, none);
@@ -109,7 +105,7 @@
     z-index: 20;
 
     &.white-btn.btn--icon {
-      color: white;
+      color: $text-light;
     }
 
     @include mobile {

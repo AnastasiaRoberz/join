@@ -23,7 +23,7 @@ app-sidebar {
   grid-area: sidebar;
 }
 
-app-header {
+header[app-header] {
   grid-area: header;
 }
 

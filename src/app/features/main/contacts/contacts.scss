@@ -1,4 +1,4 @@
-@use '../../../../../public/assets/styles/' as *;
+@use '../../../../../public/assets/styles' as *;
 
 :host {
   @include flex-start;
@@ -27,7 +27,7 @@ app-contact-details {
   @include main-styling;
   gap: calcClampMin((32, 48), (16, 32, 700, 350));
   position: relative;
-  overflow-x: clip; // no scrollbar for animation of contact details sliding in
+  overflow-x: clip;
 
   &__title__container {
     display: flex;

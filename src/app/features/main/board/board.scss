@@ -1,4 +1,4 @@
-@use '../../../../../public/assets/styles/' as *;
+@use '../../../../../public/assets/styles' as *;
 
 :host {
   @include main-styling;
@@ -6,13 +6,13 @@
 
   @include mobile {
     --gap-mobile: #{calcClamp(0, 20, 600, 320)};
-    gap: var(--gap-mobile); // reduced gap in mobile
+    gap: var(--gap-mobile);
     min-height: 0;
 
     app-board-header {
       position: sticky;
       top: #{calc(-42px - var(--padding-top) - var(--gap-mobile))};
-      z-index: 1; // stays above the task cards
+      z-index: 1;
       background: $color-grey-background;
       padding-bottom: 16px;
       width: 100%;

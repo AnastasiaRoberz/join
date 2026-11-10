@@ -35,7 +35,6 @@
       aspect-ratio: 1/1;
       flex-shrink: 0;
       transform: var(--btn-icon-transform, none);
-      transition: transform 0.2s ease;
     }
 
     &:disabled {
@@ -103,7 +102,7 @@
     background-color: transparent;
     border: none;
     box-shadow: none;
-    color: $btn-icon;
+    color: $btn-txtIcon-default;
     padding: 0;
 
     .btn-label {
@@ -161,10 +160,6 @@
         width: var(--btn-icon-medium-size, 32px);
         aspect-ratio: 1/1;
       }
-    }
-
-    .btn-close-mobile {
-      color: $close-btn-mobile-default;
     }
   }
 

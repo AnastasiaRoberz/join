@@ -3,6 +3,91 @@
 :host {
   @include flex-start;
   width: 100%;
+
+  &.has-users {
+    margin-top: 8px;
+  }
+
+  &.no-overlap {
+    --avatar-size: #{calcClamp(32, 42)};
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--avatar-gap, 8px);
+    height: var(--avatar-size);
+    width: 100%;
+    transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .group-item {
+      margin-left: 0;
+    }
+
+    .avatar-wrapper {
+      @include flex-start;
+      position: relative;
+      flex-shrink: 0;
+      width: var(--avatar-size);
+      height: var(--avatar-size);
+      cursor: pointer;
+
+      &:hover .btn-delete-user {
+        @include flex-center;
+      }
+
+      &.overflow-user,
+      .user-name {
+        display: none;
+      }
+
+      button.btn.btn-delete-user {
+        display: none;
+        width: var(--avatar-size);
+        height: var(--avatar-size);
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(1px);
+
+        svg {
+          --btn-icon-medium-size: calc(var(--avatar-size) * 0.5);
+          color: $main-color;
+        }
+      }
+    }
+
+    &.expanded {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: calcClamp(8, 16);
+      height: auto;
+
+      .avatar-wrapper {
+        flex-shrink: 0;
+        width: 100%;
+        height: var(--avatar-size);
+        gap: calcClamp(8, 16);
+
+        &.overflow-user {
+          display: flex;
+        }
+
+        .user-name {
+          display: block;
+          text-wrap: wrap;
+          overflow-wrap: anywhere;
+          max-height: 2lh;
+        }
+      }
+
+      .remaining-count {
+        display: none;
+      }
+    }
+  }
 }
 
 .group-item {
@@ -31,86 +116,5 @@
   &.size-medium {
     height: calcClamp(32, 42);
     width: calcClamp(32, 42);
-  }
-}
-
-:host.no-overlap {
-  --avatar-size: #{calcClamp(32, 42)};
-
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: var(--avatar-gap, 8px);
-  height: var(--avatar-size);
-  width: 100%;
-  transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-
-  .group-item {
-    margin-left: 0;
-  }
-
-  .avatar-wrapper {
-    @include flex-start;
-    position: relative;
-    flex-shrink: 0;
-    width: var(--avatar-size);
-    height: var(--avatar-size);
-    cursor: pointer;
-
-    &:hover .btn-delete-user {
-      @include flex-center;
-    }
-
-    &.overflow-user,
-    .user-name {
-      display: none;
-    }
-  }
-
-  &.expanded {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: calcClamp(8, 16);
-    height: auto;
-
-    .avatar-wrapper {
-      flex-shrink: 0;
-      width: 100%;
-      height: var(--avatar-size);
-      gap: calcClamp(8, 16);
-
-      &.overflow-user {
-        display: flex;
-      }
-
-      .user-name {
-        display: block;
-        text-wrap: wrap;
-        overflow-wrap: anywhere;
-        max-height: 2lh;
-      }
-    }
-
-    .remaining-count {
-      display: none;
-    }
-  }
-}
-
-button.btn.btn-delete-user {
-  display: none;
-  width: var(--avatar-size);
-  height: var(--avatar-size);
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(1px);
-
-  svg {
-    --btn-icon-medium-size: calc(var(--avatar-size) * 0.5);
-    color: $main-color;
   }
 }

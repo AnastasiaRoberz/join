@@ -23,10 +23,8 @@
   border: 1px solid $input-default-border;
   border-radius: 10px;
   position: relative;
-  background-color: white;
+  background-color: $input-background;
   padding-block: calcClamp(8, 12, 768, 320);
-
-  // padding-block: calcClampMin((8, 12, 768, 320), (2, 8, 500, 350));
 
   &:focus-within {
     border-color: $input-focus-border;

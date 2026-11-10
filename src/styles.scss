@@ -1,4 +1,3 @@
-// @use '../public/assets/styles/general/_buttons.scss';
 @use '../public/assets/styles/general/_custom-flatpickr.scss';
 @use '../public/assets/styles/general/_typography.scss';
 @use '../public/assets/styles' as *;
@@ -62,23 +61,8 @@ button {
   }
 
   &::-webkit-scrollbar-button:single-button {
-    // display: block;
-    // height: 30px;
-    // width: 10px;
-    // background-size: 10px 4px;
-    // background-repeat: no-repeat;
     display: none;
   }
-
-  // &::-webkit-scrollbar-button:single-button:vertical:start {
-  //   background: transparent url('../public/assets/icons/scrollbar-up.svg') no-repeat center;
-  //   background-position: center bottom;
-  // }
-
-  // &::-webkit-scrollbar-button:single-button:vertical:end {
-  //   background: transparent url('../public/assets/icons/scrollbar-down.svg') no-repeat center;
-  //   background-position: center top;
-  // }
 
   &::-webkit-scrollbar-track {
     background: none;
@@ -206,4 +190,15 @@ button {
 // the dragged card stays below the navbar and the header
 .cdk-drag-preview {
   z-index: 4 !important;
+}
+
+@keyframes overlay-fade {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }

@@ -8,7 +8,7 @@
 .detail-header {
   @include flex-start;
   gap: calcClamp(16, 54, 1440, 1290);
-  max-width: 100%; // never wider than the component
+  max-width: 100%;
   overflow: visible;
   padding-top: 16px;
 
@@ -26,7 +26,7 @@
   }
 
   .name {
-    font-size: #{min(calcClamp(36, 48), calcClamp(36, 48, 700, 350, height))};
+    font-size: calcClampMin((36, 48), (36, 48, 700, 350));
     word-break: normal;
     overflow-wrap: anywhere;
     hyphens: auto;
@@ -44,7 +44,7 @@
     position: fixed;
     bottom: 106px;
     right: 14px;
-    z-index: 1; // covers the dots button while open
+    z-index: 1;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
@@ -53,14 +53,12 @@
     border-radius: 20px 20px 0 20px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
 
-    // when closed: outside the wrapper to the right, hidden after the slide-out
     transform: translateX(calc(100% + 16px));
     visibility: hidden;
     transition:
       transform 150ms ease-in-out,
-      visibility 0s linear 150ms; // hide only once the slide-out is done
+      visibility 0s linear 150ms;
 
-    // when open: slide in, visible right away
     &.is-open {
       transform: translateX(0);
       visibility: visible;
@@ -81,7 +79,7 @@
   font-size: $font-medium;
   line-height: 0.75;
   padding: 10px 0;
-  margin-top: #{min(calcClamp(0, 32, 1200, 768), calcClamp(0, 32, 700, 350, height))};
+  margin-top: calcClampMin((0, 32, 1200, 768), (0, 32, 700, 350));
 }
 
 .detail-info {

@@ -10,7 +10,6 @@
   border: 1px solid $color-white;
   background-color: $icon-bg;
   container-type: inline-size;
-  container-type: inline-size;
 
   &.size-small {
     width: 32px;
@@ -22,12 +21,12 @@
   }
 
   &.size-large {
-    width: #{min(calcClamp(80, 120, 768, 320), calcClamp(80, 120, 700, 350, height))};
+    width: calcClampMin((80, 120, 768, 320), (80, 120, 700, 350));
     border-width: 3px;
     box-shadow: $avatar-shadow;
 
     @include tablet {
-      width: #{min(calcClamp(80, 120, 768, 320), calcClamp(60, 120, 700, 450, height))};
+      width: calcClampMin((80, 120, 768, 320), (60, 120, 700, 450));
     }
   }
 

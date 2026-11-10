@@ -34,8 +34,10 @@ $color-amber-500: #df9500;
 $color-green-500: #43a800;
 
 // ==========================================
-// SEMANTIC TOKENS
+// 2. SEMANTIC TOKENS
 // ==========================================
+
+// GLOBAL / LAYOUT
 $main-color: $color-navy-800;
 $main-bg: $color-grey-background;
 $devider: $color-grey-100;
@@ -64,9 +66,7 @@ $btn-add-hover: $color-cyan-500;
 $btn-add-active: $color-navy-900;
 $btn-add-txt: $color-white;
 
-$close-btn-hover: $color-grey-500;
 $close-btn-mobile-default: $color-white;
-$close-btn-mobile-active: $color-cyan-700;
 
 $btn-contact-hover: linear-gradient(180deg, #f9f9f9 0%, #f0f0f0 100%);
 $btn-contact-active: $color-navy-800;
@@ -78,17 +78,9 @@ $btn-icon: $color-navy-800;
 $btn-icon-hover: $color-grey-500;
 $icon: #a8a8a8;
 
-$checkbox-hover: $color-grey-50;
-
-$avatar-hover: $color-bluish-grey;
-
 $btn-shadow: 0px 4px 4px 0px #00000040;
 $btn-disabled: $color-grey-400;
-
 $btn-shadow-placeholder: 0px 4px 4px 0px transparent;
-
-$avatar-shadow: 0px 0px 4px 0px #00000066;
-$avatar-hover: $color-bluish-grey;
 
 // NAVIGATION & SIDEBAR
 $sidebar-main-theme: $color-navy-800;
@@ -107,14 +99,8 @@ $mail: $color-blue-500;
 $prio-urgent: $color-orange-500;
 $prio-medium: $color-amber-500;
 $prio-low: $color-green-500;
-// $prio-urgent: #e03e3e;
-// $prio-medium: #d96b00;
-// $prio-low: #29a347;
 
-// INPUT FIELDS
-$input-default-border: $color-grey-100;
-
-// INPUT FIELDS
+// INPUTS & DROPDOWNS
 $input-default-border: $color-grey-100;
 $input-default-label: $color-grey-100;
 $input-icon: $color-grey-300;
@@ -124,28 +110,25 @@ $input-placeholder: $color-grey-600;
 $input-background: $color-white;
 $input-select-hover: $color-grey-500;
 $input-edit-underline: $color-blue;
-
 $checkbox-hover: $color-grey-50;
-
 $dropdown-item-active: $color-navy-800;
 $dropdown-item-active-hover: $color-navy-900;
 
-// AVATAR ICON
+// AVATARS
+$avatar-hover: $color-bluish-grey;
+$avatar-shadow: 0px 0px 4px 0px #00000066;
 $icon-bg: $color-grey-300;
 
 // OVERLAY
 $overlay-shadow: 0px 0px 4px 0px #00000066;
 
-// TASK CARD
+// BOARD & TASK CARD
 $task-card-width: 252px;
-
-// BOARD
 // below this width the columns are below each other (4 columns would get too narrow)
 $board-breakpoint: 1140;
 
 // ==========================================
-// FONT SIZES
+// 3. FONT SIZES
 // ==========================================
 $font-default: toRem(16);
 $font-medium: toRem(20);
-$font-large: toRem(47);

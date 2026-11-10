@@ -1,5 +1,5 @@
-   @use '../../../../../../../public/assets/styles' as *;
-  
+@use '../../../../../../../public/assets/styles' as *;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -8,12 +8,11 @@
   max-width: $task-card-width;
   cursor: pointer;
 
-  user-select: none; // no text selection on long press
-  -webkit-touch-callout: none; // no "copy / share" menu on iOS
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
-// tilt only the inner card while pressed and while dragged,
-// :host(:active) > *,
+// tilt only the inner card while dragged
 :host(.cdk-drag-preview) > * {
   rotate: 3deg;
 }
@@ -22,7 +21,6 @@
 :host(.cdk-drag-placeholder) {
   position: relative;
 
-  // height for mobile smaller and fixed, so columns do not jump
   @include mobile {
     height: 230px;
   }
@@ -37,7 +35,7 @@
 :host(.cdk-drag-placeholder)::after {
   content: '';
   position: absolute;
-  inset: 0; // same size as the card
+  inset: 0;
   border: 1px dashed $color-grey-400;
   border-radius: 24px;
 }
@@ -52,10 +50,8 @@
   border-radius: 24px;
   background-color: $color-white;
   box-shadow: 0px 0px 10px 3px #0000000a;
-  flex: 1;
 
-  // the color of the label comes from utils/categories-list.ts (set in the template),
-  // grey is only the fallback for an unknown category
+  // the color of the label comes from utils/categories-list.ts (set in the template)
   &__category {
     align-self: flex-start;
     padding: 4px 16px;
@@ -75,7 +71,6 @@
     color: $text-dark;
   }
 
-  // title and description belong together, so they sit closer than the other parts of the card
   // title and description belong together, so they sit closer than the other parts of the card
   &__text {
     @include flex-start(column);
@@ -101,7 +96,7 @@
     margin-top: auto;
   }
 
-    // native <progress>: the default browser look is removed, track and fill are styled per engine
+  // native <progress>: the default browser look is removed, track and fill are styled per engine
   &__bar {
     flex: 1;
     height: 8px;
@@ -109,7 +104,7 @@
     border-radius: 4px;
     appearance: none;
     overflow: hidden;
-    background-color: $color-grey-500; // track in Firefox
+    background-color: $color-grey-500;
 
     // Chrome, Edge, Safari: the track
     &::-webkit-progress-bar {

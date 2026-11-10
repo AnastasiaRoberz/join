@@ -7,7 +7,7 @@
 
   @include mobile {
     flex-wrap: wrap;
-    gap: calcClamp(16, 28, 600, 320); // moved gap to padding at bottom
+    gap: calcClamp(16, 28, 600, 320);
   }
 }
 
@@ -17,6 +17,15 @@
   align-items: center;
   flex-wrap: wrap;
   gap: calcClamp(12, 24);
+
+  @include mobile(500) {
+    .filter-btn {
+      padding: 4px;
+      ::ng-deep span {
+        display: none;
+      }
+    }
+  }
 }
 
 app-select-field {
@@ -25,14 +34,5 @@ app-select-field {
   @include mobile {
     order: 1;
     width: 100%;
-  }
-}
-
-@include mobile(500) {
-  .filter-btn {
-    padding: 4px;
-    ::ng-deep span {
-      display: none;
-    }
   }
 }
