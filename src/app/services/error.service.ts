@@ -65,7 +65,7 @@ export class ErrorService {
 
     requiredDefault: () => 'This field is required.',
 
-    invalidCredentials: () => 'Check your email and password. Please try again.',
+    invalidCredentials: () => 'Invalid email or password.',
 
     passwordMismatch: () => "Your passwords don't match. Please try again.",
   };
