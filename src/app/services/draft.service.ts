@@ -11,6 +11,7 @@ export interface LoginDraft {
 export interface RegisterDraft {
   name?: string;
   mail?: string;
+  privacy?: boolean;
 }
 
 /** Data draft of the Add Task form. */

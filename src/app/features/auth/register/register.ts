@@ -58,8 +58,15 @@ export class Register implements OnDestroy {
     ],
     password: ['', [Validators.required, customPasswordValidator()]],
     confirmPassword: ['', [Validators.required, passwordMatchValidator()]],
-    privacy: [false, [Validators.requiredTrue]],
+    privacy: [this.draftService.registerDraft().privacy, [Validators.requiredTrue]],
   });
+
+  /** Shows the validation messages of name and e-mail that were restored from the draft. */
+  ngOnInit(): void {
+    const draft = this.draftService.registerDraft();
+    if (draft.name) this.registerForm.controls.name.markAsTouched();
+    if (draft.mail) this.registerForm.controls.mail.markAsTouched();
+  }
 
   /** Saves entered name and email to draft service on component destroy. */
   public ngOnDestroy(): void {
@@ -68,6 +75,7 @@ export class Register implements OnDestroy {
     this.draftService.registerDraft.set({
       name: rawData.name ?? '',
       mail: rawData.mail ?? '',
+      privacy: rawData.privacy ?? false,
     });
   }
 

@@ -18,7 +18,7 @@ const MAIN_PAGE_PREFIXES: readonly string[] = ['/app/summary', '/app/board', '/a
  * Route deactivate guard for the Add Task page.
  *
  * - When transitioning to an Info page (`help`, `legal-notice`, `privacy-policy`), the current form
- *   values are saved to `AuthDraftService` so they remain intact upon returning.
+ *   values are saved to `DraftService` so they remain intact upon returning.
  * - When transitioning to one of the 3 other main pages (`summary`, `board`, `contacts`), the user
  *   is asked via `ConfirmService` whether to discard changes or continue editing.
  * - When navigating to `/login` (e.g. during logout), confirmation is requested if not already handled.

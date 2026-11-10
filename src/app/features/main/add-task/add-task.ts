@@ -128,6 +128,12 @@ export class AddTask implements OnDestroy {
     category: new FormControl('', Validators.required),
   });
 
+  /** Shows the validation messages of name and e-mail that were restored from the draft. */
+  ngOnInit(): void {
+    const draft = this.draftService.addTaskDraft();
+    if (draft.title) this.taskForm.controls.title.markAsTouched();
+  }
+
   /** Full contact objects matching `selectedContactIds()`. */
   protected readonly selectedContacts = computed(() => {
     const ids = new Set(this.selectedContactIds());
