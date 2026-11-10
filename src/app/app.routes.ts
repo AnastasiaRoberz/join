@@ -11,6 +11,7 @@ import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
 import { Auth } from './features/auth/auth';
 import { authGuard } from './auth.guard';
+import { addTaskDeactivateGuard } from './features/main/add-task/add-task-deactivate.guard';
 
 /**
  * Application routes.
@@ -40,7 +41,12 @@ export const routes: Routes = [
       { path: 'legal-notice', component: LegalNotice },
       { path: 'summary', component: Dashboard, canActivate: [authGuard] },
       { path: 'contacts', component: Contacts, canActivate: [authGuard] },
-      { path: 'add-task', component: AddTask, canActivate: [authGuard] },
+      {
+        path: 'add-task',
+        component: AddTask,
+        canActivate: [authGuard],
+        canDeactivate: [addTaskDeactivateGuard],
+      },
       { path: 'board', component: Board, canActivate: [authGuard] },
       { path: 'help', component: Help, canActivate: [authGuard] },
     ],

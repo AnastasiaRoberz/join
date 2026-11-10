@@ -7,6 +7,8 @@ import { Session, User } from '@supabase/supabase-js';
 import { IntroService } from './intro.service';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskService } from './task.service';
+import { ConfirmService } from './confirm.service';
+import { DraftService } from './draft.service';
 
 /** Payload of `supabase.auth.signUp` (credentials plus profile metadata). */
 export interface UserInterface {
@@ -46,6 +48,10 @@ export class UserService {
   private readonly introService = inject(IntroService);
   /** Task service for synchronizing task state upon session changes. */
   private readonly taskService = inject(TaskService);
+  /** Draft service holding temporary form input across routes. */
+  private readonly draftService = inject(DraftService);
+  /** Confirm service used for interactive confirmation prompts. */
+  private readonly confirmService = inject(ConfirmService);
 
   /** The logged-in Supabase auth user, `null` if nobody is logged in. */
   public readonly currentUser = signal<User | null>(null);
@@ -79,7 +85,10 @@ export class UserService {
     const newUser = await this.supabaseService.userSignUp(this.buildSignUpPayload(data, nameParts));
     if (!newUser) return false;
 
-    await this.contactService.addContact(this.buildContact(data.mail, nameParts, newUser.user?.id), false);
+    await this.contactService.addContact(
+      this.buildContact(data.mail, nameParts, newUser.user?.id),
+      false,
+    );
     this.setSession(newUser.user, newUser.session);
     this.redirectToSummary();
     this.contactService.getAllContacts();
@@ -106,13 +115,23 @@ export class UserService {
   }
 
   /**
-   * Logs out, redirects to the login page and clears user, session and contacts.
+   * Logs out, redirects to the login page and clears user, session, contacts, and drafts.
+   * If entries exist in the Add Task form draft, prompts for confirmation before discarding.
    *
-   * @returns A promise that resolves when the logout is done (nothing changes if it fails)
+   * @returns A promise that resolves when the logout is done (nothing changes if cancelled or fails).
    */
   public async logOut(): Promise<void> {
+    if (this.draftService.hasAddTaskDraft()) {
+      const confirmed = await this.confirmService.askLogoutWithUnsavedTask();
+      if (!confirmed) {
+        return;
+      }
+      this.draftService.clearAddTaskDraft();
+    }
+
     const { error } = await this.supabase.auth.signOut();
     if (!error) {
+      this.draftService.clearAllDrafts();
       this.router.navigate(['/login']);
       this.currentUser.set(null);
       this.currentSession.set(null);
@@ -157,7 +176,7 @@ export class UserService {
 
   /**
    * Deletes a contact and, if it belongs to a registered user, the auth user as well.
-   * If the deleted user is the logged-in user, the user is logged out.
+   * If the deleted user is the logged-in user, navigate to login-page
    *
    * @param id - Id of the contact
    * @param uid - Id of the linked auth user, if any
@@ -172,7 +191,7 @@ export class UserService {
       const success = await this.supabaseService.deleteUser(uid);
 
       if (success && isSelf) {
-        await this.logOut();
+        this.router.navigate(['/login']);
       }
     }
   }
@@ -199,7 +218,7 @@ export class UserService {
     return {
       email: data.mail,
       password: data.password,
-      phone: '000000',
+      phone: '---',
       options: {
         data: {
           first_name: nameParts.firstname,

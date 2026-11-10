@@ -141,7 +141,12 @@ export class Dashboard implements OnInit, AfterViewInit {
         (t) =>
           t.due_date?.slice(0, 10) === currentDeadline.rawDate?.slice(0, 10) && t.status !== 'Done',
       );
-    this.navigateToDeadlineTasks(currentDeadline.rawDate, currentDeadline.formattedDate, tasks);
+    this.router.navigate(['/app/board']);
+    this.taskService.setBoardFilter({
+      type: 'deadline',
+      dueDate: currentDeadline.rawDate,
+      label: `Deadline: ${currentDeadline.formattedDate}`,
+    });
   }
 
   /** Evaluates nearest open deadline across all tasks as a reactive computed signal. */
@@ -249,30 +254,6 @@ export class Dashboard implements OnInit, AfterViewInit {
       amount: tasks.filter((task) => task.priority === prio).length,
       filter: { type: 'priority', priority: prio, label },
     };
-  }
-
-  /**
-   * Navigates to board view applying either task modal or deadline filter.
-   *
-   * @param dueDate - Raw due date string.
-   * @param formatted - Formatted date string for label.
-   * @param tasks - Matching tasks collection.
-   */
-  private navigateToDeadlineTasks(
-    dueDate: string,
-    formatted: string,
-    tasks: TaskInterface[],
-  ): void {
-    this.router.navigate(['/app/board']);
-    if (tasks.length === 1) {
-      this.dialogService.openDialog('task', tasks[0]);
-    } else if (tasks.length > 1) {
-      this.taskService.setBoardFilter({
-        type: 'deadline',
-        dueDate,
-        label: `Deadline: ${formatted}`,
-      });
-    }
   }
 
   /**

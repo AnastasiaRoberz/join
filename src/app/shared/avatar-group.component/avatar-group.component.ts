@@ -208,9 +208,14 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
       for (const entry of entries) {
         this.containerWidth.set(entry.contentRect.width);
       }
-      const avatarEl = this.element.nativeElement.querySelector('.group-item') as HTMLElement | null;
-      if (avatarEl && avatarEl.offsetWidth > 0) {
-        this.measuredAvatarWidth.set(avatarEl.offsetWidth);
+      const avatarEl = this.element.nativeElement.querySelector(
+        '.group-item',
+      ) as HTMLElement | null;
+      if (avatarEl) {
+        const avatarWidth = avatarEl.getBoundingClientRect().width;
+        if (avatarWidth > 0) {
+          this.measuredAvatarWidth.set(avatarWidth);
+        }
       }
     });
     this.resizeObserver.observe(this.element.nativeElement);
@@ -238,7 +243,7 @@ export class AvatarGroupComponent implements OnInit, OnDestroy {
   private calculateMaxFittingAvatars(width: number, total: number): number {
     const itemWidth = this.avatarSize();
     const minGap = 8;
-    const maxFitting = Math.max(1, Math.floor((width + minGap) / (itemWidth + minGap)));
+    const maxFitting = Math.max(1, Math.floor((width - 1 + minGap) / (itemWidth + minGap)));
     return total <= maxFitting ? total : Math.max(1, maxFitting - 1);
   }
 

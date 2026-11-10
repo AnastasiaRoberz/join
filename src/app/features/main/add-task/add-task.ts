@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,6 +21,7 @@ import { SubtaskInterface } from '../../../interfaces/subtask.interface';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { generalCustomValidators } from '../../../utils/custom-validators';
 import { UserService } from '../../../services/user.service';
+import { DraftService } from '../../../services/draft.service';
 
 /**
  * Form component for creating a new task.
@@ -70,8 +71,14 @@ export class AddTask implements OnDestroy {
   /** Router instance for navigation to board after standalone submission. */
   private readonly router = inject(Router);
 
+  /** Draft service preserving typed task entries across navigation to info pages. */
+  private readonly draftService = inject(DraftService);
+
   /** Reference to subtask field child component for resetting input state. */
   private readonly subtaskField = viewChild(SubtaskFieldComponent);
+
+  /** Flag preventing ngOnDestroy from saving draft when discarded or submitted. */
+  public skipDraftSave = false;
 
   /** Signal indicating mobile or landscape viewport orientation. */
   protected readonly isMobileOrLandscape = this.responsiveService.isMobileOrLandscape;
@@ -121,6 +128,12 @@ export class AddTask implements OnDestroy {
     category: new FormControl('', Validators.required),
   });
 
+  /** Shows the validation messages of name and e-mail that were restored from the draft. */
+  ngOnInit(): void {
+    const draft = this.draftService.addTaskDraft();
+    if (draft.title) this.taskForm.controls.title.markAsTouched();
+  }
+
   /** Full contact objects matching `selectedContactIds()`. */
   protected readonly selectedContacts = computed(() => {
     const ids = new Set(this.selectedContactIds());
@@ -162,12 +175,124 @@ export class AddTask implements OnDestroy {
   }
 
   /** Resets the form and all selection signals to initial state. */
-  protected onClear(): void {
+  public onClear(): void {
     this.taskForm.reset();
     this.selectedPrio.set('medium');
     this.selectedContactIds.set([]);
     this.createdSubtasks.set([]);
     this.subtaskField()?.reset();
+    if (!this.isInDialog()) {
+      this.clearDraft();
+    }
+  }
+
+  /**
+   * Initializes the component, restoring previously saved draft values and syncing ongoing input.
+   */
+  constructor() {
+    this.restoreDraft();
+    this.initDraftSync();
+  }
+
+  /**
+   * Checks whether AddTask is hosted inside a modal dialog rather than as a standalone page.
+   *
+   * @returns `true` if displayed inside a dialog overlay, otherwise `false`.
+   */
+  public isInDialog(): boolean {
+    return this.dialogService.isOpen() && this.dialogService.dialogType() === 'add-task';
+  }
+
+  /**
+   * Checks whether any form control or selection contains user-entered content.
+   *
+   * @returns `true` if any field differs from its initial empty/default state, otherwise `false`.
+   */
+  public hasContent(): boolean {
+    const { title, description, date, category } = this.taskForm.value;
+    const hasTitle = Boolean(title && title.trim().length > 0);
+    const hasDesc = Boolean(description && description.trim().length > 0);
+    const hasDate = Boolean(date && date.trim().length > 0);
+    const hasCategory = Boolean(category && category.trim().length > 0);
+    const hasAssigned = this.selectedContactIds().length > 0;
+    const hasSubtasks = this.createdSubtasks().length > 0;
+    const hasCustomPrio = this.selectedPrio() !== 'medium';
+
+    return (
+      hasTitle || hasDesc || hasDate || hasCategory || hasAssigned || hasSubtasks || hasCustomPrio
+    );
+  }
+
+  /**
+   * Saves the current task input values to `AuthDraftService`.
+   */
+  public saveDraft(): void {
+    if (this.isInDialog() || this.isSubmitting() || this.skipDraftSave) return;
+    if (!this.hasContent()) {
+      this.draftService.clearAddTaskDraft();
+      return;
+    }
+    const val = this.taskForm.getRawValue();
+    this.draftService.addTaskDraft.set({
+      title: val.title ?? '',
+      description: val.description ?? '',
+      date: val.date ?? '',
+      category: val.category ?? '',
+      priority: this.selectedPrio(),
+      assigned: this.selectedContactIds(),
+      subtasks: this.createdSubtasks(),
+    });
+  }
+
+  /**
+   * Clears the task draft in `AuthDraftService`.
+   */
+  public clearDraft(): void {
+    this.draftService.clearAddTaskDraft();
+  }
+
+  /**
+   * Restores draft values from `AuthDraftService` into form controls and signals.
+   */
+  private restoreDraft(): void {
+    if (this.isInDialog() || !this.draftService.hasAddTaskDraft()) return;
+
+    const draft = this.draftService.addTaskDraft();
+    this.taskForm.patchValue({
+      title: draft.title ?? '',
+      description: draft.description ?? '',
+      date: draft.date ?? '',
+      category: draft.category ?? '',
+    });
+    if (draft.priority) {
+      this.selectedPrio.set(draft.priority);
+      this.taskForm.controls.priority.setValue(draft.priority);
+    }
+    if (draft.assigned && draft.assigned.length > 0) {
+      this.selectedContactIds.set(draft.assigned);
+      this.taskForm.controls.assigned.setValue(draft.assigned);
+    }
+    if (draft.subtasks && draft.subtasks.length > 0) {
+      this.createdSubtasks.set(draft.subtasks);
+    }
+  }
+
+  /**
+   * Sets up synchronization so that changes to form controls and selections update the draft.
+   */
+  private initDraftSync(): void {
+    if (this.isInDialog()) return;
+
+    this.taskForm.valueChanges.subscribe(() => {
+      this.saveDraft();
+    });
+
+    effect(() => {
+      this.selectedPrio();
+      this.selectedContactIds();
+      this.createdSubtasks();
+      this.saveDraft();
+    });
   }
 
   /** Submits the form, creates the task, and sets assignments and subtasks. */
@@ -188,9 +313,12 @@ export class AddTask implements OnDestroy {
     }
   }
 
-  /** Resets column status to default 'To do' when navigating away. */
+  /** Resets column status to default 'To do' and preserves draft if navigating to info pages. */
   public ngOnDestroy(): void {
     this.taskService.addTaskStatus.set('To do');
+    if (!this.skipDraftSave && !this.isInDialog() && this.hasContent()) {
+      this.saveDraft();
+    }
   }
 
   /**
@@ -210,7 +338,9 @@ export class AddTask implements OnDestroy {
    * @param top - Position index.
    * @returns Task record payload.
    */
-  private buildNewTaskPayload(top: number): Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> {
+  private buildNewTaskPayload(
+    top: number,
+  ): Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> {
     return {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
@@ -231,6 +361,7 @@ export class AddTask implements OnDestroy {
     const contactIds = this.selectedContactIds();
     const subtasks = this.createdSubtasks();
     await this.taskService.saveTaskRelations(newTaskId, contactIds, subtasks);
+    this.skipDraftSave = true;
     this.onClear();
     this.returnToBoard();
   }

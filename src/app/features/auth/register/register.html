@@ -72,11 +72,12 @@
   />
 
   <div class="privacy-row">
-    <app-checkbox fieldId="privacy" formControlName="privacy" />
-    <label for="privacy">
-      I accept the
-      <a routerLink="/app/privacy-policy">Privacy policy</a>
-    </label>
+    <app-checkbox fieldId="privacy" formControlName="privacy" label="Privacy policy" requiredMsg>
+      <span for="privacy">
+        I accept the
+        <a routerLink="/app/privacy-policy" (click)="$event.stopPropagation()">Privacy policy</a>
+      </span>
+    </app-checkbox>
   </div>
 
   <button
