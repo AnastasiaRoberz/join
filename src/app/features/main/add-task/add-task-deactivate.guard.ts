@@ -2,7 +2,7 @@ import { CanDeactivateFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@a
 import { inject } from '@angular/core';
 import { AddTask } from './add-task';
 import { ConfirmService } from '../../../services/confirm.service';
-import { AuthDraftService } from '../../../services/auth-draft.service';
+import { DraftService } from '../../../services/draft.service';
 
 /** Info page URL prefixes where the task draft is preserved without user confirmation. */
 const INFO_PAGE_PREFIXES: readonly string[] = [
@@ -12,11 +12,7 @@ const INFO_PAGE_PREFIXES: readonly string[] = [
 ];
 
 /** Main page URL prefixes where navigating away requires confirmation if entries exist. */
-const MAIN_PAGE_PREFIXES: readonly string[] = [
-  '/app/summary',
-  '/app/board',
-  '/app/contacts',
-];
+const MAIN_PAGE_PREFIXES: readonly string[] = ['/app/summary', '/app/board', '/app/contacts'];
 
 /**
  * Route deactivate guard for the Add Task page.
@@ -60,7 +56,7 @@ export const addTaskDeactivateGuard: CanDeactivateFn<AddTask> = async (
   }
 
   const confirmService = inject(ConfirmService);
-  const draftService = inject(AuthDraftService);
+  const draftService = inject(DraftService);
 
   // If navigating to login (logout flow)
   if (targetUrl.startsWith('/login')) {
