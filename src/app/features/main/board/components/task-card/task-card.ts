@@ -4,7 +4,6 @@ import { AvatarGroupComponent } from '../../../../../shared/avatar-group.compone
 import { DialogService } from '../../../../../services/dialog.service';
 import { TaskService } from '../../../../../services/task.service';
 import { CATEGORIES } from '../../../../../utils/categories-list';
-import { CursorTooltipDirective } from '../../../../../directives/cursor-tooltip.directive';
 
 /**
  * Shows one task as a card on the board: category, title, description preview,
@@ -14,7 +13,7 @@ import { CursorTooltipDirective } from '../../../../../directives/cursor-tooltip
  * <app-task-card [task]="task" />
  */
 @Component({
-  imports: [AvatarGroupComponent, CursorTooltipDirective],
+  imports: [AvatarGroupComponent],
   selector: 'app-task-card',
   styleUrl: './task-card.scss',
   templateUrl: './task-card.html',

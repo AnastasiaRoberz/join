@@ -53,13 +53,11 @@
 
   @if (totalSubtasks() > 0) {
     <div class="task-card__progress">
-      
       <progress
         class="task-card__bar"
         aria-label="Subtask progress"
         [value]="doneSubtasks()"
         [max]="totalSubtasks()"
-        [appCursorTooltip]="doneSubtasks() + ' of ' + totalSubtasks() + ' subtasks completed'"
       ></progress>
       <span class="task-card__count">{{ doneSubtasks() }}/{{ totalSubtasks() }} Subtasks</span>
     </div>
