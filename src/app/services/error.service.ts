@@ -67,7 +67,7 @@ export class ErrorService {
 
     invalidCredentials: () => 'Check your email and password. Please try again.',
 
-    passwordMismatch: () => "Your passwords don't match. Please try again.",
+    passwordMismatch: () => "Passwords don't match. Please try again.",
 
     // --- Password Strength Validators ---
     minPasswordLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
