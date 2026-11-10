@@ -3,23 +3,23 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from
 import { Subscription } from 'rxjs';
 import { SupabaseService } from '../services/supabase.service';
 
-// Verbietet doppelte Punkte, Bindestriche oder Leerzeichen hintereinander
+// Forbids consecutive dots, hyphens or spaces
 const DUPLICATE_SPECIALS_REGEX = /([.\-\s])\1/;
-// Erkennt gängige unsichtbare Zeichen / Zero-Width-Spaces
+// Detects common invisible characters / zero-width spaces
 const INVISIBLE_CHARS_REGEX = /[\u200B-\u200D\uFEFF]/;
-// Unerlaubte Script-/Control-Zeichen in Kontaktdaten
+// Forbidden script/control characters in contact data
 const FORBIDDEN_CHARS_REGEX = /[<>\\{}[\]]/;
-// Darf nicht mit Punkt oder Bindestrich starten/enden
+// Must not start or end with a dot or hyphen
 const EDGE_SPECIALS_REGEX = /^[.\-]|[.\-]$/;
-// Erlaubt alle Unicode-Buchstaben, Leerzeichen, Apostroph, Punkt (für Initialen) und Bindestrich
+// Allows all Unicode letters, spaces, apostrophe, dot (for initials) and hyphen
 const ALLOWED_NAME_CHARS_REGEX = /^[\p{L}\s'.-]+$/u;
-// Mindestens ein Buchstabe pro Namensbestandteil
+// At least one letter per name part
 const CONTAINS_LETTER_REGEX = /\p{L}/u;
-// 1. Lokaler Teil: Buchstaben, Zahlen, erlaubte Zeichen, keine doppelten Punkte
-// 2. Domain-Teil: Buchstaben, Zahlen, Bindestriche
-// 3. TLD: Mindestens 2 Buchstaben (z.B. .de, .com, .cloud)
+// 1. Local part: letters, digits, allowed characters, no consecutive dots
+// 2. Domain part: letters, digits, hyphens
+// 3. TLD: at least 2 letters (e.g. .de, .com, .cloud)
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-*]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-// Erlaubt Ziffern, Leerzeichen, '-', '/', '(', ')' sowie '+' (auch am Anfang oder in Klammern)
+// Allows digits, spaces, '-', '/', '(', ')' and '+' (also at the start or inside brackets)
 const ALLOWED_PHONE_STRUCTURE = /^[0-9+\s/()\-]+$/;
 
 /**
@@ -128,7 +128,7 @@ async function findMailConflict(
   const { data, error } = await query.maybeSingle();
 
   if (error) {
-    console.error('Fehler bei der E-Mail-Validierung:', error);
+    console.error('Error during e-mail validation:', error);
     return null;
   }
   return data ? { uniqueEmail: true } : null;
@@ -153,7 +153,7 @@ export function uniqueMailValidator(
       const currentId = getCurrentContactId?.();
       return await findMailConflict(supabaseService, rawValue.trim().toLowerCase(), currentId);
     } catch (err) {
-      console.error('Unerwarteter Fehler im Async-Validator:', err);
+      console.error('Unexpected error in async validator:', err);
       return null;
     }
   };
