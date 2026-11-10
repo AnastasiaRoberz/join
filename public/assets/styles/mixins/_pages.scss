@@ -30,20 +30,8 @@
   padding-inline: var(--padding-inline);
   padding-top: calcClampMin((48, 116), (24, 48, 700, 350));
   padding-bottom: 24px;
-  gap: 24px;
   height: 100%;
   min-height: 0;
-
-  .content {
-    @include flex-start(column, both);
-    gap: 24px;
-    padding-bottom: calcClamp(0, 32);
-
-    @include responsive(1441, width, min) {
-      width: 100%;
-      padding-right: var(--space-right);
-    }
-  }
 
   .header {
     width: 100%;
@@ -63,6 +51,31 @@
         top: -100%;
         right: 0;
       }
+
+      @include responsive(1441, width, min) {
+        width: 100%;
+        margin-right: var(--space-right);
+      }
+    }
+  }
+
+  .content {
+    @include flex-start(column, both);
+    padding-bottom: calcClamp(0, 32);
+
+    @include responsive(1441, width, min) {
+      width: 100%;
+      padding-right: var(--space-right);
+    }
+
+    h3 {
+      margin-top: 32px;
+      margin-bottom: 16px;
+    }
+
+    h4 {
+      margin-bottom: 8px;
+      margin-top: 16px;
     }
   }
 

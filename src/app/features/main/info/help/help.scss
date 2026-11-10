@@ -19,11 +19,6 @@
 
 .content {
   @include flex-start(column);
-  gap: 20px;
-
-  h3 {
-    margin-top: 20px;
-  }
 
   &__list {
     display: flex;
@@ -43,6 +38,7 @@
       grid-row: 1 / span 2;
       font-size: 27px;
       font-weight: 700;
+      margin-top: 12px;
     }
   }
 }
