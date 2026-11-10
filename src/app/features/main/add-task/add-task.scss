@@ -13,9 +13,11 @@
     max-width: 1116px;
     height: 100%;
 
-    .task-container {
-      flex: 1;
-      min-height: 0;
+    @include responsive(701, height, min) {
+      .task-container {
+        flex: 1;
+        min-height: 0;
+      }
     }
 
     @include responsive(971, height, max) {

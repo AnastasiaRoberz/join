@@ -67,8 +67,8 @@
   &.add-task {
     --dialog-height: #{min(95dvh, 850px)};
     --dialog-margin-top: auto;
-    --padding-block-dialog: 64px;
-    --padding-inline-dialog: 70px;
+    --padding-block-dialog: #{calcClampMin(24, 64)};
+    --padding-inline-dialog: #{calcClampMin(24, 64)};
 
     @include responsive(971, height, max) {
       --dialog-height: 85dvh;
