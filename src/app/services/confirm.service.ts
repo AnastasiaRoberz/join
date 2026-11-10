@@ -2,7 +2,7 @@ import { Service, signal } from '@angular/core';
 import { ConfirmInterface } from '../interfaces/confirm.interface';
 
 /**
- * Asks the user to confirm an action (e.g. deleting a contact).
+ * Asks the user to confirm an action (e.g. deleting a contact or discarding unsaved form entries).
  * The confirm dialog is visible as long as `request` is not null.
  */
 @Service()
@@ -36,6 +36,32 @@ export class ConfirmService {
       title: `Delete ${type}?`,
       message: 'This cannot be undone!',
       confirmLabel: 'Delete',
+    });
+  }
+
+  /**
+   * Asks the user whether to leave the Add Task page and discard unsaved form entries.
+   *
+   * @returns A promise resolving to `true` if discarded, or `false` to continue editing.
+   */
+  public askDiscardTask(): Promise<boolean> {
+    return this.ask({
+      title: 'Leave page?',
+      message: 'Do you want to leave this page and discard the entries, or continue editing the task?',
+      confirmLabel: 'Discard',
+    });
+  }
+
+  /**
+   * Asks the user whether to discard task entries and log out.
+   *
+   * @returns A promise resolving to `true` to discard and log out, or `false` to continue editing.
+   */
+  public askLogoutWithUnsavedTask(): Promise<boolean> {
+    return this.ask({
+      title: 'Discard changes and log out?',
+      message: 'Do you want to discard your changes and log out, or continue editing the task?',
+      confirmLabel: 'Log out',
     });
   }
 
