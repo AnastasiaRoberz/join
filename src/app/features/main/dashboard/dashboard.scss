@@ -7,7 +7,7 @@
 }
 
 .header {
-  @include titleWithDevider(500);
+  @include titleWithDivider(500);
 }
 
 // Overlay that covers the page area during the greeting.
@@ -279,6 +279,10 @@
     .date {
       font-size: calcClamp(16, 20, 768, 320);
       font-weight: 700;
+
+      &.overdue {
+        color: $error;
+      }
     }
 
     .headsup {

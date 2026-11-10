@@ -54,6 +54,6 @@ export class UserAvatar {
 
   /** Computes the border color based on avatar size and contact badge color. */
   protected hostBorder(): string | undefined {
-    return this.size() === 'header' ? this.user()?.badge_color : 'white';
+    return this.size() === 'header' ? this.user()?.badge_color : undefined;
   }
 }

@@ -37,7 +37,7 @@ app-contact-details {
   }
 
   &__title {
-    @include titleWithDevider(1200);
+    @include titleWithDivider(1200);
   }
 
   &.scroll-container {

@@ -59,7 +59,7 @@
       <hr aria-hidden="true" />
       <div class="deadline__info" (click)="onDeadlineTileClick($event)">
         @if (deadline(); as deadline) {
-          <span class="date" [style.color]="deadline.color">{{ deadline.formattedDate }} </span>
+          <span class="date" [class.overdue]="deadline.overdue">{{ deadline.formattedDate }} </span>
           <span class="headsup">{{ deadline.text }}</span>
         } @else {
           <span>No Deadlines in your Board.</span>

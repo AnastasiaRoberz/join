@@ -38,7 +38,7 @@ export interface DeadlineInfo {
   rawDate: string;
   formattedDate: string;
   text: string;
-  color: string | null;
+  overdue: boolean;
 }
 
 /**
@@ -268,7 +268,7 @@ export class Dashboard implements OnInit, AfterViewInit {
         year: 'numeric',
       }),
       text: overdue ? 'Overdue Deadline' : 'Upcoming Deadline',
-      color: overdue ? '#e60026' : null,
+      overdue,
     };
   }
 }

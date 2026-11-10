@@ -21,9 +21,7 @@
   @include mobile(500) {
     .filter-btn {
       padding: 4px;
-      ::ng-deep span {
-        display: none;
-      }
+      --btn-label-display: none;
     }
   }
 }

@@ -52,7 +52,7 @@
   }
 }
 
-@mixin titleWithDevider($break-at: null) {
+@mixin titleWithDivider($break-at: null) {
   display: flex;
   align-items: center;
 
@@ -99,4 +99,8 @@
       }
     }
   }
+}
+
+@mixin titleWithDevider($break-at: null) {
+  @include titleWithDivider($break-at);
 }

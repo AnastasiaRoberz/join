@@ -30,11 +30,20 @@
       box-shadow: $btn-shadow;
     }
 
+    &:focus-visible {
+      outline: 2px solid $main-color;
+      outline-offset: 2px;
+    }
+
     .icon {
       width: var(--btn-icon-size, 24px);
       aspect-ratio: 1/1;
       flex-shrink: 0;
       transform: var(--btn-icon-transform, none);
+    }
+
+    .btn-label {
+      display: var(--btn-label-display, inline);
     }
 
     &:disabled {

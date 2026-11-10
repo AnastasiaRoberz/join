@@ -24,7 +24,7 @@
   border-radius: 10px;
   position: relative;
   background-color: $input-background;
-  padding-block: calcClamp(8, 12, 768, 320);
+  padding-block: var(--input-padding-block, #{calcClamp(8, 12, 768, 320)});
 
   &:focus-within {
     border-color: $input-focus-border;

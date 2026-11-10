@@ -25,6 +25,6 @@ export class Board {
   /** Signal indicating viewports with height <= 500px. */
   protected readonly isShortHeight = this.responsiveService.isMaxHeight(500);
 
-  /** Signal indicating viewports narrower than 1280px where columns scroll horizontally. */
-  protected readonly boardBreakpoint = this.responsiveService.isMaxWidth(1280);
+  /** Signal indicating viewports narrower than 1140px where columns scroll horizontally. */
+  protected readonly boardBreakpoint = this.responsiveService.horizontalDrag;
 }

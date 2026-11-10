@@ -8,7 +8,7 @@
 <div #scrollContainer class="contact-list scroll-container">
   @for (group of contactService.groupedContacts(); track $index) {
     <p class="contact-list__group-letter" id="group-{{ group.letter }}">{{ group.letter }}</p>
-    <hr class="contact-list__devider" aria-hidden="true" />
+    <hr class="contact-list__divider" aria-hidden="true" />
     <div
       class="contact-list__group-wrapper"
       role="group"
