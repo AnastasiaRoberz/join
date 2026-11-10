@@ -195,8 +195,19 @@ button {
   z-index: $z-drag-preview !important;
 }
 
+@keyframes logo-intro {
+  0%,
+  20% {
+    transform: translate(var(--intro-x), var(--intro-y)) scale(var(--intro-scale));
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
 @keyframes overlay-fade {
-  0% {
+  0%,
+  60% {
     opacity: 1;
     visibility: visible;
   }
