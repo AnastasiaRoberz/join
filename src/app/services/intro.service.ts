@@ -57,9 +57,14 @@ export class IntroService {
     this.greetingPending = true;
   }
 
-  /** Called by the dashboard, starts the greeting if one is pending (only once per login). */
+  /**
+   * Called by the dashboard, starts the greeting if one is pending (only once per login).
+   * `?greeting` in the URL (e.g. `/summary?greeting=`) forces the animation and does not mark it as seen.
+   */
   public startGreeting(): void {
-    if (this.greetingPending) {
+    const forceGreeting = new URLSearchParams(window.location.search).has('greeting');
+
+    if (this.greetingPending || forceGreeting) {
       this.greeting.set(true);
       this.greetingPending = false;
     }
