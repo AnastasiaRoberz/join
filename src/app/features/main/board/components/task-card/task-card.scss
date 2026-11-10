@@ -46,12 +46,6 @@
   background-color: $color-white;
   box-shadow: $task-card-shadow;
 
-  &__header {
-    @include flex-between;
-    width: 100%;
-    gap: 8px;
-  }
-
   &__category {
     align-self: flex-start;
     padding: 4px 16px;
@@ -60,88 +54,17 @@
     color: $text-light;
   }
 
-  &__mobile-move {
-    display: none;
-    position: relative;
-
-    @include mobile {
-      display: flex;
-    }
-  }
-
-  &__move-btn {
-    @include flex-center;
-    width: 28px;
-    height: 28px;
-    border: none;
-    border-radius: $radius-round;
-    background-color: $color-grey-500;
-    cursor: pointer;
-    transition: background-color 100ms ease;
-
-    &:hover,
-    &:focus-visible {
-      background-color: $color-grey-300;
-    }
-
-    .icon-move {
-      width: 14px;
-      height: 14px;
-      fill: $color-navy-800;
-    }
-  }
-
-  &__move-menu {
-    position: absolute;
-    top: calc(100% + 4px);
-    right: 0;
-    z-index: $z-dropdown;
-    min-width: 150px;
-    padding: 8px;
-    border-radius: $radius-md;
-    background-color: $color-white;
-    box-shadow: $dropdown-shadow;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  &__move-menu-title {
-    font-size: 11px;
-    font-weight: 700;
-    color: $color-grey-400;
-    padding: 2px 8px;
-    text-transform: uppercase;
-  }
-
-  &__move-item {
-    padding: 6px 10px;
-    border: none;
-    border-radius: $radius-xs;
-    background: transparent;
-    font-size: 13px;
-    text-align: left;
-    color: $text-dark;
-    cursor: pointer;
-    transition: background-color 100ms ease;
-
-    &:hover,
-    &:focus-visible {
-      background-color: $color-grey-50;
-    }
+  &__text {
+    @include flex-start(column);
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
   }
 
   &__title {
     @include line-clamp(3);
     font-size: $font-default;
     color: $text-dark;
-  }
-
-  &__text {
-    @include flex-start(column);
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: 8px;
   }
 
   &__description {
