@@ -49,6 +49,9 @@ export interface DeadlineInfo {
   selector: 'app-dashboard',
   styleUrl: './dashboard.scss',
   templateUrl: './dashboard.html',
+  host: {
+    '[class.is-greeting]': 'greeterService.isGreeting()',
+  },
 })
 export class Dashboard implements OnInit, AfterViewInit {
   /** Responsive service for viewport layout queries. */
@@ -179,9 +182,7 @@ export class Dashboard implements OnInit, AfterViewInit {
 
   /** Synchronizes greeting movement start time with the backdrop overlay. */
   private syncWithOverlayAnimation(animation: Animation): void {
-    const overlay = this.host.nativeElement
-      .querySelector('.greeter-overlay')
-      ?.getAnimations()[0];
+    const overlay = this.host.nativeElement.querySelector('.greeter-overlay')?.getAnimations()[0];
     overlay?.ready.then(() => {
       animation.startTime = overlay.startTime;
     });
