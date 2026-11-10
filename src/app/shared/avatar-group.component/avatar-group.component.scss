@@ -19,7 +19,8 @@
     width: 100%;
     transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
-    .group-item {
+    .group-item,
+    .group-item:not(:first-child) {
       margin-left: 0;
     }
 
