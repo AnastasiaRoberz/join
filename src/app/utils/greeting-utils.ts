@@ -71,15 +71,25 @@ function pickRandom(list: SloganFormatter[]): SloganFormatter {
 }
 
 export function getGreeting(firstname?: string, currentHour = new Date().getHours()): string {
+  const nameWithSpans = firstname ? splitName(firstname) : undefined;
   if (currentHour >= 5 && currentHour < 11) {
-    return pickRandom(MORNING_SLOGANS)(firstname);
+    return pickRandom(MORNING_SLOGANS)(nameWithSpans);
   } else if (currentHour >= 11 && currentHour < 14) {
-    return pickRandom(LUNCH_SLOGANS)(firstname);
+    return pickRandom(LUNCH_SLOGANS)(nameWithSpans);
   } else if (currentHour >= 14 && currentHour < 18) {
-    return pickRandom(AFTERNOON_SLOGANS)(firstname);
+    return pickRandom(AFTERNOON_SLOGANS)(nameWithSpans);
   } else if (currentHour >= 18 && currentHour < 22) {
-    return pickRandom(EVENING_SLOGANS)(firstname);
+    return pickRandom(EVENING_SLOGANS)(nameWithSpans);
   } else {
-    return pickRandom(NIGHT_SLOGANS)(firstname);
+    return pickRandom(NIGHT_SLOGANS)(nameWithSpans);
   }
+}
+
+function splitName(firstname: string) {
+  return Array.from(firstname)
+    .map((char, index) => {
+      const displayChar = char === ' ' ? '&nbsp;' : char.toUpperCase();
+      return `<span class="char">${displayChar}</span>`;
+    })
+    .join('');
 }
