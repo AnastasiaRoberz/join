@@ -5,22 +5,20 @@
   gap: calcClampMin((40, 48, 1440, 430), (16, 40, 1024, 350));
 
   &.add-task-overlay {
-    --padding-inline: 70px;
     display: flex;
     flex-direction: column;
-    padding-block: 64px;
-    padding-inline: var(--padding-inline);
+    padding-block: var(--padding-inline-dialog);
+    padding-inline: var(--padding-inline-dialog);
     width: 95vw;
     max-width: 1116px;
-    max-height: 95dvh;
+    height: 100%;
 
     .task-container {
-      height: 530px;
+      flex: 1;
+      min-height: 0;
     }
 
     @include responsive(971, height, max) {
-      height: 85vh;
-
       .task-container {
         height: auto;
       }
