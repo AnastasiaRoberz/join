@@ -63,6 +63,11 @@
         top: -100%;
         right: 0;
       }
+
+      @include responsive(1441, width, min) {
+        width: 100%;
+        margin-right: var(--space-right);
+      }
     }
   }
 
