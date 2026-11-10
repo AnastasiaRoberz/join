@@ -106,7 +106,9 @@
     overflow: hidden;
     background-color: transparent;
     border: 1px solid $btn-secondary-default;
-    box-shadow: inset 0 0 0 0px transparent, $btn-shadow-placeholder;
+    box-shadow:
+      inset 0 0 0 0px transparent,
+      $btn-shadow-placeholder;
     color: $btn-secondary-default;
     font-weight: 700;
     transition:
@@ -133,7 +135,9 @@
     &:hover {
       border-color: $btn-secondary-hover;
       color: $btn-secondary-hover;
-      box-shadow: inset 0 0 0 1px $btn-secondary-hover, $btn-shadow;
+      box-shadow:
+        inset 0 0 0 1px $btn-secondary-hover,
+        $btn-shadow;
       transform: translateY(-1px);
 
       &::before {
@@ -145,7 +149,9 @@
     &:active {
       border-color: $btn-secondary-active;
       color: $btn-secondary-active;
-      box-shadow: inset 0 0 0 1px $btn-secondary-active, $btn-shadow-placeholder;
+      box-shadow:
+        inset 0 0 0 1px $btn-secondary-active,
+        $btn-shadow-placeholder;
       transform: translateY(0);
     }
   }
@@ -221,9 +227,23 @@
 
   &.btn--add {
     background-color: $btn-add-default;
+    background-image: linear-gradient(
+      110deg,
+      $btn-secondary-hover 0%,
+      $btn-secondary-hover 40%,
+      rgba($color-cyan-500, 0.45) 50%,
+      $btn-secondary-default 60%,
+      $btn-secondary-default 100%
+    );
+    background-size: 250% 100%;
+    background-position: 100% 0;
     color: $btn-add-txt;
     font-weight: 700;
     gap: 0;
+    transition:
+      background-position 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.2s ease,
+      box-shadow 0.25s ease;
 
     .icon {
       width: 32px;
@@ -231,12 +251,16 @@
     }
 
     &:hover {
-      background-color: $btn-add-hover;
+      // background-color: $btn-add-hover;
+      background-position: 0% 0;
+      transform: translateY(-1px);
     }
 
     &:active {
+      background-image: none;
       background-color: $btn-add-active;
       box-shadow: $btn-shadow-placeholder;
+      transform: translateY(0);
     }
   }
 
