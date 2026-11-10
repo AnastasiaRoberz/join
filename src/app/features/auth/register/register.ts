@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { CheckboxComponent } from '../../../shared/checkbox.component/checkbox.component';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AuthDraftService } from '../../../services/auth-draft.service';
+import { DraftService } from '../../../services/draft.service';
 
 /** Status of an individual password strength rule. */
 export interface PasswordRule {
@@ -38,7 +38,7 @@ export class Register implements OnDestroy {
   private readonly userService = inject(UserService);
 
   /** Draft service preserving typed name and email across route switches. */
-  private readonly draftService = inject(AuthDraftService);
+  private readonly draftService = inject(DraftService);
 
   /** Flag indicating whether to skip saving the registration form draft to AuthDraftService on component destruction. */
   private skipDraftService = false;

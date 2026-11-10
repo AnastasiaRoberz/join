@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextField } from '../../../shared/text-field/text-field';
 import { UserService } from '../../../services/user.service';
 import { Buttons } from '../../../shared/button.component/button.component';
-import { AuthDraftService } from '../../../services/auth-draft.service';
+import { DraftService } from '../../../services/draft.service';
 
 /**
  * Login view component for email/password and anonymous guest sign-in.
@@ -22,7 +22,7 @@ export class Login implements OnDestroy {
   private readonly userService = inject(UserService);
 
   /** Draft service preserving typed email input across route transitions. */
-  private readonly draftService = inject(AuthDraftService);
+  private readonly draftService = inject(DraftService);
 
   /** Prevents ngOnDestroy from re-saving the email draft after a login redirect. */
   private skipDraftService = false;
