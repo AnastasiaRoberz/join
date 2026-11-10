@@ -40,6 +40,9 @@ export class Register implements OnDestroy {
   /** Draft service preserving typed name and email across route switches. */
   private readonly draftService = inject(AuthDraftService);
 
+  /** Prevents ngOnDestroy from re-saving the email draft after a login redirect. */
+  private skipDraftService = false;
+
   /** Submitting state flag preventing duplicate sign-up submissions. */
   protected readonly isSubmitting = signal<boolean>(false);
 
@@ -106,13 +109,16 @@ export class Register implements OnDestroy {
   protected async onSignup(): Promise<void> {
     if (this.isSubmitting() || !this.registerForm.valid) return;
     this.isSubmitting.set(true);
-
-    const success = await this.userService.userSignUp(this.getSignUpPayload());
-    if (success) {
-      this.draftService.clearDrafts();
-      this.registerForm.reset();
+    try {
+      const success = await this.userService.userSignUp(this.getSignUpPayload());
+      if (success) {
+        this.skipDraftService = true;
+        this.draftService.clearDrafts();
+        this.registerForm.reset();
+      }
+    } finally {
+      this.isSubmitting.set(false);
     }
-    this.isSubmitting.set(false);
   }
 
   /** Extracts form field values into user sign-up payload. */

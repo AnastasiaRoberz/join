@@ -24,6 +24,9 @@ export class Login implements OnDestroy {
   /** Draft service preserving typed email input across route transitions. */
   private readonly draftService = inject(AuthDraftService);
 
+  /** Prevents ngOnDestroy from re-saving the email draft after a login redirect. */
+  private skipDraftService = false;
+
   /** Submitting state flag preventing duplicate login requests. */
   protected readonly isSubmitting = signal<boolean>(false);
 
@@ -35,6 +38,7 @@ export class Login implements OnDestroy {
 
   /** Saves email input to draft service on component destroy. */
   public ngOnDestroy(): void {
+    if (this.skipDraftService) return;
     const rawData = this.loginForm.getRawValue();
     this.draftService.loginDraft.set({
       mail: rawData.mail ?? '',
@@ -54,6 +58,7 @@ export class Login implements OnDestroy {
         password: rawData.password!,
       });
       if (!success) return this.handleInvalidCredentials();
+      this.skipDraftService = true;
       this.draftService.clearDrafts();
       this.loginForm.reset();
     } finally {
@@ -68,8 +73,10 @@ export class Login implements OnDestroy {
     if (this.isSubmitting()) return;
     this.isSubmitting.set(true);
     try {
-      await this.userService.logIn();
+      this.skipDraftService = true;
       this.draftService.clearDrafts();
+      this.loginForm.reset();
+      await this.userService.logIn();
     } finally {
       this.isSubmitting.set(false);
     }
