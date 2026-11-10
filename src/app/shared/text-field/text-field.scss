@@ -2,6 +2,7 @@
 
 :host {
   @include field-host;
+  position: relative;
 
   &.ng-invalid.ng-touched .input-container {
     border-color: $error;
@@ -23,8 +24,7 @@
 .char-count {
   font-size: calcClampMin((12, 14, 940, 400), (12, 14));
   color: $input-default-label;
-  position: relative;
-  align-self: flex-end;
+  position: absolute;
   right: 0;
   top: -8px;
   transform: translateY(100%);
