@@ -19,7 +19,8 @@
 }
 
 .prio-btn {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   border-radius: $radius-md;
   padding-inline: 10px;
   padding-block: calcClamp(8, 16, 500, 350, height);
