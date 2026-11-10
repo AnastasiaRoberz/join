@@ -42,74 +42,60 @@ let nextId = 0;
 })
 export class CalendarFieldComponent implements ControlValueAccessor {
   /** Service used to adapt label and error message styling to mobile/desktop viewports. */
-  responsiveService = inject(ResponsiveService);
+  protected readonly responsiveService = inject(ResponsiveService);
 
   /** Service used to generate human-readable validation error messages. */
-  errorService = inject(ErrorService);
+  private readonly errorService = inject(ErrorService);
 
   /** ChangeDetectorRef used to trigger view updates when the bound FormControl state changes. */
-  private cdr = inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   /** Injected `NgControl` binding this component to the parent Angular form control. */
-  ngControl = inject(NgControl);
+  private readonly ngControl = inject(NgControl);
 
   // ---------------------------------------------------------------------------
   // Inputs, View Queries & Internal State
   // ---------------------------------------------------------------------------
 
   /** Unique HTML id attribute for the underlying input element. */
-  fieldId = input<string>(`app-calendar-${nextId++}`);
+  public readonly fieldId = input<string>(`app-calendar-${nextId++}`);
 
   /** Optional label text displayed above the date input field. */
-  label = input<string>();
+  public readonly label = input<string>();
 
   /** Reference to the `FlatpickrDirective` instance managing the calendar popup. */
-  picker = viewChild<FlatpickrDirective>('picker');
+  protected readonly picker = viewChild<FlatpickrDirective>('picker');
 
   /** Formatted date string (`DD/MM/YYYY`) currently displayed inside the input element. */
-  value = signal<string>('');
-
-  requiredMsg = input(false, { transform: booleanAttribute });
-
-  /** Registered `ControlValueAccessor` callback invoked when the date value changes. */
-  onChange: (value: string) => void = () => {};
-
-  /** Registered `ControlValueAccessor` callback invoked when the input loses focus. */
-  onTouched: () => void = () => {};
-
-  /** Shows the label-free `requiredDefault` message instead of "Your {label} is required.". */
-  isRequired(): boolean {
-    const ctrl = this.ngControl?.control;
-    return ctrl ? ctrl.hasValidator(Validators.required) : false;
-  }
+  protected readonly value = signal<string>('');
 
   /**
-   * Registers this component as the `valueAccessor` for its `NgControl`,
-   * synchronizes the `FlatpickrDirective` instance whenever `value()` or `picker()` updates,
-   * and subscribes to form control events to refresh validation error display.
+   * When `true`, displays the generic default message "This field is required" instead of the field-specific one.
+   */
+  public readonly requiredMsg = input(false, { transform: booleanAttribute });
+
+  /** Registered `ControlValueAccessor` callback invoked when the date value changes. */
+  private onChange: (value: string) => void = () => {};
+
+  /** Registered `ControlValueAccessor` callback invoked when the input loses focus. */
+  protected onTouched: () => void = () => {};
+
+  /**
+   * Registers this component as the `valueAccessor` for its `NgControl`
+   * and initializes reactive synchronization effects.
    */
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+    this.initPickerSyncEffect();
+    this.initControlEventsEffect();
+  }
 
-    effect(() => {
-      const currentPicker = this.picker();
-      const currentValue = this.value();
-      if (currentPicker && currentValue) {
-        currentPicker.setDate(currentValue);
-      }
-    });
-
-    effect((onCleanUp) => {
-      const ctrl = this.ngControl.control;
-      if (ctrl) {
-        const sub = ctrl.events.subscribe(() => {
-          this.cdr.markForCheck();
-        });
-        onCleanUp(() => sub.unsubscribe());
-      }
-    });
+  /** Shows the label-free `requiredDefault` message instead of "Your {label} is required.". */
+  protected isRequired(): boolean {
+    const ctrl = this.ngControl?.control;
+    return ctrl ? ctrl.hasValidator(Validators.required) : false;
   }
 
   // ---------------------------------------------------------------------------
@@ -122,7 +108,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
    *
    * @param value - The incoming date string from the Angular `FormControl`.
    */
-  writeValue(value: string): void {
+  public writeValue(value: string): void {
     if (!value) {
       this.value.set('');
       return;
@@ -138,7 +124,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
    *
    * @param fn - Callback expecting an ISO-formatted date string (`YYYY-MM-DD`).
    */
-  registerOnChange(fn: (value: string) => void): void {
+  public registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
@@ -147,7 +133,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
    *
    * @param fn - Callback invoked on input blur or date selection.
    */
-  registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -161,7 +147,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
    *
    * @param dateStr - The selected date string formatted as `DD/MM/YYYY`.
    */
-  onDateSelect(dateStr: string): void {
+  protected onDateSelect(dateStr: string): void {
     this.value.set(dateStr);
     const parsedDate = flatpickr.parseDate(dateStr, 'd/m/Y');
     const isoDate = parsedDate ? flatpickr.formatDate(parsedDate, 'Y-m-d') : dateStr;
@@ -174,19 +160,17 @@ export class CalendarFieldComponent implements ControlValueAccessor {
    * Handles manual user input in the date field.
    * If the user clears the input, notifies the Angular FormControl with an empty
    * string so the required validator triggers and the error message becomes visible.
-   * If the input is not empty, Flatpickr takes over via (dateChanged).
    *
    * @param event - The native DOM input event fired on every keystroke.
    */
-  onInputChange(event: Event): void {
+  protected onInputChange(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     if (input.value === '') {
       this.value.set('');
-      this.onChange(''); // Notify Angular FormControl → required validator fires
-      this.onTouched(); // Mark as touched → error message becomes visible
+      this.onChange('');
+      this.onTouched();
     }
-    // If not empty: Flatpickr handles the value via (dateChanged)
   }
 
   /**
@@ -195,7 +179,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
    *
    * @returns The error message string, or `null` if the control is valid or untouched.
    */
-  showError(): string | null {
+  protected showError(): string | null {
     const ctrl = this.ngControl.control;
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
@@ -203,5 +187,29 @@ export class CalendarFieldComponent implements ControlValueAccessor {
       this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
 
     return this.errorService.getErrorMessage(errors, this.label() ?? '');
+  }
+
+  /** Synchronizes the Flatpickr instance whenever value or directive reference updates. */
+  private initPickerSyncEffect(): void {
+    effect(() => {
+      const currentPicker = this.picker();
+      const currentValue = this.value();
+      if (currentPicker && currentValue) {
+        currentPicker.setDate(currentValue);
+      }
+    });
+  }
+
+  /** Subscribes to form control events to refresh validation error display. */
+  private initControlEventsEffect(): void {
+    effect((onCleanUp) => {
+      const ctrl = this.ngControl.control;
+      if (ctrl) {
+        const sub = ctrl.events.subscribe(() => {
+          this.cdr.markForCheck();
+        });
+        onCleanUp(() => sub.unsubscribe());
+      }
+    });
   }
 }

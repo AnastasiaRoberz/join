@@ -12,8 +12,13 @@ import { Register } from './features/auth/register/register';
 import { Auth } from './features/auth/auth';
 import { authGuard } from './auth.guard';
 
+/**
+ * Application routes.
+ * - `''`: authentication shell with `login` (default) and `register`.
+ * - `app`: main shell. Privacy policy and legal notice are always reachable,
+ *   all other pages are protected by `authGuard` (logged-in users only).
+ */
 export const routes: Routes = [
-  // Authentification: main-screen with login-page as standard and navigation to sign-up
   {
     path: '',
     component: Auth,
@@ -23,34 +28,17 @@ export const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
-
-  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen (unten einfügen)
-  //Main
   {
     path: 'app',
     component: Main,
     children: [
-      //immer erreichbar
       { path: 'privacy-policy', component: PrivacyPolicy },
       { path: 'legal-notice', component: LegalNotice },
-
-      //nur eingeloggt, canActivate kommt später
-      // { path: 'summary', component: Dashboard },
-      // { path: 'contacts', component: Contacts },
-      // { path: 'add-task', component: AddTask },
-      // { path: 'board', component: Board },
-      // { path: 'help', component: Help },
-
       { path: 'summary', component: Dashboard, canActivate: [authGuard] },
       { path: 'contacts', component: Contacts, canActivate: [authGuard] },
       { path: 'add-task', component: AddTask, canActivate: [authGuard] },
       { path: 'board', component: Board, canActivate: [authGuard] },
       { path: 'help', component: Help, canActivate: [authGuard] },
-
-      //Weiterleitung, wenn URL leer
-      // { path: '', redirectTo: 'summary', pathMatch: 'full' },
     ],
   },
-
-  // { path: '**', redirectTo: '/login' }, //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
 ];

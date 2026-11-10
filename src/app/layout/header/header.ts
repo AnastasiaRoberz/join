@@ -1,6 +1,5 @@
 import {
   Component,
-  computed,
   ElementRef,
   HostListener,
   inject,
@@ -13,6 +12,9 @@ import { ResponsiveService } from '../../services/responsive.service';
 import { UserAvatar } from '../../shared/user-avatar/user-avatar';
 import { UserService } from '../../services/user.service';
 
+/**
+ * Global application header containing title, responsive logo, help link, and user profile menu.
+ */
 @Component({
   imports: [RouterLink, UserAvatar],
   selector: 'header[app-header]',
@@ -20,22 +22,34 @@ import { UserService } from '../../services/user.service';
   templateUrl: './header.html',
 })
 export class Header {
-  userService = inject(UserService);
-  private menuRef = viewChild<ElementRef>('menuRef');
-  navService = inject(NavigationService);
-  responsiveService = inject(ResponsiveService);
-  menuOpen = signal<boolean>(false);
+  /** User service providing session state and current contact details. */
+  protected readonly userService = inject(UserService);
 
-  toggleMenu() {
+  /** Navigation service providing current URL for conditional help icon rendering. */
+  protected readonly navService = inject(NavigationService);
+
+  /** Responsive service for mobile/desktop layout switches. */
+  protected readonly responsiveService = inject(ResponsiveService);
+
+  /** State flag controlling dropdown menu visibility. */
+  protected readonly menuOpen = signal<boolean>(false);
+
+  /** Reference to the dropdown menu element for outside click detection. */
+  private readonly menuRef = viewChild<ElementRef<HTMLElement>>('menuRef');
+
+  /** Toggles user profile menu visibility. */
+  protected toggleMenu(): void {
     this.menuOpen.update((v) => !v);
   }
 
-  closeMenu() {
+  /** Closes user profile menu. */
+  protected closeMenu(): void {
     this.menuOpen.set(false);
   }
 
+  /** Closes user profile menu when clicking outside of it. */
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
+  protected onDocumentClick(event: MouseEvent): void {
     if (!this.menuOpen()) return;
 
     const menuElement = this.menuRef()?.nativeElement;

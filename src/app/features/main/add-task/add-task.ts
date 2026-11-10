@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { Buttons } from '../../../shared/button.component/button.component';
 import { Priority, PriorityBtn } from '../../../shared/priority-btn/priority-btn';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContactInterface } from '../../../interfaces/contact.interface';
 import { UserAvatar } from '../../../shared/user-avatar/user-avatar';
 import { ResponsiveService } from '../../../services/responsive.service';
@@ -25,9 +25,9 @@ import { UserService } from '../../../services/user.service';
 /**
  * Form component for creating a new task.
  *
- * Collects title, description, due date, priority, category and assigned contacts.
- * On submit, the task is saved via `TaskService`, the selected contacts are linked
- * to it, and the form is reset.
+ * Collects title, description, due date, priority, category, subtasks, and assigned contacts.
+ * On submit, the task is saved via `TaskService`, assignments and subtasks are linked,
+ * and the form closes or redirects to the board.
  */
 @Component({
   imports: [
@@ -52,12 +52,63 @@ import { UserService } from '../../../services/user.service';
   },
 })
 export class AddTask implements OnDestroy {
-  /**
-   * Reactive form of the task. `title`, `date` and `category` are required.
-   * The date is stored as text in the format `dd/mm/yyyy`.
-   * Contact assignment is handled separately via the `assignedContacts` signal.
-   */
-  taskForm = new FormGroup({
+  /** Responsive layout service for breakpoint queries. */
+  protected readonly responsiveService = inject(ResponsiveService);
+
+  /** User service providing assignable contacts for assignment dropdown. */
+  protected readonly userService = inject(UserService);
+
+  /** Contact service providing contact sorting and data. */
+  private readonly contactService = inject(ContactService);
+
+  /** Task service used to create tasks and manage column status. */
+  private readonly taskService = inject(TaskService);
+
+  /** Dialog service for modal add-task workflows. */
+  private readonly dialogService = inject(DialogService);
+
+  /** Router instance for navigation to board after standalone submission. */
+  private readonly router = inject(Router);
+
+  /** Reference to subtask field child component for resetting input state. */
+  private readonly subtaskField = viewChild(SubtaskFieldComponent);
+
+  /** Signal indicating mobile or landscape viewport orientation. */
+  protected readonly isMobileOrLandscape = this.responsiveService.isMobileOrLandscape;
+
+  /** Signal indicating middle viewport heights between 501px and 700px. */
+  protected readonly isMiddleHeight = this.responsiveService.observeQuery(
+    '(min-height: 501px) and (max-height: 700px)',
+  );
+
+  /** Signal indicating short viewport heights <= 500px. */
+  protected readonly isShortHeight = this.responsiveService.isMaxHeight(500);
+
+  /** Signal indicating tablet special viewports. */
+  protected readonly isTabletSpecialHeight = this.responsiveService.observeQuery(
+    '(min-width: 769px) and (max-width: 1024px) and (min-height: 701px)',
+  );
+
+  /** Static categories list available for task classification. */
+  protected readonly categories = CATEGORIES;
+
+  /** Category key extractor function for SelectField. */
+  protected readonly categoryKey = (category: (typeof CATEGORIES)[number]): string => category.name;
+
+  /** Priority selected via priority buttons, defaults to `'medium'`. */
+  public readonly selectedPrio = signal<Priority>('medium');
+
+  /** Reactive list of currently assigned contact IDs. */
+  public readonly selectedContactIds = signal<number[]>([]);
+
+  /** Reactive list of created subtasks. */
+  public readonly createdSubtasks = signal<SubtaskInterface[]>([]);
+
+  /** Submission state flag to prevent concurrent duplicate task creation. */
+  protected readonly isSubmitting = signal<boolean>(false);
+
+  /** Reactive form holding task fields. */
+  protected readonly taskForm = new FormGroup({
     title: new FormControl('', [
       Validators.required,
       Validators.maxLength(200),
@@ -70,110 +121,27 @@ export class AddTask implements OnDestroy {
     category: new FormControl('', Validators.required),
   });
 
-  /** Provides responsive layout information. */
-  responsiveService = inject(ResponsiveService);
-  userService = inject(UserService);
-  isMobile = this.responsiveService.isMobile;
-  isMobileOrLandscape = this.responsiveService.isMobileOrLandscape;
-  isMiddleHeight = this.responsiveService.observeQuery(
-    '(min-height: 501px) and (max-height: 700px)',
-  );
-  isShortHeight = this.responsiveService.isMaxHeight(500);
-  isTabletSpecialHeight = this.responsiveService.observeQuery(
-    '(min-width: 769px) and (max-width: 1024px) and (min-height: 701px)',
-  );
-
-  contactService = inject(ContactService);
-
-  /** Used to create the task and to assign contacts to it. */
-  taskService = inject(TaskService);
-
-  readonly categories = CATEGORIES;
-  categoryKey = (category: (typeof CATEGORIES)[number]) => category.name;
-
-  /** Contacts currently selected for assignment. */
-  assignedContacts = signal<ContactInterface[]>([]);
-
-  /** Priority selected via the priority buttons, `null` if none is selected. */
-  selectedPrio = signal<Priority>('medium');
-
-  /** Reactive list of currently assigned contact IDs. */
-  selectedContactIds = signal<number[]>([]);
-
-  createdSubtasks = signal<SubtaskInterface[]>([]);
-
-  subtaskField = viewChild(SubtaskFieldComponent);
-  /** Holds the status chosen via a column "+" button.
-   * also used to close dialog when task is created
-   */
-  dialogService = inject(DialogService);
-
-  /** used to route to board page after task is created via sidebar */
-  private router = inject(Router);
-
-  isSubmitting = signal<boolean>(false);
-
-  /**
-   * Full contact objects corresponding to `selectedContactIds()`,
-   * used to render the assigned user avatars in the select-field footer.
-   */
-  selectedContacts = computed(() => {
+  /** Full contact objects matching `selectedContactIds()`. */
+  protected readonly selectedContacts = computed(() => {
     const ids = new Set(this.selectedContactIds());
     return this.contactService.sortedContacts().filter((contact) => ids.has(contact.id));
   });
 
-  /**
-   * Extraction function passed to `<app-select-field [getSearchStrings]>`
-   * so contacts can be filtered by either first name or surname.
-   *
-   * @param contact - The contact item to extract searchable strings from.
-   * @returns An array containing the contact's first name and surname.
-   */
-  contactSearchStrings = (contact: ContactInterface): string[] => [
+  /** Search strings extractor for filtering contacts by first and last name. */
+  protected readonly contactSearchStrings = (contact: ContactInterface): string[] => [
     contact.firstname,
     contact.surname,
   ];
 
-  /**
-   * Returns `true` if the given form control is invalid and has been
-   * touched or dirtied by the user. Used by the template to show error hints.
-   *
-   * @param controlName - The name of the form control to check
-   */
-  showError(controlName: string): boolean {
-    const control = this.taskForm.get(controlName);
-    return !!control && control.invalid && (control.touched || control.dirty);
-  }
-
-  /**
-   * Stores the priority chosen via a priority button.
-   *
-   * @param prio - The selected priority
-   */
-  onPrioritySelected(prio: Priority): void {
-    this.selectedPrio.set(prio);
-  }
-
-  /**
-   * Updates both the `selectedContactIds` signal and the `assignedTo` form control
-   * when the selection changes via the `<app-select-field>` listbox.
-   *
-   * @param ids - The updated array of selected contact IDs.
-   */
-  onAssignmentChange(ids: number[]): void {
+  /** Updates assigned contact IDs and marks form control dirty. */
+  protected onAssignmentChange(ids: number[]): void {
     this.selectedContactIds.set(ids);
     this.taskForm.controls.assigned.setValue(ids);
     this.taskForm.controls.assigned.markAsDirty();
   }
 
-  /**
-   * Toggles a single contact's assignment state when clicking an option's checkbox
-   * or the delete button on an avatar badge in the footer.
-   *
-   * @param contactId - The ID of the contact to assign or unassign.
-   * @param isAssigned - `true` to assign the contact, `false` to remove the assignment.
-   */
-  toggleAssignment(contactId: number, isAssigned: boolean): void {
+  /** Toggles assignment for a single contact. */
+  protected toggleAssignment(contactId: number, isAssigned: boolean): void {
     const currentIds = this.selectedContactIds();
     const updatedIds = isAssigned
       ? currentIds.includes(contactId)
@@ -184,83 +152,74 @@ export class AddTask implements OnDestroy {
     this.onAssignmentChange(updatedIds);
   }
 
-  /**
-   * Resets the form and all related signals to their initial state.
-   * Called by the Clear button and at the end of a successful submit.
-   */
-  onClear(): void {
+  /** Resets the form and all selection signals to initial state. */
+  protected onClear(): void {
     this.taskForm.reset();
     this.selectedPrio.set('medium');
-    this.assignedContacts.set([]);
     this.selectedContactIds.set([]);
     this.createdSubtasks.set([]);
     this.subtaskField()?.reset();
   }
 
-  /**
-   * Submits the form. If the form is invalid or no priority is selected,
-   * all fields are marked as touched to reveal error hints and the method aborts.
-   * Otherwise it converts the date to `yyyy-mm-dd` (database format), creates the task
-   * with status `'To do'`, assigns the selected contacts one by one via the
-   * task-assignment table, and finally resets the form via `onClear`.
-   *
-   * @returns A promise that resolves when the task and its assignments are saved
-   */
-  async onSubmit(): Promise<void> {
+  /** Submits the form, creates the task, and sets assignments and subtasks. */
+  protected async onSubmit(): Promise<void> {
     if (this.taskForm.invalid) {
       this.taskForm.markAllAsTouched();
       return;
     }
-
     if (this.isSubmitting()) return;
 
     this.isSubmitting.set(true);
+    try {
+      const top = this.getNextTopPosition(this.taskService.addTaskStatus());
+      const newTask = await this.taskService.addTask(this.buildNewTaskPayload(top));
+      if (newTask) await this.saveTaskRelationsAndFinalize(newTask.id);
+    } finally {
+      this.isSubmitting.set(false);
+    }
+  }
 
-    const status = this.taskService.addTaskStatus(); // adding the status
-    // find all tasks of that status / column
+  /** Resets column status to default 'To do' when navigating away. */
+  public ngOnDestroy(): void {
+    this.taskService.addTaskStatus.set('To do');
+  }
+
+  /** Calculates position value one above existing tasks in the target column. */
+  private getNextTopPosition(status: TaskInterface['status']): number {
     const columnTasks = this.taskService.tasks().filter((task) => task.status === status);
+    return columnTasks.length ? Math.min(...columnTasks.map((t) => t.position)) - 1 : 0;
+  }
 
-    /** one above the current top task, so the new task always lands first. */
-    // identify task positions in column and get smallest position, apply -1 from there or applues 0 if empty column
-    const top = columnTasks.length ? Math.min(...columnTasks.map((task) => task.position)) - 1 : 0;
-
-    const task: Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> = {
+  /** Constructs the task database record payload from form state. */
+  private buildNewTaskPayload(top: number): Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> {
+    return {
       title: this.taskForm.value.title!,
       description: this.taskForm.value.description ?? '',
       due_date: this.taskForm.value.date!,
       priority: this.selectedPrio(),
       category: this.taskForm.value.category! as 'User Story' | 'Technical Task',
       status: this.taskService.addTaskStatus(),
-      position: top, // assigning top position
+      position: top,
     };
-
-    const newTask = await this.taskService.addTask(task);
-
-    if (newTask) {
-      const contactIds = this.selectedContactIds();
-      const subtasks = this.createdSubtasks();
-      await this.taskService.setTaskAssignments(newTask.id, contactIds);
-      await this.taskService.setTaskSubtasks(newTask.id, subtasks);
-
-      this.onClear();
-      this.returnToBoard(); // calls to close dialog or navigate to board page
-      this.isSubmitting.set(false);
-    }
   }
 
-  /** After saving: closes the dialog, or navigates to the board when on the Add Task page. */
+  /** Persists task assignments and subtasks, resets form, and routes back to board. */
+  private async saveTaskRelationsAndFinalize(newTaskId: number): Promise<void> {
+    const contactIds = this.selectedContactIds();
+    const subtasks = this.createdSubtasks();
+    await this.taskService.setTaskAssignments(newTaskId, contactIds);
+    await this.taskService.setTaskSubtasks(newTaskId, subtasks);
+    this.onClear();
+    this.returnToBoard();
+  }
+
+  /** Closes add-task modal or routes to board page. */
   private returnToBoard(): void {
     const inDialog = this.dialogService.isOpen() && this.dialogService.dialogType() === 'add-task';
     if (inDialog) {
       this.dialogService.closeDialog();
     } else {
-      this.router.navigate(['/board']);
+      this.router.navigate(['/app/board']);
     }
-  }
-
-  /** Resets the column status so the next task starts in "To do" again. */
-  // needed for the add task link on the sidebar, as that is never the overlay and does not call the dialogservice
-  ngOnDestroy(): void {
-    this.taskService.addTaskStatus.set('To do');
   }
 }

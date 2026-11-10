@@ -7,6 +7,9 @@ import { DialogComponent } from '../../shared/dialog.component/dialog.component'
 import { DialogService } from '../../services/dialog.service';
 import { ConfirmDialog } from '../../shared/confirm-dialog/confirm-dialog';
 
+/**
+ * Main application shell wrapping header, sidebar, router outlet, and global dialog overlays.
+ */
 @Component({
   imports: [Header, Sidebar, RouterOutlet, DialogComponent, ConfirmDialog],
   selector: 'app-main',
@@ -14,7 +17,9 @@ import { ConfirmDialog } from '../../shared/confirm-dialog/confirm-dialog';
   templateUrl: './main.html',
 })
 export class Main {
-  responsiveService = inject(ResponsiveService);
+  /** Responsive service for shell-level layout awareness. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  dialogService = inject(DialogService);
+  /** Dialog service managing global modal visibility. */
+  protected readonly dialogService = inject(DialogService);
 }

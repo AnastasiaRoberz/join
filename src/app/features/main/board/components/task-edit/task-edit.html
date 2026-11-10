@@ -52,7 +52,14 @@
     <app-subtask-field [(subtasks)]="currentSubtasks" />
   </div>
 
-  <button class="btn-submit" appBtn type="submit" preset="check" aria-label="Save task changes">
+  <button
+    class="btn-submit"
+    appBtn
+    type="submit"
+    preset="check"
+    aria-label="Save task changes"
+    [disabled]="taskForm.invalid"
+  >
     Ok
   </button>
 </form>

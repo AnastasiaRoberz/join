@@ -19,79 +19,85 @@ const COLUMN_STATUSES: TaskInterface['status'][] = [
   'Done',
 ];
 
+/** Column data structure holding tasks for a status. */
+export interface BoardColumnData {
+  status: TaskInterface['status'];
+  tasks: TaskInterface[];
+}
+
+/**
+ * Container component arranging the four Kanban board columns with drag-and-drop support.
+ */
 @Component({
   selector: 'app-board-container',
   imports: [BoardColumn, CdkDropList],
   templateUrl: './board-container.html',
   styleUrl: './board-container.scss',
   hostDirectives: [CdkScrollable],
-  // listens on mouse button being released, hides the placeholder
   host: { '(document:pointerup)': 'pressedColumnIndex.set(null)' },
 })
 export class BoardContainer {
-  taskService = inject(TaskService);
+  /** Task service providing filtered tasks and column reorder persistence. */
+  private readonly taskService = inject(TaskService);
 
-  /** Provides responsive layout information for drag columns. */
-  responsiveService = inject(ResponsiveService);
+  /** Responsive service for horizontal vs. vertical drag orientation. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  columns = computed(() => {
+  /** Grouped tasks by column status, sorted by their position. */
+  protected readonly columns = computed<BoardColumnData[]>(() => {
     const tasks = this.taskService.filteredTasks();
     return COLUMN_STATUSES.map((status) => ({
       status,
       tasks: tasks.filter((task) => task.status === status).sort((a, b) => a.position - b.position),
-      // sorting cards by position now, as its assigned automatically
     }));
   });
 
   /** Index of the column whose card is currently pressed, `null` if none. */
-  pressedColumnIndex = signal<number | null>(null);
+  protected readonly pressedColumnIndex = signal<number | null>(null);
 
   /** Size (px) of the pressed card, used for the drop hints. */
-  pressedCardSize = signal({ width: 0, height: 0 });
+  protected readonly pressedCardSize = signal<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
 
-  // drag and drop function assigning new status once dropped
   /**
    * Handles a dropped task. Reorders the task inside its column,
    * or moves it to another column, then saves the new order.
    *
-   * @param event - Drop event from the CDK with the old and new column data
-   * @param status - Status of the column the task was dropped into
+   * @param event - Drop event from the CDK with the old and new column data.
+   * @param status - Status of the column the task was dropped into.
    */
-  dragDrop(event: CdkDragDrop<TaskInterface[]>, status: TaskInterface['status']) {
+  protected dragDrop(event: CdkDragDrop<TaskInterface[]>, status: TaskInterface['status']): void {
     const sameColumn = event.previousContainer === event.container;
-
-    // dropped in the same spot: nothing changed, so no save and no toast
     if (sameColumn && event.previousIndex === event.currentIndex) return;
 
-    // copy of the tasks in the column the card was dropped into (cdkDropListData)
-    const newColumn = [...event.container.data];
+    const newColumn = this.getReorderedColumnTasks(event, sameColumn);
+    const updatedColumns = newColumn.map((task, index) => ({ ...task, status, position: index }));
+    const movedTaskId = sameColumn ? null : updatedColumns[event.currentIndex].id;
+    this.taskService.saveColumn(updatedColumns, movedTaskId);
+  }
 
-    // Same status / column: task was only moved up or down (cdkDropListData)
+  /**
+   * Reorders items within the same column or transfers an item between columns.
+   */
+  private getReorderedColumnTasks(
+    event: CdkDragDrop<TaskInterface[]>,
+    sameColumn: boolean,
+  ): TaskInterface[] {
+    const newColumn = [...event.container.data];
     if (sameColumn) {
-      // moves task from its old to its new index inside the same column (cdkDropListDropped)
       moveItemInArray(newColumn, event.previousIndex, event.currentIndex);
     } else {
-      // change status: copy of the tasks in the column the card came from (cdkDropListData)
       const oldColumn = [...event.previousContainer.data];
-      // removes task from old column and inserts it at the new index (where dropped) in the new one (cdkDropListDropped)
       transferArrayItem(oldColumn, newColumn, event.previousIndex, event.currentIndex);
     }
-
-    // gives all tasks in the target column its column's status
-    // and its new position based on its order in the array (using the index)
-    const updatedColumns = newColumn.map((task, index) => ({ ...task, status, position: index }));
-
-    // id of the moved card, only if it changed column. Otherwise null = no toast
-    const movedTaskedId = sameColumn ? null : updatedColumns[event.currentIndex].id;
-    // updates the board right away and saves status + position to Supabase
-    this.taskService.saveColumn(updatedColumns, movedTaskedId);
+    return newColumn;
   }
 
   /** True for the columns directly left and right of the pressed card's column. */
-  isNeighbourColumn(index: number): boolean {
-    // reads the signal and stores the index or null
+  protected isNeighbourColumn(index: number): boolean {
     const pressed = this.pressedColumnIndex();
-    // each column gets a hint, which is one away as well
     return pressed !== null && Math.abs(index - pressed) === 1;
   }
 }

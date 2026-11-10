@@ -13,8 +13,8 @@ import { ContactInterface } from '../../../../../interfaces/contact.interface';
 /**
  * Shows the details of one contact (avatar, name, email, phone).
  *
- * Receives only the id of the selected contact from the Contacts container
- * and looks up the full contact itself in the Supabase service.
+ * Receives the id of the selected contact from the Contacts container
+ * and looks up the full contact in {@link ContactService}.
  *
  * @example
  * <app-contact-details [selectedId]="id" />
@@ -25,43 +25,57 @@ import { ContactInterface } from '../../../../../interfaces/contact.interface';
   styleUrl: './contact-details.scss',
   templateUrl: './contact-details.html',
   host: {
-    // Any click anywhere on the page closes the mobile menu (listener)
     '(document:click)': 'closeMenu()',
     '[class.scroll-container]': 'middleHeight()',
   },
 })
 export class ContactDetails {
-  contactService = inject(ContactService);
-  dialogService = inject(DialogService);
-  responsiveService = inject(ResponsiveService);
-  userService = inject(UserService);
+  /** Contact service providing reactive contacts signal. */
+  private readonly contactService = inject(ContactService);
 
-  shortHeight = this.responsiveService.isMaxHeight(500);
-  middleHeight = this.responsiveService.observeQuery('(min-height: 501px) and (max-height: 700px)');
+  /** Dialog service for opening the contact edit dialog. */
+  protected readonly dialogService = inject(DialogService);
 
-  /** Emitted after a contact is successfully deleted. The container listens to this and clears the selection. */
-  contactDeleted = output<void>();
-  confirmService = inject(ConfirmService);
+  /** Responsive service for viewport layout queries. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  // adding fullName for easier diplay of title + name
-  protected fullName = fullName;
+  /** User service for deleting user accounts and contacts. */
+  private readonly userService = inject(UserService);
+
+  /** Confirmation prompt service for delete actions. */
+  private readonly confirmService = inject(ConfirmService);
+
+  /** Signal indicating viewports with height <= 500px. */
+  protected readonly shortHeight = this.responsiveService.isMaxHeight(500);
+
+  /** Signal indicating viewports with height between 501px and 700px. */
+  protected readonly middleHeight = this.responsiveService.observeQuery(
+    '(min-height: 501px) and (max-height: 700px)',
+  );
+
+  /** Emitted after a contact is successfully deleted. */
+  public readonly contactDeleted = output<void>();
+
+  /** Formatter function combining name parts for display. */
+  protected readonly fullName = fullName;
 
   /** Whether the mobile Edit/Delete menu is open. */
-  menuOpen = signal<boolean>(false);
+  protected readonly menuOpen = signal<boolean>(false);
+
+  /** Id of the contact to display, passed in by the Contacts container. */
+  public readonly selectedId = input.required<number>();
+
+  /** Full contact object matching `selectedId`, or `undefined` if none matches. */
+  protected readonly selectedContact = computed<ContactInterface | undefined>(() =>
+    this.contactService.contacts().find((item) => item.id === this.selectedId()),
+  );
 
   /**
-   * Id of the contact to display, passed in by the Contacts container.
-   * Required: the component is only rendered once a contact is selected.
-   */
-  selectedId = input.required<number>();
-
-  /**
-   * Asks the user for confirmation, then deletes the given contact and notifies
-   * the container, which returns to the contact list. Does nothing on cancel.
+   * Asks the user for confirmation, then deletes the given contact and notifies the container.
    *
-   * @param id - Id of the contact to delete.
+   * @param contact - The contact to delete.
    */
-  async deleteContact(contact: ContactInterface): Promise<void> {
+  protected async deleteContact(contact: ContactInterface): Promise<void> {
     if (!(await this.confirmService.askDelete('Contact'))) return;
 
     await this.userService.deleteUser(contact.id, contact?.user_uid);
@@ -69,27 +83,17 @@ export class ContactDetails {
   }
 
   /**
-   * The full contact object that matches `selectedId`,
-   * or `undefined` if no contact with that id exists.
-   * Recalculates automatically when the selected id or the
-   * contact list in the service changes.
+   * Opens or closes the mobile options menu.
+   *
+   * @param event - DOM click event.
    */
-  selectedContact = computed(() => {
-    return this.contactService.contacts().find((item) => item.id === this.selectedId());
-  });
-
-  /**
-   * Opens or closes the mobile menu.
-   * stopPropagation keeps this click from reaching the listener (see above),
-   * which would close the menu again right away.
-   */
-  toggleMenu(event: Event): void {
+  protected toggleMenu(event: Event): void {
     event.stopPropagation();
     this.menuOpen.update((open) => !open);
   }
 
-  /** Closes the mobile menu. */
-  closeMenu(): void {
+  /** Closes the mobile options menu. */
+  protected closeMenu(): void {
     this.menuOpen.set(false);
   }
 }

@@ -20,20 +20,22 @@ import { CATEGORIES } from '../../../../../utils/categories-list';
   templateUrl: './task-card.html',
 })
 export class TaskCard {
-  dialogService = inject(DialogService);
+  /** Dialog service for opening task detail popup upon card click. */
+  protected readonly dialogService = inject(DialogService);
+
   /** The task that is displayed. Must be provided by the parent. */
-  task = input.required<TaskInterface>();
+  public readonly task = input.required<TaskInterface>();
 
   /** Number of all subtasks of the task (0 if there are none). */
-  totalSubtasks = computed(() => this.task().subtasks?.length ?? 0);
+  protected readonly totalSubtasks = computed<number>(() => this.task().subtasks?.length ?? 0);
 
   /** Number of subtasks that are already checked. */
-  doneSubtasks = computed(
+  protected readonly doneSubtasks = computed<number>(
     () => this.task().subtasks?.filter((subtask) => subtask.is_done).length ?? 0,
   );
 
   /** Background color of the category label, taken from the shared category list. */
-  categoryColor = computed(
+  protected readonly categoryColor = computed<string | undefined>(
     () => CATEGORIES.find((category) => category.name === this.task().category)?.color,
   );
 }

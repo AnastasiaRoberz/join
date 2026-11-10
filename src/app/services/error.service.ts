@@ -20,7 +20,7 @@ export class ErrorService {
    * The function receives the field label and the error data of the validator
    * (e.g. `{ requiredLength, actualLength }` for `maxLength`).
    */
-  messages: Record<string, (field: string, err: any) => string> = {
+  private readonly messages: Record<string, (field: string, err: any) => string> = {
     // --- General Custom Validators ---
     onlyWhitespace: (field) => `${field} can't be only spaces.`,
 
@@ -68,6 +68,18 @@ export class ErrorService {
     invalidCredentials: () => 'Check your email and password. Please try again.',
 
     passwordMismatch: () => "Your passwords don't match. Please try again.",
+
+    // --- Password Strength Validators ---
+    minPasswordLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
+      `At least ${errData?.requiredLength ?? 8} characters needed.`,
+
+    passwordMissingUppercase: () => 'At least one uppercase letter needed.',
+
+    passwordMissingLowercase: () => 'At least one lowercase letter needed.',
+
+    passwordMissingNumber: () => 'At least one number needed.',
+
+    passwordMissingSpecialChar: () => 'At least one special character needed.',
   };
 
   /**
@@ -78,7 +90,7 @@ export class ErrorService {
    * @returns `null` if there are no errors, the matching message for the first error key,
    * or the generic "Invalid input." if no message is registered for that key.
    */
-  getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
+  public getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
     if (!errors) return null;
 
     const firstKey = Object.keys(errors)[0];

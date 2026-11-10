@@ -1,9 +1,15 @@
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { SupabaseService } from './services/supabase.service';
 import { UserService } from './services/user.service';
 import { inject } from '@angular/core';
 
-export const authGuard: CanActivateFn = async (route, state) => {
+/**
+ * Route guard that only lets logged-in users pass.
+ * If a Supabase session exists, it restores `currentUser`/`currentSession` (e.g. after a page reload).
+ *
+ * @returns `true` if a session exists, otherwise a `UrlTree` redirecting to `/login`.
+ */
+export const authGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
   const supabaseService = inject(SupabaseService);
   const userService = inject(UserService);
   const router = inject(Router);

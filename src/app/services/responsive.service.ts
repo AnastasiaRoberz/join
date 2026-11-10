@@ -20,12 +20,12 @@ import { map } from 'rxjs';
 @Service()
 export class ResponsiveService {
   /** CDK service that observes media queries. */
-  breakpointObserver = inject(BreakpointObserver);
+  private readonly breakpointObserver = inject(BreakpointObserver);
   /** Injection context used by `isMaxWidth()` so `toSignal()` can be called outside of the constructor. */
-  injector = inject(Injector);
+  private readonly injector = inject(Injector);
 
   /** Media queries used by the signals below. Keep in sync with the SCSS breakpoints. */
-  customBreakpoints = {
+  private readonly customBreakpoints = {
     mobile: '(max-width: 768px)',
     tablet: '(max-width: 1024px)',
     desktop: '(min-width: 1025px)',
@@ -34,7 +34,7 @@ export class ResponsiveService {
     mobileOrLandscape: '(max-width: 768px), ((max-height: 971px) and (orientation: landscape))',
   };
 
-  /** `true` when the viewport is at most 768px wide. */
+  /** `true` when the viewport is at most 1140px wide (board columns are dragged horizontally). */
   readonly horizontalDrag = toSignal(
     this.breakpointObserver
       .observe(this.customBreakpoints.horizontalDrag)
@@ -74,6 +74,7 @@ export class ResponsiveService {
     { initialValue: false },
   );
 
+  /** `true` when the viewport is at most 768px wide, or at most 971px high in landscape orientation. */
   readonly isMobileOrLandscape = toSignal(
     this.breakpointObserver
       .observe(this.customBreakpoints.mobileOrLandscape)
@@ -103,6 +104,13 @@ export class ResponsiveService {
     );
   }
 
+  /**
+   * Creates a signal for an arbitrary max-height breakpoint.
+   * Like `isMaxWidth()`, call it once (e.g. in a field initializer) and reuse the result.
+   *
+   * @param maxHeight - Maximum viewport height in pixels (inclusive).
+   * @returns A signal that is `true` while the viewport is at most `maxHeight` px high.
+   */
   isMaxHeight(maxHeight: number): Signal<boolean> {
     return toSignal(
       this.breakpointObserver
@@ -115,6 +123,13 @@ export class ResponsiveService {
     );
   }
 
+  /**
+   * Creates a signal for an arbitrary media query.
+   * Like `isMaxWidth()`, call it once (e.g. in a field initializer) and reuse the result.
+   *
+   * @param query - Media query, e.g. `'(min-width: 1441px)'`.
+   * @returns A signal that is `true` while the query matches.
+   */
   observeQuery(query: string): Signal<boolean> {
     return toSignal(this.breakpointObserver.observe(query).pipe(map((result) => result.matches)), {
       initialValue: false,

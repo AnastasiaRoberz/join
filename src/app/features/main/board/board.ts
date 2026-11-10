@@ -5,19 +5,26 @@ import { CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { ResponsiveService } from '../../../services/responsive.service';
 
+/**
+ * Main Kanban board page shell containing board header and four drag-and-drop columns.
+ */
 @Component({
   selector: 'app-board',
   imports: [BoardHeader, BoardContainer, CdkDropListGroup],
   templateUrl: './board.html',
   styleUrl: './board.scss',
-  hostDirectives: [CdkScrollable], // ensures page scrolls in mobile when card is draged to edge of screen.
+  hostDirectives: [CdkScrollable],
   host: {
     '[class.scroll-container]': 'isShortHeight() || responsiveService.isMobile()',
   },
 })
 export class Board {
-  responsiveService = inject(ResponsiveService);
+  /** Responsive layout service for breakpoint queries. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  isShortHeight = this.responsiveService.isMaxHeight(500);
-  boardBreakpoint = this.responsiveService.isMaxWidth(1280);
+  /** Signal indicating viewports with height <= 500px. */
+  protected readonly isShortHeight = this.responsiveService.isMaxHeight(500);
+
+  /** Signal indicating viewports narrower than 1280px where columns scroll horizontally. */
+  protected readonly boardBreakpoint = this.responsiveService.isMaxWidth(1280);
 }

@@ -7,8 +7,11 @@ import { ConfirmInterface } from '../interfaces/confirm.interface';
  */
 @Service()
 export class ConfirmService {
-  request = signal<ConfirmInterface | null>(null);
-  resolver: ((confirmed: boolean) => void) | null = null;
+  /** The open question, or `null` while no confirm dialog is shown. */
+  public readonly request = signal<ConfirmInterface | null>(null);
+
+  /** Resolves the promise returned by `ask()` with the answer of the user. */
+  private resolver: ((confirmed: boolean) => void) | null = null;
 
   /**
    * Opens the confirm dialog and waits for the answer of the user.
@@ -16,7 +19,7 @@ export class ConfirmService {
    * @param request - Title, message and label of the confirm button
    * @returns A promise that resolves to `true` (confirmed) or `false` (cancelled)
    */
-  ask(request: ConfirmInterface): Promise<boolean> {
+  public ask(request: ConfirmInterface): Promise<boolean> {
     this.resolver?.(false);
     this.request.set(request);
     return new Promise((resolve) => (this.resolver = resolve));
@@ -28,7 +31,7 @@ export class ConfirmService {
    * @param type - What is deleted, e.g. `'Contact'` or `'Task'`
    * @returns A promise that resolves to `true` (confirmed) or `false` (cancelled)
    */
-  askDelete(type: string): Promise<boolean> {
+  public askDelete(type: string): Promise<boolean> {
     return this.ask({
       title: `Delete ${type}?`,
       message: 'This cannot be undone!',
@@ -41,7 +44,7 @@ export class ConfirmService {
    *
    * @param confirmed - `true` if the user confirmed, `false` if the user cancelled
    */
-  answer(confirmed: boolean): void {
+  public answer(confirmed: boolean): void {
     this.request.set(null);
     this.resolver?.(confirmed);
     this.resolver = null;

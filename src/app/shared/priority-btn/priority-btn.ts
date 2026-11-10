@@ -1,4 +1,4 @@
-import { Component, inject, model, signal } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
 
@@ -68,25 +68,25 @@ export const PRIORITY_OPTIONS: PriorityOption[] = [
   templateUrl: './priority-btn.html',
 })
 export class PriorityBtn implements ControlValueAccessor {
-  responsiveService = inject(ResponsiveService);
+  /** Responsive service used to query viewport width. */
+  private readonly responsiveService = inject(ResponsiveService);
 
-  hideBtnText = this.responsiveService.isMaxWidth(400);
+  /** Responsive signal hiding button label texts on screens narrower than 400px. */
+  protected readonly hideBtnText = this.responsiveService.isMaxWidth(400);
+
+  /** The list of available priority options rendered by the template. */
+  protected readonly priorities = PRIORITY_OPTIONS;
 
   /**
-   * The list of available priority options rendered by the template.
-   */
-  readonly priorities = PRIORITY_OPTIONS;
-
-  /**
-   * Internal signal tracking the currently active priority level for template rendering and class binding.
+   * Internal model signal tracking the currently active priority level.
    * Defaults to `'medium'`.
    */
-  activePriority = model<Priority>('medium');
+  public readonly activePriority = model<Priority>('medium');
 
   /**
    * Injected {@link NgControl} binding this component to the parent Angular form control directive.
    */
-  private ngControl = inject(NgControl, { optional: true });
+  private readonly ngControl = inject(NgControl, { optional: true });
 
   /**
    * Callback registered by Angular Forms; invoked to propagate new priority values to the bound form control.
@@ -113,12 +113,10 @@ export class PriorityBtn implements ControlValueAccessor {
 
   /**
    * Writes a new priority value from the Angular form model into the component view.
-   * Called by Angular Forms when the control value is updated programmatically
-   * (e.g. `setValue()`, `patchValue()`, or `reset()`).
    *
    * @param value - The priority value from the form model (`'urgent'`, `'medium'`, `'low'`).
    */
-  writeValue(value: Priority): void {
+  public writeValue(value: Priority): void {
     if (value) {
       this.activePriority.set(value);
     }
@@ -129,7 +127,7 @@ export class PriorityBtn implements ControlValueAccessor {
    *
    * @param fn - The callback receiving the updated {@link Priority}.
    */
-  registerOnChange(fn: (value: Priority) => void): void {
+  public registerOnChange(fn: (value: Priority) => void): void {
     this.onChange = fn;
   }
 
@@ -138,7 +136,7 @@ export class PriorityBtn implements ControlValueAccessor {
    *
    * @param fn - The callback notifying Angular Forms that the control was touched.
    */
-  registerOnTouched(fn: () => void): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -148,12 +146,10 @@ export class PriorityBtn implements ControlValueAccessor {
 
   /**
    * Updates the selected priority when the user clicks a priority button.
-   * Sets the internal signal, emits the value to the parent form control via `onChange`,
-   * and marks the control as touched.
    *
    * @param prio - The chosen {@link Priority} level.
    */
-  selectPriority(prio: Priority): void {
+  protected selectPriority(prio: Priority): void {
     this.activePriority.set(prio);
     this.onChange(prio);
     this.onTouched();

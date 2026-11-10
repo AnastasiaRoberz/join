@@ -15,7 +15,7 @@ import { FeedbackInterface } from '../interfaces/feedback.interface';
 @Service()
 export class FeedbackService {
   /** Current feedback: `message` text, `type` (`'success'` | `'error'`) and `visible` flag. Read-only for consumers; changed via the show methods. */
-  readonly feedbackState = signal<FeedbackInterface>({
+  public readonly feedbackState = signal<FeedbackInterface>({
     message: '',
     type: 'success',
     visible: false,
@@ -26,7 +26,7 @@ export class FeedbackService {
    *
    * @param msg - Text to display.
    */
-  showSuccess(msg: string) {
+  public showSuccess(msg: string): void {
     this.showMessage(msg, 'success');
   }
 
@@ -35,23 +35,26 @@ export class FeedbackService {
    *
    * @param msg - Text to display.
    */
-  showError(msg: string) {
+  public showError(msg: string): void {
     this.showMessage(msg, 'error');
   }
+
+  /** Active timer ID for hiding the banner, cancelled when a new toast is shown. */
+  private hideTimeout?: ReturnType<typeof setTimeout>;
 
   /**
    * Sets the feedback state to visible and hides it again after 2.5 seconds. The text and type
    * stay in the state after hiding, so the banner can fade out without its content disappearing.
-   * Note: the hide timer is not cancelled by a newer message, so a message shown shortly after
-   * another one may be hidden early.
+   * Cancels any pending hide timer so each message gets the full display duration.
    *
    * @param message - Text to display.
    * @param type - Determines the banner styling.
    */
   private showMessage(message: string, type: 'success' | 'error'): void {
+    if (this.hideTimeout) clearTimeout(this.hideTimeout);
     this.feedbackState.set({ message, type, visible: true });
 
-    setTimeout(() => {
+    this.hideTimeout = setTimeout(() => {
       this.feedbackState.update((prev) => ({ ...prev, visible: false }));
     }, 2500);
   }

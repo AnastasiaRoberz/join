@@ -75,7 +75,11 @@
       [class.greeter-fly]="greeterService.isGreeting() && !hideGreeting()"
       [class.greeter-fade]="greeterService.isGreeting() && hideGreeting()"
     >
-      <p class="greeting" [innerHTML]="getDaytime()"></p>
+      <p class="greeting">
+        {{ getDaytime().prefix }}@if (getDaytime().name) {
+          <span class="name">{{ getDaytime().name }}</span>{{ getDaytime().suffix ?? '' }}
+        }
+      </p>
     </div>
   }
 </div>
