@@ -6,6 +6,7 @@ import { NameParts, splitName } from '../utils/name-utils';
 import { Session, User } from '@supabase/supabase-js';
 import { IntroService } from './intro.service';
 import { ContactInterface } from '../interfaces/contact.interface';
+import { TaskService } from './task.service';
 
 /** Payload of `supabase.auth.signUp` (credentials plus profile metadata). */
 export interface UserInterface {
@@ -33,11 +34,18 @@ interface SignUpData {
  */
 @Service()
 export class UserService {
+  /** Supabase service used for database interaction. */
   private readonly supabaseService = inject(SupabaseService);
+  /** Raw Supabase client instance for authentication actions. */
   private readonly supabase = this.supabaseService.supabase;
+  /** Contact service for managing associated user contact entries. */
   private readonly contactService = inject(ContactService);
+  /** Angular Router for redirecting users upon authentication events. */
   private readonly router = inject(Router);
+  /** Intro service managing the welcome/logo splash animation. */
   private readonly introService = inject(IntroService);
+  /** Task service for synchronizing task state upon session changes. */
+  private readonly taskService = inject(TaskService);
 
   /** The logged-in Supabase auth user, `null` if nobody is logged in. */
   public readonly currentUser = signal<User | null>(null);
@@ -71,7 +79,7 @@ export class UserService {
     const newUser = await this.supabaseService.userSignUp(this.buildSignUpPayload(data, nameParts));
     if (!newUser) return false;
 
-    await this.contactService.addContact(this.buildContact(data.mail, nameParts, newUser.user?.id));
+    await this.contactService.addContact(this.buildContact(data.mail, nameParts, newUser.user?.id), false);
     this.setSession(newUser.user, newUser.session);
     this.redirectToSummary();
     this.contactService.getAllContacts();
@@ -109,7 +117,29 @@ export class UserService {
       this.currentUser.set(null);
       this.currentSession.set(null);
       this.contactService.contacts.set([]);
+      this.taskService.tasks.set([]);
+      this.taskService.clearBoardFilter();
     }
+  }
+
+  /**
+   * Restores current session and loads user data if an active session exists in Supabase.
+   *
+   * @returns A promise resolving to `true` if an active session exists, otherwise `false`.
+   */
+  public async restoreSession(): Promise<boolean> {
+    const { data } = await this.supabase.auth.getSession();
+    if (data.session) {
+      if (!this.currentUser()) {
+        this.currentUser.set(data.session.user);
+        this.currentSession.set(data.session);
+      }
+      if (this.contactService.contacts().length === 0) {
+        await this.contactService.getAllContacts();
+      }
+      return true;
+    }
+    return false;
   }
 
   /**

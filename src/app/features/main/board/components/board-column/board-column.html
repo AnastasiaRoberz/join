@@ -1,7 +1,7 @@
 <header class="header">
   <h3 class="header__title">{{ status() }}</h3>
   @if (status() !== 'Done') {
-    <!-- added method dialogService.openAddTask() in click (new in DialogService), also passing status-->
+    
     <button
       appBtn
       preset="iconSmall"
@@ -15,7 +15,7 @@
 
 <div class="tasks scroll-container" #taskList role="list" [attr.aria-label]="status() + ' tasks'">
   @for (task of tasks(); track task.id) {
-    <!-- cdkDrag = making the task cards drag and drop items, pointer down to start visualization-->
+    
     <app-task-card
       [task]="task"
       cdkDrag
@@ -24,12 +24,13 @@
       (cdkDragStarted)="onDragStarted($event)"
     />
   } @empty {
-    <!-- hidden while the column shows the placeholder -->
     @if (!showDropHint()) {
-      <p class="tasks__empty" aria-live="polite">No tasks {{ status() }}</p>
+      <p class="tasks__empty" aria-live="polite">
+        {{ taskService.searchQuery().trim() ? 'No results found' : 'No tasks ' + status() }}
+      </p>
     }
   }
-  <!-- show drop placeholder with size of actual card clicked inside the column -->
+  
   @if (showDropHint()) {
     <div
       class="tasks__placeholder tasks__drop-hint"

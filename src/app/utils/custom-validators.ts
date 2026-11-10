@@ -3,29 +3,32 @@ import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from
 import { Subscription } from 'rxjs';
 import { SupabaseService } from '../services/supabase.service';
 
-// Forbids consecutive dots, hyphens or spaces
+/** Forbids consecutive dots, hyphens, or spaces. */
 const DUPLICATE_SPECIALS_REGEX = /([.\-\s])\1/;
-// Detects common invisible characters / zero-width spaces
+/** Detects common invisible characters and zero-width spaces. */
 const INVISIBLE_CHARS_REGEX = /[\u200B-\u200D\uFEFF]/;
-// Forbidden script/control characters in contact data
+/** Forbidden script and control characters in contact data. */
 const FORBIDDEN_CHARS_REGEX = /[<>\\{}[\]]/;
-// Must not start or end with a dot or hyphen
+/** Must not start or end with a dot or hyphen. */
 const EDGE_SPECIALS_REGEX = /^[.\-]|[.\-]$/;
-// Allows all Unicode letters, spaces, apostrophe, dot (for initials) and hyphen
+/** Allows all Unicode letters, spaces, apostrophe, dot (for initials), and hyphen. */
 const ALLOWED_NAME_CHARS_REGEX = /^[\p{L}\s'.-]+$/u;
-// At least one letter per name part
+/** Requires at least one Unicode letter per name part. */
 const CONTAINS_LETTER_REGEX = /\p{L}/u;
-// 1. Local part: letters, digits, allowed characters, no consecutive dots
-// 2. Domain part: letters, digits, hyphens
-// 3. TLD: at least 2 letters (e.g. .de, .com, .cloud)
+/**
+ * 1. Local part: letters, digits, allowed characters, no consecutive dots
+ * 2. Domain part: letters, digits, hyphens
+ * 3. TLD: at least 2 letters (e.g. .de, .com, .cloud)
+ */
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-*]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-// Allows digits, spaces, '-', '/', '(', ')' and '+' (also at the start or inside brackets)
+/** Allows digits, spaces, '-', '/', '(', ')' and '+' (also at the start or inside brackets). */
 const ALLOWED_PHONE_STRUCTURE = /^[0-9+\s/()\-]+$/;
 
 /**
  * Returns the error key of the first violated general rule, or `null` if the text is fine.
  *
  * @param rawValue - Untrimmed control value.
+ * @returns The error key string if invalid, or null if valid.
  */
 function findGeneralError(rawValue: string): string | null {
   const value = rawValue.trim();
@@ -41,6 +44,8 @@ function findGeneralError(rawValue: string): string | null {
 /**
  * Validator for free text: no only-whitespace values, invisible or forbidden characters,
  * leading/trailing spaces, edge `.`/`-` or consecutive spaces, periods and hyphens.
+ *
+ * @returns Angular ValidatorFn enforcing general text restrictions.
  */
 export function generalCustomValidators(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -56,6 +61,7 @@ export function generalCustomValidators(): ValidatorFn {
  * each containing a real letter (blocks isolated `-`, `.`, etc.).
  *
  * @param parts - Name split at whitespace.
+ * @returns ValidationErrors if invalid, or null if valid.
  */
 function validateNameParts(parts: string[]): ValidationErrors | null {
   if (parts.length < 2) return { missingFullName: true };
@@ -67,6 +73,8 @@ function validateNameParts(parts: string[]): ValidationErrors | null {
 
 /**
  * Validator for full names: allowed characters, max. 75 characters, first and last name required.
+ *
+ * @returns Angular ValidatorFn enforcing full name constraints.
  */
 export function customNameValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -87,6 +95,7 @@ export function customNameValidator(): ValidatorFn {
  * Checks that no label of the mail domain is empty or starts/ends with a hyphen.
  *
  * @param mail - Lower-cased mail address.
+ * @returns True if domain contains invalid labels, false otherwise.
  */
 function hasInvalidDomainLabel(mail: string): boolean {
   const domainPart = mail.split('@')[1];
@@ -98,6 +107,8 @@ function hasInvalidDomainLabel(mail: string): boolean {
 
 /**
  * Validator for the mail format (local part, domain labels and TLD with at least 2 letters).
+ *
+ * @returns Angular ValidatorFn enforcing email address syntax.
  */
 export function customMailValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -117,6 +128,7 @@ export function customMailValidator(): ValidatorFn {
  * @param supabaseService - Database gateway.
  * @param mail - Lower-cased mail address.
  * @param currentId - Id of the contact being edited (ignored in the lookup).
+ * @returns Validation errors if conflict found, or null.
  */
 async function findMailConflict(
   supabaseService: SupabaseService,
@@ -128,7 +140,6 @@ async function findMailConflict(
   const { data, error } = await query.maybeSingle();
 
   if (error) {
-    console.error('Error during e-mail validation:', error);
     return null;
   }
   return data ? { uniqueEmail: true } : null;
@@ -139,6 +150,7 @@ async function findMailConflict(
  *
  * @param supabaseService - Database gateway.
  * @param getCurrentContactId - Optional getter for the id of the contact being edited.
+ * @returns The configured AsyncValidatorFn.
  */
 export function uniqueMailValidator(
   supabaseService: SupabaseService,
@@ -152,8 +164,7 @@ export function uniqueMailValidator(
     try {
       const currentId = getCurrentContactId?.();
       return await findMailConflict(supabaseService, rawValue.trim().toLowerCase(), currentId);
-    } catch (err) {
-      console.error('Unexpected error in async validator:', err);
+    } catch {
       return null;
     }
   };
@@ -163,6 +174,7 @@ export function uniqueMailValidator(
  * Checks the `+`: at most one, and only at the start or directly after an opening bracket.
  *
  * @param value - Trimmed phone number.
+ * @returns True if plus placement is invalid, false otherwise.
  */
 function hasInvalidPlus(value: string): boolean {
   const plusCount = (value.match(/\+/g) || []).length;
@@ -174,6 +186,7 @@ function hasInvalidPlus(value: string): boolean {
  * Checks the brackets: at most one pair, which has to be closed after it was opened and not be empty.
  *
  * @param value - Trimmed phone number.
+ * @returns True if bracket placement is invalid, false otherwise.
  */
 function hasInvalidBrackets(value: string): boolean {
   const openBrackets = (value.match(/\(/g) || []).length;
@@ -186,6 +199,8 @@ function hasInvalidBrackets(value: string): boolean {
 /**
  * Validator for phone numbers: allowed characters, plus and bracket placement
  * and 6 to 15 digits (E.164 standard).
+ *
+ * @returns Angular ValidatorFn enforcing phone number constraints.
  */
 export function customPhoneValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -208,6 +223,7 @@ export function customPhoneValidator(): ValidatorFn {
  * Unsubscribes cleanly via `DestroyRef` when the enclosing component context is destroyed.
  *
  * @param destroyRef - Optional cleanup reference, defaults to auto-injected DestroyRef.
+ * @returns Angular ValidatorFn enforcing matching passwords.
  */
 export function passwordMatchValidator(destroyRef?: DestroyRef): ValidatorFn {
   let sub: Subscription | null = null;
@@ -231,6 +247,7 @@ export function passwordMatchValidator(destroyRef?: DestroyRef): ValidatorFn {
  * number and special character), or `null` if the password is strong enough.
  *
  * @param value - The password.
+ * @returns Validation errors or null if password meets requirements.
  */
 function findPasswordError(value: string): ValidationErrors | null {
   if (value.length < 8) {
@@ -245,6 +262,8 @@ function findPasswordError(value: string): ValidationErrors | null {
 
 /**
  * Validator for the password strength (see `findPasswordError` for the rules).
+ *
+ * @returns Angular ValidatorFn enforcing password complexity.
  */
 export function customPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

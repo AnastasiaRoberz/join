@@ -1,6 +1,5 @@
 @use '../../../../../../../public/assets/styles' as *;
 
-// min-width: 0 lets the column shrink, so long words in a card cannot push it wider
 :host {
   @include flex-start(column);
   align-items: stretch;
@@ -8,7 +7,6 @@
   gap: calcClamp(12, 16);
 }
 
-// same height with and without the add button, so all columns start on one line
 .header {
   @include flex-between;
   gap: calcClamp(8, 12);
@@ -21,7 +19,6 @@
   }
 }
 
-// takes the rest of the column height and scrolls if there are too many cards
 .tasks {
   @include flex-start(column);
   align-items: stretch;
@@ -33,29 +30,25 @@
   scroll-behavior: smooth;
   padding-right: 0;
 
-  // placeholder upon mouse click
   &__placeholder {
     border: 1px dashed $color-grey-400;
-    border-radius: 24px;
+    border-radius: $radius-xl;
     background-color: transparent;
   }
 
-  // once the real card is in this column, hide the hint so there aren't two boxes
   &:has(.cdk-drag-placeholder) &__drop-hint {
     display: none;
   }
 
-  // dashed grey box that is shown instead of the cards if the column is empty
   &__empty {
     padding: calcClamp(8, 14);
     border: 1px dashed $color-grey-400;
-    border-radius: 10px;
+    border-radius: $radius-md;
     background-color: $color-grey-500;
     color: $color-grey-400;
     text-align: center;
   }
 
-  // compact layout: cards in a row, scrolling sideways
   @include responsive($board-breakpoint) {
     flex: none;
     flex-direction: row;

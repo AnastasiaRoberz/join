@@ -17,13 +17,14 @@
   variant="search"
   placeholder="Find Task"
   aria-label="Search tasks"
-  emptyText="No tasks found."
+  emptyText="No results found"
   [options]="taskService.sortedTasks()"
   [labelFn]="taskLabelFn"
   [getSearchStrings]="taskSearchStrings"
+  (searchChange)="taskService.searchQuery.set($event)"
   (valueChange)="onTaskSelected($event)"
 />
-<!-- added method dialogService.openAddTask() in click (new in DialogService)-->
+
 <button
   appBtn
   preset="addTask"

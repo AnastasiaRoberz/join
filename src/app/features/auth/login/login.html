@@ -26,7 +26,14 @@
     >
       Log in
     </button>
-    <button appBtn preset="secondary" size="medium" (click)="anonymLogin()" type="button">
+    <button
+      appBtn
+      preset="secondary"
+      size="medium"
+      (click)="anonymLogin()"
+      type="button"
+      [disabled]="isSubmitting()"
+    >
       Guest Log in
     </button>
   </div>

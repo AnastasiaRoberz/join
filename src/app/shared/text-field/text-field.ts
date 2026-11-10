@@ -84,6 +84,11 @@ export class TextField implements ControlValueAccessor {
   /** Maximum character length for add-task title input. */
   public readonly maxLength = input<number | null>(null);
 
+  /**
+   * When `true`, displays the generic default message "This field is required" instead of the field-specific one.
+   */
+  public readonly requiredMsg = input(false, { transform: booleanAttribute });
+
   /** Autocomplete attribute for the input element. Standard is `'off'`. */
   public readonly autocomplete = input<string>('off');
 
@@ -97,6 +102,7 @@ export class TextField implements ControlValueAccessor {
   protected value: string = '';
 
   /** Real unmasked password string stored internally. */
+  /** Stores the unmasked password string in memory when inputType is password. */
   private actualPassword: string = '';
 
   /** Callback registered by Angular forms; call it to propagate a new value to the form control. */
@@ -105,6 +111,7 @@ export class TextField implements ControlValueAccessor {
   /** Callback registered by Angular forms; called on blur to mark the control as touched. */
   protected onTouched: () => void = () => {};
 
+  /** Registers ControlValueAccessor and initializes reactive control event listeners. */
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
@@ -170,7 +177,8 @@ export class TextField implements ControlValueAccessor {
     const ctrl = this.ngControl.control;
     if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
 
-    const errors = ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
     return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 

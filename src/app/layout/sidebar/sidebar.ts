@@ -45,7 +45,11 @@ export class Sidebar {
     { section: 'contacts', svgId: 'contacts', label: 'Contacts' },
   ];
 
-  /** Handles navigation item click, clearing board filter when board is selected. */
+  /**
+   * Handles navigation item click, clearing board filter when board is selected.
+   *
+   * @param section - The target section name.
+   */
   protected onNavClick(section: string): void {
     if (section === 'board') {
       this.taskService.clearBoardFilter();

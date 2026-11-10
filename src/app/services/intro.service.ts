@@ -7,10 +7,12 @@ import { computed, Service, signal } from '@angular/core';
 @Service()
 export class IntroService {
   /** Key used to store the intro status in sessionStorage. */
+  /** Session storage key tracking whether the intro animation was already displayed. */
   private readonly STORAGE_KEY: string = 'intro-shown';
 
   /** Writable state, only this service can change it. */
   private readonly _active = signal<boolean>(false);
+  /** Writable state indicating whether the intro animation runs in mobile layout. */
   private readonly _isMobile = signal<boolean>(false);
 
   /** Whether the greeting animation is running. */

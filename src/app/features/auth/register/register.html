@@ -84,8 +84,8 @@
     preset="primary"
     size="medium"
     type="submit"
-    [disabled]="!registerForm.valid"
-    [attr.aria-disabled]="!registerForm.valid"
+    [disabled]="!registerForm.valid || isSubmitting()"
+    [attr.aria-disabled]="!registerForm.valid || isSubmitting()"
   >
     Sign up
   </button>

@@ -47,7 +47,11 @@ export class Header {
     this.menuOpen.set(false);
   }
 
-  /** Closes user profile menu when clicking outside of it. */
+  /**
+   * Closes user profile menu when clicking outside of it.
+   *
+   * @param event - The mouse click event.
+   */
   @HostListener('document:click', ['$event'])
   protected onDocumentClick(event: MouseEvent): void {
     if (!this.menuOpen()) return;

@@ -18,7 +18,7 @@ input[type='checkbox'] {
   @include flex-center;
   gap: 16px;
   color: $main-color;
-  border-radius: 8px;
+  border-radius: $radius-sm;
   cursor: pointer;
 
   &:hover {

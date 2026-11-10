@@ -1,7 +1,5 @@
 @use '../../../../../../../public/assets/styles' as *;
 
-// desktop: 4 columns next to each other (max. card width as in Figma),
-// each column scrolls itself
 :host {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, $task-card-width));
@@ -9,7 +7,6 @@
   gap: calcClamp(28, 40);
   min-height: 0;
 
-  // compact layout: the sections are below each other
   @include responsive($board-breakpoint) {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto;

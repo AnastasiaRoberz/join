@@ -10,15 +10,10 @@ import { inject } from '@angular/core';
  * @returns `true` if a session exists, otherwise a `UrlTree` redirecting to `/login`.
  */
 export const authGuard: CanActivateFn = async (): Promise<boolean | UrlTree> => {
-  const supabaseService = inject(SupabaseService);
   const userService = inject(UserService);
   const router = inject(Router);
-  const { data } = await supabaseService.supabase.auth.getSession();
-  if (data.session) {
-    if (!userService.currentUser()) {
-      userService.currentUser.set(data.session.user);
-      userService.currentSession.set(data.session);
-    }
+  const hasSession = await userService.restoreSession();
+  if (hasSession) {
     return true;
   }
   return router.createUrlTree(['/login']);

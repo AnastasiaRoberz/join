@@ -71,6 +71,7 @@ export class ContactList implements AfterViewInit {
   /** Tracks previously selected contact id to detect deletions. */
   private previousId: number | null = null;
 
+  /** Initializes reactive effect to scroll selected contact into view when selection changes. */
   constructor() {
     this.initScrollEffect();
   }

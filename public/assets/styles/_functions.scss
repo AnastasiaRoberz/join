@@ -22,11 +22,11 @@
  * @returns {String} A CSS `clamp(min, preferred, max)` expression.
  *
  * @example
- *   // Scales font-size from 16px (at 320px width) to 24px (at 1440px width)
+ *
  *   font-size: calcClamp(16, 24);
  *
  * @example
- *   // Scales gap from 8px (at 350px height) to 32px (at 800px height)
+ *
  *   gap: calcClamp(8, 32, 800, 350, height);
  */
 @function calcClamp($min, $max, $start: 1440, $end: 320, $axis: width) {
@@ -34,7 +34,6 @@
     @error "calcClamp: $start (#{$start}) must be greater than $end (#{$end}).";
   }
 
-  // Use Small Viewport units (svh / svw) to avoid layout jumps caused by dynamic mobile browser toolbars
   $viewport: if($axis == 'height', 100svh, 100svw);
 
   @return clamp(
@@ -74,24 +73,22 @@
  * @returns {String} An unquoted CSS `min(clamp(...), clamp(...), ...)` expression ready for direct assignment.
  *
  * @example
- *   // 1. Shorthand: Identical min/max (16px to 32px) for both width and height
+ *
  *   gap: calcClampMin(16, 32);
  *
  * @example
- *   // 2. Standard 2D: Different min values, default breakpoints (Width: 1440->320, Height: 800->350)
+ *
  *   padding-block: calcClampMin((16, 32), (8, 32));
  *
  * @example
- *   // 3. Custom breakpoints for both width (768->320) and height (500->350)
+ *
  *   font-size: calcClampMin((16, 20, 768, 320), (14, 16, 500, 350));
  *
  * @example
- *   // 4. Multiple height stages (1x width + 2x height ranges)
+ *
  *   font-size: calcClampMin((36, 61), (36, 61, 1000, 600), (24, 36, 600, 350));
  */
 @function calcClampMin($clamps...) {
-  // Shorthand check: If exactly two plain numbers are passed (e.g., calcClampMin(16, 32)),
-  // apply those min/max values to both the default width clamp and default height clamp.
   @if list.length($clamps) ==
     2 and
     meta.type-of(list.nth($clamps, 1)) ==
@@ -104,35 +101,29 @@
     $clamp-w: calcClamp($min, $max, 1440, 320, width);
     $clamp-h: calcClamp($min, $max, 800, 350, height);
 
-    // Return via unquote() so Sass outputs native CSS min() instead of attempting compile-time evaluation
     @return unquote('min(#{$clamp-w}, #{$clamp-h})');
   }
 
   $resolved: ();
 
-  // Iterate through all passed arguments (Note: Sass lists are 1-indexed)
   @for $i from 1 through list.length($clamps) {
     $item: list.nth($clamps, $i);
 
-    // By convention: 1st argument scales with screen width, all subsequent arguments scale with screen height
     $default-axis: if($i == 1, width, height);
     $default-start: if($i == 1, 1440, 800);
     $default-end: if($i == 1, 320, 350);
 
     @if meta.type-of($item) == 'list' {
-      // Unpack the tuple list and resolve it into a calcClamp() expression
       $resolved: list.append(
         $resolved,
         _resolveClamp($item, $default-axis, $default-start, $default-end),
         comma
       );
     } @else {
-      // Fallback: If a pre-built clamp() string or CSS value was passed directly, append it as-is
       $resolved: list.append($resolved, $item, comma);
     }
   }
 
-  // Wrap all resolved clamp expressions in a native CSS min() call without requiring #{} at the call site
   @return unquote('min(#{$resolved})');
 }
 
@@ -209,6 +200,18 @@
   @return unquote('min(#{$resolved})');
 }
 
+/**
+ * Internal helper (adapter) function that unpacks a Sass list (tuple) of positional
+ * arguments, fills in any omitted optional parameters with context-aware defaults,
+ * and forwards them to `calcClampRem()`.
+ *
+ * @param {List} $args - Tuple of arguments ($min, $max, [$start], [$end], [$axis]).
+ * @param {String} $default-axis - Fallback viewport axis ('width' or 'height').
+ * @param {Number} $default-start - Fallback upper breakpoint in px.
+ * @param {Number} $default-end - Fallback lower breakpoint in px.
+ * @param {Number} $base - Base font size in px.
+ * @return {String} CSS clamp() expression formatted in rem.
+ */
 @function _resolveClampRem($args, $default-axis: width, $default-start: 1440, $default-end: 320, $base: 16) {
   $min: list.nth($args, 1);
   $max: list.nth($args, 2);
@@ -240,11 +243,9 @@
  * @returns {String} The resulting `clamp()` expression from `calcClamp()`.
  */
 @function _resolveClamp($args, $default-axis: width, $default-start: 1440, $default-end: 320) {
-  // Extract mandatory min and max values (Sass list indices start at 1)
   $min: list.nth($args, 1);
   $max: list.nth($args, 2);
 
-  // Extract optional breakpoint and axis overrides, or fall back to defaults if omitted
   $start: if(list.length($args) >= 3, list.nth($args, 3), $default-start);
   $end: if(list.length($args) >= 4, list.nth($args, 4), $default-end);
   $axis: if(list.length($args) >= 5, list.nth($args, 5), $default-axis);
@@ -260,7 +261,7 @@
  * @returns {Number} Value in rem (e.g. 1.5rem).
  *
  * @example
- *   font-size: toRem(24); // Outputs: 1.5rem
+ *   font-size: toRem(24);
  */
 @function toRem($px, $base: 16) {
   @return ($px / $base) * 1rem;

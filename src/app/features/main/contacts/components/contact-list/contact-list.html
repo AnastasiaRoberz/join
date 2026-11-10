@@ -15,8 +15,7 @@
       [attr.aria-labelledby]="'group-' + group.letter"
     >
       @for (contact of group.contacts; track $index) {
-        <!-- Angular adds the class "contact--active" ONLY when this contact's id equals the selected id from the container. -->
-        <!-- (click) sends id to contacts.ts -->
+        
         <button
           #contactBtn
           class="contact-card-btn"

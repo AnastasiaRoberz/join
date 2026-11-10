@@ -62,6 +62,9 @@ export class ContactDetails {
   /** Whether the mobile Edit/Delete menu is open. */
   protected readonly menuOpen = signal<boolean>(false);
 
+  /** Deleting state flag preventing duplicate contact deletions. */
+  protected readonly isDeleting = signal<boolean>(false);
+
   /** Id of the contact to display, passed in by the Contacts container. */
   public readonly selectedId = input.required<number>();
 
@@ -76,10 +79,16 @@ export class ContactDetails {
    * @param contact - The contact to delete.
    */
   protected async deleteContact(contact: ContactInterface): Promise<void> {
+    if (this.isDeleting()) return;
     if (!(await this.confirmService.askDelete('Contact'))) return;
 
-    await this.userService.deleteUser(contact.id, contact?.user_uid);
-    this.contactDeleted.emit();
+    this.isDeleting.set(true);
+    try {
+      await this.userService.deleteUser(contact.id, contact?.user_uid);
+      this.contactDeleted.emit();
+    } finally {
+      this.isDeleting.set(false);
+    }
   }
 
   /**

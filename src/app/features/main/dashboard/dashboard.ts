@@ -198,7 +198,17 @@ export class Dashboard implements OnInit, AfterViewInit {
     ];
   }
 
-  /** Builds an individual metric tile configuration for a status. */
+  /**
+   * Builds an individual metric tile configuration for a status.
+   *
+   * @param area - CSS grid area identifier.
+   * @param label - Tile label text.
+   * @param status - Task status category.
+   * @param icon - Icon name.
+   * @param tasks - Full task collection.
+   * @param bold - Whether to render text in bold.
+   * @returns Configured DashboardTile object.
+   */
   private createStatusTile(
     area: string,
     label: string,
@@ -218,7 +228,13 @@ export class Dashboard implements OnInit, AfterViewInit {
     };
   }
 
-  /** Maps a priority string to its metric summary object. */
+  /**
+   * Maps a priority string to its metric summary object.
+   *
+   * @param prio - Priority level.
+   * @param tasks - Full task collection.
+   * @returns Configured PriorityItem object.
+   */
   private createPriorityItem(
     prio: 'urgent' | 'medium' | 'low',
     tasks: TaskInterface[],
@@ -231,7 +247,13 @@ export class Dashboard implements OnInit, AfterViewInit {
     };
   }
 
-  /** Navigates to board view applying either task modal or deadline filter. */
+  /**
+   * Navigates to board view applying either task modal or deadline filter.
+   *
+   * @param dueDate - Raw due date string.
+   * @param formatted - Formatted date string for label.
+   * @param tasks - Matching tasks collection.
+   */
   private navigateToDeadlineTasks(
     dueDate: string,
     formatted: string,
@@ -249,7 +271,12 @@ export class Dashboard implements OnInit, AfterViewInit {
     }
   }
 
-  /** Finds the next unfinished task with a due date. */
+  /**
+   * Finds the next unfinished task with a due date.
+   *
+   * @param tasks - Full task collection.
+   * @returns The earliest upcoming open task or undefined.
+   */
   private findNextOpenTask(tasks: TaskInterface[]): TaskInterface | undefined {
     return tasks
       .filter((task) => task.due_date && task.status !== 'Done')

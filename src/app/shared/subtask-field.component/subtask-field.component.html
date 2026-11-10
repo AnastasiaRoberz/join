@@ -5,6 +5,7 @@
     #mainInput
     type="text"
     [id]="fieldId()"
+    placeholder="Add new subtask"
     autocomplete="off"
     (keydown.enter)="$event.preventDefault(); saveSubtask(mainInput)"
     (keydown.escape)="reset()"

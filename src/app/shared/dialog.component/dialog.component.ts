@@ -70,6 +70,7 @@ export class DialogComponent {
     return this.responsiveService.isMobile() && this.dialogService.dialogType() === 'contact';
   });
 
+  /** Initializes tablet viewport change listener to automatically close dialogs when needed. */
   constructor() {
     this.initTabletCloseEffect();
   }

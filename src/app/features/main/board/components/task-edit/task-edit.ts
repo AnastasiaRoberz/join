@@ -101,6 +101,10 @@ export class TaskEdit {
     priority: this.fb.control<Priority>('medium', { nonNullable: true }),
   });
 
+  /** Submitting state flag preventing duplicate task updates. */
+  protected readonly isSubmitting = signal<boolean>(false);
+
+  /** Sets up reactive effect to synchronize form fields whenever currentTask changes. */
   constructor() {
     effect(() => this.syncFormWithTask(this.currentTask()));
   }
@@ -126,20 +130,28 @@ export class TaskEdit {
    * Persists all task edits to the database and returns to task detail view.
    */
   protected async saveTask(): Promise<void> {
-    if (this.taskForm.invalid) {
+    if (this.taskForm.invalid || this.isSubmitting()) {
       this.taskForm.markAllAsTouched();
       return;
     }
-    const currentTaskId = this.currentTask()?.id;
-    if (currentTaskId) {
-      await this.persistTaskUpdates(currentTaskId);
+    this.isSubmitting.set(true);
+    try {
+      const currentTaskId = this.currentTask()?.id;
+      if (currentTaskId) {
+        await this.persistTaskUpdates(currentTaskId);
+      }
+      const updatedTask = this.taskService.tasks().find((t) => t.id === currentTaskId);
+      this.dialogService.openDialog('task', updatedTask);
+    } finally {
+      this.isSubmitting.set(false);
     }
-
-    const updatedTask = this.taskService.tasks().find((t) => t.id === currentTaskId);
-    this.dialogService.openDialog('task', updatedTask);
   }
 
-  /** Synchronizes form controls and signals with incoming task data. */
+  /**
+   * Synchronizes form controls and signals with incoming task data.
+   *
+   * @param task - The task interface or null.
+   */
   private syncFormWithTask(task: TaskInterface | null): void {
     if (task) {
       this.selectedContactIds.set(task.assigned_users?.map((u) => u.id) ?? []);
@@ -162,7 +174,11 @@ export class TaskEdit {
     this.taskForm.reset();
   }
 
-  /** Writes task field updates, assignments, and subtasks to Supabase. */
+  /**
+   * Writes task field updates, assignments, and subtasks to Supabase.
+   *
+   * @param taskId - ID of the task to update.
+   */
   private async persistTaskUpdates(taskId: number): Promise<void> {
     const rawValue = this.taskForm.getRawValue();
     await this.taskService.updateTask(taskId, {

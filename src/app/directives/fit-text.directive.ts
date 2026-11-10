@@ -27,7 +27,9 @@ export class FitTextDirective implements AfterViewInit, OnDestroy {
   /** Whether an overflow of the parent element also counts as overflow. */
   @Input() public fitParent: boolean = false;
 
+  /** Reference to the host DOM element whose text size is being dynamically adjusted. */
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  /** MutationObserver watching text content changes to re-trigger size fitting. */
   private mutationObserver?: MutationObserver;
 
   /** Fits the text once after rendering and observes content changes of the host. */

@@ -72,11 +72,8 @@ export interface BtnInterface {
  *   Add Item
  * </button>
  *
- * <!-- 4. Floating Action Button (FAB) on mobile -->
- * <button appBtn preset="addContact" [isFab]="true" (click)="create()"></button>
- *
- * <!-- 5. Anchor element navigation -->
- * <a appBtn variant="secondary" routerLink="/board">Go to Board</a>
+ * <!-- 4. Anchor element navigation -->
+ * <a appBtn variant="secondary" routerLink="/app/board">Go to Board</a>
  * ```
  */
 @Component({
@@ -135,11 +132,6 @@ export class Buttons {
   public readonly type = input<BtnType | null>('button');
 
   /**
-   * When `true`, applies the `.btn--fab` class for round floating action button positioning.
-   */
-  public readonly isFab = input<boolean>(false);
-
-  /**
    * Evaluates the active preset configuration from `BUTTON_STYLES` if a preset is assigned.
    * Explicitly typed as `BtnInterface | null` to widen literal union types and allow safe optional access.
    */
@@ -192,9 +184,6 @@ export class Buttons {
     }
     if (this.preset()) {
       classes.push(`btn--${this.preset()}`);
-    }
-    if (this.isFab()) {
-      classes.push('btn--fab');
     }
     return classes.join(' ');
   });

@@ -2,6 +2,7 @@ import { Component, computed, contentChild, effect, inject, input, model } from 
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { ErrorService } from '../../services/error.service';
 
+/** Global counter used to generate unique DOM IDs for checkbox instances. */
 let nextId = 0;
 
 /**
@@ -101,6 +102,7 @@ export class CheckboxComponent implements ControlValueAccessor {
       : './assets/icons/icons.svg#checkbox-empty',
   );
 
+  /** Initializes reactive synchronization between the checkbox state and NgControl. */
   constructor() {
     this.initNgControlSyncEffect();
   }

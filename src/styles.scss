@@ -75,13 +75,13 @@ button {
 
   &::-webkit-scrollbar-thumb {
     border: var(--sb-border-width) solid transparent;
-    border-radius: 9999px;
+    border-radius: $radius-pill;
     background-clip: content-box;
     background-color: $icon;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
+    background-color: $color-grey-600;
   }
 
   @include mobile {
@@ -174,7 +174,6 @@ button {
   user-select: none;
 }
 
-// PRIORITY ICONS
 .icon-priority {
   width: 17px;
   height: 17px;
@@ -192,7 +191,6 @@ button {
   }
 }
 
-// the dragged card stays below the navbar and the header
 .cdk-drag-preview {
   z-index: $z-drag-preview !important;
 }

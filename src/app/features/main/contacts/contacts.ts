@@ -47,6 +47,7 @@ export class Contacts {
    */
   private readonly contactDetails = viewChild(ContactDetails, { read: ElementRef });
 
+  /** Initializes reactive effects for pending contact selection and slide-in animation. */
   constructor() {
     this.initPendingSelectionEffect();
     this.initSlideInEffect();

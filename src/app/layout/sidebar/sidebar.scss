@@ -94,7 +94,7 @@ nav {
         width: calcClamp(70, 80, 370, 320);
         height: 100%;
         font-size: calcClamp(13, 16, 370, 320);
-        border-radius: 8px;
+        border-radius: $radius-sm;
         white-space: nowrap;
         padding: 0;
 

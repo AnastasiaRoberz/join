@@ -1,8 +1,8 @@
-<!-- Greeter Overlay -->
+
 @if (greeterService.isGreeting()) {
   <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
 }
-<!-- header -->
+
 <header class="header">
   <h2>Join 360</h2>
   <hr aria-hidden="true" />
@@ -33,7 +33,6 @@
       </a>
     }
 
-    <!-- priority and deadline -->
     <a
       routerLink="/app/board"
       routerLinkActive="active"
@@ -67,7 +66,7 @@
       </div>
     </a>
   </div>
-  <!-- greeting -->
+  
   @if (!hideGreeting() || greeterService.isGreeting()) {
     <div
       #welcome

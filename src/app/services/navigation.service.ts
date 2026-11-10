@@ -10,7 +10,7 @@ import { filter } from 'rxjs';
  * @example
  * nav = inject(NavigationService);
  * // template: <button (click)="nav.goBack()">Back</button>
- * // active route check: nav.currentUrl().startsWith('/contacts')
+ * // active route check: nav.currentUrl().startsWith('/app/contacts')
  */
 @Service()
 export class NavigationService {

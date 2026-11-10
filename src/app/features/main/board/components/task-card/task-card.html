@@ -7,9 +7,41 @@
   role="button"
   [attr.aria-label]="'Open task: ' + task().title"
 >
-  <span class="task-card__category" [style.background-color]="categoryColor()">
-    {{ task().category }}
-  </span>
+  <div class="task-card__header">
+    <span class="task-card__category" [style.background-color]="categoryColor()">
+      {{ task().category }}
+    </span>
+
+    <div class="task-card__mobile-move" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="task-card__move-btn"
+        aria-label="Move task to another column"
+        [attr.aria-expanded]="statusMenuOpen()"
+        (click)="toggleStatusMenu($event)"
+      >
+        <svg class="icon-move">
+          <use href="./assets/icons/icons.svg#arrow-down"></use>
+        </svg>
+      </button>
+
+      @if (statusMenuOpen()) {
+        <div class="task-card__move-menu" role="menu">
+          <span class="task-card__move-menu-title">Move to:</span>
+          @for (targetStatus of targetStatuses(); track targetStatus) {
+            <button
+              type="button"
+              class="task-card__move-item"
+              role="menuitem"
+              (click)="moveToStatus(targetStatus, $event)"
+            >
+              {{ targetStatus }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
 
   <div class="task-card__text">
     <h4 class="task-card__title">{{ task().title }}</h4>
@@ -21,13 +53,13 @@
 
   @if (totalSubtasks() > 0) {
     <div class="task-card__progress">
-      <!-- native progress element: value and max replace the two divs and the aria attributes -->
+      
       <progress
         class="task-card__bar"
         aria-label="Subtask progress"
         [value]="doneSubtasks()"
         [max]="totalSubtasks()"
-        [title]="doneSubtasks() + ' of ' + totalSubtasks() + ' subtasks done'"
+        [appCursorTooltip]="doneSubtasks() + ' of ' + totalSubtasks() + ' subtasks completed'"
       ></progress>
       <span class="task-card__count">{{ doneSubtasks() }}/{{ totalSubtasks() }} Subtasks</span>
     </div>

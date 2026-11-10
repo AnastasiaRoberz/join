@@ -33,6 +33,7 @@ export class ConfirmDialog {
   /** Reference to the dialog section element in the template for accessibility focus. */
   protected readonly dialogBox = viewChild<ElementRef<HTMLElement>>('dialogBox');
 
+  /** Initializes accessibility focus management when confirmation dialog opens. */
   constructor() {
     this.initFocusEffect();
   }

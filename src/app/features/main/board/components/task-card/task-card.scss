@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  // same fixed width as in Figma, the card does not grow with the column
   max-width: $task-card-width;
   cursor: pointer;
 
@@ -12,12 +11,10 @@
   -webkit-touch-callout: none;
 }
 
-// tilt only the inner card while dragged
 :host(.cdk-drag-preview) > * {
   rotate: 3deg;
 }
 
-// anchor for the dashed ::after box, so it covers exactly the card
 :host(.cdk-drag-placeholder) {
   position: relative;
 
@@ -26,12 +23,10 @@
   }
 }
 
-// copy of actual card invisible in column
 :host(.cdk-drag-placeholder) > * {
   opacity: 0;
 }
 
-// placeholder for drop, same size
 :host(.cdk-drag-placeholder)::after {
   content: '';
   position: absolute;
@@ -51,7 +46,12 @@
   background-color: $color-white;
   box-shadow: $task-card-shadow;
 
-  // the color of the label comes from utils/categories-list.ts (set in the template)
+  &__header {
+    @include flex-between;
+    width: 100%;
+    gap: 8px;
+  }
+
   &__category {
     align-self: flex-start;
     padding: 4px 16px;
@@ -60,14 +60,83 @@
     color: $text-light;
   }
 
-  // shows max. 3 lines of the title, the rest is cut off with "..."
+  &__mobile-move {
+    display: none;
+    position: relative;
+
+    @include mobile {
+      display: flex;
+    }
+  }
+
+  &__move-btn {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: $radius-round;
+    background-color: $color-grey-500;
+    cursor: pointer;
+    transition: background-color 100ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: $color-grey-300;
+    }
+
+    .icon-move {
+      width: 14px;
+      height: 14px;
+      fill: $color-navy-800;
+    }
+  }
+
+  &__move-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: $z-dropdown;
+    min-width: 150px;
+    padding: 8px;
+    border-radius: $radius-md;
+    background-color: $color-white;
+    box-shadow: $dropdown-shadow;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__move-menu-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: $color-grey-400;
+    padding: 2px 8px;
+    text-transform: uppercase;
+  }
+
+  &__move-item {
+    padding: 6px 10px;
+    border: none;
+    border-radius: $radius-xs;
+    background: transparent;
+    font-size: 13px;
+    text-align: left;
+    color: $text-dark;
+    cursor: pointer;
+    transition: background-color 100ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: $color-grey-50;
+    }
+  }
+
   &__title {
     @include line-clamp(3);
     font-size: $font-default;
     color: $text-dark;
   }
 
-  // title and description belong together, so they sit closer than the other parts of the card
   &__text {
     @include flex-start(column);
     align-items: stretch;
@@ -75,7 +144,6 @@
     gap: 8px;
   }
 
-  // shows max. 2 lines of the description, the rest is cut off with "..."
   &__description {
     @include line-clamp(2);
     color: $color-grey-400;
@@ -88,7 +156,6 @@
     margin-top: auto;
   }
 
-  // native <progress>: the default browser look is removed, track and fill are styled per engine
   &__bar {
     flex: 1;
     height: 8px;
@@ -98,19 +165,16 @@
     overflow: hidden;
     background-color: $color-grey-500;
 
-    // Chrome, Edge, Safari: the track
     &::-webkit-progress-bar {
       background-color: $color-grey-500;
     }
 
-    // Chrome, Edge, Safari: the filled part
     &::-webkit-progress-value {
       border-radius: $radius-xs;
       background-color: $color-blue-500;
       transition: width 100ms ease-in-out;
     }
 
-    // Firefox: the filled part
     &::-moz-progress-bar {
       border-radius: $radius-xs;
       background-color: $color-blue-500;
@@ -133,13 +197,11 @@
     margin-top: 0;
   }
 
-  // the overlap of the avatars is done by the avatar group component
   &__users {
     min-width: 0;
     margin-top: 0;
   }
 
-  // size and color of the icon come from the global classes icon-priority / icon-<priority>
   &__priority {
     height: 32px;
     flex-shrink: 0;

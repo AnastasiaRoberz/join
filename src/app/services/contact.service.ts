@@ -83,14 +83,16 @@ export class ContactService {
    * Appends the created record to the local `contacts` signal on success to eliminate full re-fetches.
    *
    * @param contactData - The contact information excluding server-managed properties (`id`, `badge_color`)
+   * @param showFeedback - Whether to show success toast notification. Defaults to `true`.
    * @returns A promise that resolves to the newly created contact with server-generated ID, or `null` on failure
    */
   public async addContact(
     contactData: Omit<ContactInterface, 'id' | 'badge_color'>,
+    showFeedback: boolean = true,
   ): Promise<ContactInterface | null> {
     const contact = { ...contactData, badge_color: getRandomColor() };
 
-    const newContact = await this.supabaseService.addData(contact, 'contacts');
+    const newContact = await this.supabaseService.addData(contact, 'contacts', showFeedback);
     if (!newContact) return null;
 
     this.contacts.update((list) => [...list, newContact]);

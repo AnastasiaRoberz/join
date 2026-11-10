@@ -148,7 +148,13 @@
   </div>
 
   <div class="button-wrapper">
-    <button appBtn preset="delete" ariaLabel="Delete task" (click)="onDelete(task.id)"></button>
+    <button
+      appBtn
+      preset="delete"
+      ariaLabel="Delete task"
+      (click)="onDelete(task.id)"
+      [disabled]="isDeleting()"
+    ></button>
     <hr aria-hidden="true" />
     <button
       appBtn

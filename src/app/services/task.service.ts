@@ -21,26 +21,19 @@ const TASK_SELECT =
  * Acts as the single source of truth for task state within the application using Angular Signals.
  *
  * @remarks
- * Data model (PostgreSQL tables behind {@link SupabaseService}):
- * - `tasks`: the main task rows.
- * - `subtasks`: 1:N child rows of a task (`task_id` foreign key, `is_done` flag).
- * - `task-assignment`: N:M join table between `tasks` and `contacts` (`task_id`, `contact_id`).
- *
- * Write strategy:
- * - Subtasks and assignments are NOT written one by one while the user edits a task. The edit form
- *   collects them locally and persists them in one go via {@link TaskService.setTaskSubtasks} and
- *   {@link TaskService.setTaskAssignments} ("delete all, then re-insert").
- * - The only value persisted immediately is the `is_done` flag of a subtask ({@link TaskService.updateSubtaskStatus}).
- *
- * User feedback: this service shows no toasts itself. {@link SupabaseService} shows them for
- * create, update and delete operations on the tables `tasks` and `contacts` only.
+ * Data model: `tasks` (main rows), `subtasks` (1:N child rows), `task-assignment` (N:M join).
+ * Subtasks and assignments are collected locally and persisted via {@link TaskService.setTaskSubtasks}
+ * and {@link TaskService.setTaskAssignments}. Subtask completion (`is_done`) persists immediately.
  */
 @Service()
 export class TaskService {
   /** Low-level database gateway used for all queries and mutations. */
   private readonly supabaseService = inject(SupabaseService);
+  /** Angular Router used for programmatic navigation to board and tasks. */
   private readonly router = inject(Router);
+  /** Responsive service used to determine mobile layout behavior. */
   private readonly responsiveService = inject(ResponsiveService);
+  /** Dialog service used to trigger modals and overlays. */
   private readonly dialogService = inject(DialogService);
 
   /**
@@ -52,26 +45,41 @@ export class TaskService {
   /** Active board filter, `null` if all tasks are shown. */
   public readonly boardFilter = signal<BoardFilter | null>(null);
 
+  /** Active search term filtering board tasks in real time. */
+  public readonly searchQuery = signal<string>('');
+
   /** Last task created on the board, so its column can scroll to it. */
   public readonly lastAddedTask = signal<TaskInterface | null>(null);
 
   /** Status of the column the next new task is added to (default `'To do'`). */
   public readonly addTaskStatus = signal<TaskInterface['status']>('To do');
 
-  /** The tasks that match `boardFilter` (all tasks if there is no filter). */
+  /** The tasks that match `boardFilter` and `searchQuery` (all tasks if none set). */
   public readonly filteredTasks = computed<TaskInterface[]>(() => {
-    const tasks = this.tasks();
+    let tasks = this.tasks();
     const filter = this.boardFilter();
-    if (!filter) return tasks;
-
-    switch (filter.type) {
-      case 'status':
-        return tasks.filter((task) => task.status === filter.status);
-      case 'priority':
-        return tasks.filter((task) => task.priority === filter.priority);
-      case 'deadline':
-        return tasks.filter((task) => this.matchesDeadlineFilter(task, filter.dueDate));
+    if (filter) {
+      switch (filter.type) {
+        case 'status':
+          tasks = tasks.filter((task) => task.status === filter.status);
+          break;
+        case 'priority':
+          tasks = tasks.filter((task) => task.priority === filter.priority);
+          break;
+        case 'deadline':
+          tasks = tasks.filter((task) => this.matchesDeadlineFilter(task, filter.dueDate));
+          break;
+      }
     }
+    const query = this.searchQuery().trim().toLowerCase();
+    if (query) {
+      tasks = tasks.filter(
+        (task) =>
+          task.title.toLowerCase().includes(query) ||
+          (task.description && task.description.toLowerCase().includes(query)),
+      );
+    }
+    return tasks;
   });
 
   /**
@@ -99,9 +107,10 @@ export class TaskService {
     this.boardFilter.set(filter);
   }
 
-  /** Removes the board filter, so all tasks are shown. */
+  /** Removes the board filter and resets the search query. */
   public clearBoardFilter(): void {
     this.boardFilter.set(null);
+    this.searchQuery.set('');
   }
 
   /**

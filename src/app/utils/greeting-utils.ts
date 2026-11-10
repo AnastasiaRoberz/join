@@ -16,12 +16,14 @@ function slogan(prefix: string, suffix: string, noName?: string): SloganFormatte
       : { prefix: noName ?? `${prefix.trimEnd().replace(/,$/, '')}${suffix}` };
 }
 
+/** Slogans displayed during morning hours. */
 const MORNING_SLOGANS: SloganFormatter[] = [
   slogan('First coffee, then tasks, ', '!'),
   slogan('Rise and shine, ', " – let's do this!", "Rise and shine – let's do this!"),
   slogan('Ready to conquer the backlog, ', '?', 'Ready to conquer the backlog?'),
   slogan('Good morning, ', '!', 'Good morning!'),
 ];
+/** Slogans displayed around lunch time. */
 const LUNCH_SLOGANS: SloganFormatter[] = [
   slogan('Halfway there, ', ' – hungry yet?', 'Halfway there – hungry yet?'),
   slogan('Fuel up, ', ', you earned it!', 'Fuel up, you earned it!'),
@@ -29,6 +31,7 @@ const LUNCH_SLOGANS: SloganFormatter[] = [
   slogan('Happy midday, ', '!', 'Happy midday!'),
   slogan('Still going strong, ', '!', 'Still going strong!'),
 ];
+/** Slogans displayed during the afternoon. */
 const AFTERNOON_SLOGANS: SloganFormatter[] = [
   slogan("Almost beer o'clock, ", ' – keep pushing!', "Almost beer o'clock – keep pushing!"),
   slogan('One final sprint, ', '!', 'One final sprint!'),
@@ -37,12 +40,14 @@ const AFTERNOON_SLOGANS: SloganFormatter[] = [
   slogan('More coffee, ', '?', 'More coffee?'),
   slogan('Keep it up, ', '!', 'Keep it up!'),
 ];
+/** Slogans displayed during the evening. */
 const EVENING_SLOGANS: SloganFormatter[] = [
   slogan('Still here, ', '? Dedication 100%!', 'Still here? Dedication 100%!'),
   slogan('Wrap it up, ', ', dinner is waiting!', 'Wrap it up, dinner is waiting!'),
   slogan('Closing time is calling, ', '!', 'Closing time is calling!'),
   slogan('Good evening, ', '!', 'Good evening!'),
 ];
+/** Slogans displayed late at night. */
 const NIGHT_SLOGANS: SloganFormatter[] = [
   slogan('Go to sleep already, ', '!', 'Go to sleep already, night owl!'),
   slogan('Debugging in the dark, ', '?', 'Debugging in the dark?'),

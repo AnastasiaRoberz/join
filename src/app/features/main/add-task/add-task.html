@@ -111,14 +111,14 @@
   <div class="task-footer">
     <span> <span aria-hidden="true" class="required">*</span>This field is required </span>
     <div class="task-footer__buttons">
-      <button appBtn preset="cancel" label="Clear" (click)="onClear()"></button>
+      <button appBtn preset="cancel" label="Clear" (click)="onClear()" [disabled]="isSubmitting()"></button>
       <button
         appBtn
         preset="check"
         type="submit"
         label="Create Task"
-        [disabled]="taskForm.invalid"
-        [attr.aria-disabled]="taskForm.invalid"
+        [disabled]="taskForm.invalid || isSubmitting()"
+        [attr.aria-disabled]="taskForm.invalid || isSubmitting()"
       ></button>
     </div>
   </div>

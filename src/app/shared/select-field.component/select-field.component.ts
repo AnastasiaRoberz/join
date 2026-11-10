@@ -9,6 +9,7 @@ import {
   inject,
   input,
   model,
+  output,
   signal,
   TemplateRef,
   viewChild,
@@ -23,6 +24,7 @@ import { Buttons } from '../button.component/button.component';
 import { ErrorService } from '../../services/error.service';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 
+/** Global counter used to generate unique DOM IDs for select field instances. */
 let nextId = 0;
 
 /**
@@ -119,6 +121,9 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   /** Shows generic required message instead of field-specific. */
   public readonly requiredMsg = input(false, { transform: booleanAttribute });
 
+  /** Emits search query string in real time on every input keystroke. */
+  public readonly searchChange = output<string>();
+
   // ---------------------------------------------------------------------------
   // Content & View Queries
   // ---------------------------------------------------------------------------
@@ -195,9 +200,12 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
     return this.labelFn()(matchedOption ?? currentVal);
   });
 
+  /** Form control change notification callback. */
   private onChange: (v: any) => void = () => {};
+  /** Form control touch notification callback. */
   private onTouched: () => void = () => {};
 
+  /** Registers ControlValueAccessor and initializes reactive popup and control event effects. */
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
@@ -234,6 +242,7 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   protected onSearchInput(event: Event): void {
     const val = (event.target as HTMLInputElement).value;
     this.searchTerm.set(val);
+    this.searchChange.emit(val);
     if (!this.popupExpanded() && val.trim().length > 0) {
       this.openPopup();
     }
@@ -352,7 +361,7 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
     });
 
     effect(() => {
-      if (!this.popupExpanded()) {
+      if (!this.popupExpanded() && this.variant() !== 'search') {
         this.searchTerm.set('');
         const element = this.inputField()?.nativeElement;
         if (element) element.value = this.displayValue();

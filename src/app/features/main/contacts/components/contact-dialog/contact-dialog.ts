@@ -79,6 +79,7 @@ export class ContactDialog {
     ],
   });
 
+  /** Initializes reactive effect to synchronize form fields when active contact changes. */
   constructor() {
     this.initFormSyncEffect();
   }
@@ -128,7 +129,11 @@ export class ContactDialog {
     };
   }
 
-  /** Persists contact updates or creations to Supabase and selects the resulting contact. */
+  /**
+   * Persists contact updates or creations to Supabase and selects the resulting contact.
+   *
+   * @param contactInfos - Contact payload excluding id and badge_color.
+   */
   private async persistContact(
     contactInfos: Omit<ContactInterface, 'id' | 'badge_color'>,
   ): Promise<void> {
@@ -143,7 +148,12 @@ export class ContactDialog {
     }
   }
 
-  /** Syncs contact changes to Supabase auth user when the contact is linked to a user. */
+  /**
+   * Syncs contact changes to Supabase auth user when the contact is linked to a user.
+   *
+   * @param uid - User UID in auth.users.
+   * @param infos - Contact metadata.
+   */
   private async syncAuthUser(
     uid: string,
     infos: Omit<ContactInterface, 'id' | 'badge_color'>,

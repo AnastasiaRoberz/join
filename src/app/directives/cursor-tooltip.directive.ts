@@ -25,7 +25,9 @@ export class CursorTooltipDirective implements OnDestroy {
   // Injected Dependencies & State
   // ---------------------------------------------------------------------------
 
+  /** Angular Renderer2 used to create and manipulate tooltip DOM elements safely. */
   private readonly renderer = inject(Renderer2);
+  /** Native host DOM element on which the directive is attached. */
   private readonly hostElement = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   /** Text content displayed inside the tooltip; when empty, no tooltip is shown. */

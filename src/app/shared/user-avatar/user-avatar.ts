@@ -2,7 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { ContactInterface } from '../../interfaces/contact.interface';
 
 /** Avatar size options. */
-export type AvatarSize = 'small' | 'medium' | 'large' | 'header' | 'details';
+export type AvatarSize = 'small' | 'medium' | 'large' | 'header';
 
 /**
  * Round avatar showing the initials of a contact on the contact's badge color.
@@ -47,12 +47,20 @@ export class UserAvatar {
     return `${firstLetter}${secondLetter}`;
   });
 
-  /** Computes the background color based on avatar size and contact badge color. */
+  /**
+   * Computes the background color based on avatar size and contact badge color.
+   *
+   * @returns CSS color value or undefined.
+   */
   protected hostBackground(): string | undefined {
     return this.size() === 'header' ? 'transparent' : this.user()?.badge_color;
   }
 
-  /** Computes the border color based on avatar size and contact badge color. */
+  /**
+   * Computes the border color based on avatar size and contact badge color.
+   *
+   * @returns CSS border color value or undefined.
+   */
   protected hostBorder(): string | undefined {
     return this.size() === 'header' ? this.user()?.badge_color : undefined;
   }

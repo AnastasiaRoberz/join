@@ -191,7 +191,3 @@
     }
   }
 }
-
-@mixin titleWithDevider($break-at: null) {
-  @include titleWithDivider($break-at);
-}

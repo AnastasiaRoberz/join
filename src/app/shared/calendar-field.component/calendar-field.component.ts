@@ -15,6 +15,7 @@ import { ResponsiveService } from '../../services/responsive.service';
 import { ErrorService } from '../../services/error.service';
 import { Buttons } from '../button.component/button.component';
 
+/** Global counter used to generate unique DOM IDs for calendar field instances. */
 let nextId = 0;
 
 /**
@@ -92,7 +93,7 @@ export class CalendarFieldComponent implements ControlValueAccessor {
     this.initControlEventsEffect();
   }
 
-  /** Shows the label-free `requiredDefault` message instead of "Your {label} is required.". */
+  /** Checks whether the associated form control has the Validators.required validator attached. */
   protected isRequired(): boolean {
     const ctrl = this.ngControl?.control;
     return ctrl ? ctrl.hasValidator(Validators.required) : false;

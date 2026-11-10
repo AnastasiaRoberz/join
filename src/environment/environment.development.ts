@@ -1,3 +1,4 @@
+/** Runtime configuration for development environment. */
 export const environment = {
   production: false,
   supabaseUrl: 'https://nnvjteipgjertrdzhhww.supabase.co',

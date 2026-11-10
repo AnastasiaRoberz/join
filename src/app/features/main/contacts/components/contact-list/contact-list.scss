@@ -57,7 +57,7 @@
   width: 100%;
   gap: calcClamp(8, 32);
   padding: 16px 24px;
-  border-radius: 10px;
+  border-radius: $radius-md;
 
   &:hover:not(.contact-card-btn--active) {
     background: $btn-contact-hover;

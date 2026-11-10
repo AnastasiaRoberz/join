@@ -40,7 +40,7 @@ export class Register implements OnDestroy {
   /** Draft service preserving typed name and email across route switches. */
   private readonly draftService = inject(AuthDraftService);
 
-  /** Prevents ngOnDestroy from re-saving the email draft after a login redirect. */
+  /** Flag indicating whether to skip saving the registration form draft to AuthDraftService on component destruction. */
   private skipDraftService = false;
 
   /** Submitting state flag preventing duplicate sign-up submissions. */
@@ -63,6 +63,7 @@ export class Register implements OnDestroy {
 
   /** Saves entered name and email to draft service on component destroy. */
   public ngOnDestroy(): void {
+    if (this.skipDraftService) return;
     const rawData = this.registerForm.getRawValue();
     this.draftService.registerDraft.set({
       name: rawData.name ?? '',

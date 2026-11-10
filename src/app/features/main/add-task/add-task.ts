@@ -133,14 +133,23 @@ export class AddTask implements OnDestroy {
     contact.surname,
   ];
 
-  /** Updates assigned contact IDs and marks form control dirty. */
+  /**
+   * Updates assigned contact IDs and marks form control dirty.
+   *
+   * @param ids - List of selected contact IDs.
+   */
   protected onAssignmentChange(ids: number[]): void {
     this.selectedContactIds.set(ids);
     this.taskForm.controls.assigned.setValue(ids);
     this.taskForm.controls.assigned.markAsDirty();
   }
 
-  /** Toggles assignment for a single contact. */
+  /**
+   * Toggles assignment for a single contact.
+   *
+   * @param contactId - ID of the contact to toggle.
+   * @param isAssigned - Whether the contact should be assigned.
+   */
   protected toggleAssignment(contactId: number, isAssigned: boolean): void {
     const currentIds = this.selectedContactIds();
     const updatedIds = isAssigned
@@ -184,13 +193,23 @@ export class AddTask implements OnDestroy {
     this.taskService.addTaskStatus.set('To do');
   }
 
-  /** Calculates position value one above existing tasks in the target column. */
+  /**
+   * Calculates position value one above existing tasks in the target column.
+   *
+   * @param status - The column status.
+   * @returns Next top position number.
+   */
   private getNextTopPosition(status: TaskInterface['status']): number {
     const columnTasks = this.taskService.tasks().filter((task) => task.status === status);
     return columnTasks.length ? Math.min(...columnTasks.map((t) => t.position)) - 1 : 0;
   }
 
-  /** Constructs the task database record payload from form state. */
+  /**
+   * Constructs the task database record payload from form state.
+   *
+   * @param top - Position index.
+   * @returns Task record payload.
+   */
   private buildNewTaskPayload(top: number): Omit<TaskInterface, 'id' | 'assigned_users' | 'subtasks'> {
     return {
       title: this.taskForm.value.title!,
@@ -203,7 +222,11 @@ export class AddTask implements OnDestroy {
     };
   }
 
-  /** Persists task assignments and subtasks, resets form, and routes back to board. */
+  /**
+   * Persists task assignments and subtasks, resets form, and routes back to board.
+   *
+   * @param newTaskId - ID of the newly created task.
+   */
   private async saveTaskRelationsAndFinalize(newTaskId: number): Promise<void> {
     const contactIds = this.selectedContactIds();
     const subtasks = this.createdSubtasks();

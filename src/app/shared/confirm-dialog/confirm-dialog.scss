@@ -1,6 +1,5 @@
 @use '../../../../public/assets/styles' as *;
 
-// dark, blurred background that covers the whole page
 .confirm {
   @include flex-center;
   position: fixed;

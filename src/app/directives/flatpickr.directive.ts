@@ -48,6 +48,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
 
   /** Notifies about scrolling, so an open calendar can follow its input field. */
   private readonly scrollDispatcher = inject(ScrollDispatcher);
+  /** Subscription to global scroll events used to reposition the open calendar popup. */
   private scrollSub?: Subscription;
 
   /** Underlying Flatpickr instance created during `ngOnInit`. */

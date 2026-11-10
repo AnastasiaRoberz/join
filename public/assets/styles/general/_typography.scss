@@ -34,10 +34,6 @@ h4 {
   font-family: inherit;
 }
 
-/* ------------------------------------------------
-            * --- CLASSES --- * 
------------------------------------------------- */
-// * --- texts --- *
 .subheading {
   font-size: calcClampMinRem(16, 27);
   color: $color-navy-800;
@@ -46,4 +42,3 @@ h4 {
 .highlighted-txt {
   color: $text-lightblue;
 }
-// * ------------- *

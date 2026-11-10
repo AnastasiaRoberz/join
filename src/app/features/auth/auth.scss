@@ -1,8 +1,5 @@
 @use '../../../../public/assets/styles' as *;
 
-// Moves the logo from the calculated center position back to its natural header position.
-// CSS custom properties --intro-x, --intro-y, --intro-scale are set via TypeScript
-// based on the logo's actual DOM position at runtime.
 @keyframes logo-intro {
   0%,
   20% {
@@ -25,7 +22,7 @@
 
 .content {
   width: 100%;
-  max-width: 1920px;
+  max-width: 1440px;
   height: 100%;
   max-height: 900px;
   position: relative;
@@ -52,7 +49,6 @@
     }
   }
 
-  // Full-screen overlay that provides the colored background during the intro.
   .intro-overlay {
     position: fixed;
     inset: 0;
@@ -65,7 +61,6 @@
     animation-delay: 0.2s;
   }
 
-  // Mobile variant
   &.intro-mobile {
     .intro-overlay {
       background-color: $main-color;
@@ -91,7 +86,7 @@
       --logo-main: #{$main-color};
       height: calcClampMin((78, 122), (60, 122, 800, 550));
       aspect-ratio: 56 / 67;
-      z-index: 1000;
+      z-index: $z-intro-element;
       position: relative;
 
       &.intro-active {

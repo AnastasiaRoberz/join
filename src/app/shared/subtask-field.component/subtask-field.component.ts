@@ -12,6 +12,7 @@ import { ResponsiveService } from '../../services/responsive.service';
 import { SubtaskInterface } from '../../interfaces/subtask.interface';
 import { Buttons } from '../button.component/button.component';
 
+/** Global counter used to generate unique DOM IDs for subtask field instances. */
 let nextId = 0;
 
 /**

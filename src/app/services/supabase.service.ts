@@ -26,12 +26,15 @@ type AuthResult = { user: User | null; session: Session | null };
  */
 @Service()
 export class SupabaseService {
+  /** The Supabase project URL loaded from environment settings. */
   private readonly projectUrl: string = environment.supabaseUrl;
+  /** The Supabase anonymous API key loaded from environment settings. */
   private readonly projectKey: string = environment.supabaseAnonKey;
 
   /** Supabase client, also used directly for authentication and custom queries. */
   public readonly supabase: SupabaseClient = createClient(this.projectUrl, this.projectKey);
 
+  /** Feedback service used to display toast notifications upon database operations. */
   private readonly feedbackService = inject(FeedbackService);
 
   /** Tables that show toasts after create, update and delete (table name -> entity name). */
@@ -94,11 +97,13 @@ export class SupabaseService {
    * @template T - The shape of the payload extending a key-value record
    * @param data - The data object or array of objects to insert (omitting generated keys such as `id`)
    * @param table - The target database table name
+   * @param showFeedback - Set to `false` to suppress the notification. Defaults to `true`
    * @returns A promise resolving to the freshly created database row(s) (including server-generated values like `id`), or `null` on failure
    */
   public async addData<T extends Record<string, any>>(
     data: T | T[],
     table: string,
+    showFeedback: boolean = true,
   ): Promise<any | null> {
     let query = this.supabase
       .from(table)
@@ -107,7 +112,7 @@ export class SupabaseService {
     if (!Array.isArray(data)) query = query.single() as any;
     const { data: result, error } = await query;
 
-    this.notifyCrudResult(table, 'Create', !error);
+    if (showFeedback) this.notifyCrudResult(table, 'Create', !error);
     return error ? null : result;
   }
 

@@ -31,7 +31,7 @@ import { ResponsiveService } from '../../services/responsive.service';
  * @example
  * ### 1. Overlapping stack (e.g., on a task card)
  * ```html
- * <app-avatar-group [users]="task.assignedUsers" size="small" [maxUsers]="3" />
+ * <app-avatar-group [users]="task.assigned_users" size="small" [maxUsers]="3" />
  * ```
  *
  * @example

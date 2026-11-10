@@ -88,6 +88,9 @@ export class TaskDetails {
   /** Whether completed (`is_done: true`) subtasks are currently shown in the list. */
   protected readonly showDoneSubtasks = signal<boolean>(false);
 
+  /** Deleting state flag preventing duplicate delete calls. */
+  protected readonly isDeleting = signal<boolean>(false);
+
   /** Reactively resolves the active task from `TaskService` matching dialog selection. */
   protected readonly selectedTask = computed<TaskInterface | undefined>(() => {
     const targetId = this.dialogService.selectedItem()?.id;
@@ -140,6 +143,7 @@ export class TaskDetails {
     this.showDoneSubtasks() ? this.sortedSubtasks() : this.subtasksNotDone(),
   );
 
+  /** Sets up afterRenderEffect to detect whether task description content overflows container. */
   constructor() {
     afterRenderEffect(() => {
       const element = this.container()?.nativeElement;
@@ -164,7 +168,11 @@ export class TaskDetails {
     }
   }
 
-  /** Toggles assigned users view between compact row and full vertical list. */
+  /**
+   * Toggles assigned users view between compact row and full vertical list.
+   *
+   * @param element - The container element holding the users list.
+   */
   protected toggleUsers(element: HTMLElement): void {
     this.showAllUsers.update((v) => !v);
     if (this.showAllUsers()) {
@@ -174,7 +182,11 @@ export class TaskDetails {
     }
   }
 
-  /** Toggles visibility of completed subtasks. */
+  /**
+   * Toggles visibility of completed subtasks.
+   *
+   * @param element - The container element holding the subtasks list.
+   */
   protected toggleSubtasks(element: HTMLElement): void {
     this.showDoneSubtasks.update((v) => !v);
     if (this.showDoneSubtasks()) {
@@ -187,7 +199,11 @@ export class TaskDetails {
     }
   }
 
-  /** Smoothly scrolls dialog content so given section element aligns with top edge. */
+  /**
+   * Smoothly scrolls dialog content so given section element aligns with top edge.
+   *
+   * @param element - The DOM element to scroll into view.
+   */
   protected scrollToSection(element: HTMLElement): void {
     setTimeout(() => {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -201,19 +217,38 @@ export class TaskDetails {
     });
   }
 
-  /** Persists completion status of a subtask immediately via `TaskService`. */
+  /**
+   * Persists completion status of a subtask immediately via `TaskService`.
+   *
+   * @param subtaskId - ID of the subtask to update.
+   * @param isDone - Completion state.
+   */
   protected async toggleSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     await this.taskService.updateSubtaskStatus(subtaskId, isDone);
   }
 
-  /** Prompts for confirmation and deletes the task, then closes dialog. */
+  /**
+   * Prompts for confirmation and deletes the task, then closes dialog.
+   *
+   * @param taskId - ID of the task to delete.
+   */
   protected async onDelete(taskId: number): Promise<void> {
+    if (this.isDeleting()) return;
     if (!(await this.confirmService.askDelete('Task'))) return;
-    await this.taskService.deleteTask(taskId);
-    this.dialogService.closeDialog();
+    this.isDeleting.set(true);
+    try {
+      await this.taskService.deleteTask(taskId);
+      this.dialogService.closeDialog();
+    } finally {
+      this.isDeleting.set(false);
+    }
   }
 
-  /** Scrolls the last assigned user in the list into view if overflowing. */
+  /**
+   * Scrolls the last assigned user in the list into view if overflowing.
+   *
+   * @param element - The container element containing avatars.
+   */
   private scrollLastUserIntoView(element: HTMLElement): void {
     const container = this.scrollWrapper()?.nativeElement;
     if (!container) return;

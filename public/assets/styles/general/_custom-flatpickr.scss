@@ -1,6 +1,5 @@
 @use '../../styles' as *;
 
-// 1. CONTAINER & BASIS-FUNKTION
 .flatpickr-calendar {
   display: none;
   position: absolute;
@@ -63,7 +62,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    transition: background-color 0.15s ease;
+    transition: background-color 100ms ease;
     visibility: visible;
 
     &:hover {
