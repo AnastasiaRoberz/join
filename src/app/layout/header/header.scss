@@ -57,7 +57,8 @@ nav {
     @include flex-start;
     cursor: pointer;
 
-    a {
+    a,
+    button {
       @include size;
       @include flex-start;
       color: $text-muted;
