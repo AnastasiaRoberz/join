@@ -1,26 +1,37 @@
-import { Component, computed, contentChild, effect, input, model } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  model,
+} from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
+import { ErrorService } from '../../services/error.service';
 
 /** Global counter used to generate unique DOM IDs for checkbox instances. */
 let nextId = 0;
 
 /**
  * Reusable custom checkbox component that supports both standalone reactive binding
- * via `[(checked)]` / `[checked]` + `(checkedChange)` and Angular FormControl projection via `NgControl`.
+ * via `[(checked)]` / `[checked]` + `(checkedChange)` and Angular FormControl binding via `NgControl`.
  *
  * ### Usage modes
  * - **Standalone**: bind `[(checked)]` (two-way) or `[checked]` + `(checkedChange)`. The native
  *   `<input type="checkbox">` is hidden; the visible box is an SVG icon (`checkbox-checked` / `checkbox-empty`).
  *   A click on the icon toggles `checked` and emits `checkedChange` with the new boolean.
- * - **With a projected `NgControl`**: if the content contains a form control directive
- *   (`formControlName` / `formControl` / `ngModel`), its value is bidirectionally synchronized.
- *   User interactions update the model and notify the form control via `onChange`.
+ * - **With `NgControl` (`formControlName` / `formControl`)**: implements `ControlValueAccessor`.
+ *   Synchronizes with the form control state, validates against attached validators, and displays
+ *   validation errors via {@link ErrorService}.
  *
  * The host element gets the CSS class `selected` while `checked()` is `true`.
  *
  * Automatically adapts its visual layout:
  * - **With label (`[text]`)**: Renders an interactive row with strikethrough styling when checked (e.g., subtasks).
- * - **Icon-only (`!text()`)**: Renders just the checkbox icon for compact placement inside lists/dropdowns.
+ * - **With projected content (`<ng-content />`)**: Renders arbitrary rich HTML next to the checkbox icon (e.g. links).
+ * - **Icon-only (`!text()` & no content)**: Renders just the checkbox icon for compact placement inside lists/dropdowns.
  *
  * @example
  * ### 1. Standalone with label (Subtasks)
@@ -42,9 +53,18 @@ let nextId = 0;
  * ```
  *
  * @example
- * ### 3. Two-way binding
+ * ### 3. Reactive Form with validation error message
  * ```html
- * <app-checkbox text="Remember me" [(checked)]="rememberMe" />
+ * <app-checkbox
+ *   fieldId="privacy"
+ *   formControlName="privacy"
+ *   label="Privacy policy"
+ *   requiredMsg
+ * >
+ *   <label for="privacy">
+ *     I accept the <a routerLink="/app/privacy-policy">Privacy policy</a>
+ *   </label>
+ * </app-checkbox>
  * ```
  */
 @Component({
@@ -57,18 +77,18 @@ let nextId = 0;
   },
 })
 export class CheckboxComponent implements ControlValueAccessor {
+  /** Service providing localized form validation error messages. */
+  private readonly errorService = inject(ErrorService);
+
+  /** Change detector reference used to trigger view updates on control events. */
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  /** Optional injected `NgControl` directive binding this component to an Angular form control. */
+  private readonly ngControl = inject(NgControl, { optional: true });
+
   // ---------------------------------------------------------------------------
-  // Content Queries, Inputs & Models
+  // Inputs & Models
   // ---------------------------------------------------------------------------
-
-  /** Optional projected `NgControl` when used inside a reactive form wrapper. */
-  public readonly ngControl = contentChild(NgControl);
-
-  /** Callback registered by Angular Forms to propagate value changes. */
-  private onChange: (value: boolean) => void = () => {};
-
-  /** Callback registered by Angular Forms to propagate touch events. */
-  private onTouched: () => void = () => {};
 
   /**
    * Unique HTML id attribute for the native (hidden) checkbox input element.
@@ -77,15 +97,31 @@ export class CheckboxComponent implements ControlValueAccessor {
   public readonly fieldId = input<string>(`app-checkbox-${nextId++}`);
 
   /**
-   * Optional text label displayed next to the checkbox icon (rendered in a `<span>`).
+   * Optional text label displayed next to the checkbox icon.
    */
   public readonly text = input<string | null>(null);
+
+  /**
+   * Field label passed to {@link ErrorService} for generating validation messages.
+   */
+  public readonly label = input<string>();
+
+  /**
+   * When `true`, displays the generic default message "This field is required" instead of the field-specific one.
+   */
+  public readonly requiredMsg = input(false, { transform: booleanAttribute });
 
   /**
    * Two-way bindable checked state.
    * Automatically exposes both `[checked]` input and `(checkedChange)` output.
    */
   public readonly checked = model<boolean>(false);
+
+  /** Callback registered by Angular Forms to propagate value changes. */
+  private onChange: (value: boolean) => void = () => {};
+
+  /** Callback registered by Angular Forms to propagate touch events. */
+  private onTouched: () => void = () => {};
 
   // ---------------------------------------------------------------------------
   // Computed Signals
@@ -98,9 +134,12 @@ export class CheckboxComponent implements ControlValueAccessor {
       : './assets/icons/icons.svg#checkbox-empty',
   );
 
-  /** Initializes reactive synchronization between the checkbox state and NgControl. */
+  /** Registers ControlValueAccessor and initializes reactive control event listeners. */
   constructor() {
-    this.initNgControlSyncEffect();
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+    this.initControlEventsEffect();
   }
 
   // ---------------------------------------------------------------------------
@@ -114,6 +153,7 @@ export class CheckboxComponent implements ControlValueAccessor {
    */
   public writeValue(value: boolean): void {
     this.checked.set(Boolean(value));
+    this.cdr.markForCheck();
   }
 
   /**
@@ -140,7 +180,7 @@ export class CheckboxComponent implements ControlValueAccessor {
 
   /**
    * Handles native checkbox input changes, updates the `checked` model,
-   * and emits the new boolean value via `(checkedChange)`.
+   * notifies Angular forms via `onChange`/`onTouched`, and emits `(checkedChange)`.
    *
    * @param event - The DOM `change` event triggered by the checkbox input.
    */
@@ -154,15 +194,28 @@ export class CheckboxComponent implements ControlValueAccessor {
   }
 
   /**
-   * Synchronizes the `checked` state with a projected `NgControl` (if present).
+   * Returns the error message to display below the field.
+   *
+   * @returns Validation error message string, or `null` if valid/untouched.
    */
-  private initNgControlSyncEffect(): void {
+  protected showError(): string | null {
+    const ctrl = this.ngControl?.control;
+    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
+
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
+  }
+
+  /**
+   * Subscribes to form control events (status/touch changes) to refresh validation error display.
+   */
+  private initControlEventsEffect(): void {
     effect((onCleanUp) => {
-      const ctrl = this.ngControl()?.control;
+      const ctrl = this.ngControl?.control;
       if (ctrl) {
-        this.checked.set(Boolean(ctrl.value));
-        const sub = ctrl.valueChanges.subscribe((value) => {
-          this.checked.set(Boolean(value));
+        const sub = ctrl.events.subscribe(() => {
+          this.cdr.markForCheck();
         });
         onCleanUp(() => sub.unsubscribe());
       }

@@ -1,7 +1,7 @@
 @use '../../../../public/assets/styles' as *;
 
 input[type='checkbox'] {
-  position: absolute;
+  position: relative;
   opacity: 0;
   width: 1px;
   height: 1px;
@@ -20,6 +20,7 @@ input[type='checkbox'] {
   color: $main-color;
   border-radius: $radius-sm;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     background-color: $checkbox-hover;
@@ -31,7 +32,7 @@ input[type='checkbox'] {
   }
 
   &.selected {
-    span {
+    .checkbox-text {
       text-decoration: line-through;
     }
   }
@@ -62,4 +63,9 @@ label {
     width: 24px;
     height: 24px;
   }
+}
+
+.error-msg {
+  @include field-error-msg;
+  white-space: nowrap;
 }
