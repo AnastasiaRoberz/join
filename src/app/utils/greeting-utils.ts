@@ -11,42 +11,44 @@ type SloganFormatter = (firstname?: string) => GreetingParts;
 /** Helper creating a slogan formatter with name interpolation and optional fallback. */
 function slogan(prefix: string, suffix: string, noName?: string): SloganFormatter {
   return (n?: string): GreetingParts =>
-    n ? { prefix, name: n, suffix } : { prefix: noName ?? `${prefix.trimEnd()}${suffix}` };
+    n
+      ? { prefix, name: n, suffix }
+      : { prefix: noName ?? `${prefix.trimEnd().replace(/,$/, '')}${suffix}` };
 }
 
 const MORNING_SLOGANS: SloganFormatter[] = [
   slogan('First coffee, then tasks, ', '!'),
-  slogan('Rise and shine, ', ' – let’s do this!'),
-  slogan('Ready to conquer the backlog, ', '?'),
-  slogan('Good morning, ', '!'),
+  slogan('Rise and shine, ', " – let's do this!", "Rise and shine – let's do this!"),
+  slogan('Ready to conquer the backlog, ', '?', 'Ready to conquer the backlog?'),
+  slogan('Good morning, ', '!', 'Good morning!'),
 ];
 const LUNCH_SLOGANS: SloganFormatter[] = [
-  slogan('Halfway there, ', ' – hungry yet?'),
-  slogan('Fuel up, ', ', you earned it!'),
-  slogan('Don’t drop the ball, ', ', lunch is near!'),
-  slogan('Happy midday, ', '!'),
-  slogan('Still going strong, ', '!'),
+  slogan('Halfway there, ', ' – hungry yet?', 'Halfway there – hungry yet?'),
+  slogan('Fuel up, ', ', you earned it!', 'Fuel up, you earned it!'),
+  slogan("Don't drop the ball, ", ', lunch is near!', "Don't drop the ball, lunch is near!"),
+  slogan('Happy midday, ', '!', 'Happy midday!'),
+  slogan('Still going strong, ', '!', 'Still going strong!'),
 ];
 const AFTERNOON_SLOGANS: SloganFormatter[] = [
-  slogan('Almost beer o’clock, ', ' – keep pushing!'),
-  slogan('One final sprint, ', '!'),
-  slogan('Crushing tasks like a pro, ', '!'),
-  slogan('Good afternoon, ', '!'),
-  slogan('More coffee, ', '?'),
-  slogan('Keep it up, ', '!'),
+  slogan("Almost beer o'clock, ", ' – keep pushing!', "Almost beer o'clock – keep pushing!"),
+  slogan('One final sprint, ', '!', 'One final sprint!'),
+  slogan('Crushing tasks like a pro, ', '!', 'Crushing tasks like a pro!'),
+  slogan('Good afternoon, ', '!', 'Good afternoon!'),
+  slogan('More coffee, ', '?', 'More coffee?'),
+  slogan('Keep it up, ', '!', 'Keep it up!'),
 ];
 const EVENING_SLOGANS: SloganFormatter[] = [
-  slogan('Still here, ', '? Dedication 100%!'),
-  slogan('Wrap it up, ', ', dinner is waiting!'),
-  slogan('Closing time is calling, ', '!'),
-  slogan('Good evening, ', '!'),
+  slogan('Still here, ', '? Dedication 100%!', 'Still here? Dedication 100%!'),
+  slogan('Wrap it up, ', ', dinner is waiting!', 'Wrap it up, dinner is waiting!'),
+  slogan('Closing time is calling, ', '!', 'Closing time is calling!'),
+  slogan('Good evening, ', '!', 'Good evening!'),
 ];
 const NIGHT_SLOGANS: SloganFormatter[] = [
   slogan('Go to sleep already, ', '!', 'Go to sleep already, night owl!'),
-  slogan('Debugging in the dark, ', '?'),
-  slogan('Sleep is overrated, right, ', '?'),
-  slogan('Burning the midnight oil, ', '?', 'Burning the midnight oil'),
-  slogan('Hello from the dark side, ', '!'),
+  slogan('Debugging in the dark, ', '?', 'Debugging in the dark?'),
+  slogan('Sleep is overrated, right, ', '?', 'Sleep is overrated, right?'),
+  slogan('Burning the midnight oil, ', '?', 'Burning the midnight oil?'),
+  slogan('Hello from the dark side, ', '!', 'Hello from the dark side!'),
 ];
 
 /**
