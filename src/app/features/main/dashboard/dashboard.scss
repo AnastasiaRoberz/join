@@ -6,6 +6,10 @@
   gap: calcClampMin((16, 56), (16, 56, 1024, 800));
 }
 
+:host.is-greeting {
+  pointer-events: none;
+}
+
 .header {
   @include titleWithDivider(500);
 }
@@ -18,7 +22,7 @@
   opacity: 1;
 
   background-color: $main-bg;
-  animation: overlay-fade 1.8s ease-in-out forwards;
+  animation: overlay-fade 2.4s ease-in-out forwards;
   animation-delay: 0.2s;
 }
 
