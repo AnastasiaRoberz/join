@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavigationService } from '../../services/navigation.service';
 import { ResponsiveService } from '../../services/responsive.service';
@@ -60,5 +53,13 @@ export class Header {
     if (menuElement && !menuElement.contains(event.target as Node)) {
       this.menuOpen.set(false);
     }
+  }
+
+  /**
+   * Closes the user menu and logs out the current user.
+   */
+  logout(): void {
+    this.closeMenu();
+    this.userService.logOut();
   }
 }

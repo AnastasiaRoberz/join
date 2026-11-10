@@ -41,8 +41,8 @@
       <li (click)="closeMenu()">
         <a routerLink="/app/privacy-policy">Privacy Policy</a>
       </li>
-      <li (click)="closeMenu()">
-        <button type="button" class="menu-btn" (click)="userService.logOut()">Log Out</button>
+      <li>
+        <button type="button" (click)="logout()">Log Out</button>
       </li>
     </ul>
   </nav>
