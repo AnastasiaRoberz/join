@@ -4,9 +4,7 @@
   @include info-page;
 }
 
-article,
-section {
+article {
   @include flex-start(column);
-  gap: 12px;
   margin-bottom: 8px;
 }

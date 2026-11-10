@@ -27,6 +27,7 @@
   --space-right: #{calc(100% - 1112px)};
   --padding-inline: #{calcClamp(16, 96)};
   @include flex-start(column, both);
+  gap: 16px;
   padding-inline: var(--padding-inline);
   padding-top: calcClampMin((48, 116), (24, 48, 700, 350));
   padding-bottom: 24px;
@@ -67,8 +68,7 @@
     }
 
     h3 {
-      margin-top: 32px;
-      margin-bottom: 16px;
+      margin-top: 24px;
     }
 
     h4 {
