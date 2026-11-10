@@ -157,7 +157,7 @@ export class UserService {
 
   /**
    * Deletes a contact and, if it belongs to a registered user, the auth user as well.
-   * If the deleted user is the logged-in user, the user is logged out.
+   * If the deleted user is the logged-in user, navigate to login-page
    *
    * @param id - Id of the contact
    * @param uid - Id of the linked auth user, if any
@@ -172,7 +172,7 @@ export class UserService {
       const success = await this.supabaseService.deleteUser(uid);
 
       if (success && isSelf) {
-        await this.logOut();
+        this.router.navigate(['/login']);
       }
     }
   }
