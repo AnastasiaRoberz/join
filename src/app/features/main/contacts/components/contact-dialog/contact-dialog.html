@@ -1,39 +1,65 @@
 <div class="header-section">
-  <div class="header">
+  <div class="header-section__header">
     @if (contact()) {
-      <h2>Edit contact</h2>
+      <h2 id="dialog-heading">Edit contact</h2>
     } @else {
-      <h2>Add contact</h2>
-      <span class="subheading">Tasks are better with a team!</span>
+      <h2 id="dialog-heading">Add contact</h2>
+      <span class="header-section__subheading">Tasks are better with a team!</span>
     }
   </div>
 </div>
 
 <div class="content-section">
-  <div class="input-wrapper">
-    <app-user-avatar class="avatar" [user]="contact()" size="large" />
+  <div class="content-section__input-wrapper">
+    <app-user-avatar [user]="contact()" size="large" />
 
-    <form class="form-section" [formGroup]="contactForm" (ngSubmit)="saveContact()">
-      <app-text-field label="Name" formControlName="name" icon="person" fieldId="name" />
+    <form
+      class="content-section__form-section"
+      [formGroup]="contactForm"
+      (ngSubmit)="saveContact()"
+      aria-labelledby="dialog-heading"
+    >
+      <app-text-field
+        label="Name"
+        formControlName="name"
+        icon="person"
+        fieldId="name"
+        autocomplete="name"
+      />
 
-      <app-text-field label="Mail" formControlName="mail" icon="mail" fieldId="mail" />
+      <app-text-field
+        label="Mail"
+        formControlName="mail"
+        icon="mail"
+        fieldId="mail"
+        autocomplete="email"
+      />
 
-      <app-text-field label="Phone" formControlName="phone" icon="phone" fieldId="phone" />
+      <app-text-field
+        label="Phone"
+        formControlName="phone"
+        icon="phone"
+        fieldId="phone"
+        autocomplete="tel"
+      />
 
-      <div class="buttons-wrapper">
+      <div class="content-section__buttons-wrapper">
         @if (contact()) {
-          <button appBtn preset="secondary" (click)="deleteAndClose()">Delete</button>
+          <button appBtn preset="secondary" (click)="deleteAndClose()" type="button" [disabled]="isSubmitting()">Delete</button>
           <button
             appBtn
             preset="check"
             type="submit"
             [disabled]="!contactForm.valid || isSubmitting()"
+            [attr.aria-disabled]="!contactForm.valid || isSubmitting()"
           >
             Save
           </button>
         } @else {
           @if (!responsiveService.isMobile()) {
-            <button appBtn preset="cancel" icon="x" (click)="closeDialog()">Cancel</button>
+            <button appBtn preset="cancel" icon="x" type="button" (click)="closeDialog()" [disabled]="isSubmitting()">
+              Cancel
+            </button>
           }
 
           <button
@@ -41,6 +67,7 @@
             preset="check"
             type="submit"
             [disabled]="!contactForm.valid || isSubmitting()"
+            [attr.aria-disabled]="!contactForm.valid || isSubmitting()"
           >
             Create contact
           </button>

@@ -17,7 +17,11 @@ import { ContactService } from '../../../../../services/contact.service';
 import { SupabaseService } from '../../../../../services/supabase.service';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName, splitName } from '../../../../../utils/name-utils';
+import { UserService } from '../../../../../services/user.service';
 
+/**
+ * Dialog for creating a new contact or editing an existing contact.
+ */
 @Component({
   imports: [ReactiveFormsModule, TextField, UserAvatar, Buttons],
   selector: 'app-contact-dialog',
@@ -25,17 +29,35 @@ import { fullName, splitName } from '../../../../../utils/name-utils';
   templateUrl: './contact-dialog.html',
 })
 export class ContactDialog {
-  supabaseService = inject(SupabaseService);
-  contactService = inject(ContactService);
-  dialogService = inject(DialogService);
-  responsiveService = inject(ResponsiveService);
-  fb = inject(FormBuilder);
-  confirmService = inject(ConfirmService);
-  isSubmitting = signal<boolean>(false);
+  /** Supabase service for unique email validation queries. */
+  private readonly supabaseService = inject(SupabaseService);
 
-  contact = computed(() => this.dialogService.selectedItem() as ContactInterface);
+  /** Contact service managing contacts persistence. */
+  private readonly contactService = inject(ContactService);
 
-  contactForm = this.fb.group({
+  /** User service managing user account deletion. */
+  private readonly userService = inject(UserService);
+
+  /** Dialog service managing dialog open state and selected contact. */
+  protected readonly dialogService = inject(DialogService);
+
+  /** Responsive service for mobile/desktop layout switches. */
+  protected readonly responsiveService = inject(ResponsiveService);
+
+  /** Form builder instance for reactive form group creation. */
+  private readonly fb = inject(FormBuilder);
+
+  /** Confirmation service for delete confirmations. */
+  private readonly confirmService = inject(ConfirmService);
+
+  /** Submitting flag to prevent duplicate submissions. */
+  protected readonly isSubmitting = signal<boolean>(false);
+
+  /** Contact currently being edited, or null when creating a new contact. */
+  protected readonly contact = computed(() => this.dialogService.selectedItem() as ContactInterface);
+
+  /** Reactive contact form group with validators. */
+  protected readonly contactForm = this.fb.group({
     name: [
       '',
       {
@@ -57,12 +79,98 @@ export class ContactDialog {
     ],
   });
 
+  /** Initializes reactive effect to synchronize form fields when active contact changes. */
   constructor() {
+    this.initFormSyncEffect();
+  }
+
+  /**
+   * Saves contact changes or creates a new contact, then selects it and closes the dialog.
+   */
+  protected async saveContact(): Promise<void> {
+    if (this.isSubmitting() || !this.contactForm.valid) return;
+
+    this.isSubmitting.set(true);
+    await this.persistContact(this.buildContactPayload());
+    this.closeDialog();
+    this.isSubmitting.set(false);
+  }
+
+  /**
+   * Deletes the currently selected contact after confirmation and closes the dialog.
+   */
+  protected async deleteAndClose(): Promise<void> {
+    const id = this.contact()?.id;
+    if (this.isSubmitting() || !id) return;
+    if (!(await this.confirmService.askDelete('Contact'))) return;
+
+    this.isSubmitting.set(true);
+    await this.userService.deleteUser(id, this.contact()?.user_uid);
+    this.closeDialog();
+    this.isSubmitting.set(false);
+  }
+
+  /** Closes the contact dialog and resets the form. */
+  protected closeDialog(): void {
+    this.dialogService.closeDialog();
+    this.contactForm.reset();
+  }
+
+  /** Builds the normalized contact data payload from the reactive form. */
+  private buildContactPayload(): Omit<ContactInterface, 'id' | 'badge_color'> {
+    const { name, mail, phone } = this.contactForm.getRawValue();
+    const { title, firstname, surname } = splitName(name ?? '');
+    return {
+      title,
+      firstname,
+      surname,
+      mail: mail?.trim() ?? '',
+      phone: phone?.trim() ?? '',
+    };
+  }
+
+  /**
+   * Persists contact updates or creations to Supabase and selects the resulting contact.
+   *
+   * @param contactInfos - Contact payload excluding id and badge_color.
+   */
+  private async persistContact(
+    contactInfos: Omit<ContactInterface, 'id' | 'badge_color'>,
+  ): Promise<void> {
+    const existingContact = this.contact();
+    if (existingContact) {
+      await this.contactService.updateContact(existingContact.id, contactInfos);
+      if (existingContact.user_uid) await this.syncAuthUser(existingContact.user_uid, contactInfos);
+      this.dialogService.selectContact(existingContact.id);
+    } else {
+      const newContact = await this.contactService.addContact(contactInfos);
+      if (newContact) this.dialogService.selectContact(newContact.id);
+    }
+  }
+
+  /**
+   * Syncs contact changes to Supabase auth user when the contact is linked to a user.
+   *
+   * @param uid - User UID in auth.users.
+   * @param infos - Contact metadata.
+   */
+  private async syncAuthUser(
+    uid: string,
+    infos: Omit<ContactInterface, 'id' | 'badge_color'>,
+  ): Promise<void> {
+    await this.userService.updateUser(uid, {
+      email: infos.mail,
+      user_metadata: { first_name: infos.firstname, full_name: infos.surname },
+    });
+  }
+
+  /** Synchronizes form field values when switching between contacts or opening for new contact. */
+  private initFormSyncEffect(): void {
     effect(() => {
       const currentContact = this.contact();
       if (currentContact) {
         this.contactForm.setValue({
-          name: fullName(currentContact), // starting to use fullName for display purposes
+          name: fullName(currentContact),
           mail: currentContact.mail,
           phone: currentContact.phone,
         });
@@ -70,56 +178,5 @@ export class ContactDialog {
         this.contactForm.reset();
       }
     });
-  }
-
-  async saveContact() {
-    if (this.isSubmitting() || !this.contactForm.valid) return;
-
-    this.isSubmitting.set(true);
-    const { name, mail, phone } = this.contactForm.getRawValue();
-    const { title, firstname, surname } = splitName(name ?? ''); // added title and using external splitName from name-utils
-    const contactInfos = {
-      title,
-      firstname,
-      surname,
-      mail: mail?.trim() ?? '',
-      phone: phone?.trim() ?? '',
-    };
-
-    const existingContact = this.contact();
-    if (existingContact) {
-      await this.contactService.updateContact(existingContact.id, contactInfos);
-      this.dialogService.selectContact(existingContact.id);
-    } else {
-      // Wait for Supabase to return the created contact including its server-generated id
-      const newContact = await this.contactService.addContact(contactInfos);
-      if (newContact) {
-        // Pass the new contact's id to DialogService to trigger auto-selection and scroll
-        this.dialogService.selectContact(newContact.id);
-      }
-    }
-
-    this.closeDialog();
-    this.isSubmitting.set(false);
-  }
-
-  // splitMame now moved to name-utils.ts
-
-  async deleteAndClose() {
-    const id = this.contact()?.id;
-    if (this.isSubmitting() || !id) return;
-    if (!(await this.confirmService.askDelete('Contact'))) return;
-
-    this.isSubmitting.set(true);
-    if (!id) return;
-
-    await this.contactService.deleteContact(id);
-    this.closeDialog();
-    this.isSubmitting.set(false);
-  }
-
-  closeDialog(): void {
-    this.dialogService.closeDialog();
-    this.contactForm.reset();
   }
 }

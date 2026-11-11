@@ -2,7 +2,7 @@
   <label [attr.for]="fieldId()" [class.is-mobile]="responsiveService.isMobile()"
     >{{ label() }}
     @if (isRequired()) {
-      <span class="required">*</span>
+      <span class="required" aria-hidden="true">*</span>
     }
   </label>
 }
@@ -19,8 +19,16 @@
     (dateChanged)="onDateSelect($event)"
     placeholder="dd/mm/yyyy"
     autocomplete="off"
+    [attr.aria-label]="label() + (isRequired() ? ', required' : '')"
   />
-  <button appBtn preset="iconSmall" icon="calendar" (click)="picker.toggle()"></button>
+  <button
+    appBtn
+    preset="iconSmall"
+    icon="calendar"
+    ariaLabel="Open calendar"
+    type="button"
+    (click)="picker.toggle()"
+  ></button>
 
-  <span class="error-msg">{{ showError() }}</span>
+  <span class="error-msg" role="alert" aria-live="polite">{{ showError() }}</span>
 </div>

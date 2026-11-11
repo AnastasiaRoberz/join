@@ -11,13 +11,55 @@ import { getRandomColor } from '../utils/utils';
 @Service()
 export class ContactService {
   /** Low-level database gateway used for contact queries and mutations. */
-  supabaseService = inject(SupabaseService);
+  private readonly supabaseService = inject(SupabaseService);
 
   /**
    * Reactive list of all contacts fetched from Supabase.
    * Updated in place upon addition, update, or deletion of contacts.
    */
-  contacts = signal<ContactInterface[]>([]);
+  public readonly contacts = signal<ContactInterface[]>([]);
+
+  /** Scroll position (px) of the contact list, kept so it can be restored after returning to the list. */
+  public savedScrollTop: number = 0;
+
+  /**
+   * Derived computed signal containing all contacts sorted alphabetically by `firstname`
+   * (locale-aware, via `localeCompare`).
+   *
+   * @remarks
+   * - Creates a defensive shallow copy (`[...this.contacts()]`) before sorting to avoid mutating state
+   * - Automatically recalculates whenever the underlying `contacts` signal emits a new value
+   *
+   * @returns An array of contacts sorted alphabetically by first name
+   */
+  public readonly sortedContacts = computed<ContactInterface[]>(() => {
+    return [...this.contacts()].sort((a, b) => a.firstname.localeCompare(b.firstname));
+  });
+
+  /**
+   * Derived computed signal that groups contacts alphabetically by the uppercase first letter of their `firstname`.
+   *
+   * @remarks
+   * Relies on {@link ContactService.sortedContacts}, so the contacts inside each letter group
+   * remain in alphabetical order. Used by the contact list view to render letter header sections.
+   *
+   * @returns An array of objects each containing an uppercase `letter` and its matching `contacts` array
+   */
+  public readonly groupedContacts = computed<{ letter: string; contacts: ContactInterface[] }[]>(
+    () => this.groupContactsByLetter(this.sortedContacts()),
+  );
+
+  /**
+   * Extraction function passed to `<app-select-field [getSearchStrings]>`
+   * so contacts can be filtered by either first name or surname.
+   *
+   * @param contact - The contact item to extract searchable strings from.
+   * @returns An array containing the contact's first name and surname.
+   */
+  public readonly contactSearchStrings = (contact: ContactInterface): string[] => [
+    contact.firstname,
+    contact.surname,
+  ];
 
   /**
    * Initializes the service and triggers the initial fetch of all contacts.
@@ -31,81 +73,30 @@ export class ContactService {
    *
    * @returns A promise that resolves when the signal has been populated
    */
-  async getAllContacts(): Promise<void> {
+  public async getAllContacts(): Promise<void> {
     const contactData = await this.supabaseService.getData('contacts');
     if (contactData) this.contacts.set(contactData);
   }
-
-  /**
-   * Fetches a single contact by ID directly from the database.
-   * Useful when opening detailed route views without relying on an existing client-side cache.
-   *
-   * @param id - The ID of the contact to retrieve
-   * @returns A promise resolving to the contact record, or `null` if not found or on error
-   */
-  async getOneContact(id: number): Promise<ContactInterface | null> {
-    return await this.supabaseService.getOneItem('contacts', id);
-  }
-
-  /**
-   * Derived computed signal containing all contacts sorted alphabetically by `firstname`
-   * (locale-aware, via `localeCompare`).
-   *
-   * @remarks
-   * - Creates a defensive shallow copy (`[...this.contacts()]`) before sorting to avoid mutating state
-   * - Automatically recalculates whenever the underlying `contacts` signal emits a new value
-   *
-   * @returns An array of contacts sorted alphabetically by first name
-   */
-  sortedContacts = computed(() => {
-    return [...this.contacts()].sort((a, b) => a.firstname.localeCompare(b.firstname));
-  });
-
-  /**
-   * Derived computed signal that groups contacts alphabetically by the uppercase first letter of their `firstname`.
-   *
-   * @remarks
-   * Relies on {@link ContactService.sortedContacts}, so the contacts inside each letter group
-   * remain in alphabetical order. Used by the contact list view to render letter header sections.
-   *
-   * @returns An array of objects each containing an uppercase `letter` and its matching `contacts` array
-   */
-  groupedContacts = computed(() => {
-    const sortedContacts = this.sortedContacts();
-
-    const groups: { [key: string]: ContactInterface[] } = {};
-
-    for (const contact of sortedContacts) {
-      const firstLetter = contact.firstname.charAt(0).toUpperCase();
-      if (!groups[firstLetter]) groups[firstLetter] = [];
-      groups[firstLetter].push(contact);
-    }
-
-    return Object.keys(groups).map((letter) => ({
-      letter,
-      contacts: groups[letter],
-    }));
-  });
 
   /**
    * Creates a new contact entry in the database with an auto-assigned badge color.
    * Appends the created record to the local `contacts` signal on success to eliminate full re-fetches.
    *
    * @param contactData - The contact information excluding server-managed properties (`id`, `badge_color`)
+   * @param showFeedback - Whether to show success toast notification. Defaults to `true`.
    * @returns A promise that resolves to the newly created contact with server-generated ID, or `null` on failure
    */
-  async addContact(contactData: Omit<ContactInterface, 'id' | 'badge_color'>): Promise<ContactInterface | null> {
-    const contact = {
-      ...contactData,
-      badge_color: getRandomColor(),
-    };
+  public async addContact(
+    contactData: Omit<ContactInterface, 'id' | 'badge_color'>,
+    showFeedback: boolean = true,
+  ): Promise<ContactInterface | null> {
+    const contact = { ...contactData, badge_color: getRandomColor() };
 
-    const newContact = await this.supabaseService.addData(contact, 'contacts');
-    if (newContact) {
-      this.contacts.update((list) => [...list, newContact]);
-      return newContact;
-    }
-    return null;
+    const newContact = await this.supabaseService.addData(contact, 'contacts', showFeedback);
+    if (!newContact) return null;
+
+    this.contacts.update((list) => [...list, newContact]);
+    return newContact;
   }
 
   /**
@@ -115,7 +106,7 @@ export class ContactService {
    * @param contactData - A partial object containing the properties to update
    * @returns A promise resolving after the update has been reflected in state
    */
-  async updateContact(id: number, contactData: Partial<ContactInterface>): Promise<void> {
+  public async updateContact(id: number, contactData: Partial<ContactInterface>): Promise<void> {
     const success = await this.supabaseService.updateData(id, contactData, 'contacts');
     if (success) {
       this.contacts.update((list) =>
@@ -130,24 +121,33 @@ export class ContactService {
    * @param id - The ID of the contact to delete
    * @returns A promise that resolves to `true` when the contact has been removed from DB and state, or `false` on failure
    */
-  async deleteContact(id: number): Promise<boolean> {
+  public async deleteContact(id: number): Promise<boolean> {
     const success = await this.supabaseService.deleteData(id, 'contacts');
     if (success) {
       this.contacts.update((list) => list.filter((contact) => contact.id !== id));
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   /**
-   * Extraction function passed to `<app-select-field [getSearchStrings]>`
-   * so contacts can be filtered by either first name or surname.
+   * Groups already sorted contacts by the uppercase first letter of their `firstname`.
    *
-   * @param contact - The contact item to extract searchable strings from.
-   * @returns An array containing the contact's first name and surname.
+   * @param sortedContacts - Contacts sorted by first name.
+   * @returns One entry per letter, in the order the letters first appear.
    */
-  contactSearchStrings = (contact: ContactInterface): string[] => [
-    contact.firstname,
-    contact.surname,
-  ];
+  private groupContactsByLetter(
+    sortedContacts: ContactInterface[],
+  ): { letter: string; contacts: ContactInterface[] }[] {
+    const groups: { [key: string]: ContactInterface[] } = {};
+
+    for (const contact of sortedContacts) {
+      const firstLetter = contact.firstname.charAt(0).toUpperCase();
+      if (!groups[firstLetter]) groups[firstLetter] = [];
+      groups[firstLetter].push(contact);
+    }
+
+    return Object.keys(groups).map((letter) => ({ letter, contacts: groups[letter] }));
+  }
 }

@@ -6,42 +6,89 @@ import { ResponsiveService } from './responsive.service';
 import { Router } from '@angular/router';
 import { DialogService } from './dialog.service';
 
+/** Filter of the board: show only tasks with a status, a priority, or an (open) deadline. */
+export type BoardFilter =
+  | { type: 'status'; status: TaskInterface['status']; label: string }
+  | { type: 'priority'; priority: TaskInterface['priority']; label: string }
+  | { type: 'deadline'; dueDate?: string; label: string };
+
+/** PostgREST select pattern: task with its subtasks and the contacts assigned via `task-assignment`. */
+const TASK_SELECT =
+  '*, subtasks(*), task-assignment(contacts(id, firstname, surname, badge_color))';
+
 /**
  * Domain service managing tasks, subtasks, and user (contact) assignments.
  * Acts as the single source of truth for task state within the application using Angular Signals.
  *
  * @remarks
- * Data model (PostgreSQL tables behind {@link SupabaseService}):
- * - `tasks`: the main task rows.
- * - `subtasks`: 1:N child rows of a task (`task_id` foreign key, `is_done` flag).
- * - `task-assignment`: N:M join table between `tasks` and `contacts` (`task_id`, `contact_id`).
- *
- * Write strategy (important for everyone working with this service):
- * - Subtasks and assignments are NOT written one by one while the user edits a task.
- *   The edit form (e.g. `task-edit`) collects them locally and only after the user confirms the
- *   main task, they are persisted in one go via {@link TaskService.setTaskSubtasks} and
- *   {@link TaskService.setTaskAssignments} (both use a "delete all, then re-insert" strategy).
- * - The only value persisted immediately is the `is_done` flag of a subtask, via
- *   {@link TaskService.updateSubtaskStatus} (e.g. when a checkbox is toggled on the board).
- *
- * User feedback:
- * - This service shows no toasts itself. Success / error toasts are triggered inside
- *   {@link SupabaseService} (via `FeedbackService`) for every insert, update and delete it performs.
- *
- * Typical flow when saving a new task:
- * 1. `addTask(...)` to create the main task.
- * 2. `setTaskSubtasks(id, ...)` and `setTaskAssignments(id, ...)` to persist the related records.
+ * Data model: `tasks` (main rows), `subtasks` (1:N child rows), `task-assignment` (N:M join).
+ * Subtasks and assignments are collected locally and persisted via {@link TaskService.setTaskSubtasks}
+ * and {@link TaskService.setTaskAssignments}. Subtask completion (`is_done`) persists immediately.
  */
 @Service()
 export class TaskService {
   /** Low-level database gateway used for all queries and mutations. */
-  supabaseService = inject(SupabaseService);
+  private readonly supabaseService = inject(SupabaseService);
+  /** Angular Router used for programmatic navigation to board and tasks. */
+  private readonly router = inject(Router);
+  /** Responsive service used to determine mobile layout behavior. */
+  private readonly responsiveService = inject(ResponsiveService);
+  /** Dialog service used to trigger modals and overlays. */
+  private readonly dialogService = inject(DialogService);
 
   /**
    * Reactive list of all tasks, including their nested `subtasks` and flattened `assigned_users`.
    * Filled by {@link TaskService.getAllTasks} and patched in place by the update/delete methods.
    */
-  tasks = signal<TaskInterface[]>([]);
+  public readonly tasks = signal<TaskInterface[]>([]);
+
+  /** Active board filter, `null` if all tasks are shown. */
+  public readonly boardFilter = signal<BoardFilter | null>(null);
+
+  /** Active search term filtering board tasks in real time. */
+  public readonly searchQuery = signal<string>('');
+
+  /** Last task created on the board, so its column can scroll to it. */
+  public readonly lastAddedTask = signal<TaskInterface | null>(null);
+
+  /** Status of the column the next new task is added to (default `'To do'`). */
+  public readonly addTaskStatus = signal<TaskInterface['status']>('To do');
+
+  /** The tasks that match `boardFilter` and `searchQuery` (all tasks if none set). */
+  public readonly filteredTasks = computed<TaskInterface[]>(() => {
+    let tasks = this.tasks();
+    const filter = this.boardFilter();
+    if (filter) {
+      switch (filter.type) {
+        case 'status':
+          tasks = tasks.filter((task) => task.status === filter.status);
+          break;
+        case 'priority':
+          tasks = tasks.filter((task) => task.priority === filter.priority);
+          break;
+        case 'deadline':
+          tasks = tasks.filter((task) => this.matchesDeadlineFilter(task, filter.dueDate));
+          break;
+      }
+    }
+    const query = this.searchQuery().trim().toLowerCase();
+    if (query) {
+      tasks = tasks.filter(
+        (task) =>
+          task.title.toLowerCase().includes(query) ||
+          (task.description && task.description.toLowerCase().includes(query)),
+      );
+    }
+    return tasks;
+  });
+
+  /**
+   * Derived computed signal containing the filtered tasks sorted alphabetically by `title`
+   * (locale-aware, via `localeCompare`). Sorts a shallow copy, so `tasks` is never mutated.
+   */
+  public readonly sortedTasks = computed<TaskInterface[]>(() => {
+    return [...this.filteredTasks()].sort((a, b) => a.title.localeCompare(b.title));
+  });
 
   /**
    * Automatically fetches all tasks from Supabase upon service instantiation.
@@ -52,166 +99,87 @@ export class TaskService {
   }
 
   /**
-   * Queries all tasks from the `tasks` table with deep PostgREST joins:
-   * - 1:N join on `subtasks`
-   * - N:M join across `task-assignment` pulling related `contacts`
+   * Sets the board filter.
    *
-   * Flattens the nested assignment structure into `assigned_users` (array of contacts with
-   * `id`, `firstname`, `surname`, `badge_color`), defaults missing `subtasks` to `[]` and
-   * replaces the whole `tasks` signal with the result.
-   *
-   * @remarks
-   * Error handling: if the query fails, `SupabaseService.getData` logs the error and returns
-   * `null`. In that case this method returns early and the `tasks` signal keeps its previous value.
-   * No toast is shown for read operations.
-   *
-   * Call this after any change that is not patched locally (e.g. after `setTaskSubtasks`)
-   * to get fresh relational data.
+   * @param filter - The filter to apply, or `null` to show all tasks.
+   */
+  public setBoardFilter(filter: BoardFilter | null): void {
+    this.boardFilter.set(filter);
+  }
+
+  /** Removes the board filter and resets the search query. */
+  public clearBoardFilter(): void {
+    this.boardFilter.set(null);
+    this.searchQuery.set('');
+  }
+
+  /**
+   * Queries all tasks with their subtasks and assigned contacts, flattens the nested
+   * `task-assignment` structure into `assigned_users` and replaces the `tasks` signal.
+   * If the query fails (nothing is shown to the user), `tasks` keeps its previous value.
+   * Call this after changes that are not patched locally (e.g. after `setTaskSubtasks`).
    *
    * @returns A promise that resolves once the local signal has been synchronized with the database
-   * (or immediately if the fetch failed)
    */
-  async getAllTasks(): Promise<void> {
-    const taskData = await this.supabaseService.getData(
-      'tasks',
-      '*, subtasks(*), task-assignment(contacts(id, firstname, surname, badge_color))',
-    );
+  public async getAllTasks(): Promise<void> {
+    const taskData = await this.supabaseService.getData('tasks', TASK_SELECT);
     if (!taskData) return;
 
-    const mappedTasks = taskData.map((task: any) => ({
-      ...task,
-      subtasks: task.subtasks ?? [],
-      assigned_users: task['task-assignment']
-        ? task['task-assignment'].map((a: any) => a.contacts)
-        : [],
-    })) as TaskInterface[];
-    this.tasks.set(mappedTasks);
+    this.tasks.set(taskData.map((task: any) => this.mapTaskRecord(task)));
   }
-
-  /**
-   * Fetches a single task by ID directly from the database along with its subtasks and assigned users.
-   * Applies the same mapping as {@link TaskService.getAllTasks} (`subtasks` defaults to `[]`,
-   * `task-assignment` is flattened into `assigned_users`).
-   *
-   * @remarks
-   * Does NOT modify the `tasks` signal; the result is only returned to the caller.
-   * Errors (including "no row found") are logged by `SupabaseService.getOneItem` and result in `null`.
-   *
-   * @param id - The ID of the target task
-   * @returns A promise resolving to the structured `TaskInterface` entity, or `null` if not found or on error
-   */
-  async getOneTask(id: number): Promise<TaskInterface | null> {
-    const task = await this.supabaseService.getOneItem(
-      'tasks',
-      id,
-      '*, subtasks(*), task-assignment(contacts(id, firstname, surname, badge_color))',
-    );
-
-    if (!task) return null;
-
-    const completeTask = {
-      ...task,
-      subtasks: task.subtasks ?? [],
-      assigned_users: task['task-assignment']
-        ? task['task-assignment'].map((a: any) => a.contacts)
-        : [],
-    } as TaskInterface;
-    return completeTask;
-  }
-
-  /**
-   * Derived computed signal containing all tasks sorted alphabetically by `title`
-   * (locale-aware, via `localeCompare`).
-   *
-   * @remarks
-   * Sorts a shallow copy, so the underlying `tasks` signal is never mutated.
-   * Recalculates automatically whenever `tasks` changes.
-   */
-  sortedTasks = computed(() => {
-    return [...this.tasks()].sort((a, b) => a.title.localeCompare(b.title));
-  });
-
-  /** Last task created on the board, so its column can scroll to it. */
-  lastAddedTask = signal<TaskInterface | null>(null);
 
   /**
    * Inserts a new task row into the `tasks` table and, on success, reloads all tasks via
    * {@link TaskService.getAllTasks} so the local signal contains the new task with clean relational joins.
    *
    * @remarks
-   * - Only the main task row is created. Subtasks and assignments are NOT handled here; persist
-   *   them separately with {@link TaskService.setTaskSubtasks} and {@link TaskService.setTaskAssignments}.
-   * - This method does NOT return the new task's ID (the return type is `void`).
-   * - Feedback: `SupabaseService.addData` shows a success toast ("... succesfully created.") or an
-   *   error toast ("Create ... failed."). On failure no reload happens and the signal stays unchanged.
-   * - No exception is thrown on failure; errors are only surfaced via the toast.
+   * Only the main task row is created. Subtasks and assignments are persisted separately with
+   * {@link TaskService.setTaskSubtasks} and {@link TaskService.setTaskAssignments}.
+   * `SupabaseService.addData` shows a success or error toast. On failure no reload happens.
    *
-   * @param taskData - The task data payload without `id`. The payload is inserted as is, so it must
-   *                   only contain real columns of the `tasks` table (i.e. no `subtasks` or
-   *                   `assigned_users`, as these are managed via their own tables)
-   * @returns A promise that resolves after the insert and the subsequent reload have finished
+   * @param taskData - The task payload without `id` and `position`. It is inserted as is, so it must
+   *                   only contain real columns of the `tasks` table (no `subtasks` or `assigned_users`)
+   * @returns A promise resolving to the created task, or `null` on failure
    */
-  async addTask(taskData: Omit<TaskInterface, 'id' | 'position'>): Promise<TaskInterface | null> {
+  public async addTask(
+    taskData: Omit<TaskInterface, 'id' | 'position'>,
+  ): Promise<TaskInterface | null> {
     const newTask = await this.supabaseService.addData(taskData, 'tasks');
-    if (newTask) {
-      await this.getAllTasks();
-      this.lastAddedTask.set(newTask); // a new object every time for scroll to top
-      return newTask;
-    } else {
-      return null;
-    }
+    if (!newTask) return null;
+
+    await this.getAllTasks();
+    this.lastAddedTask.set(newTask); // a new object every time for scroll to top
+    return newTask;
   }
 
   /**
-   * Updates an existing task row in the database and, on success, applies an in-place update
-   * to the local `tasks` signal without triggering a network re-fetch.
-   * Existing `subtasks` and `assigned_users` of the local task are preserved if not provided in `taskData`.
-   *
-   * @remarks
-   * - The whole `taskData` object is sent to the `tasks` table, so it must only contain real columns
-   *   of that table. Do not pass `subtasks` or `assigned_users` here; use
-   *   {@link TaskService.setTaskSubtasks} and {@link TaskService.setTaskAssignments} for those.
-   * - Feedback: `SupabaseService.updateData` shows a success toast ("... succesfully updated.") or an
-   *   error toast ("Update ... failed."). On failure the local signal is left untouched.
-   * - No exception is thrown on failure.
+   * Updates an existing task row and, on success, patches the local `tasks` signal without a re-fetch.
+   * Existing `subtasks` and `assigned_users` of the local task are kept if not provided in `taskData`.
    *
    * @param id - The ID of the task to update
    * @param taskData - A partial task entity containing only the fields to change
    * @returns A promise that resolves after the remote update and local signal modification
    */
-  async updateTask(id: number, taskData: Partial<TaskInterface>): Promise<void> {
+  public async updateTask(id: number, taskData: Partial<TaskInterface>): Promise<void> {
     const success = await this.supabaseService.updateData(id, taskData, 'tasks');
 
     if (success) {
       this.tasks.update((list) =>
-        list.map((task) =>
-          task.id === id
-            ? {
-                ...task,
-                ...taskData,
-                subtasks: taskData.subtasks ?? task.subtasks,
-                assigned_users: taskData.assigned_users ?? task.assigned_users,
-              }
-            : task,
-        ),
+        list.map((task) => (task.id === id ? this.mergeTaskChanges(task, taskData) : task)),
       );
     }
   }
 
-  // inject for openAddTask method below
-  router = inject(Router);
-  responsiveService = inject(ResponsiveService);
-  dialogService = inject(DialogService);
-
-  // for adding tasks into column, passed status
-  addTaskStatus = signal<TaskInterface['status']>('To do');
-
-  /** mobile: go to the Add Task page. tablet/desktop: open the dialog. */
-  // using a method here, as it needs to be called from board-header and board-column
-  openAddTask(status: TaskInterface['status'] = 'To do') {
-    this.addTaskStatus.set(status); // sets status received by signal, default = To do
+  /**
+   * Opens the Add Task form. Mobile/tablet: navigates to the Add Task page. Desktop: opens the dialog.
+   * It is a service method, because it is called from the board header and from the board columns.
+   *
+   * @param status - Status (column) the new task is added to. Defaults to `'To do'`
+   */
+  public openAddTask(status: TaskInterface['status'] = 'To do'): void {
+    this.addTaskStatus.set(status);
     if (this.responsiveService.isMobile() || this.responsiveService.isTablet()) {
-      this.router.navigate(['/add-task']);
+      this.router.navigate(['/app/add-task']);
     } else {
       this.dialogService.openDialog('add-task');
     }
@@ -223,28 +191,19 @@ export class TaskService {
    * then stores `status` and `position` of every task in the column.
    *
    * @param columnTasks - All tasks of the target column, in their new order
+   * @param movedTaskId - Id of the card that changed its column (only this one shows a toast), or `null`
    */
-  async saveColumn(
+  public async saveColumn(
     columnTasks: TaskInterface[],
-    movedTaskedId: number | null = null,
+    movedTaskId: number | null = null,
   ): Promise<void> {
-    // check all tasks: if a task is in the moved column, take the new version
+    // tasks of the moved column are replaced by their new version, all others stay unchanged
     this.tasks.update((list) =>
-      // (new task(s) with status + position), otherwise (`??`) keep the old task unchanged
       list.map((task) => columnTasks.find((moved) => moved.id === task.id) ?? task),
     );
 
-    // send update per task to Supabase
     await Promise.all(
-      // Create one update request for each task in the column
-      columnTasks.map((task) =>
-        this.supabaseService.updateData(
-          task.id,
-          { status: task.status, position: task.position }, // only these two fields are saved
-          'tasks', // table "tasks"
-          task.id === movedTaskedId, // toast only for the card that changed column
-        ),
-      ),
+      columnTasks.map((task) => this.persistColumnTaskOrder(task, task.id === movedTaskId)),
     );
   }
 
@@ -254,51 +213,34 @@ export class TaskService {
    *
    * @remarks
    * This is the only subtask change that is written to the database right away. All other subtask
-   * changes (add, rename, remove, reorder) are collected locally in the edit form and saved
-   * together with the main task via {@link TaskService.setTaskSubtasks}.
-   *
-   * Feedback: `SupabaseService.updateData` shows a success toast ("Subtask succesfully updated.") or an
-   * error toast ("Update subtask failed."). On failure the local signal is left untouched.
-   * No exception is thrown on failure.
+   * changes are collected in the edit form and saved via {@link TaskService.setTaskSubtasks}.
+   * On failure the local signal is left untouched.
    *
    * @param subtaskId - The primary key of the subtask in the `subtasks` table
    * @param isDone - The new completion state
    * @returns A promise that resolves after the database update and the local signal update
    */
-  async updateSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
+  public async updateSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     const success = await this.supabaseService.updateData(
       subtaskId,
       { is_done: isDone },
       'subtasks',
     );
 
-    if (success) {
-      this.tasks.update((list) =>
-        list.map((task) => ({
-          ...task,
-          subtasks: task.subtasks?.map((subtask) =>
-            subtask.id === subtaskId ? { ...subtask, is_done: isDone } : subtask,
-          ),
-        })),
-      );
-    }
+    if (success) this.patchLocalSubtaskStatus(subtaskId, isDone);
   }
 
   /**
    * Deletes a task from the `tasks` table and, on success, removes it from the local `tasks` signal.
    *
    * @remarks
-   * - Only the main task row is deleted explicitly. This method does not delete the task's rows in
-   *   `subtasks` or `task-assignment` itself, so removing them depends on the database
-   *   (e.g. `ON DELETE CASCADE` foreign keys).
-   * - Feedback: `SupabaseService.deleteData` shows a success toast ("... succesfully deleted.") or an
-   *   error toast ("Delete ... failed."). On failure the local signal is left untouched.
-   * - No exception is thrown and nothing is returned, so callers cannot tell whether it succeeded.
+   * Only the main task row is deleted explicitly. Removing its `subtasks` and `task-assignment` rows
+   * depends on the database (e.g. `ON DELETE CASCADE`). On failure the local signal is left untouched.
    *
    * @param id - The ID of the task to delete
    * @returns A promise resolving after deletion and state synchronization
    */
-  async deleteTask(id: number) {
+  public async deleteTask(id: number): Promise<void> {
     const success = await this.supabaseService.deleteData(id, 'tasks');
 
     if (success) {
@@ -307,82 +249,150 @@ export class TaskService {
   }
 
   /**
-   * Replaces ALL subtasks of a task with the given list ("delete all, then re-insert").
-   * Called once when the user confirms the main task in the edit form.
+   * Replaces all subtasks of a task with error verification and optional reload.
    *
-   * Steps:
-   * 1. Deletes every existing row in `subtasks` with this `task_id`
-   *    (`SupabaseService.deleteTaskSubtasks`).
-   * 2. If the list is not empty, inserts all items in a single bulk insert. Only `title`, `is_done`
-   *    (defaults to `false` if missing) and `task_id` are written; other properties are ignored.
-   * 3. Reloads all tasks via {@link TaskService.getAllTasks}.
-   *
-   * @remarks
-   * Order: the list is inserted in REVERSED order, so the first item of `subtasks` receives the
-   * highest database ID. Subtasks are displayed sorted by ID descending, therefore the first item
-   * of the given list appears on top.
-   *
-   * Because all rows are deleted and re-created, the subtasks get NEW database IDs on every save.
-   * Do not keep old subtask IDs around after calling this method.
-   *
-   * Error handling / feedback: the delete step shows no toast and its errors are ignored. The
-   * insert step shows one success toast ("Subtask succesfully created.") or one error toast
-   * ("Create subtask failed."). There is no transaction: if the insert fails after the delete
-   * succeeded, the task ends up without subtasks. No exception is thrown in either case.
-   *
-   * @param taskId - The ID of the task the subtasks belong to
-   * @param subtasks - The complete new list of subtasks in display order (top item first).
-   *                   An empty array simply removes all subtasks of the task
-   * @returns A promise that resolves after the database was updated and the tasks were reloaded
+   * @param taskId - The ID of the parent task.
+   * @param subtasks - Subtasks in display order.
+   * @param reload - Whether to trigger `getAllTasks()` on completion.
+   * @returns A promise resolving to `true` on success, or `false` on failure.
    */
-  async setTaskSubtasks(taskId: number, subtasks: Omit<SubtaskInterface, 'id'>[]): Promise<void> {
-    await this.supabaseService.deleteTaskSubtasks(taskId);
+  public async setTaskSubtasks(
+    taskId: number,
+    subtasks: Omit<SubtaskInterface, 'id'>[],
+    reload: boolean = true,
+  ): Promise<boolean> {
+    const deleted = await this.supabaseService.deleteTaskSubtasks(taskId);
+    if (!deleted) return false;
     if (subtasks.length > 0) {
       const data = [...subtasks].reverse().map((s) => ({
         title: s.title,
         is_done: s.is_done ?? false,
         task_id: taskId,
       }));
-
-      await this.supabaseService.addData(data, 'subtasks');
+      const added = await this.supabaseService.addData(data, 'subtasks');
+      if (!added) return false;
     }
-    await this.getAllTasks();
+    if (reload) await this.getAllTasks();
+    return true;
   }
 
   /**
-   * Replaces ALL contact assignments of a task with the given list ("delete all, then re-insert").
-   * Called once when the user confirms the main task in the edit form.
+   * Replaces all contact assignments of a task with error verification and optional reload.
    *
-   * Steps:
-   * 1. Deletes every row in the `task-assignment` join table with this `task_id`
-   *    (`SupabaseService.deleteTaskAssignments`).
-   * 2. If `contactIds` is not empty, inserts one `{ task_id, contact_id }` row per contact in a
-   *    single bulk insert.
-   * 3. Reloads all tasks via {@link TaskService.getAllTasks} so `assigned_users` is up to date.
-   *
-   * @remarks
-   * Error handling / feedback: the delete step shows no toast and its errors are ignored. The
-   * insert step shows one success toast or one error toast (generated from the table name by
-   * `SupabaseService.addData`). There is no transaction: if the insert fails after the delete
-   * succeeded, the task ends up without assignments. No exception is thrown in either case.
-   *
-   * @param taskId - The ID of the task to update
-   * @param contactIds - The complete new list of contact IDs assigned to the task.
-   *                     An empty array removes all assignments of the task
-   * @returns A promise that resolves after the database was updated and the tasks were reloaded
+   * @param taskId - The ID of the task to update.
+   * @param contactIds - The new array of assigned contact IDs.
+   * @param reload - Whether to trigger `getAllTasks()` on completion.
+   * @returns A promise resolving to `true` on success, or `false` on failure.
    */
-  async setTaskAssignments(taskId: number, contactIds: number[]): Promise<void> {
-    await this.supabaseService.deleteTaskAssignments(taskId);
-
+  public async setTaskAssignments(
+    taskId: number,
+    contactIds: number[],
+    reload: boolean = true,
+  ): Promise<boolean> {
+    const deleted = await this.supabaseService.deleteTaskAssignments(taskId);
+    if (!deleted) return false;
     if (contactIds.length > 0) {
-      const newData = contactIds.map((contactId) => ({
-        task_id: taskId,
-        contact_id: contactId,
-      }));
-
-      await this.supabaseService.addData(newData, 'task-assignment');
+      const data = contactIds.map((contactId) => ({ task_id: taskId, contact_id: contactId }));
+      const added = await this.supabaseService.addData(data, 'task-assignment');
+      if (!added) return false;
     }
+    if (reload) await this.getAllTasks();
+    return true;
+  }
 
+  /**
+   * Persists both assignments and subtasks for a task with a single table reload.
+   *
+   * @param taskId - The ID of the target task.
+   * @param contactIds - Assigned contact IDs.
+   * @param subtasks - Subtasks list.
+   * @returns A promise resolving to `true` if both operations succeeded.
+   */
+  public async saveTaskRelations(
+    taskId: number,
+    contactIds: number[],
+    subtasks: Omit<SubtaskInterface, 'id'>[],
+  ): Promise<boolean> {
+    const assignmentsOk = await this.setTaskAssignments(taskId, contactIds, false);
+    const subtasksOk = await this.setTaskSubtasks(taskId, subtasks, false);
     await this.getAllTasks();
+    return assignmentsOk && subtasksOk;
+  }
+
+  /**
+   * Checks whether a task belongs to the deadline filter: it is not done and,
+   * if a due date is given, is due on that day.
+   *
+   * @param task - The task to check
+   * @param dueDate - Optional due date (`YYYY-MM-DD...`) the task has to match
+   */
+  private matchesDeadlineFilter(task: TaskInterface, dueDate?: string): boolean {
+    if (task.status === 'Done') return false;
+    if (dueDate) return task.due_date.slice(0, 10) === dueDate.slice(0, 10);
+    return true;
+  }
+
+  /**
+   * Maps a raw row of the joined task query to a `TaskInterface`:
+   * `subtasks` defaults to `[]` and `task-assignment` is flattened into `assigned_users`.
+   *
+   * @param task - Raw row returned by `getData('tasks', TASK_SELECT)`
+   */
+  private mapTaskRecord(task: any): TaskInterface {
+    return {
+      ...task,
+      subtasks: task.subtasks ?? [],
+      assigned_users: task['task-assignment']
+        ? task['task-assignment'].map((a: any) => a.contacts)
+        : [],
+    } as TaskInterface;
+  }
+
+  /**
+   * Applies changed fields to a local task. `subtasks` and `assigned_users` are kept
+   * if `taskData` does not contain them.
+   *
+   * @param task - The current local task
+   * @param taskData - The changed fields
+   */
+  private mergeTaskChanges(task: TaskInterface, taskData: Partial<TaskInterface>): TaskInterface {
+    return {
+      ...task,
+      ...taskData,
+      subtasks: taskData.subtasks ?? task.subtasks,
+      assigned_users: taskData.assigned_users ?? task.assigned_users,
+    };
+  }
+
+  /**
+   * Saves `status` and `position` (only these two fields) of one task of a column.
+   *
+   * @param task - The task with its new status and position
+   * @param showFeedback - Whether a toast is shown (only for the card that changed its column)
+   */
+  private persistColumnTaskOrder(task: TaskInterface, showFeedback: boolean): Promise<boolean> {
+    return this.supabaseService.updateData(
+      task.id,
+      { status: task.status, position: task.position },
+      'tasks',
+      showFeedback,
+    );
+  }
+
+  /**
+   * Sets `is_done` of one subtask in the local `tasks` signal.
+   *
+   * @param subtaskId - The id of the subtask
+   * @param isDone - The new completion state
+   */
+  private patchLocalSubtaskStatus(subtaskId: number, isDone: boolean): void {
+    this.tasks.update((list) =>
+      list.map((task) => ({
+        ...task,
+        subtasks: task.subtasks?.map((subtask) =>
+          subtask.id === subtaskId ? { ...subtask, is_done: isDone } : subtask,
+        ),
+      })),
+    );
   }
 }

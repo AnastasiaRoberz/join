@@ -4,7 +4,6 @@ import {
   computed,
   ElementRef,
   inject,
-  input,
   signal,
   viewChild,
 } from '@angular/core';
@@ -19,6 +18,8 @@ import { FitTextDirective } from '../../../../../directives/fit-text.directive';
 import { capitalizeFirstLetter } from '../../../../../utils/utils';
 import { CATEGORIES } from '../../../../../utils/categories-list';
 import { ResponsiveService } from '../../../../../services/responsive.service';
+import { SubtaskInterface } from '../../../../../interfaces/subtask.interface';
+import { TaskInterface } from '../../../../../interfaces/task.interface';
 
 /**
  * Dialog view component that displays the full details of a selected board task,
@@ -26,8 +27,7 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
  * expandable assigned contacts, and filterable subtasks.
  *
  * The view is read-only except for the subtask checkboxes: toggling a subtask's `is_done`
- * state is persisted immediately (see {@link TaskDetails.toggleSubtaskStatus}). All other
- * changes are made in `TaskEdit`, which is opened via the edit button.
+ * state is persisted immediately. All other changes are made in `TaskEdit`.
  *
  * Rendered by `DialogComponent` when `DialogService.dialogType()` is `'task'`.
  *
@@ -44,84 +44,81 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
   selector: 'app-task-details',
   styleUrl: './task-details.scss',
   templateUrl: './task-details.html',
+  host: {
+    '[class.scroll-container]': 'isShortHeight()',
+  },
 })
 export class TaskDetails {
-  // ---------------------------------------------------------------------------
-  // Injected Services & Helpers
-  // ---------------------------------------------------------------------------
-  responsiveService = inject(ResponsiveService);
+  /** Responsive layout service for breakpoint queries. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  /** Provides reactive access to the task collection and persists subtask status changes. */
-  taskService = inject(TaskService);
+  /** Provides reactive access to task collection and persists subtask status changes. */
+  private readonly taskService = inject(TaskService);
 
   /** Handles confirmation prompts before deleting a task. */
-  confirmService = inject(ConfirmService);
+  private readonly confirmService = inject(ConfirmService);
 
-  /** Manages closing the detail modal or switching to the `task-edit` dialog. */
-  dialogService = inject(DialogService);
+  /** Manages closing detail modal or switching to `task-edit` dialog. */
+  protected readonly dialogService = inject(DialogService);
 
-  /** Helper function exposed to the template for formatting priority labels. */
-  capitalizeFirstLetter = capitalizeFirstLetter;
+  /** Signal indicating viewports with height <= 600px. */
+  protected readonly isShortHeight = this.responsiveService.isMaxHeight(600);
 
-  // ---------------------------------------------------------------------------
-  // Inputs & View Queries
-  // ---------------------------------------------------------------------------
+  /** Helper function exposed to template for formatting priority labels. */
+  protected readonly capitalizeFirstLetter = capitalizeFirstLetter;
 
-  /** Maximum height of the description text in its collapsed state (e.g. `'140px'`). */
-  collapsedHeight = input<string>('140px');
+  /** Reference to description paragraph element used to measure text overflow. */
+  private readonly container = viewChild<ElementRef<HTMLElement>>('container');
 
-  /** Reference to the description paragraph element used to measure text overflow. */
-  container = viewChild<ElementRef<HTMLElement>>('container');
-
-  /** Reference to the main scrollable content wrapper inside the dialog. */
-  scrollWrapper = viewChild<ElementRef<HTMLElement>>('scrollTop');
-
-  // ---------------------------------------------------------------------------
-  // UI State Signals
-  // ---------------------------------------------------------------------------
+  /** Reference to main scrollable content wrapper inside dialog. */
+  private readonly scrollWrapper = viewChild<ElementRef<HTMLElement>>('scrollTop');
 
   /** Whether the task description is currently expanded to its full height. */
-  isExpanded = signal<boolean>(false);
+  protected readonly isExpanded = signal<boolean>(false);
 
-  /** Measured full scrollHeight (in px) applied as CSS variable when the description is expanded. */
-  expandedHeight = signal<string | null>(null);
+  /** Measured full scrollHeight (in px) applied as CSS variable when description is expanded. */
+  protected readonly expandedHeight = signal<string | null>(null);
 
-  /** Whether the description content exceeds `collapsedHeight()` and requires a toggle button. */
-  hasMoreHeight = signal<boolean>(false);
+  /** Whether description content overflows the collapsed height and requires a toggle button. */
+  protected readonly hasMoreHeight = signal<boolean>(false);
 
-  /** Whether the full vertical list of assigned users is expanded (when more than 3 users are assigned). */
-  showAllUsers = signal<boolean>(false);
+  /** Whether the full vertical list of assigned users is expanded. */
+  protected readonly showAllUsers = signal<boolean>(false);
 
-  /** Whether completed (`is_done: true`) subtasks are currently shown in the subtask list. */
-  showDoneSubtasks = signal<boolean>(false);
+  /** Whether completed (`is_done: true`) subtasks are currently shown in the list. */
+  protected readonly showDoneSubtasks = signal<boolean>(false);
 
-  // ---------------------------------------------------------------------------
-  // Computed State
-  // ---------------------------------------------------------------------------
+  /** Deleting state flag preventing duplicate delete calls. */
+  protected readonly isDeleting = signal<boolean>(false);
 
-  /**
-   * Reactively resolves the active task from `TaskService` matching the item selected in `DialogService`.
-   * Automatically reflects live updates when subtasks or task details change.
-   */
-  selectedTask = computed(() => {
+  /** Reactively resolves the active task from `TaskService` matching dialog selection. */
+  protected readonly selectedTask = computed<TaskInterface | undefined>(() => {
     const targetId = this.dialogService.selectedItem()?.id;
     return this.taskService.tasks().find((task) => task.id === targetId);
   });
 
-  /** Background color associated with the current task's category tag. */
-  categoryColor = computed(() => {
+  /** Whether the task due date is in the past relative to today. */
+  protected readonly isOverdue = computed<boolean>(() => {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const dueDateTask = this.selectedTask();
+    if (!dueDateTask) return false;
+    const matchingDate = new Date(dueDateTask.due_date).setHours(0, 0, 0, 0);
+    return matchingDate < today;
+  });
+
+  /** Background color associated with current task's category tag. */
+  protected readonly categoryColor = computed<string | undefined>(() => {
     const currentCategory = this.selectedTask()?.category;
     return CATEGORIES.find((cat) => cat.name === currentCategory)?.color;
   });
 
-  /** True if more than 3 users are assigned to the task, enabling the compact/expandable avatar view. */
-  moreUsers = computed(() => (this.selectedTask()?.assigned_users?.length ?? 0) > 1);
+  /** True if more than 1 user is assigned to the task, enabling expandable avatar view. */
+  protected readonly moreUsers = computed<boolean>(
+    () => (this.selectedTask()?.assigned_users?.length ?? 0) > 1,
+  );
 
-  /**
-   * All subtasks of `selectedTask()` sorted for display (without mutating the source array):
-   * open subtasks first, completed ones last; within each group newest (highest id) first.
-   */
-  sortedSubtasks = computed(() => {
+  /** All subtasks of selected task sorted with open ones first and completed last. */
+  protected readonly sortedSubtasks = computed<SubtaskInterface[]>(() => {
     const currentSubtasks = this.selectedTask()?.subtasks ?? [];
     return [...currentSubtasks].sort((a, b) => {
       if (a.is_done !== b.is_done) {
@@ -132,40 +129,35 @@ export class TaskDetails {
   });
 
   /** Open subtasks (`is_done === false`) in display order. */
-  subtasksNotDone = computed(() => this.sortedSubtasks().filter((item) => !item.is_done));
+  protected readonly subtasksNotDone = computed<SubtaskInterface[]>(() =>
+    this.sortedSubtasks().filter((item) => !item.is_done),
+  );
 
   /** Completed subtasks (`is_done === true`) in display order. */
-  subtasksDone = computed(() => this.sortedSubtasks().filter((item) => item.is_done));
+  protected readonly subtasksDone = computed<SubtaskInterface[]>(() =>
+    this.sortedSubtasks().filter((item) => item.is_done),
+  );
 
-  /** Subtasks currently rendered in the list: all subtasks when expanded, otherwise only open ones. */
-  visibleSubtasks = computed(() =>
+  /** Subtasks currently rendered in list: all when expanded, otherwise only open ones. */
+  protected readonly visibleSubtasks = computed<SubtaskInterface[]>(() =>
     this.showDoneSubtasks() ? this.sortedSubtasks() : this.subtasksNotDone(),
   );
 
-  // ---------------------------------------------------------------------------
-  // Lifecycle
-  // ---------------------------------------------------------------------------
-
+  /** Sets up afterRenderEffect to detect whether task description content overflows container. */
   constructor() {
     afterRenderEffect(() => {
       const element = this.container()?.nativeElement;
       this.selectedTask()?.description;
-
       if (!element) {
         this.hasMoreHeight.set(false);
         return;
       }
-
       this.hasMoreHeight.set(element.scrollHeight > element.clientHeight + 1);
     });
   }
 
-  // ---------------------------------------------------------------------------
-  // UI Interaction & Scroll Methods
-  // ---------------------------------------------------------------------------
-
-  /** Toggles the description between its collapsed preview height and full scrollHeight. */
-  toggleDescription(): void {
+  /** Toggles description between collapsed preview height and full scrollHeight. */
+  protected toggleDescription(): void {
     const el = this.container()?.nativeElement;
     if (!el) return;
 
@@ -177,35 +169,25 @@ export class TaskDetails {
   }
 
   /**
-   * Toggles the assigned users view between the compact avatar row and the full vertical list.
-   * Scrolls the users section into view when expanding, or back to the top when collapsing.
+   * Toggles assigned users view between compact row and full vertical list.
+   *
+   * @param element - The container element holding the users list.
    */
-  toggleUsers(element: HTMLElement): void {
+  protected toggleUsers(element: HTMLElement): void {
     this.showAllUsers.update((v) => !v);
     if (this.showAllUsers()) {
-      setTimeout(() => {
-        const container = this.scrollWrapper()?.nativeElement;
-        if (!container) return;
-
-        const lastItem =
-          element.querySelector<HTMLElement>('.avatar-wrapper:last-child') ?? element;
-        const containerRect = container.getBoundingClientRect();
-        const itemRect = lastItem.getBoundingClientRect();
-
-        if (itemRect.bottom > containerRect.bottom) {
-          lastItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      });
+      setTimeout(() => this.scrollLastUserIntoView(element));
     } else {
       this.scrollToTop();
     }
   }
 
   /**
-   * Toggles the visibility of completed subtasks.
-   * Scrolls the subtasks section into view when expanding, or back to the top when collapsing.
+   * Toggles visibility of completed subtasks.
+   *
+   * @param element - The container element holding the subtasks list.
    */
-  toggleSubtasks(element: HTMLElement): void {
+  protected toggleSubtasks(element: HTMLElement): void {
     this.showDoneSubtasks.update((v) => !v);
     if (this.showDoneSubtasks()) {
       setTimeout(() => {
@@ -217,39 +199,66 @@ export class TaskDetails {
     }
   }
 
-  /** Smoothly scrolls the dialog content so the given section element aligns with the top edge. */
-  scrollToSection(element: HTMLElement): void {
+  /**
+   * Smoothly scrolls dialog content so given section element aligns with top edge.
+   *
+   * @param element - The DOM element to scroll into view.
+   */
+  protected scrollToSection(element: HTMLElement): void {
     setTimeout(() => {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 
-  /** Smoothly scrolls the dialog content wrapper back to the very top. */
-  scrollToTop(): void {
+  /** Smoothly scrolls dialog content wrapper back to the top. */
+  protected scrollToTop(): void {
     setTimeout(() => {
       this.scrollWrapper()?.nativeElement.scrollTo({ behavior: 'smooth', top: 0 });
     });
   }
 
-  // ---------------------------------------------------------------------------
-  // Data Persistence Methods
-  // ---------------------------------------------------------------------------
-
   /**
-   * Persists the completion status (`is_done`) of a single subtask immediately via
-   * `TaskService.updateSubtaskStatus`.
+   * Persists completion status of a subtask immediately via `TaskService`.
    *
-   * @param subtaskId - The ID of the subtask being toggled.
-   * @param isDone - The new completion state emitted by `<app-checkbox>`.
+   * @param subtaskId - ID of the subtask to update.
+   * @param isDone - Completion state.
    */
-  async toggleSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
+  protected async toggleSubtaskStatus(subtaskId: number, isDone: boolean): Promise<void> {
     await this.taskService.updateSubtaskStatus(subtaskId, isDone);
   }
 
-  /** Prompts for confirmation and deletes the given task, then closes the dialog. */
-  async onDelete(taskId: number): Promise<void> {
+  /**
+   * Prompts for confirmation and deletes the task, then closes dialog.
+   *
+   * @param taskId - ID of the task to delete.
+   */
+  protected async onDelete(taskId: number): Promise<void> {
+    if (this.isDeleting()) return;
     if (!(await this.confirmService.askDelete('Task'))) return;
-    await this.taskService.deleteTask(taskId);
-    this.dialogService.closeDialog();
+    this.isDeleting.set(true);
+    try {
+      await this.taskService.deleteTask(taskId);
+      this.dialogService.closeDialog();
+    } finally {
+      this.isDeleting.set(false);
+    }
+  }
+
+  /**
+   * Scrolls the last assigned user in the list into view if overflowing.
+   *
+   * @param element - The container element containing avatars.
+   */
+  private scrollLastUserIntoView(element: HTMLElement): void {
+    const container = this.scrollWrapper()?.nativeElement;
+    if (!container) return;
+
+    const lastItem = element.querySelector<HTMLElement>('.avatar-wrapper:last-child') ?? element;
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = lastItem.getBoundingClientRect();
+
+    if (itemRect.bottom > containerRect.bottom) {
+      lastItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 }

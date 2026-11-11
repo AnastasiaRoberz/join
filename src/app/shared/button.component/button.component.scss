@@ -2,7 +2,7 @@
 
 :host {
   .icon {
-    transition: transform 0.2s ease;
+    transition: transform 100ms ease;
   }
 
   &.is-open {
@@ -11,7 +11,6 @@
     }
   }
 
-  // BUTTONS DEFAULT
   &.btn {
     display: inline-flex;
     justify-content: center;
@@ -24,10 +23,21 @@
     cursor: pointer;
     white-space: nowrap;
     flex-shrink: 0;
+    user-select: none;
+    transition:
+      background-color 100ms ease,
+      border-color 100ms ease,
+      box-shadow 100ms ease,
+      color 100ms ease;
 
     &:hover,
     &:active {
       box-shadow: $btn-shadow;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $main-color;
+      outline-offset: 2px;
     }
 
     .icon {
@@ -35,63 +45,137 @@
       aspect-ratio: 1/1;
       flex-shrink: 0;
       transform: var(--btn-icon-transform, none);
-      transition: transform 0.2s ease;
+    }
+
+    .btn-label {
+      display: var(--btn-label-display, inline);
     }
 
     &:disabled {
       cursor: not-allowed;
       pointer-events: none;
       background-color: $btn-disabled;
+      background-image: none;
       border-color: transparent;
+      box-shadow: none;
+      transform: none;
     }
   }
 
   &.btn--small {
     font-size: $font-default;
-    padding: calcClamp(4, 8, 768, 320) calcClamp(6, 12, 768, 320);
-    border-radius: 8px;
+    padding-inline: calcClamp(6, 12, 768, 320);
+    padding-block: calcClampMin((4, 8, 768, 320), (4, 8, 500, 350));
+    border-radius: $radius-sm;
   }
 
   &.btn--medium {
-    font-size: $font-default;
-    padding: calcClamp(10, 16, 768, 320);
-    border-radius: 8px;
+    font-size: calcClampRem(16, 20);
+    padding-block: calcClampMin((8, 16, 768, 320), (4, 16, 500, 350));
+    padding-inline: calcClamp(12, 24, 768, 320);
+    border-radius: $radius-md;
   }
 
   &.btn--large {
     font-size: $font-medium;
-    padding: calcClamp(10, 16, 768, 320);
-    border-radius: 10px;
+    padding-inline: calcClamp(8, 16, 768, 320);
+    padding-block: calcClampMin((8, 16, 768, 320), (4, 16, 500, 350));
+    border-radius: $radius-md;
   }
 
   &.btn--primary {
+    position: relative;
+    overflow: hidden;
     background-color: $btn-primary-default;
     color: $btn-primary-txt;
     font-weight: 700;
+    transition:
+      background-color 0.25s ease,
+      transform 0.2s ease,
+      box-shadow 0.25s ease;
 
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba($color-white, 0.35) 50%,
+        transparent 80%
+      );
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
     &:hover {
       background-color: $btn-primary-hover;
+      box-shadow: $btn-shadow;
+      transform: translateY(-1px);
+
+      &::before {
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
     }
 
     &:active {
       background-color: $btn-primary-active;
+      transform: translateY(0);
     }
   }
 
   &.btn--secondary {
+    position: relative;
+    overflow: hidden;
     background-color: transparent;
     border: 1px solid $btn-secondary-default;
+    box-shadow:
+      inset 0 0 0 0px transparent,
+      $btn-shadow-placeholder;
     color: $btn-secondary-default;
+    font-weight: 700;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+
+    // Diagonaler Glanzstreifen, der beim Hovern einmal durchzieht
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba($color-cyan-500, 0.25) 50%,
+        transparent 80%
+      );
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
 
     &:hover {
-      border: 1px solid $btn-secondary-hover;
-      outline: 1px solid $btn-secondary-hover;
+      border-color: $btn-secondary-hover;
       color: $btn-secondary-hover;
+      box-shadow:
+        inset 0 0 0 1px $btn-secondary-hover,
+        $btn-shadow;
+      transform: translateY(-1px);
+
+      &::before {
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
     }
 
     &:active {
-      border: 1px solid $btn-secondary-active;
+      border-color: $btn-secondary-active;
       color: $btn-secondary-active;
+      box-shadow:
+        inset 0 0 0 1px $btn-secondary-active,
+        $btn-shadow-placeholder;
+      transform: translateY(0);
     }
   }
 
@@ -99,7 +183,7 @@
     background-color: transparent;
     border: none;
     box-shadow: none;
-    color: $btn-icon;
+    color: $btn-txtIcon-default;
     padding: 0;
 
     .btn-label {
@@ -158,30 +242,54 @@
         aspect-ratio: 1/1;
       }
     }
-
-    .btn-close-mobile {
-      color: $close-btn-mobile-default;
-    }
   }
 
   &.btn--add {
+    position: relative;
+    overflow: hidden;
     background-color: $btn-add-default;
     color: $btn-add-txt;
     font-weight: 700;
     gap: 0;
+    transition:
+      background-color 0.25s ease,
+      transform 0.2s ease,
+      box-shadow 0.25s ease;
 
     .icon {
       width: 32px;
       height: 32px;
     }
 
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba($color-white, 0.35) 50%,
+        transparent 80%
+      );
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
+
     &:hover {
       background-color: $btn-add-hover;
+      box-shadow: $btn-shadow;
+      transform: translateY(-1px);
+
+      &::before {
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
     }
 
     &:active {
       background-color: $btn-add-active;
       box-shadow: $btn-shadow-placeholder;
+      transform: translateY(0);
     }
   }
 
@@ -190,18 +298,11 @@
     width: 100%;
 
     @include mobile {
-      position: absolute;
-      bottom: 32px;
-      right: 16px;
-      height: 56px;
-      width: 56px;
-      border-radius: 50%;
-      box-shadow: $btn-shadow;
-      padding: 0;
+      @include circle-btn(56px, 32px, 16px);
+    }
 
-      .btn-label {
-        display: none;
-      }
+    @include short-height {
+      @include circle-btn(48px, 16px, -8px);
     }
   }
 

@@ -20,7 +20,7 @@ export class ErrorService {
    * The function receives the field label and the error data of the validator
    * (e.g. `{ requiredLength, actualLength }` for `maxLength`).
    */
-  messages: Record<string, (field: string, err: any) => string> = {
+  private readonly messages: Record<string, (field: string, err: any) => string> = {
     // --- General Custom Validators ---
     onlyWhitespace: (field) => `${field} can't be only spaces.`,
 
@@ -61,9 +61,25 @@ export class ErrorService {
     invalidPhoneBrackets: () => `The parentheses do not match / close.`,
 
     // --- Angular standard validator (used for Validators.required) ---
-    required: (field) => `Your ${field} is required.`,
+    required: (field) => `${field} is required.`,
 
     requiredDefault: () => 'This field is required.',
+
+    invalidCredentials: () => 'Invalid email or password.',
+
+    passwordMismatch: () => "Passwords don't match. Please try again.",
+
+    // --- Password Strength Validators ---
+    minPasswordLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
+      `${errData?.requiredLength ?? 8} characters needed`,
+
+    passwordMissingUppercase: () => 'One uppercase needed',
+
+    passwordMissingLowercase: () => 'One lowercase letter',
+
+    passwordMissingNumber: () => 'One number needed',
+
+    passwordMissingSpecialChar: () => 'One special character',
   };
 
   /**
@@ -74,7 +90,7 @@ export class ErrorService {
    * @returns `null` if there are no errors, the matching message for the first error key,
    * or the generic "Invalid input." if no message is registered for that key.
    */
-  getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
+  public getErrorMessage(errors: ValidationErrors | null, fieldName: string): string | null {
     if (!errors) return null;
 
     const firstKey = Object.keys(errors)[0];

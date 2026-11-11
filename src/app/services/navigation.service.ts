@@ -10,36 +10,41 @@ import { filter } from 'rxjs';
  * @example
  * nav = inject(NavigationService);
  * // template: <button (click)="nav.goBack()">Back</button>
- * // active route check: nav.currentUrl().startsWith('/contacts')
+ * // active route check: nav.currentUrl().startsWith('/app/contacts')
  */
 @Service()
 export class NavigationService {
   /** Angular Location service, used for browser history navigation. */
-  location = inject(Location);
+  private readonly location = inject(Location);
   /** Angular Router, used for the fallback navigation and to listen to route changes. */
-  router = inject(Router);
+  private readonly router = inject(Router);
 
   /** Current URL of the app (after redirects). Initialized with the router URL and updated on every `NavigationEnd`. */
-  currentUrl = signal<string>(this.router.url);
+  public readonly currentUrl = signal<string>(this.router.url);
 
-  /** Subscribes to router events to keep `currentUrl` in sync (lives as long as the root service). */
+  /** Starts listening to route changes (lives as long as the root service). */
   constructor() {
+    this.initRouteListener();
+  }
+
+  /**
+   * Navigates one step back in the browser history. If the history has no previous entry,
+   * navigates to `/app/summary` instead so the user never ends up on a dead end.
+   */
+  public goBack(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/app/summary']);
+    }
+  }
+
+  /** Subscribes to router events to keep `currentUrl` in sync. */
+  private initRouteListener(): void {
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
         this.currentUrl.set(event.urlAfterRedirects);
       });
-  }
-
-  /**
-   * Navigates one step back in the browser history. If the history has no previous entry,
-   * navigates to `/summary` instead so the user never ends up on a dead end.
-   */
-  goBack(): void {
-    if (window.history.length > 1) {
-      this.location.back();
-    } else {
-      this.router.navigate(['/summary']);
-    }
   }
 }

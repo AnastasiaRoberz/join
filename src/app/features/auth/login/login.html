@@ -1,5 +1,40 @@
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <app-text-field label="Email" icon="mail" formControlName="mail" />
-  <app-text-field label="Password" icon="lock" formControlName="password" />
-  <button appBtn preset="primary" type="submit">Log in</button>
+<h2 id="login-heading">Log in</h2>
+
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" aria-labelledby="login-heading">
+  <app-text-field
+    label="Email"
+    icon="mail"
+    fieldId="mail"
+    formControlName="mail"
+    autocomplete="email"
+  />
+  <app-text-field
+    inputType="password"
+    label="Password"
+    fieldId="password"
+    formControlName="password"
+    autocomplete="current-password"
+  />
+  <div class="button-wrapper">
+    <button
+      appBtn
+      preset="primary"
+      size="medium"
+      type="submit"
+      [attr.aria-disabled]="!loginForm.valid"
+      [disabled]="!loginForm.valid || isSubmitting()"
+    >
+      Log in
+    </button>
+    <button
+      appBtn
+      preset="secondary"
+      size="medium"
+      (click)="anonymLogin()"
+      type="button"
+      [disabled]="isSubmitting()"
+    >
+      Guest Log in
+    </button>
+  </div>
 </form>

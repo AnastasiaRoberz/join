@@ -2,14 +2,27 @@
 
 :host {
   @include field-host;
-}
+  position: relative;
 
-:host(.ng-invalid.ng-touched) .input-container {
-  border-color: $error;
+  &.ng-invalid.ng-touched .input-container {
+    border-color: $error;
+
+    &:focus-within,
+    &:has(input:not(:placeholder-shown)),
+    &:has(textarea:not(:placeholder-shown)) {
+      label.inner {
+        color: $error;
+      }
+    }
+  }
+
+  &.task-input .input-container {
+    --padding-inline: #{calcClamp(12, 16, 768, 320)};
+  }
 }
 
 .char-count {
-  font-size: calcClamp(12, 14, 940, 400);
+  font-size: calcClampMin((12, 14, 940, 400), (12, 14));
   color: $input-default-label;
   position: absolute;
   right: 0;
@@ -20,12 +33,12 @@
 input,
 textarea {
   @include field-input(flex);
+  min-width: 0;
 }
 
 textarea {
   field-sizing: content;
   min-height: 96px;
-  // max-width: 100%;
   max-height: #{min(40cqh, 240px)};
   resize: none;
   overflow-wrap: anywhere;
@@ -37,9 +50,8 @@ textarea {
   --padding-inline: #{calcClamp(12, 20, 768, 320)};
   --sb-width: 16px;
   --sb-border-width: 6px;
-  @include field-container(auto);
+  @include field-container;
   padding-inline: var(--padding-inline);
-  padding-block: calcClamp(8, 12, 768, 320);
 
   &:focus-within,
   &:has(input:not(:placeholder-shown)),
@@ -48,43 +60,33 @@ textarea {
       transform: translateY(-150%);
       color: $input-focus-label;
 
-      @include mobile {
+      @media screen and (max-width: 768px), screen and (max-height: 500px) {
         display: none;
       }
     }
   }
-
-  // &:has(input) {
-  //   height: calcClamp(40, 48, 769, 400);
-  // }
-
-  // &:has(.ng-invalid:is(.ng-touched)) {
-  //   border-color: $error;
-
-  //   label {
-  //     color: $error;
-  //   }
-  // }
 }
 
-label.top {
-  @include field-label;
-}
+label {
+  &.top {
+    @include field-label;
+  }
 
-label.inner {
-  font-size: calcClamp(16, 20, 768, 320);
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: $main-color;
-  pointer-events: none;
-  background-color: white;
-  padding: 0 8px;
-  transition: all 150ms ease-in-out;
+  &.inner {
+    @include field-label;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $main-color;
+    background-color: $color-white;
+    padding: 0 8px;
+    transition: all 150ms ease-in-out;
+    cursor: text;
 
-  @include mobile {
-    padding: 0;
+    @include mobile {
+      padding: 0;
+    }
   }
 }
 
@@ -99,12 +101,10 @@ label.inner {
   pointer-events: none;
 }
 
-.error-msg {
-  @include field-error-msg;
+.btn.btn--icon {
+  color: $input-icon;
 }
 
-:host(.task-input) .input-container {
-  --padding-inline: #{calcClamp(12, 16, 768, 320)};
-  padding-block: calcClamp(8, 12, 768, 320);
-  padding-inline: var(--padding-inline);
+.error-msg {
+  @include field-error-msg;
 }

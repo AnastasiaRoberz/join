@@ -2,7 +2,7 @@
   <label [attr.for]="fieldId()" [class.is-mobile]="responsiveService.isMobile()"
     >{{ label() }}
     @if (required()) {
-      <span class="required">*</span>
+      <span class="required" aria-hidden="true">*</span>
     }
   </label>
 }
@@ -15,21 +15,24 @@
     [value]="displayValue()"
     #combobox="ngCombobox"
     ngCombobox
-    [(expanded)]="popupExpanded"
+    [expanded]="popupExpanded()"
+    (expandedChange)="onExpandedChange($event)"
     [preserveContent]="false"
     (click)="onInputClick()"
     (input)="onSearchInput($event)"
     autocomplete="off"
+    [style.visibility]="filterButton() ? 'hidden' : 'visible'"
     #inputField
   />
 
   @if (variant() === 'search') {
     <div class="search-suffix">
-      <hr class="divider" />
+      <hr class="divider" aria-hidden="true" />
       <button
         appBtn
         preset="iconMedium"
         icon="search"
+        ariaLabel="Search"
         (click)="togglePopup()"
         (mousedown)="$event.preventDefault()"
       ></button>
@@ -39,16 +42,18 @@
       appBtn
       preset="iconMedium"
       icon="arrow-down"
+      [ariaLabel]="popupExpanded() ? 'Close dropdown' : 'Open dropdown'"
       [class.is-open]="popupExpanded()"
       (click)="togglePopup()"
       (mousedown)="$event.preventDefault()"
     ></button>
   }
 
-  <span class="error-msg">{{ showError() }}</span>
+  <ng-content />
+
+  <span class="error-msg" role="alert" aria-live="polite">{{ showError() }}</span>
 </div>
 
-<!-- Optional slot for footer content (e.g., assigned user avatar badges) -->
 <ng-content select="[footer]" />
 
 <ng-template

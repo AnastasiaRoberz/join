@@ -9,29 +9,48 @@ import { Board } from './features/main/board/board';
 import { Help } from './features/main/info/help/help';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
+import { Auth } from './features/auth/auth';
+import { authGuard } from './auth.guard';
+import { addTaskDeactivateGuard } from './features/main/add-task/add-task-deactivate.guard';
 
+/**
+ * Application routes.
+ * - `''`: authentication shell with `login` (default) and `register`.
+ * - `'app'`: main shell.
+ *   - `''` redirects to `summary`.
+ *   - `privacy-policy` and `legal-notice` are always reachable (no guard).
+ *   - All other pages are protected by `authGuard` (logged-in users only).
+ * - `'**'`: catch-all, redirects to `/login` for unknown URLs.
+ */
 export const routes: Routes = [
-  { path: 'login', component: Login }, //für später: login-page
-  { path: 'register', component: Register },
-  //canActivate: [Methodenname] -> property ruft Methode auf, die Pfad erst aktiviert, wenn eingeloggt -> für alle außer privacy und legal ergänzen
   {
     path: '',
-    component: Main,
+    component: Auth,
     children: [
-      //immer erreichbar
-      { path: 'privacy-policy', component: PrivacyPolicy },
-      { path: 'legal-notice', component: LegalNotice },
-
-      //nur eingeloggt, canActivate kommt später
-      { path: 'summary', component: Dashboard },
-      { path: 'contacts', component: Contacts },
-      { path: 'add-task', component: AddTask },
-      { path: 'board', component: Board },
-      { path: 'help', component: Help },
-
-      //Weiterleitung, wenn URL leer
-      { path: '', redirectTo: 'summary', pathMatch: 'full' },
+      { path: 'login', component: Login },
+      { path: 'register', component: Register },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
-  //   {path: '**', redirectTo: 'login'} //-> für später: wenn falsche URL, dann zu login (statt 404) -> bricht sofort ab, daher letzte stelle!
+  {
+    path: 'app',
+    component: Main,
+    children: [
+      { path: '', redirectTo: 'summary', pathMatch: 'full' },
+      { path: 'privacy-policy', component: PrivacyPolicy },
+      { path: 'legal-notice', component: LegalNotice },
+      { path: 'summary', component: Dashboard, canActivate: [authGuard] },
+      { path: 'contacts', component: Contacts, canActivate: [authGuard] },
+      {
+        path: 'add-task',
+        component: AddTask,
+        canActivate: [authGuard],
+        canDeactivate: [addTaskDeactivateGuard],
+      },
+      { path: 'board', component: Board, canActivate: [authGuard] },
+      { path: 'help', component: Help, canActivate: [authGuard] },
+    ],
+  },
+
+  { path: '**', redirectTo: '/login' },
 ];

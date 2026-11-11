@@ -1,4 +1,12 @@
-<article class="task-card" (click)="dialogService.openDialog('task', task())">
+<article
+  class="task-card"
+  (click)="dialogService.openDialog('task', task())"
+  (keydown.enter)="dialogService.openDialog('task', task())"
+  (keydown.space)="dialogService.openDialog('task', task())"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Open task: ' + task().title"
+>
   <span class="task-card__category" [style.background-color]="categoryColor()">
     {{ task().category }}
   </span>
@@ -11,15 +19,13 @@
     }
   </div>
 
-    @if (totalSubtasks() > 0) {
+  @if (totalSubtasks() > 0) {
     <div class="task-card__progress">
-      <!-- native progress element: value and max replace the two divs and the aria attributes -->
       <progress
         class="task-card__bar"
         aria-label="Subtask progress"
         [value]="doneSubtasks()"
         [max]="totalSubtasks()"
-        [title]="doneSubtasks() + ' of ' + totalSubtasks() + ' subtasks done'"
       ></progress>
       <span class="task-card__count">{{ doneSubtasks() }}/{{ totalSubtasks() }} Subtasks</span>
     </div>

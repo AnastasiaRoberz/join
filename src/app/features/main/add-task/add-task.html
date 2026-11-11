@@ -1,11 +1,9 @@
-<!-- <div class="task-header">
-  <h2>Add Task</h2>
-</div> -->
-<h2 class="task-header">Add Task</h2>
+<h2 class="task-header" id="add-task-heading">Add Task</h2>
 
 <form
   [formGroup]="taskForm"
   (ngSubmit)="onSubmit()"
+  aria-labelledby="add-task-heading"
   [class.scroll-container]="isMiddleHeight()"
   cdkScrollable
 >
@@ -22,7 +20,6 @@
         class="task-input"
         formControlName="title"
         requiredMsg
-        ...
         labelPos="top"
         label="Title"
         type="input"
@@ -46,12 +43,11 @@
         label="Due date"
         formControlName="date"
         requiredMsg
-        ...
       ></app-calendar-field>
     </div>
 
     @if (!responsiveService.isMobile()) {
-      <div class="divider"></div>
+      <div class="divider" aria-hidden="true"></div>
     }
 
     <div class="task-wrap task-right">
@@ -64,17 +60,23 @@
         label="Assigned to"
         placeholder="Select contacts to assign"
         emptyText="No contacts found."
-        [options]="contactService.sortedContacts()"
+        [options]="userService.assignableContacts()"
         [multi]="true"
         [(value)]="selectedContactIds"
         [getSearchStrings]="contactSearchStrings"
       >
         <ng-template #optionTemplate let-contact let-selected="selected">
           <app-user-avatar [user]="contact" size="medium"></app-user-avatar>
-          <span class="name">{{ contact.firstname }} {{ contact.surname }}</span>
+          <span class="name">
+            {{ contact.firstname }} {{ contact.surname }}
+            @if (contact.id === userService.currentContact()?.id) {
+              (You)
+            }
+          </span>
           <app-checkbox
             [checked]="selected"
             (checkedChange)="toggleAssignment(contact.id, $event)"
+            class="whiteIcon"
           ></app-checkbox>
         </ng-template>
         <app-avatar-group
@@ -92,7 +94,6 @@
         placeholder="Select task category"
         formControlName="category"
         requiredMsg
-        ...
         [options]="categories"
         [valueKey]="categoryKey"
         [required]="true"
@@ -108,15 +109,16 @@
   </div>
 
   <div class="task-footer">
-    <span><span class="required">*</span>This field is required</span>
+    <span> <span aria-hidden="true" class="required">*</span>This field is required </span>
     <div class="task-footer__buttons">
-      <button appBtn preset="cancel" label="Clear" (click)="onClear()"></button>
+      <button appBtn preset="cancel" label="Clear" (click)="onClear()" [disabled]="isSubmitting()"></button>
       <button
         appBtn
         preset="check"
         type="submit"
         label="Create Task"
-        [disabled]="taskForm.invalid"
+        [disabled]="taskForm.invalid || isSubmitting()"
+        [attr.aria-disabled]="taskForm.invalid || isSubmitting()"
       ></button>
     </div>
   </div>

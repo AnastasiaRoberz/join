@@ -1,5 +1,9 @@
 import { BtnInterface } from './button.component';
 
+/**
+ * Predefined button style configurations mapped by preset name.
+ * Provides default variant, size, icon, icon position, and label settings.
+ */
 export const BUTTON_STYLES = {
   // * --- PRIMARY --- *
   primary: {
@@ -71,4 +75,5 @@ export const BUTTON_STYLES = {
   },
 } as const satisfies Record<string, BtnInterface>;
 
+/** Preset keys defined in `BUTTON_STYLES`. */
 export type BtnPreset = keyof typeof BUTTON_STYLES;

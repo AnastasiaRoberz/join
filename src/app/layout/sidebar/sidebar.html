@@ -1,19 +1,42 @@
 <div class="sidebar-wrapper">
   @if (!responsiveService.isTablet() && !isShort()) {
-    <svg class="nav-logo">
+    <svg class="nav-logo" role="img" aria-label="Join Logo">
       <use href="./assets/icons/icons.svg#logo"></use>
     </svg>
   }
 
   <nav>
     <ul>
-      @for (item of navList; track item.section) {
+      @if (userService.currentSession()) {
+        @for (item of navList; track item.section) {
+          <li>
+            <a
+              [routerLink]="'/app/' + item.section"
+              routerLinkActive="active"
+              (click)="onNavClick(item.section)"
+            >
+              <svg class="nav-icon" aria-hidden="true" focusable="false">
+                <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
+              </svg>
+              <span>{{ item.label }}</span>
+            </a>
+          </li>
+        }
+      } @else {
         <li>
-          <a [routerLink]="'/' + item.section" routerLinkActive="active">
-            <svg class="nav-icon">
-              <use [attr.href]="'./assets/icons/icons.svg#' + item.svgId"></use>
+          <a routerLink="/login" routerLinkActive="active">
+            <svg class="nav-icon" aria-hidden="true" focusable="false">
+              <use href="./assets/icons/icons.svg#log-in"></use>
             </svg>
-            <span>{{ item.label }}</span>
+            <span>Log In</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/register" routerLinkActive="active">
+            <svg class="nav-icon" aria-hidden="true" focusable="false">
+              <use href="./assets/icons/icons.svg#sign-up"></use>
+            </svg>
+            <span>Sign up</span>
           </a>
         </li>
       }

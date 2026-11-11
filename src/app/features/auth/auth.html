@@ -1,0 +1,47 @@
+<div
+  class="content"
+  [class.short-register]="navService.currentUrl() === '/register' && isShortHeight()"
+  [class.intro-mobile]="introService.isMobile()"
+>
+  @if (introService.isActive()) {
+    <div class="intro-overlay" aria-hidden="true"></div>
+  }
+  @if (!(navService.currentUrl() === '/register' && isShortHeight())) {
+    <header class="start-header">
+      <svg
+        class="main-logo"
+        [class.intro-active]="introService.isActive()"
+        role="img"
+        aria-label="Join Logo"
+      >
+        <use href="./assets/icons/icons.svg#logo"></use>
+      </svg>
+
+      @if (
+        navService.currentUrl().startsWith('/login') &&
+        (!responsiveService.isMobile() || isShortHeight())
+      ) {
+        <div class="start-header__login">
+          <span>Not a Join user?</span>
+          <a appBtn preset="primary" size="medium" routerLink="/register">Sign Up</a>
+        </div>
+      }
+    </header>
+  }
+
+  <main class="auth-main-box">
+    <router-outlet />
+  </main>
+  @if (
+    navService.currentUrl().startsWith('/login') && responsiveService.isMobile() && !isShortHeight()
+  ) {
+    <div class="auth-mobile-signup">
+      <span>Not a Join user?</span>
+      <a appBtn preset="primary" size="medium" routerLink="/register" aria-label="Sign up for Join"
+        >Sign Up</a
+      >
+    </div>
+  }
+
+  <footer app-footer variant="auth"></footer>
+</div>

@@ -2,156 +2,187 @@
 
 :host {
   @include flex-center;
-  width: 100%;
-  height: 100%;
+  @include size;
   max-width: 1212px;
 
   @include mobile {
-    height: 100%;
-    min-height: 560px;
+    justify-content: flex-end;
     flex-direction: column;
   }
 }
 
 .header-section {
   @include flex-start(column);
+  height: 100%;
+  width: fit-content;
   align-self: stretch;
   background-color: $main-color;
   padding: 0 calcClamp(24, 48);
   position: relative;
-  max-width: 40%;
 
   @include mobile {
+    justify-content: center;
     width: 100%;
     max-width: 100%;
-    height: 45%;
-    padding: 66px calcClamp(24, 88, 940, 500);
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    flex: 1;
+    padding-block: 0;
+    padding-inline: var(--padding-inline-dialog);
     gap: 30px;
   }
-}
 
-.header {
-  @include flex-start(column);
-  gap: 16px;
-  position: relative;
-  color: $text-light;
+  &__header {
+    @include flex-start(column);
+    @include underline();
+    gap: 16px;
+    position: relative;
+    color: $text-light;
+    margin-bottom: 16px;
+
+    &::before {
+      content: url('../../../../../../../public/assets/icons/logo.svg');
+      width: 64px;
+      aspect-ratio: 1;
+      position: absolute;
+      top: calc(-1 * calcClamp(4, 24, 450, 350, height));
+      transform: translateY(-100%);
+      left: 0;
+
+      @include short-height {
+        width: 48px;
+        right: 0;
+        left: auto;
+      }
+    }
+
+    @include mobile {
+      gap: 8px;
+
+      &:not(:has(.header-section__subheading)) {
+        margin-top: 14px;
+        margin-bottom: 30px;
+      }
+
+      &::before {
+        display: none;
+      }
+
+      @include short-height(450) {
+        margin-block: 0;
+
+        &::after,
+        .header-section__subheading {
+          display: none;
+        }
+      }
+    }
+  }
 
   h2 {
     line-height: 1;
-    text-wrap: wrap;
-  }
+    text-wrap: nowrap;
 
-  &::before {
-    content: url('../../../../../../../public/assets/icons/logo.svg');
-    height: 64px;
-    width: 64px;
-    position: absolute;
-    top: -24px;
-    transform: translateY(-100%);
-    left: 0;
-  }
-
-  &::after {
-    content: '';
-    width: 90px;
-    height: 3px;
-    background-color: $text-underline;
-    position: absolute;
-    bottom: -16px;
-    left: 0;
-  }
-
-  @include mobile {
-    gap: 8px;
-    &::before {
-      display: none;
+    @include tablet {
+      text-wrap: wrap;
     }
   }
-}
 
-.btn-close-mobile {
-  position: absolute;
-  top: 24px;
-  right: 16px;
+  &__subheading {
+    color: $text-light;
+    font-size: calcClamp(16, 28);
+    text-wrap: nowrap;
 
-  &:active {
-    background-color: $close-btn-mobile-active;
+    @include tablet {
+      text-wrap: wrap;
+    }
   }
 }
 
 .content-section {
+  --form-gap: #{calcClampMin((24, 32), (16, 32, 700, 350))};
+  --btn-margin: #{calcClamp(0, 16, 700, 350, height)};
+  --avatar-size: #{calcClamp(60, 120, 700, 450, height)};
+  --padding-short: #{calcClamp(16, 64, 700, 350, height)};
+  --input-wrapper-gap: #{calcClamp(32, 72, 1440, 1025)};
   @include flex-center(column);
-  flex: 1;
   gap: 56px;
-  height: 100%;
-  padding: calcClamp(80, 136, 1440, 769) calcClamp(24, 48, 1440, 769);
+  padding-inline: var(--padding-inline-dialog);
   position: relative;
+  flex: 1;
 
   @include mobile {
+    --avatar-gap: #{calcClamp(16, 32, 700, 350, height)};
     width: 100%;
-    flex: 1;
-    justify-content: center;
-    padding: 0 calcClamp(16, 88, 940, 500);
-  }
-}
+    padding-top: #{calc(var(--avatar-gap) + (var(--avatar-size) / 2))};
+    padding-bottom: var(--padding-short);
+    flex: none;
 
-.avatar {
-  transform: translateY(-50%);
-
-  @include tablet {
-    transform: none;
-  }
-
-  @include mobile {
-    transform: translateY(0);
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.input-wrapper {
-  @include flex-center;
-  width: 100%;
-  gap: calcClamp(48, 72, 1440, 1025);
-
-  .form-section {
-    @include flex-start(column);
-    flex: 1;
-    width: 100%;
-    gap: 32px;
-
-    @include mobile {
-      height: 100%;
-      align-items: center;
-      gap: calcClamp(20, 24, 400, 330);
-      margin-top: 30px;
+    @include short-height(600) {
+      padding-top: var(--padding-short);
     }
   }
 
-  @include tablet {
-    flex-direction: column;
+  &__input-wrapper {
+    @include flex-center;
+    width: 100%;
+    gap: var(--input-wrapper-gap);
+
+    @include tablet {
+      flex-direction: column;
+      gap: calc(var(--form-gap) + var(--btn-margin));
+    }
   }
-}
 
-.icon {
-  width: 24px;
-  height: 24px;
-}
+  &__form-section {
+    @include flex-start(column);
+    @include size;
+    flex: 1;
+    gap: var(--form-gap);
+    min-height: 0;
 
-.buttons-wrapper {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 24px;
-  margin-top: 16px;
+    @include mobile {
+      align-items: center;
+      flex: none;
+      height: auto;
+    }
+  }
 
-  @include mobile {
-    margin-top: 0;
+  app-user-avatar {
+    --btn-size: #{calcClamp(41.33, 57.33, 500, 350, height)};
+    --transform: #{calc((var(--btn-size) + var(--btn-margin) + var(--form-gap)) / -2)};
+    transform: translateY(var(--transform));
+    margin-left: calc(var(--input-wrapper-gap) - var(--padding-inline-dialog));
+    width: calcClamp(100, 120, 1440, 1025);
+
+    @include tablet {
+      transform: none;
+      margin-left: 0;
+      width: calcClamp(80, 120, 600, 450, height);
+    }
+
+    @include mobile {
+      position: absolute;
+      top: 0;
+      transform: translateY(-50%);
+      width: var(--avatar-size);
+
+      @include short-height(600) {
+        transform: translateY(calc(-100% - (var(--form-gap) / 2)));
+        right: calc(var(--form-gap) / 2);
+      }
+    }
+
+    @include short-height(450) {
+      display: none;
+    }
+  }
+
+  &__buttons-wrapper {
+    @include flex-start;
+    gap: 24px;
+    margin-top: var(--btn-margin);
+
+    @include mobile {
+      margin-top: 0;
+    }
   }
 }

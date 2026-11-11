@@ -1,27 +1,26 @@
-@use '../../../../../../../public/assets/styles/' as *;
+@use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  --dialog-max-height: #{min(95dvh, 1024px)};
-  --padding-inline: #{calcClamp(24, 40, 769, 320)};
-  @include flex-start(column, both);
-  gap: calcClamp(16, 24);
-  width: 525px;
-  max-height: var(--dialog-max-height);
-  min-height: 0;
-  padding-inline: var(--padding-inline);
-  padding-top: calcClamp(32, 48, 769, 320);
+  @include task-dialog-shell;
+  padding-top: var(--padding-block-dialog);
   padding-bottom: calcClamp(16, 24, 769, 320);
 
-  @include mobile {
-    width: 100%;
+  &.scroll-container {
+    padding-right: calc(var(--padding-inline-dialog) - var(--sb-width) + 4px);
+
+    form {
+      min-height: auto;
+      height: auto;
+    }
+
+    .form-content-wrapper {
+      width: 100%;
+    }
   }
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  @include flex-start(column, both);
   gap: calcClamp(16, 32);
   height: 100%;
   min-height: 0;
@@ -40,12 +39,5 @@ form {
 }
 
 .name {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-app-avatar-group.has-users {
-  margin-top: 8px;
+  @include text-ellipsis;
 }

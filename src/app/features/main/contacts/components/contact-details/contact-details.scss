@@ -1,41 +1,38 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column);
-  justify-content: flex-start;
+  @include flex-start(column, both);
   gap: 21px;
-  width: 100%;
-  min-width: 0; // the component may get narrower than the long name
-  height: 100%;
-  position: relative;
 }
 
 .detail-header {
   @include flex-start;
   gap: calcClamp(16, 54, 1440, 1290);
-  max-width: 100%; // never wider than the component
+  max-width: 100%;
+  overflow: visible;
+  padding-top: 16px;
 
   .name-wrapper {
     @include flex-start(column);
     gap: 8px;
+    flex: 1 1 auto;
+    max-height: calcClamp(80, 120, 1440, 769);
+    min-width: 0;
+    overflow: visible;
+
+    @include mobile {
+      max-height: calcClamp(60, 80, 768, 320);
+    }
   }
 
   .name {
-    min-height: 105px;
-    font-size: calcClamp(20, 47);
-    max-width: 100%; // never wider than the wrapper
-    overflow-wrap: anywhere; // breaks a word only if it doesn't fit at all
-    display: flex;
-    align-items: center;
-  }
-
-  // long names design for icon and name position and size
-  &__long {
-    gap: calcClamp(16, 50, 1440, 1025);
-
-    .name {
-      font-size: calcClamp(20, 38, 1440, 1025);
-    }
+    font-size: calcClampMin((36, 48), (36, 48, 700, 350));
+    word-break: normal;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphenate-limit-chars: 13 4 4;
+    -webkit-hyphenate-limit-chars: 13 4 4;
   }
 }
 
@@ -43,37 +40,41 @@
   @include flex-start;
   gap: 16px;
 
-  @include tablet {
-    // position: absolute;
-    // bottom: 16px;
-    // right: 8px;
+  @media screen and (max-width: 1024px), screen and (max-height: 500px) {
     position: fixed;
-    bottom: 106px;
+    bottom: 90px;
     right: 14px;
-    z-index: 1; // covers the dots button while open
+    z-index: $z-sticky-header;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
     padding: 20px;
     background: $color-white;
-    border-radius: 20px 20px 0 20px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: $radius-lg $radius-lg 0 $radius-lg;
+    box-shadow: $surface-shadow;
 
-    // when closed: outside the wrapper to the right, hidden after the slide-out
     transform: translateX(calc(100% + 16px));
     visibility: hidden;
     transition:
-      transform 150ms ease-in-out,
-      visibility 0s linear 150ms; // hide only once the slide-out is done
+      transform 100ms ease-in-out,
+      visibility 0s linear 100ms;
 
-    // when open: slide in, visible right away
     &.is-open {
       transform: translateX(0);
       visibility: visible;
       transition:
-        transform 150ms ease-in-out,
+        transform 100ms ease-in-out,
         visibility 0s;
     }
+  }
+
+  @media screen and (min-width: 1025px) and (max-height: 500px) {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  @include tablet {
+    bottom: calc(calcClamp(60, 80, 700, 500, height) + 12px);
   }
 }
 
@@ -81,7 +82,7 @@
   font-size: $font-medium;
   line-height: 0.75;
   padding: 10px 0;
-  margin-top: calcClamp(0, 33, 1200, 768);
+  margin-top: calcClampMin((0, 32, 1200, 768), (0, 32, 700, 350));
 }
 
 .detail-info {
@@ -97,44 +98,15 @@
   }
 }
 
-@include tablet {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(22, 36, 1024, 769);
-      }
-    }
-  }
-}
-
-@include mobile {
-  .detail-header {
-    // long names design for icon and name position and size
-    &__long {
-      .name {
-        font-size: calcClamp(20, 38, 768, 320);
-      }
-    }
-  }
-}
-
 button.btn.btn-dots {
-  @include flex-center;
-  position: fixed;
-  bottom: 112px;
-  right: 16px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: $btn-primary-default;
-  color: $color-white;
-  box-shadow: $btn-shadow;
-  // z-index: 2;
+  --btn-pos-bottom: #{calc(calcClamp(60, 80, 700, 500, height) + 16px)};
+  @include circle-btn(56px, var(--btn-pos-bottom), $pos: fixed);
 
-  .icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
+  @media screen and (min-width: 1025px) and (max-height: 600px) {
+    bottom: 16px;
+  }
+
+  @include short-height {
+    width: 48px;
   }
 }

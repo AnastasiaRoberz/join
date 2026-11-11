@@ -1,0 +1,133 @@
+@use '../../../../../../../public/assets/styles' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $task-card-width;
+  cursor: pointer;
+
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+:host(.cdk-drag-preview) > * {
+  rotate: 3deg;
+}
+
+:host(.cdk-drag-placeholder) {
+  position: relative;
+
+  @include mobile {
+    height: 230px;
+  }
+}
+
+:host(.cdk-drag-placeholder) > * {
+  opacity: 0;
+}
+
+:host(.cdk-drag-placeholder)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px dashed $color-grey-400;
+  border-radius: $radius-xl;
+}
+
+.task-card {
+  flex: 1;
+  @include flex-start(column);
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 16px;
+  border-radius: $radius-xl;
+  background-color: $color-white;
+  box-shadow: $task-card-shadow;
+
+  &__category {
+    align-self: flex-start;
+    padding: 4px 16px;
+    border-radius: $radius-sm;
+    background-color: $color-grey-400;
+    color: $text-light;
+  }
+
+  &__text {
+    @include flex-start(column);
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  &__title {
+    @include line-clamp(3);
+    font-size: $font-default;
+    color: $text-dark;
+  }
+
+  &__description {
+    @include line-clamp(2);
+    color: $color-grey-400;
+    overflow-wrap: anywhere;
+  }
+
+  &__progress {
+    @include flex-start;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  &__bar {
+    flex: 1;
+    height: 8px;
+    border: 0;
+    border-radius: $radius-xs;
+    appearance: none;
+    overflow: hidden;
+    background-color: $color-grey-500;
+
+    &::-webkit-progress-bar {
+      background-color: $color-grey-500;
+    }
+
+    &::-webkit-progress-value {
+      border-radius: $radius-xs;
+      background-color: $color-blue-500;
+      transition: width 100ms ease-in-out;
+    }
+
+    &::-moz-progress-bar {
+      border-radius: $radius-xs;
+      background-color: $color-blue-500;
+    }
+  }
+
+  &__count {
+    font-size: 12px;
+    color: $text-dark;
+    white-space: nowrap;
+  }
+
+  &__footer {
+    height: 32px;
+    @include flex-between;
+    margin-top: auto;
+  }
+
+  &__progress + &__footer {
+    margin-top: 0;
+  }
+
+  &__users {
+    min-width: 0;
+    margin-top: 0;
+  }
+
+  &__priority {
+    height: 32px;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+}

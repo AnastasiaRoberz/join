@@ -1,25 +1,34 @@
-<!-- class "&--detail-open" is added when an id is present-->
-<!-- container’s current selectedId value is handed to the list’s selectedId input.
-     contactSelected calls selectContact(). $event is the value  -->
+
 @if (!(responsiveService.isMobile() && selectedId())) {
   <app-contact-list [selectedId]="selectedId()" (contactSelected)="selectContact($event)" />
 }
 
 @if (!responsiveService.isMobile() || selectedId()) {
-  <div class="details">
+  <div
+    class="details"
+    [class.scroll-container]="shortHeight()"
+    role="region"
+    aria-label="Contact details"
+  >
     <div class="details__title__container">
       <div class="details__title">
         <h2>Contacts</h2>
-        <hr />
+        <hr aria-hidden="true" />
         <p class="subheading">Better with a team</p>
       </div>
-      <!-- Back arrow: only visible on mobile (contacts.scss) -->
-      @if (isSinglePane()) {
-        <button appBtn preset="iconMedium" icon="arrow-back" (click)="closeDetails()"></button>
+      
+      @if (responsiveService.isMobile()) {
+        <button
+          appBtn
+          preset="iconMedium"
+          icon="arrow-back"
+          ariaLabel="Back to contact list"
+          (click)="closeDetails()"
+        ></button>
       }
     </div>
     @if (selectedId(); as id) {
-      <app-contact-details [selectedId]="id" (contactDeleted)="closeDetails()" />
+      <app-contact-details [selectedId]="id" (contactDeleted)="onContactDeleted()" />
     }
   </div>
 }

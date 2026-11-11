@@ -1,0 +1,256 @@
+@use '../variables' as *;
+@use '../functions' as *;
+@use 'breakpoints' as *;
+
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-start($direction: row, $alignment: single) {
+  display: flex;
+  flex-direction: $direction;
+
+  @if ($alignment == 'both') {
+    justify-content: flex-start;
+    align-items: flex-start;
+  } @else if ($direction == 'row') {
+    justify-content: flex-start;
+    align-items: center;
+  } @else if ($direction == 'column') {
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+@mixin flex-between($direction: row, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: space-between;
+  align-items: $align;
+}
+
+@mixin size($w: 100%, $h: $w) {
+  width: $w;
+  height: $h;
+}
+
+@mixin text-ellipsis {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin vertical-divider($height: 24px, $color: $divider, $width: 1px) {
+  border: none;
+  width: $width;
+  height: $height;
+  background-color: $color;
+}
+
+@mixin slide-in-drawer($offset-x: 100dvw, $duration-transform: 0.4s, $duration-opacity: 0.2s) {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX($offset-x);
+  transition:
+    opacity $duration-opacity ease,
+    transform $duration-transform ease,
+    visibility 0s linear $duration-opacity;
+
+  :host.is-open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+    transition:
+      opacity $duration-opacity ease,
+      transform $duration-transform ease,
+      visibility 0s linear 0s;
+  }
+}
+
+@mixin sidebar-nav-link {
+  @include flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0;
+  color: $sidebar-txt-default;
+  position: relative;
+  z-index: 2;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    background-color: inherit;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+  }
+
+  &:hover {
+    background-color: $sidebar-bg-hover;
+    color: $sidebar-txt-hover;
+  }
+
+  &.active,
+  &:active {
+    background-color: $sidebar-bg-active;
+    color: $text-light;
+  }
+}
+
+@mixin task-dialog-shell {
+  @include flex-start(column, both);
+  gap: calcClamp(16, 24);
+  width: 525px;
+  min-height: 0;
+  height: 100%;
+  padding-inline: var(--padding-inline-dialog);
+
+  &.scroll-container {
+    width: 100%;
+  }
+
+  @include mobile {
+    width: 100%;
+  }
+}
+
+@mixin underline($width: 90px, $centered: false) {
+  &::after {
+    content: '';
+    width: $width;
+    height: 3px;
+    background-color: $text-underline;
+    position: absolute;
+    top: calc(100% + #{calcClamp(2, 16, 800, 350, height)});
+    left: if($centered, 50%, 0);
+    @if $centered {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@mixin titleWithDivider($break-at: null) {
+  display: flex;
+  align-items: center;
+
+  h2 {
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .subheading {
+    line-height: 1;
+    white-space: nowrap;
+
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
+  }
+
+  hr {
+    border: none;
+    border-left: 3px solid $text-underline;
+    width: 3px;
+    align-self: stretch;
+    margin-inline: calcClamp(15, 30, 768, 320);
+    @media screen and (max-width: 480px) and (max-height: 550px) {
+      display: none;
+    }
+  }
+
+  @if $break-at {
+    @include responsive($break-at) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      hr {
+        order: 1;
+        border-left: none;
+        border-top: 3px solid $text-underline;
+        width: 90px;
+        height: auto;
+        align-self: flex-start;
+        margin-top: calcClampMin(0, 8);
+        margin-inline: 0;
+      }
+    }
+  }
+}
+
+@mixin sidebar-link-hover {
+  position: relative;
+  z-index: 2;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -2;
+    background-image: linear-gradient(
+      90deg,
+      $sidebar-bg-hover 0%,
+      $sidebar-bg-hover 40%,
+      transparent 60%,
+      transparent 100%
+    );
+    background-size: 250% 100%;
+    background-position: 100% 0;
+    transition: background-position 0.3s ease;
+  }
+
+  &::after {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+    background-color: $sidebar-bg-active;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover {
+    color: $sidebar-txt-hover;
+
+    &::before {
+      background-position: 0% 0;
+      transition: background-position 0.45s ease;
+    }
+  }
+
+  &.active,
+  &:active {
+    color: $text-light;
+
+    &::after {
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+  }
+}

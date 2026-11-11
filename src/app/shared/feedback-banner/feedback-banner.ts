@@ -31,7 +31,7 @@ import { FeedbackService } from '../../services/feedback.service';
 })
 export class FeedbackBanner {
   /** Service that owns the feedback state rendered by this banner. */
-  feedbackService = inject(FeedbackService);
+  private readonly feedbackService = inject(FeedbackService);
   /** Signal with the current feedback (`message`, `type`, `visible`); read in the template via `feedback()`. */
-  feedback = this.feedbackService.feedbackState;
+  protected readonly feedback = this.feedbackService.feedbackState;
 }

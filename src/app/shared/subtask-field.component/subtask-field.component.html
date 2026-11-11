@@ -5,18 +5,25 @@
     #mainInput
     type="text"
     [id]="fieldId()"
+    placeholder="Add new subtask"
     autocomplete="off"
     (keydown.enter)="$event.preventDefault(); saveSubtask(mainInput)"
     (keydown.escape)="reset()"
   />
   <div class="input-btn-wrapper">
-    <button appBtn preset="iconSmall" icon="x" (click)="reset()"></button>
-    <hr />
+    <button
+      appBtn
+      preset="iconSmall"
+      icon="x"
+      ariaLabel="Clear subtask input"
+      (click)="reset()"
+    ></button>
+    <hr aria-hidden="true" />
     <button
       appBtn
       preset="iconSmall"
       icon="check"
-      class="btn-save"
+      ariaLabel="Save subtask"
       (click)="saveSubtask(mainInput)"
     ></button>
   </div>
@@ -26,20 +33,22 @@
   @for (subtask of sortedSubtasks(); track subtask.id) {
     <li>
       @if (editingSubtaskId() !== subtask.id) {
-        <div class="li-wrapper" (dblclick)="editSubtask(subtask.id)">
+        <div class="li-wrapper" (dblclick)="editSubtask(subtask.id)" role="listitem">
           <span>{{ subtask.title }}</span>
           <div class="subtask-btn-wrapper">
             <button
               appBtn
               preset="iconSmall"
               icon="edit"
+              [ariaLabel]="'Edit subtask: ' + subtask.title"
               (click)="editSubtask(subtask.id)"
             ></button>
-            <hr />
+            <hr aria-hidden="true" />
             <button
               appBtn
               preset="iconSmall"
               icon="delete"
+              [ariaLabel]="'Delete subtask: ' + subtask.title"
               (click)="deleteSubtask(subtask.id)"
             ></button>
           </div>
@@ -49,7 +58,8 @@
           <input
             #editInput
             type="text"
-            id="editInput"
+            [id]="fieldId() + '-edit'"
+            aria-label="Edit subtask"
             [value]="subtask.title"
             autocomplete="off"
             (keydown.enter)="$event.preventDefault(); updateSubtaskTitle(editInput, subtask.id)"
@@ -60,13 +70,15 @@
               appBtn
               preset="iconSmall"
               icon="delete"
+              [ariaLabel]="'Delete subtask: ' + subtask.title"
               (click)="deleteSubtask(subtask.id)"
             ></button>
-            <hr />
+            <hr aria-hidden="true" />
             <button
               appBtn
               preset="iconSmall"
               icon="check"
+              [ariaLabel]="'Save subtask: ' + subtask.title"
               (click)="updateSubtaskTitle(editInput, subtask.id)"
             ></button>
           </div>

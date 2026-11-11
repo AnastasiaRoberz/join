@@ -1,50 +1,54 @@
 @use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  --padding-inline: #{calcClamp(12, 24, 768, 320)};
-  @include flex-start(column);
-  justify-content: flex-start;
-  width: 100%;
-  height: 100%;
+  --padding-inline: #{calcClamp(12, 24, 1440, 1025)};
+  --sb-width: #{calcClamp(12, 24, 1440, 1025)};
+  @include flex-start(column, both);
+  @include size;
   padding-block: calcClamp(16, 32, 768, 320) calcClamp(6, 12, 768, 320);
   padding-inline: var(--padding-inline);
   gap: 24px;
-  background-color: white;
-}
+  background-color: $color-white;
+  flex-shrink: 0;
+  position: relative;
 
-.icon {
-  width: 32px;
-  height: 32px;
-}
+  &.scroll-container {
+    padding-right: #{calc(var(--padding-inline) - var(--sb-width))};
+    flex: none;
+  }
 
-.group-letter {
-  @include flex-center;
-  font-size: $font-medium;
-  width: 42px;
-  height: 42px;
-  padding: 8px 0;
-  margin-left: 24px;
-  line-height: 0.75;
-}
-
-hr {
-  width: 100%;
-  margin: calcClamp(0, 4, 1440, 768) 0;
-  border: none;
-  border-top: 1px solid $color-grey-100;
-  border-radius: 3px;
+  @include short-height {
+    padding-top: calcClamp(12, 32, 700, 350, height);
+  }
 }
 
 .contact-list {
-  @include flex-start(column);
-  justify-content: flex-start;
+  @include flex-start(column, both);
   height: 100%;
-}
 
-.group-wrapper {
-  @include flex-center(column);
-  width: 100%;
-  margin-bottom: calcClamp(16, 24);
+  &__group-letter {
+    @include flex-center;
+    font-size: calcClampMin(16, 20);
+    width: calcClamp(32, 42);
+    aspect-ratio: 1;
+    padding: 8px 0;
+    margin-left: 24px;
+    line-height: 0.75;
+  }
+
+  &__divider {
+    width: 100%;
+    margin: calcClamp(0, 4, 1440, 768) 0;
+    border: none;
+    border-top: 1px solid $color-grey-100;
+    border-radius: 3px;
+  }
+
+  &__group-wrapper {
+    @include flex-center(column);
+    width: 100%;
+    margin-bottom: calcClamp(16, 24);
+  }
 }
 
 .contact-card-btn {
@@ -53,42 +57,35 @@ hr {
   width: 100%;
   gap: calcClamp(8, 32);
   padding: 16px 24px;
-  border-radius: 10px;
+  border-radius: $radius-md;
 
-  // hover action & no action on hover, when contact is active
-  &:hover:not(.contact--active) {
+  &:hover:not(.contact-card-btn--active) {
     background: $btn-contact-hover;
   }
-  &.contact--active {
+
+  &--active {
     background-color: $btn-contact-active;
 
-    .name {
+    .contact-card-btn__name {
       color: $color-white;
     }
   }
-}
 
-.details {
-  @include flex-start(column);
-  gap: 4px;
-  min-width: 0;
-  text-align: left;
-}
+  &__details {
+    @include flex-start(column);
+    gap: 4px;
+    min-width: 0;
+    text-align: left;
+  }
 
-.name {
-  font-size: $font-medium;
-  text-align: left;
-  width: 100%;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  &__name {
+    @include text-ellipsis;
+    font-size: $font-medium;
+    color: $text-dark;
+  }
 
-.mail {
-  color: $mail;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  &__mail {
+    @include text-ellipsis;
+    color: $mail;
+  }
 }

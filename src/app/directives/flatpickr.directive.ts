@@ -2,8 +2,20 @@ import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { Directive, ElementRef, inject, OnDestroy, OnInit, output, signal } from '@angular/core';
 import flatpickr from 'flatpickr';
 import { Subscription } from 'rxjs';
-// @ts-ignore
-import ShortcutButtonsPlugin from 'shortcut-buttons-flatpickr';
+
+/** Flatpickr options that are the same for every instance. */
+const BASE_OPTIONS: flatpickr.Options.Options = {
+  position: 'auto center',
+  monthSelectorType: 'static',
+  dateFormat: 'd/m/Y',
+  minDate: 'today',
+  locale: {
+    firstDayOfWeek: 1,
+  },
+  weekNumbers: true,
+  disableMobile: true,
+  allowInput: true,
+};
 
 /**
  * Attribute directive that wraps a native `<input>` element with a customized Flatpickr
@@ -32,10 +44,13 @@ import ShortcutButtonsPlugin from 'shortcut-buttons-flatpickr';
 })
 export class FlatpickrDirective implements OnInit, OnDestroy {
   /** Reference to the host `<input>` element to which Flatpickr is attached. */
-  private element = inject(ElementRef<HTMLInputElement>);
+  private readonly element = inject(ElementRef<HTMLInputElement>);
 
-  private scrollDispatcher = inject(ScrollDispatcher);
+  /** Notifies about scrolling, so an open calendar can follow its input field. */
+  private readonly scrollDispatcher = inject(ScrollDispatcher);
+  /** Subscription to global scroll events used to reposition the open calendar popup. */
   private scrollSub?: Subscription;
+
   /** Underlying Flatpickr instance created during `ngOnInit`. */
   private pickerInstance?: flatpickr.Instance;
 
@@ -51,10 +66,10 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
   // ---------------------------------------------------------------------------
 
   /** Emits the formatted date string (`DD/MM/YYYY`) whenever the user selects or types a valid date. */
-  dateChanged = output<string>();
+  public readonly dateChanged = output<string>();
 
   /** Tracks whether the Flatpickr calendar popup is currently open. */
-  isOpen = signal<boolean>(false);
+  public readonly isOpen = signal<boolean>(false);
 
   // ---------------------------------------------------------------------------
   // Lifecycle Hooks
@@ -64,54 +79,20 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
    * Initializes the Flatpickr instance on the host input element with custom positioning,
    * flexible date parsing, and lifecycle callbacks.
    */
-  ngOnInit(): void {
+  public ngOnInit(): void {
     const parentContainer = this.element.nativeElement.parentElement ?? undefined;
 
-    this.pickerInstance = flatpickr(this.element.nativeElement, {
-      positionElement: parentContainer,
-      ignoredFocusElements: parentContainer ? [parentContainer] : [],
-      position: 'auto center',
-      monthSelectorType: 'static',
-      dateFormat: 'd/m/Y',
-      minDate: 'today',
-      locale: {
-        firstDayOfWeek: 1,
-      },
-      weekNumbers: true,
-      disableMobile: true,
-      allowInput: true,
-      nextArrow: this.arrowSvg,
-      prevArrow: this.arrowSvg,
-      parseDate: (dateStr: string) => this.parseFlexibleDate(dateStr.trim()),
-      onReady: (_selectedDates, _dateStr, instance) => {
-        const todayBtn = document.createElement('button');
-        todayBtn.type = 'button';
-        todayBtn.textContent = 'Today';
-        todayBtn.className = 'flatpickr-today-btn';
-        todayBtn.onclick = () => instance.setDate(new Date(), true);
-        instance.calendarContainer.appendChild(todayBtn);
-        instance.currentYearElement.id = 'flatpickr-year';
-      },
-      onOpen: (_selectedDates, _dateStr, instance) => {
-        this.isOpen.set(true);
-        const targetDate = instance.selectedDates[0] ?? new Date();
-        instance.jumpToDate(targetDate, false);
-      },
-      onClose: () => this.isOpen.set(false),
-      onChange: (_selectedDates, dateStr) => this.dateChanged.emit(dateStr),
-    });
-
-    this.scrollSub = this.scrollDispatcher.scrolled().subscribe(() => {
-      if (this.pickerInstance?.isOpen) {
-        this.pickerInstance._positionCalendar(parentContainer);
-      }
-    });
+    this.pickerInstance = flatpickr(
+      this.element.nativeElement,
+      this.createOptions(parentContainer),
+    );
+    this.registerScrollListener(parentContainer);
   }
 
   /**
    * Cleans up and destroys the Flatpickr instance when the directive is destroyed.
    */
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.pickerInstance?.destroy();
     this.scrollSub?.unsubscribe();
   }
@@ -123,7 +104,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
   /**
    * Toggles the visibility of the Flatpickr calendar popup.
    */
-  toggle(): void {
+  public toggle(): void {
     if (this.isOpen()) {
       this.pickerInstance?.close();
     } else {
@@ -138,20 +119,97 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
    *
    * @param value - Date string in either ISO (`YYYY-MM-DD`) or display (`DD/MM/YYYY`) format.
    */
-  setDate(value: string): void {
+  public setDate(value: string): void {
     if (!value || !this.pickerInstance) return;
 
     const format = value.includes('-') ? 'Y-m-d' : 'd/m/Y';
     const parsedDate = flatpickr.parseDate(value, format);
 
     if (parsedDate && !isNaN(parsedDate.getTime())) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      if (parsedDate < today) {
-        this.pickerInstance.set('minDate', parsedDate);
-      }
+      this.relaxMinDateIfPast(parsedDate);
       this.pickerInstance.setDate(parsedDate, false);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Private Setup Helpers
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Builds the Flatpickr options: shared base options plus positioning, arrows,
+   * flexible date parsing and the lifecycle callbacks.
+   *
+   * @param parentContainer - Parent of the input, used to position the popup and ignore its focus.
+   */
+  private createOptions(parentContainer?: HTMLElement): flatpickr.Options.Options {
+    return {
+      ...BASE_OPTIONS,
+      positionElement: parentContainer,
+      ignoredFocusElements: parentContainer ? [parentContainer] : [],
+      nextArrow: this.arrowSvg,
+      prevArrow: this.arrowSvg,
+      parseDate: (dateStr: string) => this.parseFlexibleDate(dateStr.trim()),
+      onReady: (_selectedDates, _dateStr, instance) => this.handleCalendarReady(instance),
+      onOpen: (_selectedDates, _dateStr, instance) => this.handleCalendarOpen(instance),
+      onClose: () => this.isOpen.set(false),
+      onChange: (_selectedDates, dateStr) => this.dateChanged.emit(dateStr),
+    };
+  }
+
+  /**
+   * Adds the "Today" button to the calendar and gives the year input an id.
+   *
+   * @param instance - The Flatpickr instance that became ready.
+   */
+  private handleCalendarReady(instance: flatpickr.Instance): void {
+    const todayBtn = document.createElement('button');
+    todayBtn.type = 'button';
+    todayBtn.textContent = 'Today';
+    todayBtn.className = 'flatpickr-today-btn';
+    todayBtn.onclick = () => instance.setDate(new Date(), true);
+    if (instance.calendarContainer) {
+      instance.calendarContainer.appendChild(todayBtn);
+    }
+    if (instance.currentYearElement) {
+      instance.currentYearElement.id = 'flatpickr-year';
+    }
+  }
+
+  /**
+   * Marks the calendar as open and jumps to the selected date (or today if none is selected).
+   *
+   * @param instance - The Flatpickr instance that was opened.
+   */
+  private handleCalendarOpen(instance: flatpickr.Instance): void {
+    this.isOpen.set(true);
+    const targetDate = instance.selectedDates[0] ?? new Date();
+    instance.jumpToDate(targetDate, false);
+  }
+
+  /**
+   * Keeps an open calendar attached to its input while a scrollable parent is scrolled.
+   *
+   * @param parentContainer - Element the calendar is positioned relative to.
+   */
+  private registerScrollListener(parentContainer?: HTMLElement): void {
+    this.scrollSub = this.scrollDispatcher.scrolled().subscribe(() => {
+      if (this.pickerInstance?.isOpen) {
+        this.pickerInstance._positionCalendar(parentContainer);
+      }
+    });
+  }
+
+  /**
+   * Relaxes `minDate` if the given date lies in the past, so that it can still be displayed.
+   *
+   * @param date - Date that is about to be set.
+   */
+  private relaxMinDateIfPast(date: Date): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (date < today) {
+      this.pickerInstance?.set('minDate', date);
     }
   }
 
@@ -177,12 +235,17 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
       parsed = this.parseCompactNumericDate(inputStr);
     }
 
-    if (!parsed) return new Date(NaN);
+    return parsed ? this.createValidatedDate(parsed) : new Date(NaN);
+  }
 
-    let [day, month, year] = parsed;
-    if (year < 100) {
-      year += 2000;
-    }
+  /**
+   * Builds a `Date` from day, month and year. Two-digit years are treated as 20xx.
+   *
+   * @param parts - `[day, month, year]`.
+   * @returns The date, or `new Date(NaN)` if day, month or year are out of range.
+   */
+  private createValidatedDate([day, month, rawYear]: [number, number, number]): Date {
+    const year = rawYear < 100 ? rawYear + 2000 : rawYear;
 
     const isValidRange =
       day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= 2100;
@@ -217,8 +280,19 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
 
     const yearDigits = hasFourDigitYear ? -4 : -2;
     const year = parseInt(inputStr.slice(yearDigits), 10);
-    const rest = inputStr.slice(0, yearDigits);
 
+    return this.splitDayAndMonth(inputStr.slice(0, yearDigits), year);
+  }
+
+  /**
+   * Splits the digits in front of the year into day and month.
+   * With three digits a leading `0` belongs to the day (`082` -> 08/2), otherwise one digit is the day.
+   *
+   * @param rest - The 2 to 4 digits in front of the year.
+   * @param year - The already parsed year.
+   * @returns Tuple of `[day, month, year]` or `null` if `rest` has an unsupported length.
+   */
+  private splitDayAndMonth(rest: string, year: number): [number, number, number] | null {
     if (rest.length === 2) {
       return [parseInt(rest[0], 10), parseInt(rest[1], 10), year];
     }
@@ -229,7 +303,6 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
     if (rest.length === 4) {
       return [parseInt(rest.slice(0, 2), 10), parseInt(rest.slice(2, 4), 10), year];
     }
-
     return null;
   }
 }

@@ -12,6 +12,7 @@ import { ResponsiveService } from '../../services/responsive.service';
 import { SubtaskInterface } from '../../interfaces/subtask.interface';
 import { Buttons } from '../button.component/button.component';
 
+/** Global counter used to generate unique DOM IDs for subtask field instances. */
 let nextId = 0;
 
 /**
@@ -42,31 +43,37 @@ let nextId = 0;
   templateUrl: './subtask-field.component.html',
 })
 export class SubtaskFieldComponent {
-  /** Used by the template to adapt the label styling on mobile viewports. */
-  responsiveService = inject(ResponsiveService);
-  elementRef = inject(ElementRef);
+  /** Responsive service for viewport checks. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  fieldId = input<string>(`app-subtask-field-${nextId++}`);
+  /** Unique HTML id attribute for the main subtask input element. */
+  public readonly fieldId = input<string>(`app-subtask-field-${nextId++}`);
 
-  mainInput = viewChild<ElementRef<HTMLInputElement>>('mainInput');
-  subtaskList = viewChild<ElementRef<HTMLUListElement>>('subtaskList');
+  /** Reference to the primary input element used to add new subtasks. */
+  protected readonly mainInput = viewChild<ElementRef<HTMLInputElement>>('mainInput');
 
   /**
    * The list of subtasks. A `model` signal, so the parent can use two-way binding
    * (`[(subtasks)]`) and every add/rename/delete in this component is propagated back to it.
    * Defaults to an empty list.
    */
-  subtasks = model<SubtaskInterface[]>([]);
+  public readonly subtasks = model<SubtaskInterface[]>([]);
 
   /** Copy of `subtasks()` sorted by id descending (newest first); this is what the template renders. */
-  sortedSubtasks = computed(() => [...this.subtasks()].sort((a, b) => b.id - a.id));
+  protected readonly sortedSubtasks = computed<SubtaskInterface[]>(() =>
+    [...this.subtasks()].sort((a, b) => b.id - a.id),
+  );
 
   /** Id of the subtask currently shown in edit mode, or `null` if none is being edited. */
-  editingSubtaskId = signal<number | null>(null);
+  protected readonly editingSubtaskId = signal<number | null>(null);
 
-  isScrollable = input<boolean>(false);
+  /** Whether the subtask list has a max height and allows scrolling. */
+  public readonly isScrollable = input<boolean>(false);
 
-  reset(): void {
+  /**
+   * Clears the main input field and cancels any active subtask editing.
+   */
+  public reset(): void {
     const input = this.mainInput()?.nativeElement;
     if (input) input.value = '';
     this.editingSubtaskId.set(null);
@@ -79,7 +86,7 @@ export class SubtaskFieldComponent {
    *
    * @param input - The "new subtask" input element holding the title.
    */
-  saveSubtask(input: HTMLInputElement) {
+  protected saveSubtask(input: HTMLInputElement): void {
     const rawData = input.value.trim();
     if (!rawData) return;
 
@@ -90,8 +97,6 @@ export class SubtaskFieldComponent {
     };
     this.subtasks.update((list) => [newSubtask, ...list]);
     input.value = '';
-
-    // setTimeout(() => this.scrollToSubtask());
   }
 
   /**
@@ -101,7 +106,7 @@ export class SubtaskFieldComponent {
    * @param input - The edit input element holding the new title.
    * @param id - The id of the subtask to rename.
    */
-  updateSubtaskTitle(input: HTMLInputElement, id: number) {
+  protected updateSubtaskTitle(input: HTMLInputElement, id: number): void {
     const newTitle = input.value.trim();
     if (!newTitle) return;
 
@@ -117,7 +122,7 @@ export class SubtaskFieldComponent {
    *
    * @param id - The id of the subtask to remove.
    */
-  deleteSubtask(id: number) {
+  protected deleteSubtask(id: number): void {
     this.subtasks.update((list) => list.filter((item) => item.id !== id));
     this.editingSubtaskId.set(null);
   }
@@ -127,21 +132,7 @@ export class SubtaskFieldComponent {
    *
    * @param id - The id of the subtask to edit.
    */
-  editSubtask(id: number) {
+  protected editSubtask(id: number): void {
     this.editingSubtaskId.set(id);
-  }
-
-  scrollToSubtask(): void {
-    const hostElement = this.elementRef.nativeElement as HTMLElement;
-    const outerScrollContainer = hostElement.closest<HTMLElement>('.scroll-container');
-
-    if (outerScrollContainer) {
-      const containerRect = outerScrollContainer.getBoundingClientRect();
-      const hostRect = hostElement.getBoundingClientRect();
-
-      const targetScrollTop = outerScrollContainer.scrollTop + (hostRect.top - containerRect.top);
-
-      outerScrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
-    }
   }
 }

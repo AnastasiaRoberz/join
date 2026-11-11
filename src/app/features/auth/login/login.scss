@@ -1,0 +1,32 @@
+@use '../../../../../public/assets/styles' as *;
+
+:host {
+  @include auth-page;
+  gap: calcClamp(16, 48, 800, 350, height);
+  background-color: $color-white;
+  padding-inline: calcClamp(16, 112);
+}
+
+form {
+  @include flex-center(column);
+  gap: calcClamp(16, 32, 800, 350, height);
+  width: 100%;
+
+  app-text-field {
+    --input-padding-block: #{calcClampMin((8, 12, 768, 320), (2, 8, 500, 350))};
+  }
+
+  .button-wrapper {
+    @include flex-center;
+    gap: calcClamp(16, 32);
+    margin-top: calcClamp(0, 24, 800, 350, height);
+
+    @include mobile {
+      flex-direction: column;
+      gap: calcClamp(8, 16, 500, 350, height);
+      .btn {
+        width: 180px;
+      }
+    }
+  }
+}

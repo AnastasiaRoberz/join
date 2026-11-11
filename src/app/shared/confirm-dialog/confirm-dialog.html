@@ -1,9 +1,11 @@
 @if (confirmService.request(); as request) {
-  <div class="confirm" role="presentation" (click)="confirmService.answer(false)">
+  <div class="confirm" (click)="confirmService.answer(false)">
     <section
       class="confirm__box"
       role="alertdialog"
       aria-modal="true"
+      tabindex="-1"
+      #dialogBox
       aria-labelledby="confirm-title"
       aria-describedby="confirm-text"
       (click)="$event.stopPropagation()"

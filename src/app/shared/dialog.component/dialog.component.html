@@ -1,6 +1,10 @@
 <div
   class="overlay-content"
   [class]="dialogService.dialogType()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="dialogLabel()"
+  tabindex="-1"
   (click)="$event.stopPropagation()"
   (mousedown)="onContentMousedown()"
   (mouseup)="onContentMouseUp()"
@@ -10,6 +14,7 @@
     preset="iconSmall"
     icon="x"
     class="btn-close"
+    ariaLabel="Close dialog"
     (click)="handleClose()"
     [class.white-btn]="whiteBtn()"
   ></button>

@@ -1,9 +1,18 @@
-<label [for]="fieldId()" (change)="onInputChange($event)">
-  <svg>
+<label [for]="fieldId()">
+  <svg aria-hidden="true" focusable="false">
     <use [attr.href]="iconHref()"></use>
   </svg>
-  <input type="checkbox" [id]="fieldId()" [checked]="checked()" />
+  <input
+    type="checkbox"
+    [id]="fieldId()"
+    [checked]="checked()"
+    (change)="onInputChange($event)"
+  />
 </label>
 @if (text()) {
-  <span>{{ text() }}</span>
+  <span class="checkbox-text">{{ text() }}</span>
+} @else {
+  <ng-content />
 }
+
+<span class="error-msg" role="alert" aria-live="polite">{{ showError() }}</span>
