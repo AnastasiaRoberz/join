@@ -136,9 +136,11 @@
     background-color: $text-underline;
     position: absolute;
     top: calc(100% + #{calcClamp(2, 16, 800, 350, height)});
-    left: if($centered, 50%, 0);
     @if $centered {
+      left: 50%;
       transform: translateX(-50%);
+    } @else {
+      left: 0;
     }
   }
 }
