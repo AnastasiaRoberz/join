@@ -75,10 +75,10 @@ export class UserService {
   });
 
   /**
-   * Registers a new user, creates the matching contact, logs the user in and redirects to the summary.
+   * Registers a new user, creates the matching contact, loads initial data and redirects to summary.
    *
-   * @param data - Name, mail and password from the register form
-   * @returns A promise resolving to `true` if the user was created, otherwise `false`
+   * @param data - Name, mail and password from the register form.
+   * @returns A promise resolving to `true` if the user was created, otherwise `false`.
    */
   public async userSignUp(data: SignUpData): Promise<boolean> {
     const nameParts = splitName(data.name);
@@ -90,17 +90,16 @@ export class UserService {
       false,
     );
     this.setSession(newUser.user, newUser.session);
+    await this.loadInitialAppData();
     this.redirectToSummary();
-    this.contactService.getAllContacts();
     return true;
   }
 
   /**
-   * Logs in with mail and password, or as guest if no data is given, loads the contacts
-   * and redirects to the summary.
+   * Authenticates user with credentials or as guest, loads initial data and redirects to summary.
    *
-   * @param userData - Mail and password, omit for a guest login
-   * @returns A promise resolving to `true` if the login succeeded, otherwise `false`
+   * @param userData - Mail and password, omit for a guest login.
+   * @returns A promise resolving to `true` if the login succeeded, otherwise `false`.
    */
   public async logIn(userData?: { mail: string; password: string }): Promise<boolean> {
     const data = userData
@@ -109,7 +108,7 @@ export class UserService {
     if (!data) return false;
 
     this.setSession(data.user, data.session);
-    await this.contactService.getAllContacts();
+    await this.loadInitialAppData();
     this.redirectToSummary();
     return true;
   }
@@ -142,23 +141,19 @@ export class UserService {
   }
 
   /**
-   * Restores current session and loads user data if an active session exists in Supabase.
+   * Restores active Supabase session and ensures cached contacts and tasks are loaded.
    *
    * @returns A promise resolving to `true` if an active session exists, otherwise `false`.
    */
   public async restoreSession(): Promise<boolean> {
     const { data } = await this.supabase.auth.getSession();
-    if (data.session) {
-      if (!this.currentUser()) {
-        this.currentUser.set(data.session.user);
-        this.currentSession.set(data.session);
-      }
-      if (this.contactService.contacts().length === 0) {
-        await this.contactService.getAllContacts();
-      }
-      return true;
+    if (!data.session) return false;
+
+    if (!this.currentUser()) {
+      this.setSession(data.session.user, data.session);
     }
-    return false;
+    await this.ensureDataLoaded();
+    return true;
   }
 
   /**
@@ -241,6 +236,36 @@ export class UserService {
     userUid?: string,
   ): Omit<ContactInterface, 'id' | 'badge_color'> {
     return { ...nameParts, mail, phone: '000000', user_uid: userUid };
+  }
+
+  /**
+   * Fetches initial application data (contacts and tasks) concurrently.
+   *
+   * @returns A promise resolving when both queries have completed.
+   */
+  private async loadInitialAppData(): Promise<void> {
+    await Promise.all([
+      this.contactService.getAllContacts(),
+      this.taskService.getAllTasks(),
+    ]);
+  }
+
+  /**
+   * Ensures contacts and tasks are populated if the respective signals are empty.
+   *
+   * @returns A promise resolving when pending data fetches have finished.
+   */
+  private async ensureDataLoaded(): Promise<void> {
+    const pending: Promise<void>[] = [];
+    if (this.contactService.contacts().length === 0) {
+      pending.push(this.contactService.getAllContacts());
+    }
+    if (this.taskService.tasks().length === 0) {
+      pending.push(this.taskService.getAllTasks());
+    }
+    if (pending.length > 0) {
+      await Promise.all(pending);
+    }
   }
 
   /**

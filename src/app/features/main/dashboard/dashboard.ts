@@ -106,9 +106,12 @@ export class Dashboard implements OnInit, AfterViewInit {
     ),
   );
 
-  /** Starts the greeting animation if pending from login. */
+  /** Starts the greeting animation and ensures dashboard tasks are loaded. */
   public ngOnInit(): void {
     this.greeterService.startGreeting();
+    if (this.taskService.tasks().length === 0) {
+      this.taskService.getAllTasks();
+    }
   }
 
   /** Schedules fly animation for the greeting box after fonts have loaded. */
