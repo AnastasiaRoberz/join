@@ -59,10 +59,12 @@
     width: 85%;
     max-width: 560px;
     height: 100%;
+    flex-shrink: 0;
 
     @include tablet {
       width: 100%;
       max-width: none;
+      flex-shrink: 1;
     }
 
     @include short-height(800) {

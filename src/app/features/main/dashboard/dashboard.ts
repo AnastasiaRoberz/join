@@ -20,6 +20,7 @@ import { TaskInterface } from '../../../interfaces/task.interface';
 export interface DashboardTile {
   area: string;
   label: string;
+  label2?: string;
   amount: number;
   icon?: string;
   bold?: boolean;
@@ -204,9 +205,9 @@ export class Dashboard implements OnInit, AfterViewInit {
     return [
       this.createStatusTile('todo', 'To-do', 'To do', 'edit', tasks),
       this.createStatusTile('done', 'Done', 'Done', 'check', tasks, true),
-      { area: 'total', label: 'Tasks in Board', amount: tasks.length, filter: null },
-      this.createStatusTile('progress', 'Tasks in Progress', 'In progress', '', tasks),
-      this.createStatusTile('feedback', 'Awaiting Feedback', 'Await feedback', '', tasks),
+      { area: 'total', label: 'Tasks in', label2: 'Board', amount: tasks.length, filter: null },
+      this.createStatusTile('progress', 'Tasks in', 'In progress', '', tasks, false, 'Progress'),
+      this.createStatusTile('feedback', 'Awaiting', 'Await feedback', '', tasks, false, 'Feedback'),
     ];
   }
 
@@ -228,11 +229,13 @@ export class Dashboard implements OnInit, AfterViewInit {
     icon: string,
     tasks: TaskInterface[],
     bold?: boolean,
+    label2?: string,
   ): DashboardTile {
     const amount = tasks.filter((task) => task.status === status).length;
     return {
       area,
       label,
+      label2,
       amount,
       icon: icon || undefined,
       bold,
