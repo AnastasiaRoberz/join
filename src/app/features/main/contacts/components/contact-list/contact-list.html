@@ -6,7 +6,7 @@
 ></button>
 
 <div #scrollContainer class="contact-list scroll-container">
-  @for (group of contactService.groupedContacts(); track $index) {
+  @for (group of contactService.groupedContacts(); track trackGroup($index, group)) {
     <p class="contact-list__group-letter" id="group-{{ group.letter }}">{{ group.letter }}</p>
     <hr class="contact-list__divider" aria-hidden="true" />
     <div
@@ -14,8 +14,7 @@
       role="group"
       [attr.aria-labelledby]="'group-' + group.letter"
     >
-      @for (contact of group.contacts; track $index) {
-        
+      @for (contact of group.contacts; track trackContact($index, contact)) {
         <button
           #contactBtn
           class="contact-card-btn"
