@@ -78,6 +78,8 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   /** Fallback message displayed inside the dropdown when filtering yields no matches. */
   public readonly emptyText = input<string>('No results found.');
 
+  public readonly filterButton = input<boolean>(false);
+
   /** Full list of selectable items of type `T`. */
   public readonly options = input<T[]>([]);
 
@@ -108,9 +110,9 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   );
 
   /** Extracts searchable strings matched via `includes()` against `searchTerm()`. */
-  public readonly getSearchStrings = input<(item: T) => (string | undefined | null)[]>((item: any) => [
-    typeof item === 'string' ? item : (item?.name ?? ''),
-  ]);
+  public readonly getSearchStrings = input<(item: T) => (string | undefined | null)[]>(
+    (item: any) => [typeof item === 'string' ? item : (item?.name ?? '')],
+  );
 
   /** Marks the field as required in template. */
   public readonly required = input<boolean>(false);
@@ -168,7 +170,10 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   };
 
   /** Ordered list of preferred CDK overlay positions. */
-  protected readonly positions = signal<ConnectedPosition[]>([this.positionBelow, this.positionAbove]);
+  protected readonly positions = signal<ConnectedPosition[]>([
+    this.positionBelow,
+    this.positionAbove,
+  ]);
 
   /** Filtered options matching `searchTerm()`. */
   protected readonly filteredOptions = computed<T[]>(() =>
@@ -191,7 +196,11 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
 
   /** Formatted text displayed inside the input element. */
   protected readonly displayValue = computed<string>(() => {
-    if (this.multi() || this.variant() === 'search' || (this.popupExpanded() && this.searchTerm())) {
+    if (
+      this.multi() ||
+      this.variant() === 'search' ||
+      (this.popupExpanded() && this.searchTerm())
+    ) {
       return this.searchTerm();
     }
     const currentVal = this.value();

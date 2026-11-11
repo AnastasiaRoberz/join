@@ -11,6 +11,20 @@
   }
 }
 
+.filter-btn {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-block: 4px;
+  padding-inline: 8px;
+  gap: 4px;
+
+  &:hover {
+    transform: translateY(-50%);
+  }
+}
+
 .title-group {
   flex: 1;
   display: flex;
