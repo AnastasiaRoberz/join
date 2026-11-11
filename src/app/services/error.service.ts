@@ -61,7 +61,7 @@ export class ErrorService {
     invalidPhoneBrackets: () => `The parentheses do not match / close.`,
 
     // --- Angular standard validator (used for Validators.required) ---
-    required: (field) => `Your ${field} is required.`,
+    required: (field) => `${field} is required.`,
 
     requiredDefault: () => 'This field is required.',
 
@@ -71,15 +71,15 @@ export class ErrorService {
 
     // --- Password Strength Validators ---
     minPasswordLength: (_field, errData?: { requiredLength: number; actualLength: number }) =>
-      `At least ${errData?.requiredLength ?? 8} characters needed.`,
+      `${errData?.requiredLength ?? 8} characters needed`,
 
-    passwordMissingUppercase: () => 'At least one uppercase letter needed.',
+    passwordMissingUppercase: () => 'One uppercase needed',
 
-    passwordMissingLowercase: () => 'At least one lowercase letter needed.',
+    passwordMissingLowercase: () => 'One lowercase letter',
 
-    passwordMissingNumber: () => 'At least one number needed.',
+    passwordMissingNumber: () => 'One number needed',
 
-    passwordMissingSpecialChar: () => 'At least one special character needed.',
+    passwordMissingSpecialChar: () => 'One special character',
   };
 
   /**
