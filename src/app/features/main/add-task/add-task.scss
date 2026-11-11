@@ -114,6 +114,10 @@ form {
   font-size: calcClamp(16, 20, 768, 320);
 }
 
+.required {
+  color: $hint;
+}
+
 .task-footer {
   width: 100%;
   @include flex-between(row, flex-end);
