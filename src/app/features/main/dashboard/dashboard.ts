@@ -132,7 +132,7 @@ export class Dashboard implements OnInit, AfterViewInit {
     this.router.navigate(['/app/board']);
   }
 
-  /** Navigates to board or task dialog when the deadline tile is clicked. */
+  /** Navigates to board and sets active deadline filter with a short date label. */
   protected onDeadlineTileClick(event?: Event): void {
     event?.preventDefault();
     event?.stopImmediatePropagation();
@@ -145,11 +145,13 @@ export class Dashboard implements OnInit, AfterViewInit {
         (t) =>
           t.due_date?.slice(0, 10) === currentDeadline.rawDate?.slice(0, 10) && t.status !== 'Done',
       );
+
+    const shortDate = new Date(currentDeadline.rawDate).toLocaleDateString('en-US');
     this.router.navigate(['/app/board']);
     this.taskService.setBoardFilter({
       type: 'deadline',
       dueDate: currentDeadline.rawDate,
-      label: `Deadline: ${currentDeadline.formattedDate}`,
+      label: `Deadline: ${shortDate}`,
     });
   }
 
