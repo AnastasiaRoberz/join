@@ -46,9 +46,11 @@ form {
   gap: 8px;
   font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
   margin-top: calcClamp(-6, 0, 600, 450, height);
+  width: 100%;
 
   app-checkbox {
     gap: 8px;
+    width: 100%;
 
     &:hover {
       background-color: transparent;

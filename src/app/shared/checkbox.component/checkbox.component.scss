@@ -68,4 +68,5 @@ label {
 .error-msg {
   @include field-error-msg;
   white-space: nowrap;
+  bottom: 0;
 }
