@@ -3,7 +3,7 @@ import { SupabaseService } from './supabase.service';
 import { ContactService } from './contact.service';
 import { Router } from '@angular/router';
 import { NameParts, splitName } from '../utils/name-utils';
-import { Session, User } from '@supabase/supabase-js';
+import { Session, User, UserAttributes } from '@supabase/supabase-js';
 import { IntroService } from './intro.service';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskService } from './task.service';
@@ -159,16 +159,16 @@ export class UserService {
   }
 
   /**
-   * Updates user credentials / metadata in auth and syncs with the contact record.
+   * Updates credentials / metadata of the currently logged-in auth user.
    *
    * @param uid - ID of the auth user
-   * @param userData - Partial user updates (e.g. `email`, `user_metadata`)
+   * @param attributes - User attributes (`email`, `data` for metadata)
    */
-  public async updateUser(uid: string, userData: Partial<User>): Promise<void> {
-    const updatedUser = await this.supabaseService.updateUser(uid, userData);
+  public async updateUser(uid: string, attributes: UserAttributes): Promise<void> {
+    if (this.currentUser()?.id !== uid) return;
+    const updatedUser = await this.supabaseService.updateUser(attributes);
     if (!updatedUser) return;
     this.currentUser.set(updatedUser);
-    await this.syncUpdatedContact(uid, updatedUser);
   }
 
   /**
@@ -215,7 +215,7 @@ export class UserService {
     return {
       email: data.mail,
       password: data.password,
-      phone: '---',
+      phone: '000000',
       options: {
         data: {
           first_name: nameParts.firstname,

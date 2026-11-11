@@ -54,7 +54,9 @@ export class ContactDialog {
   protected readonly isSubmitting = signal<boolean>(false);
 
   /** Contact currently being edited, or null when creating a new contact. */
-  protected readonly contact = computed(() => this.dialogService.selectedItem() as ContactInterface);
+  protected readonly contact = computed(
+    () => this.dialogService.selectedItem() as ContactInterface,
+  );
 
   /** Reactive contact form group with validators. */
   protected readonly contactForm = this.fb.group({
@@ -149,7 +151,7 @@ export class ContactDialog {
   }
 
   /**
-   * Syncs contact changes to Supabase auth user when the contact is linked to a user.
+   * Syncs contact changes to the currently logged-in Supabase auth user.
    *
    * @param uid - User UID in auth.users.
    * @param infos - Contact metadata.
@@ -158,9 +160,10 @@ export class ContactDialog {
     uid: string,
     infos: Omit<ContactInterface, 'id' | 'badge_color'>,
   ): Promise<void> {
+    const currentMail = this.userService.currentUser()?.email;
     await this.userService.updateUser(uid, {
-      email: infos.mail,
-      user_metadata: { first_name: infos.firstname, full_name: infos.surname },
+      ...(infos.mail !== currentMail ? { email: infos.mail } : {}),
+      data: { first_name: infos.firstname, full_name: infos.surname },
     });
   }
 
