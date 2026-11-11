@@ -84,31 +84,41 @@
   }
 
   &.btn--primary {
+    position: relative;
+    overflow: hidden;
     background-color: $btn-primary-default;
-    background-image: linear-gradient(
-      110deg,
-      $btn-primary-hover 0%,
-      $btn-primary-hover 40%,
-      rgba($color-cyan-500, 0.45) 50%,
-      $btn-primary-default 60%,
-      $btn-primary-default 100%
-    );
-    background-size: 250% 100%;
-    background-position: 100% 0;
     color: $btn-primary-txt;
     font-weight: 700;
     transition:
-      background-position 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.25s ease,
       transform 0.2s ease,
       box-shadow 0.25s ease;
 
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba($color-white, 0.35) 50%,
+        transparent 80%
+      );
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
     &:hover {
-      background-position: 0% 0;
+      background-color: $btn-primary-hover;
+      box-shadow: $btn-shadow;
       transform: translateY(-1px);
+
+      &::before {
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
     }
 
     &:active {
-      background-image: none;
       background-color: $btn-primary-active;
       transform: translateY(0);
     }
@@ -235,22 +245,14 @@
   }
 
   &.btn--add {
+    position: relative;
+    overflow: hidden;
     background-color: $btn-add-default;
-    background-image: linear-gradient(
-      110deg,
-      $btn-secondary-hover 0%,
-      $btn-secondary-hover 40%,
-      rgba($color-cyan-500, 0.45) 50%,
-      $btn-secondary-default 60%,
-      $btn-secondary-default 100%
-    );
-    background-size: 250% 100%;
-    background-position: 100% 0;
     color: $btn-add-txt;
     font-weight: 700;
     gap: 0;
     transition:
-      background-position 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.25s ease,
       transform 0.2s ease,
       box-shadow 0.25s ease;
 
@@ -259,14 +261,32 @@
       height: 32px;
     }
 
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba($color-white, 0.35) 50%,
+        transparent 80%
+      );
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
+
     &:hover {
-      // background-color: $btn-add-hover;
-      background-position: 0% 0;
+      background-color: $btn-add-hover;
+      box-shadow: $btn-shadow;
       transform: translateY(-1px);
+
+      &::before {
+        transform: translateX(100%);
+        transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      }
     }
 
     &:active {
-      background-image: none;
       background-color: $btn-add-active;
       box-shadow: $btn-shadow-placeholder;
       transform: translateY(0);

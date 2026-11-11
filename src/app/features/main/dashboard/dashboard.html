@@ -27,7 +27,12 @@
         }
         <div class="details">
           <span class="amount">{{ tile.amount }}</span>
-          <p class="type">{{ tile.label }}</p>
+          <p class="type">
+            {{ tile.label }}
+            @if (tile.label2) {
+              <br />{{ tile.label2 }}
+            }
+          </p>
         </div>
       </a>
     }

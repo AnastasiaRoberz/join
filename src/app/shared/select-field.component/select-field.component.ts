@@ -78,6 +78,8 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   /** Fallback message displayed inside the dropdown when filtering yields no matches. */
   public readonly emptyText = input<string>('No results found.');
 
+  public readonly filterButton = input<boolean>(false);
+
   /** Full list of selectable items of type `T`. */
   public readonly options = input<T[]>([]);
 
@@ -94,6 +96,9 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   /** Whether clicking the input field opens the dropdown popup. Ignored in search mode. */
   public readonly openOnClick = input<boolean>(true);
 
+  /** Whether typing into the input field automatically opens the dropdown popup. */
+  public readonly openOnTyping = input<boolean>(true);
+
   /** Two-way bound selection value (single key, array of keys, or transient key). */
   public readonly value = model<any>();
 
@@ -108,9 +113,9 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   );
 
   /** Extracts searchable strings matched via `includes()` against `searchTerm()`. */
-  public readonly getSearchStrings = input<(item: T) => (string | undefined | null)[]>((item: any) => [
-    typeof item === 'string' ? item : (item?.name ?? ''),
-  ]);
+  public readonly getSearchStrings = input<(item: T) => (string | undefined | null)[]>(
+    (item: any) => [typeof item === 'string' ? item : (item?.name ?? '')],
+  );
 
   /** Marks the field as required in template. */
   public readonly required = input<boolean>(false);
@@ -168,7 +173,10 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   };
 
   /** Ordered list of preferred CDK overlay positions. */
-  protected readonly positions = signal<ConnectedPosition[]>([this.positionBelow, this.positionAbove]);
+  protected readonly positions = signal<ConnectedPosition[]>([
+    this.positionBelow,
+    this.positionAbove,
+  ]);
 
   /** Filtered options matching `searchTerm()`. */
   protected readonly filteredOptions = computed<T[]>(() =>
@@ -191,7 +199,11 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
 
   /** Formatted text displayed inside the input element. */
   protected readonly displayValue = computed<string>(() => {
-    if (this.multi() || this.variant() === 'search' || (this.popupExpanded() && this.searchTerm())) {
+    if (
+      this.multi() ||
+      this.variant() === 'search' ||
+      (this.popupExpanded() && this.searchTerm())
+    ) {
       return this.searchTerm();
     }
     const currentVal = this.value();
@@ -238,12 +250,25 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   // User Interaction & Popup Methods
   // ---------------------------------------------------------------------------
 
-  /** Handles input typing and opens popup if non-empty. */
+  /** Handles input typing and opens popup if non-empty and openOnTyping is true. */
   protected onSearchInput(event: Event): void {
     const val = (event.target as HTMLInputElement).value;
     this.searchTerm.set(val);
     this.searchChange.emit(val);
-    if (!this.popupExpanded() && val.trim().length > 0) {
+    if (this.openOnTyping() && !this.popupExpanded() && val.trim().length > 0) {
+      this.openPopup();
+    }
+  }
+
+  /**
+   * Synchronizes popup expansion state emitted by ngCombobox directive.
+   *
+   * @param expanded - New expansion state from ngCombobox.
+   */
+  protected onExpandedChange(expanded: boolean): void {
+    if (!expanded) {
+      this.closePopup();
+    } else if (this.openOnTyping()) {
       this.openPopup();
     }
   }

@@ -15,11 +15,13 @@
     [value]="displayValue()"
     #combobox="ngCombobox"
     ngCombobox
-    [(expanded)]="popupExpanded"
+    [expanded]="popupExpanded()"
+    (expandedChange)="onExpandedChange($event)"
     [preserveContent]="false"
     (click)="onInputClick()"
     (input)="onSearchInput($event)"
     autocomplete="off"
+    [style.visibility]="filterButton() ? 'hidden' : 'visible'"
     #inputField
   />
 
@@ -46,6 +48,8 @@
       (mousedown)="$event.preventDefault()"
     ></button>
   }
+
+  <ng-content />
 
   <span class="error-msg" role="alert" aria-live="polite">{{ showError() }}</span>
 </div>

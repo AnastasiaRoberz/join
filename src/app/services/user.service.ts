@@ -128,6 +128,8 @@ export class UserService {
       this.draftService.clearAddTaskDraft();
     }
 
+    const user = this.currentUser();
+    await this.supabaseService.cleanupAnonymousUser(user);
     const { error } = await this.supabase.auth.signOut();
     if (!error) {
       this.draftService.clearAllDrafts();
@@ -244,10 +246,7 @@ export class UserService {
    * @returns A promise resolving when both queries have completed.
    */
   private async loadInitialAppData(): Promise<void> {
-    await Promise.all([
-      this.contactService.getAllContacts(),
-      this.taskService.getAllTasks(),
-    ]);
+    await Promise.all([this.contactService.getAllContacts(), this.taskService.getAllTasks()]);
   }
 
   /**
