@@ -99,7 +99,7 @@
   @include flex-center;
   gap: calcClamp(8, 24);
   height: 100%;
-  padding-inline: 40px;
+  padding-inline: calcClampMin((4, 40, 1440, 1025), (16, 40, 800, 350));
   border: 1px solid $color-grey-500;
   border-radius: calcClampMin((20, 30, 768, 320), (8, 30, 800, 350));
   background-color: $color-white;
@@ -201,6 +201,7 @@
   font-size: calcClamp(14, 20);
   text-align: center;
   transition: color 240ms ease;
+  white-space: pre-line;
 }
 
 .total .type {

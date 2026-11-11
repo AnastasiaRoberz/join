@@ -20,7 +20,7 @@ import { TaskInterface } from '../../../interfaces/task.interface';
 export interface DashboardTile {
   area: string;
   label: string;
-  label2?: string;
+  displayLabel: string;
   amount: number;
   icon?: string;
   bold?: boolean;
@@ -202,26 +202,54 @@ export class Dashboard implements OnInit, AfterViewInit {
     });
   }
 
-  /** Constructs all five status metric tiles. */
+  /**
+   * Constructs all five status metric tiles with display labels and filter config.
+   *
+   * @param tasks - Full task collection to derive counts from.
+   * @returns Array of configured DashboardTile objects.
+   */
   private buildDashboardTiles(tasks: TaskInterface[]): DashboardTile[] {
     return [
       this.createStatusTile('todo', 'To-do', 'To do', 'edit', tasks),
       this.createStatusTile('done', 'Done', 'Done', 'check', tasks, true),
-      { area: 'total', label: 'Tasks in Board', amount: tasks.length, filter: null },
-      this.createStatusTile('progress', 'Tasks In Progress', 'In progress', '', tasks, false),
-      this.createStatusTile('feedback', 'Awaiting Feedback', 'Await feedback', '', tasks, false),
+      {
+        area: 'total',
+        label: 'Tasks in Board',
+        displayLabel: 'Tasks in\nBoard',
+        amount: tasks.length,
+        filter: null,
+      },
+      this.createStatusTile(
+        'progress',
+        'Tasks In Progress',
+        'In progress',
+        '',
+        tasks,
+        false,
+        'Tasks In\nProgress',
+      ),
+      this.createStatusTile(
+        'feedback',
+        'Awaiting Feedback',
+        'Await feedback',
+        '',
+        tasks,
+        false,
+        'Awaiting\nFeedback',
+      ),
     ];
   }
 
   /**
-   * Builds an individual metric tile configuration for a status.
+   * Builds an individual metric tile configuration for a task status.
    *
-   * @param area - CSS grid area identifier.
-   * @param label - Tile label text.
-   * @param status - Task status category.
-   * @param icon - Icon name.
-   * @param tasks - Full task collection.
-   * @param bold - Whether to render text in bold.
+   * @param area - CSS grid area identifier and tracking key.
+   * @param label - Full label text used for filtering and accessibility.
+   * @param status - Task status category to count.
+   * @param icon - Icon name referencing the SVG sprite.
+   * @param tasks - Full task collection to derive count from.
+   * @param bold - Whether to render the icon stroke bold.
+   * @param displayLabel - Optional display label with line breaks; falls back to label.
    * @returns Configured DashboardTile object.
    */
   private createStatusTile(
@@ -231,11 +259,13 @@ export class Dashboard implements OnInit, AfterViewInit {
     icon: string,
     tasks: TaskInterface[],
     bold?: boolean,
+    displayLabel?: string,
   ): DashboardTile {
     const amount = tasks.filter((task) => task.status === status).length;
     return {
       area,
       label,
+      displayLabel: displayLabel ?? label,
       amount,
       icon: icon || undefined,
       bold,
