@@ -28,13 +28,31 @@
   @include flex-center;
   gap: 16px;
 
-  .help-icon {
-    width: 32px;
-    height: 32px;
-    padding: 2px;
+  .help-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+
+    .help-icon {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
 
     &:hover {
-      padding: 0;
+      transform: scale(1.15);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-cyan-500;
+      outline-offset: 2px;
     }
   }
 }

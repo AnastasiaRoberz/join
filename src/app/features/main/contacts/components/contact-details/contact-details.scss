@@ -42,7 +42,7 @@
 
   @media screen and (max-width: 1024px), screen and (max-height: 500px) {
     position: fixed;
-    bottom: 106px;
+    bottom: 90px;
     right: 14px;
     z-index: $z-sticky-header;
     flex-direction: column;
@@ -68,10 +68,13 @@
     }
   }
 
-  @include short-height {
-    position: fixed;
+  @media screen and (min-width: 1025px) and (max-height: 500px) {
     bottom: 12px;
     right: 12px;
+  }
+
+  @include tablet {
+    bottom: calc(calcClamp(60, 80, 700, 500, height) + 12px);
   }
 }
 
@@ -96,7 +99,7 @@
 }
 
 button.btn.btn-dots {
-  --btn-pos-bottom: #{calcClamp(96, 112, 900, 600, height)};
+  --btn-pos-bottom: #{calc(calcClamp(60, 80, 700, 500, height) + 16px)};
   @include circle-btn(56px, var(--btn-pos-bottom), $pos: fixed);
 
   @media screen and (min-width: 1025px) and (max-height: 600px) {

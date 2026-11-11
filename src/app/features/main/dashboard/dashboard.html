@@ -1,4 +1,3 @@
-
 @if (greeterService.isGreeting()) {
   <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
 }
@@ -66,7 +65,7 @@
       </div>
     </a>
   </div>
-  
+
   @if (!hideGreeting() || greeterService.isGreeting()) {
     <div
       #welcome
@@ -75,8 +74,9 @@
       [class.greeter-fade]="greeterService.isGreeting() && hideGreeting()"
     >
       <p class="greeting">
-        {{ getDaytime().prefix }}@if (getDaytime().name) {
-          <span class="name">{{ getDaytime().name }}</span>{{ getDaytime().suffix ?? '' }}
+        {{ getDaytime().prefix }}
+        @if (getDaytime().name; as chars) {
+          <span class="name">@for (char of chars; track $index) {<span class="char">{{ char }}</span>}</span>{{ getDaytime().suffix ?? '' }}
         }
       </p>
     </div>

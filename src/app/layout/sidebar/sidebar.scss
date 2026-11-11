@@ -17,6 +17,23 @@
     justify-content: center;
     gap: calcClamp(16, 48, 500, 350, height);
   }
+
+  @include tablet {
+    padding: 2px;
+
+    height: calcClamp(60, 80, 700, 500, height);
+    width: 100%;
+    align-items: stretch;
+
+    .sidebar-wrapper {
+      height: 100%;
+      align-items: stretch;
+    }
+
+    nav {
+      height: 100%;
+    }
+  }
 }
 
 .sidebar-wrapper {
@@ -46,61 +63,63 @@ nav {
     li {
       @include flex-start;
       width: 100%;
-      max-height: 48px;
-    }
-  }
-  a {
-    @include sidebar-nav-link;
-  }
-}
-
-:host.is-tablet {
-  padding: 2px;
-
-  height: calcClamp(60, 80, 700, 500, height);
-  width: 100%;
-  align-items: stretch;
-
-  .sidebar-wrapper {
-    height: 100%;
-    align-items: stretch;
-  }
-
-  nav {
-    height: 100%;
-  }
-  ul {
-    flex-direction: row;
-    justify-content: space-around;
-    gap: 0;
-    width: 100%;
-    height: 100%;
-
-    .nav-icon {
-      width: 24px;
-      height: 24px;
     }
 
-    li {
-      width: auto;
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-around;
+      gap: 0;
+      width: 100%;
       height: 100%;
-      max-height: none;
 
-      a {
-        flex-direction: column;
-        justify-content: center;
-        gap: 4px;
-        min-width: 0;
-        width: calcClamp(70, 80, 370, 320);
+      .nav-icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      li {
+        width: auto;
         height: 100%;
-        font-size: calcClamp(13, 16, 370, 320);
-        border-radius: $radius-sm;
-        white-space: nowrap;
-        padding: 0;
+      }
+    }
+  }
 
-        &::before {
-          display: none;
-        }
+  a {
+    @include flex-start;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 0;
+    color: $sidebar-txt-default;
+    @include sidebar-link-hover;
+
+    @include tablet {
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      min-width: 0;
+      width: calcClamp(70, 80, 370, 320);
+      // height: calcClamp(70, 76, 370, 320);
+      height: 100%;
+      font-size: calcClamp(13, 16, 370, 320);
+      border-radius: 8px;
+      white-space: nowrap;
+      padding: 0;
+      transition:
+        background-color 0.25s ease,
+        color 0.25s ease;
+
+      &::before,
+      &::after {
+        display: none;
+      }
+
+      &:hover {
+        background-color: $sidebar-bg-hover;
+      }
+
+      &.active,
+      &:active {
+        background-color: $sidebar-bg-active;
       }
     }
   }

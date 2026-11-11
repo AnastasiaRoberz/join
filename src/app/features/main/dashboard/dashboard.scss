@@ -315,33 +315,53 @@
   }
 
   .greeting {
-    font-size: calcClampMin((28, 47, 1440, 1024), (20, 47, 600, 450));
+    font-size: calcClampMin((28, 48, 1440, 1024), (20, 48, 600, 450));
     font-weight: 500;
     color: $color-navy-800;
     word-wrap: break-word;
+    cursor: default;
 
     .name {
-      font-size: calcClampMin((32, 64, 1440, 1024), (24, 64, 600, 450));
+      display: inline-block;
+      white-space: nowrap;
+      font-size: calcClampMin((32, 60, 1440, 1024), (24, 60, 600, 450));
       font-weight: 700;
-      color: $color-cyan-700;
+      position: relative;
+      letter-spacing: -0.03em;
+      color: $main-color;
+      -webkit-font-smoothing: antialiased;
+
+      .char {
+        display: inline-block;
+
+        transition:
+          transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+          color 0.35s ease,
+          text-shadow 0.35s ease;
+
+        &:hover {
+          transform: scale(1.18) translateY(-4px);
+          color: $color-cyan-500;
+          text-shadow: 0 0 24px #72bedf;
+        }
+      }
     }
-  }
+    &.greeter-fly {
+      position: relative;
+      z-index: $z-intro-element;
+      width: fit-content;
+    }
 
-  &.greeter-fly {
-    position: relative;
-    z-index: $z-intro-element;
-    width: fit-content;
-  }
-
-  &.greeter-fade {
-    position: absolute;
-    inset: 0;
-    z-index: $z-intro-element;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    animation: overlay-fade 1.8s ease-in-out forwards;
-    animation-delay: 0.2s;
+    &.greeter-fade {
+      position: absolute;
+      inset: 0;
+      z-index: $z-intro-element;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: overlay-fade 1.8s ease-in-out forwards;
+      animation-delay: 0.2s;
+    }
   }
 }

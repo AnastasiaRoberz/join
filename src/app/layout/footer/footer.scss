@@ -16,6 +16,7 @@
   a {
     @include sidebar-nav-link;
     white-space: nowrap;
+    @include sidebar-link-hover;
   }
 }
 

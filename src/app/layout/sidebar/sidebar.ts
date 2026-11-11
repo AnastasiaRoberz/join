@@ -20,9 +20,6 @@ export interface NavItem {
   selector: 'app-sidebar',
   styleUrl: './sidebar.scss',
   templateUrl: './sidebar.html',
-  host: {
-    '[class.is-tablet]': 'responsiveService.isTablet()',
-  },
 })
 export class Sidebar {
   /** Responsive service for layout adjustments on tablet and short viewports. */

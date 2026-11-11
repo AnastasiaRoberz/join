@@ -1,7 +1,7 @@
 /** Structured greeting parts to avoid innerHTML / XSS. */
 export interface GreetingParts {
   prefix: string;
-  name?: string;
+  name?: string[];
   suffix?: string;
 }
 
@@ -10,10 +10,12 @@ export type SloganFormatter = (firstname?: string) => GreetingParts;
 
 /** Helper creating a slogan formatter with name interpolation and optional fallback. */
 function slogan(prefix: string, suffix: string, noName?: string): SloganFormatter {
-  return (n?: string): GreetingParts =>
-    n
-      ? { prefix, name: n, suffix }
+  return (n?: string): GreetingParts => {
+    const trimmed = n?.trim();
+    return trimmed
+      ? { prefix, name: splitGreetingChars(trimmed), suffix }
       : { prefix: noName ?? `${prefix.trimEnd().replace(/,$/, '')}${suffix}` };
+  };
 }
 
 /** Slogans displayed during morning hours. */
@@ -72,9 +74,7 @@ function pickRandom(list: SloganFormatter[]): SloganFormatter {
  * @param currentHour - Hour of the day (0–23). Defaults to the current hour.
  * @returns A randomly chosen slogan formatter for the given daytime period.
  */
-export function getGreetingFormatter(
-  currentHour: number = new Date().getHours(),
-): SloganFormatter {
+export function getGreetingFormatter(currentHour: number = new Date().getHours()): SloganFormatter {
   if (currentHour >= 5 && currentHour < 11) {
     return pickRandom(MORNING_SLOGANS);
   } else if (currentHour >= 11 && currentHour < 14) {
@@ -101,4 +101,9 @@ export function getGreeting(
   currentHour: number = new Date().getHours(),
 ): GreetingParts {
   return getGreetingFormatter(currentHour)(firstname);
+}
+
+/** Splits a firstname into uppercase display characters, preserving spaces as non-breaking spaces. */
+function splitGreetingChars(firstname: string): string[] {
+  return Array.from(firstname).map((char) => (char === ' ' ? '\u00A0' : char.toUpperCase()));
 }
