@@ -1,5 +1,7 @@
 @use 'sass:list';
 @use 'sass:meta';
+@use 'sass:math';
+@use 'sass:string';
 
 /**
  * Calculates a fluid CSS `clamp()` value that scales linearly between a minimum
@@ -34,7 +36,10 @@
     @error "calcClamp: $start (#{$start}) must be greater than $end (#{$end}).";
   }
 
-  $viewport: if($axis == 'height', 100svh, 100svw);
+  $viewport: 100svw;
+  @if $axis == 'height' {
+    $viewport: 100svh;
+  }
 
   @return clamp(
     $min * 1px,
@@ -101,7 +106,7 @@
     $clamp-w: calcClamp($min, $max, 1440, 320, width);
     $clamp-h: calcClamp($min, $max, 800, 350, height);
 
-    @return unquote('min(#{$clamp-w}, #{$clamp-h})');
+    @return string.unquote('min(#{$clamp-w}, #{$clamp-h})');
   }
 
   $resolved: ();
@@ -109,9 +114,14 @@
   @for $i from 1 through list.length($clamps) {
     $item: list.nth($clamps, $i);
 
-    $default-axis: if($i == 1, width, height);
-    $default-start: if($i == 1, 1440, 800);
-    $default-end: if($i == 1, 320, 350);
+    $default-axis: height;
+    $default-start: 800;
+    $default-end: 350;
+    @if $i == 1 {
+      $default-axis: width;
+      $default-start: 1440;
+      $default-end: 320;
+    }
 
     @if meta.type-of($item) == 'list' {
       $resolved: list.append(
@@ -124,7 +134,7 @@
     }
   }
 
-  @return unquote('min(#{$resolved})');
+  @return string.unquote('min(#{$resolved})');
 }
 
 /**
@@ -144,9 +154,14 @@
     @error "calcClampRem: $start (#{$start}) must be greater than $end (#{$end}).";
   }
 
-  $min-rem: ($min / $base) * 1rem;
-  $max-rem: ($max / $base) * 1rem;
-  $viewport: if($axis == 'height', 100svh, 100svw);
+  $min-rem: math.div($min, $base) * 1rem;
+  $max-rem: math.div($max, $base) * 1rem;
+
+  $viewport: 100svw;
+  @if $axis == 'height' {
+    $viewport: 100svh;
+  }
+
   @return clamp(
     $min-rem,
     calc(($viewport - $end * 1px) * ($max - $min) / ($start - $end) + $min-rem),
@@ -174,7 +189,7 @@
     $clamp-w: calcClampRem($min, $max, 1440, 320, width);
     $clamp-h: calcClampRem($min, $max, 800, 350, height);
 
-    @return unquote('min(#{$clamp-w}, #{$clamp-h})');
+    @return string.unquote('min(#{$clamp-w}, #{$clamp-h})');
   }
 
   $resolved: ();
@@ -182,9 +197,14 @@
   @for $i from 1 through list.length($clamps) {
     $item: list.nth($clamps, $i);
 
-    $default-axis: if($i == 1, width, height);
-    $default-start: if($i == 1, 1440, 800);
-    $default-end: if($i == 1, 320, 350);
+    $default-axis: height;
+    $default-start: 800;
+    $default-end: 350;
+    @if $i == 1 {
+      $default-axis: width;
+      $default-start: 1440;
+      $default-end: 320;
+    }
 
     @if meta.type-of($item) == 'list' {
       $resolved: list.append(
@@ -197,7 +217,7 @@
     }
   }
 
-  @return unquote('min(#{$resolved})');
+  @return string.unquote('min(#{$resolved})');
 }
 
 /**
@@ -212,12 +232,30 @@
  * @param {Number} $base - Base font size in px.
  * @return {String} CSS clamp() expression formatted in rem.
  */
-@function _resolveClampRem($args, $default-axis: width, $default-start: 1440, $default-end: 320, $base: 16) {
+@function _resolveClampRem(
+  $args,
+  $default-axis: width,
+  $default-start: 1440,
+  $default-end: 320,
+  $base: 16
+) {
   $min: list.nth($args, 1);
   $max: list.nth($args, 2);
-  $start: if(list.length($args) >= 3, list.nth($args, 3), $default-start);
-  $end: if(list.length($args) >= 4, list.nth($args, 4), $default-end);
-  $axis: if(list.length($args) >= 5, list.nth($args, 5), $default-axis);
+
+  $start: $default-start;
+  @if list.length($args) >= 3 {
+    $start: list.nth($args, 3);
+  }
+
+  $end: $default-end;
+  @if list.length($args) >= 4 {
+    $end: list.nth($args, 4);
+  }
+
+  $axis: $default-axis;
+  @if list.length($args) >= 5 {
+    $axis: list.nth($args, 5);
+  }
 
   @return calcClampRem($min, $max, $start, $end, $axis, $base);
 }
@@ -246,9 +284,20 @@
   $min: list.nth($args, 1);
   $max: list.nth($args, 2);
 
-  $start: if(list.length($args) >= 3, list.nth($args, 3), $default-start);
-  $end: if(list.length($args) >= 4, list.nth($args, 4), $default-end);
-  $axis: if(list.length($args) >= 5, list.nth($args, 5), $default-axis);
+  $start: $default-start;
+  @if list.length($args) >= 3 {
+    $start: list.nth($args, 3);
+  }
+
+  $end: $default-end;
+  @if list.length($args) >= 4 {
+    $end: list.nth($args, 4);
+  }
+
+  $axis: $default-axis;
+  @if list.length($args) >= 5 {
+    $axis: list.nth($args, 5);
+  }
 
   @return calcClamp($min, $max, $start, $end, $axis);
 }
@@ -264,5 +313,5 @@
  *   font-size: toRem(24);
  */
 @function toRem($px, $base: 16) {
-  @return ($px / $base) * 1rem;
+  @return math.div($px, $base) * 1rem;
 }

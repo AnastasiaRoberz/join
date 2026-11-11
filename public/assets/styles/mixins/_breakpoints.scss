@@ -2,7 +2,10 @@
 @use '../variables' as *;
 
 @function to-px($value) {
-  @return if(math.is-unitless($value), #{$value}px, $value);
+  @if math.is-unitless($value) {
+    @return #{$value}px;
+  }
+  @return $value;
 }
 
 @mixin responsive($size, $direction: width, $value: max) {
@@ -41,7 +44,11 @@
   }
 }
 
-@mixin mobile-or-short($mobile-width: to-px($bp-mobile), $ls-width: 1920, $ls-height: $bp-short-height) {
+@mixin mobile-or-short(
+  $mobile-width: to-px($bp-mobile),
+  $ls-width: 1920,
+  $ls-height: $bp-short-height
+) {
   @media screen and (max-width: $mobile-width),
     screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
     @content;
