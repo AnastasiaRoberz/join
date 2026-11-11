@@ -358,22 +358,23 @@
         }
       }
     }
-    &.greeter-fly {
-      position: relative;
-      z-index: $z-intro-element;
-      width: fit-content;
-    }
+  }
 
-    &.greeter-fade {
-      position: absolute;
-      inset: 0;
-      z-index: $z-intro-element;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      animation: overlay-fade 1.8s ease-in-out forwards;
-      animation-delay: 0.2s;
-    }
+  &.greeter-fly {
+    position: relative;
+    z-index: $z-intro-element;
+    width: fit-content;
+  }
+
+  &.greeter-fade {
+    position: absolute;
+    inset: 0;
+    z-index: $z-intro-element;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: overlay-fade 1.8s ease-in-out forwards;
+    animation-delay: 0.2s;
   }
 }

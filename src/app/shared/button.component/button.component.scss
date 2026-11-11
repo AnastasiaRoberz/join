@@ -238,11 +238,11 @@
     background-color: $btn-add-default;
     background-image: linear-gradient(
       110deg,
-      $btn-secondary-hover 0%,
-      $btn-secondary-hover 40%,
+      $btn-add-hover 0%,
+      $btn-add-hover 40%,
       rgba($color-cyan-500, 0.45) 50%,
-      $btn-secondary-default 60%,
-      $btn-secondary-default 100%
+      $btn-add-default 60%,
+      $btn-add-default 100%
     );
     background-size: 250% 100%;
     background-position: 100% 0;
