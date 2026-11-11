@@ -90,12 +90,10 @@ export class ContactService {
     contactData: Omit<ContactInterface, 'id' | 'badge_color'>,
     showFeedback: boolean = true,
   ): Promise<ContactInterface | null> {
-    const firstnameUppercase = capitalizeFirstLetter(contactData.firstname);
-    const surnameUppercase = capitalizeFirstLetter(contactData.surname);
     const contact = {
       ...contactData,
-      firstname: firstnameUppercase,
-      surname: surnameUppercase,
+      firstname: capitalizeFirstLetter(contactData.firstname),
+      surname: capitalizeFirstLetter(contactData.surname),
       badge_color: getRandomColor(),
     };
 
