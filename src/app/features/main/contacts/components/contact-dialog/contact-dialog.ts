@@ -18,6 +18,7 @@ import { SupabaseService } from '../../../../../services/supabase.service';
 import { ConfirmService } from '../../../../../services/confirm.service';
 import { fullName, splitName } from '../../../../../utils/name-utils';
 import { UserService } from '../../../../../services/user.service';
+import { capitalizeFirstLetter } from '../../../../../utils/utils';
 
 /**
  * Dialog for creating a new contact or editing an existing contact.
@@ -122,10 +123,11 @@ export class ContactDialog {
   private buildContactPayload(): Omit<ContactInterface, 'id' | 'badge_color'> {
     const { name, mail, phone } = this.contactForm.getRawValue();
     const { title, firstname, surname } = splitName(name ?? '');
+
     return {
       title,
-      firstname,
-      surname,
+      firstname: capitalizeFirstLetter(firstname),
+      surname: capitalizeFirstLetter(surname),
       mail: mail?.trim() ?? '',
       phone: phone?.trim() ?? '',
     };
