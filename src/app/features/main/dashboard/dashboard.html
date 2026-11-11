@@ -60,7 +60,7 @@
           <span class="date" [class.overdue]="deadline.overdue">{{ deadline.formattedDate }} </span>
           <span class="headsup">{{ deadline.text }}</span>
         } @else {
-          <span>No Deadlines in your Board.</span>
+          <span class="headsup">No Deadlines in your Board.</span>
         }
       </div>
     </a>
@@ -76,7 +76,11 @@
       <p class="greeting">
         {{ getDaytime().prefix }}
         @if (getDaytime().name; as chars) {
-          <span class="name">@for (char of chars; track $index) {<span class="char">{{ char }}</span>}</span>{{ getDaytime().suffix ?? '' }}
+          <span class="name">
+            @for (char of chars; track $index) {
+              <span class="char">{{ char }}</span>
+            }</span
+          >{{ getDaytime().suffix ?? '' }}
         }
       </p>
     </div>
