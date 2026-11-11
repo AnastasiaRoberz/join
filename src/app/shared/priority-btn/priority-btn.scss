@@ -19,9 +19,10 @@
 }
 
 .prio-btn {
-  // width: 100%;
   flex: 1;
   min-width: 0;
+  border: none;
+  cursor: pointer;
   border-radius: $radius-md;
   padding-inline: 10px;
   padding-block: calcClamp(8, 16, 500, 350, height);
@@ -31,6 +32,12 @@
   background-color: $color-white;
   font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
   line-height: 120%;
+  transform: translateY(0);
+  transition:
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 160ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
 
   @include tablet {
     font-size: calcClamp(16, 20, 1024, 769);
@@ -44,36 +51,46 @@
     width: calcClamp(12, 20, 1300, 769);
     aspect-ratio: 1 / 1;
     flex-shrink: 0;
+    transition: color 180ms ease;
 
     @include mobile {
       width: 20px;
     }
   }
 
-  &:hover:not(.active) {
+  &:hover:not(:active) {
     box-shadow: $btn-shadow;
+    transform: translateY(-2px);
   }
 
-  &:active,
+  &:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    transition:
+      transform 80ms ease,
+      box-shadow 80ms ease;
+  }
+
   &.active {
     color: $text-light;
     font-weight: 700;
+    box-shadow: $overlay-shadow;
 
     svg {
       color: $text-light;
     }
-  }
 
-  &.active:hover {
-    box-shadow: none;
+    &:hover:not(:active) {
+      box-shadow: $btn-shadow;
+      transform: translateY(-1px);
+    }
   }
 
   &--urgent {
     svg {
       color: $prio-urgent;
     }
-    &.active,
-    &:active {
+    &.active {
       background-color: $prio-urgent;
     }
   }
@@ -82,8 +99,7 @@
     svg {
       color: $prio-medium;
     }
-    &.active,
-    &:active {
+    &.active {
       background-color: $prio-medium;
     }
   }
@@ -92,8 +108,7 @@
     svg {
       color: $prio-low;
     }
-    &.active,
-    &:active {
+    &.active {
       background-color: $prio-low;
     }
   }
