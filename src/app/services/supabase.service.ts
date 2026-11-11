@@ -1,5 +1,5 @@
 import { inject, Service } from '@angular/core';
-import { createClient, Session, SupabaseClient, User } from '@supabase/supabase-js';
+import { createClient, Session, SupabaseClient, User, UserAttributes } from '@supabase/supabase-js';
 import { capitalizeFirstLetter } from '../utils/utils';
 import { FeedbackService } from './feedback.service';
 import { environment } from '../../environment/environment';
@@ -243,22 +243,20 @@ export class SupabaseService {
   }
 
   /**
-   * Updates an auth user by ID and refreshes the current session.
+   * Updates the currently logged-in auth user and refreshes the active session.
    *
-   * @param userUid - UID of the auth user to update
-   * @param userData - Partial user fields (e.g. `email`, `user_metadata`)
+   * @param attributes - User attributes (`email`, `password`, `data` for metadata)
    * @returns A promise resolving to the updated user, or `null` on failure
    */
-  public async updateUser(userUid: string, userData: Partial<User>): Promise<User | null> {
-    const { error } = await this.supabase.auth.admin.updateUserById(userUid, userData as any);
-    if (!error) {
-      this.feedbackService.showSuccess(`User successfully updated.`);
-      const { data: refreshData, error: refreshError } = await this.supabase.auth.refreshSession();
-      return refreshError ? null : refreshData.user;
-    } else {
+  public async updateUser(attributes: UserAttributes): Promise<User | null> {
+    const { data, error } = await this.supabase.auth.updateUser(attributes);
+    if (error) {
       this.feedbackService.showError(`Update user failed.`);
       return null;
     }
+    this.feedbackService.showSuccess(`User successfully updated.`);
+    const { data: refreshData } = await this.supabase.auth.refreshSession();
+    return refreshData.user ?? data.user;
   }
 
   /**
@@ -276,17 +274,6 @@ export class SupabaseService {
     } else {
       this.feedbackService.showError(`Delete user failed.`);
       return false;
-    }
-  }
-
-  /**
-   * Deletes an anonymous user from Supabase auth upon logout.
-   *
-   * @param user - The active Supabase user object.
-   */
-  public async cleanupAnonymousUser(user: User | null): Promise<void> {
-    if (user?.is_anonymous) {
-      await this.supabase.rpc('delete_auth_user', { target_uid: user.id });
     }
   }
 

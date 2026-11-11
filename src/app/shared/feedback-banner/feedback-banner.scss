@@ -9,7 +9,7 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: $z-confirm-toast;
+  z-index: $z-feedback-toast;
 
   @include tablet {
     padding-bottom: 100px;

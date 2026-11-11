@@ -1,7 +1,7 @@
 import { computed, inject, Service, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { ContactInterface } from '../interfaces/contact.interface';
-import { getRandomColor } from '../utils/utils';
+import { capitalizeFirstLetter, getRandomColor } from '../utils/utils';
 
 /**
  * Domain service managing contact data, reactive state storage, alphabetical sorting,
@@ -90,7 +90,14 @@ export class ContactService {
     contactData: Omit<ContactInterface, 'id' | 'badge_color'>,
     showFeedback: boolean = true,
   ): Promise<ContactInterface | null> {
-    const contact = { ...contactData, badge_color: getRandomColor() };
+    const firstnameUppercase = capitalizeFirstLetter(contactData.firstname);
+    const surnameUppercase = capitalizeFirstLetter(contactData.surname);
+    const contact = {
+      ...contactData,
+      firstname: firstnameUppercase,
+      surname: surnameUppercase,
+      badge_color: getRandomColor(),
+    };
 
     const newContact = await this.supabaseService.addData(contact, 'contacts', showFeedback);
     if (!newContact) return null;

@@ -52,12 +52,20 @@ export class DialogService {
    */
   public readonly scrollToContact = signal<boolean>(false);
 
+  /**
+   * True when the dialog is creating a brand-new contact.
+   * False when editing an existing one.
+   * Used by ContactList to decide whether to auto-scroll after save.
+   */
+  public readonly isNewContact = signal<boolean>(false);
+
   /** Handle of the pending state reset started in `closeDialog()`; cleared if the dialog is reopened within 400ms. */
   private closeTimeout?: ReturnType<typeof setTimeout>;
 
   /**
    * Opens the dialog with the given content. Cancels a pending reset from `closeDialog()`,
    * so reopening during the close animation works correctly.
+   * Sets `isNewContact` to true when opening a contact form without an existing item.
    *
    * @param type - Which content to show.
    * @param item - The contact/task to display or edit, or `null` to create a new one.
@@ -69,6 +77,10 @@ export class DialogService {
     this.dialogType.set(type);
     this.selectedItem.set(item);
     this.isOpen.set(true);
+
+    if (type === 'contact') {
+      this.isNewContact.set(item === null);
+    }
   }
 
   /**

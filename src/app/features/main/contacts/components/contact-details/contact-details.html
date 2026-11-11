@@ -25,6 +25,13 @@
             [disabled]="isDeleting()"
           ></button>
         </div>
+      } @else {
+        <p class="edit-info">
+          <svg class="info-icon">
+            <use href="./assets/icons/icons.svg#info"></use>
+          </svg>
+          <span>Registered user</span>
+        </p>
       }
     </div>
   </div>

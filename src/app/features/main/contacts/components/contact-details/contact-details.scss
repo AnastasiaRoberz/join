@@ -78,6 +78,21 @@
   }
 }
 
+.edit-info {
+  @include flex-start;
+  gap: 8px;
+
+  .info-icon {
+    width: 16px;
+    height: 16px;
+    color: $icon;
+  }
+
+  span {
+    color: $icon;
+  }
+}
+
 .info-heading {
   font-size: $font-medium;
   line-height: 0.75;
