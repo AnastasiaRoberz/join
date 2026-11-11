@@ -128,8 +128,6 @@ export class UserService {
       this.draftService.clearAddTaskDraft();
     }
 
-    const user = this.currentUser();
-    await this.supabaseService.cleanupAnonymousUser(user);
     const { error } = await this.supabase.auth.signOut();
     if (!error) {
       this.draftService.clearAllDrafts();
