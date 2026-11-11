@@ -20,8 +20,14 @@ header {
     bottom: 0;
     left: calcClamp(24, 68);
     margin-block: auto;
+    transition: transform 100ms ease;
 
     --btn-icon-medium-size: #{calcClamp(24, 32, 500, 350, height)};
+
+    &:hover,
+    &:focus-visible {
+      transform: translateX(-4px);
+    }
   }
 }
 
