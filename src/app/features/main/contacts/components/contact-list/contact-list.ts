@@ -15,6 +15,7 @@ import { ContactService } from '../../../../../services/contact.service';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ResponsiveService } from '../../../../../services/responsive.service';
 import { fullName } from '../../../../../utils/name-utils';
+import { ContactInterface } from '../../../../../interfaces/contact.interface';
 
 /**
  * Displays all contacts grouped by first letter and lets the user pick one.
@@ -97,12 +98,15 @@ export class ContactList implements AfterViewInit {
     this.contactSelected.emit(id);
   }
 
-  /** Reacts to selection changes to center newly added contacts or scroll to top on deletion. */
-  private initScrollEffect(): void {
+  /** Reacts to selection changes to center newly added contacts or scroll to top on deletion.
+   * Scroll is only triggered when both `scrollToContact` and `isNewContact` are true,
+   * preventing unwanted scrolling when an existing contact is edited.
+   */ private initScrollEffect(): void {
     effect(() => {
       const id = this.selectedId();
       const shouldScroll = this.dialogService.scrollToContact();
-      setTimeout(() => this.handleContactScroll(id, shouldScroll), 50);
+      const isNew = this.dialogService.isNewContact();
+      setTimeout(() => this.handleContactScroll(id, shouldScroll && isNew), 50);
     });
   }
 
@@ -129,5 +133,21 @@ export class ContactList implements AfterViewInit {
     const button = this.contactButtons()[index];
     button?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     this.dialogService.scrollToContact.set(false);
+  }
+
+  /**
+   * Returns the group letter as a stable tracking key.
+   * Prevents Angular from rebuilding group DOM elements when contacts are renamed.
+   */
+  protected trackGroup(_index: number, group: { letter: string }): string {
+    return group.letter;
+  }
+
+  /**
+   * Returns the contact id as a stable tracking key.
+   * Prevents scroll position jumps and DOM rebuilds when contact data changes.
+   */
+  protected trackContact(_index: number, contact: ContactInterface): number {
+    return contact.id!;
   }
 }
