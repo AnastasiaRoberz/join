@@ -34,12 +34,7 @@
       </a>
     }
 
-    <a
-      routerLink="/app/board"
-      routerLinkActive="active"
-      class="tile deadline"
-      aria-label="Priority overview – Go to Board"
-    >
+    <div class="tile deadline" aria-label="Priority overview">
       <div class="prios">
         @for (prio of priorities(); track prio.icon) {
           <div
@@ -65,7 +60,7 @@
           <span class="headsup">No Deadlines in your Board.</span>
         }
       </div>
-    </a>
+    </div>
   </div>
 
   @if (!hideGreeting() || greeterService.isGreeting()) {
