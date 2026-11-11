@@ -212,32 +212,62 @@ export class Dashboard implements OnInit, AfterViewInit {
     return [
       this.createStatusTile('todo', 'To-do', 'To do', 'edit', tasks),
       this.createStatusTile('done', 'Done', 'Done', 'check', tasks, true),
-      {
-        area: 'total',
-        label: 'Tasks in Board',
-        displayLabel: 'Tasks in\nBoard',
-        amount: tasks.length,
-        filter: null,
-      },
-      this.createStatusTile(
-        'progress',
-        'Tasks In Progress',
-        'In progress',
-        '',
-        tasks,
-        false,
-        'Tasks In\nProgress',
-      ),
-      this.createStatusTile(
-        'feedback',
-        'Awaiting Feedback',
-        'Await feedback',
-        '',
-        tasks,
-        false,
-        'Awaiting\nFeedback',
-      ),
+      this.createTotalTile(tasks),
+      this.createProgressTile(tasks),
+      this.createFeedbackTile(tasks),
     ];
+  }
+
+  /**
+   * Builds the Tasks In Progress metric tile.
+   *
+   * @param tasks - Full task collection to derive count from.
+   * @returns Configured DashboardTile for in-progress tasks.
+   */
+  private createProgressTile(tasks: TaskInterface[]): DashboardTile {
+    return this.createStatusTile(
+      'progress',
+      'Tasks In Progress',
+      'In progress',
+      '',
+      tasks,
+      false,
+      'Tasks In\nProgress',
+    );
+  }
+
+  /**
+   * Builds the Awaiting Feedback metric tile.
+   *
+   * @param tasks - Full task collection to derive count from.
+   * @returns Configured DashboardTile for tasks awaiting feedback.
+   */
+  private createFeedbackTile(tasks: TaskInterface[]): DashboardTile {
+    return this.createStatusTile(
+      'feedback',
+      'Awaiting Feedback',
+      'Await feedback',
+      '',
+      tasks,
+      false,
+      'Awaiting\nFeedback',
+    );
+  }
+
+  /**
+   * Builds the total tasks count tile for the dashboard.
+   *
+   * @param tasks - Full task collection to derive count from.
+   * @returns Configured DashboardTile showing the total task count.
+   */
+  private createTotalTile(tasks: TaskInterface[]): DashboardTile {
+    return {
+      area: 'total',
+      label: 'Tasks in Board',
+      displayLabel: 'Tasks in\nBoard',
+      amount: tasks.length,
+      filter: null,
+    };
   }
 
   /**
