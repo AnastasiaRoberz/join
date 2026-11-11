@@ -99,7 +99,7 @@
   @include flex-center;
   gap: calcClamp(8, 24);
   height: 100%;
-  padding-inline: calcClampMin((4, 40, 1440, 1025), (16, 40, 800, 350));
+  padding-inline: 40px;
   border: 1px solid $color-grey-500;
   border-radius: calcClampMin((20, 30, 768, 320), (8, 30, 800, 350));
   background-color: $color-white;
@@ -201,6 +201,14 @@
   font-size: calcClamp(14, 20);
   text-align: center;
   transition: color 240ms ease;
+}
+
+.total .type {
+  max-width: 9ch;
+
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    max-width: none;
+  }
 }
 
 .deadline {

@@ -207,9 +207,9 @@ export class Dashboard implements OnInit, AfterViewInit {
     return [
       this.createStatusTile('todo', 'To-do', 'To do', 'edit', tasks),
       this.createStatusTile('done', 'Done', 'Done', 'check', tasks, true),
-      { area: 'total', label: 'Tasks in', label2: 'Board', amount: tasks.length, filter: null },
-      this.createStatusTile('progress', 'Tasks in', 'In progress', '', tasks, false, 'Progress'),
-      this.createStatusTile('feedback', 'Awaiting', 'Await feedback', '', tasks, false, 'Feedback'),
+      { area: 'total', label: 'Tasks in Board', amount: tasks.length, filter: null },
+      this.createStatusTile('progress', 'Tasks In Progress', 'In progress', '', tasks, false),
+      this.createStatusTile('feedback', 'Awaiting Feedback', 'Await feedback', '', tasks, false),
     ];
   }
 
@@ -231,13 +231,11 @@ export class Dashboard implements OnInit, AfterViewInit {
     icon: string,
     tasks: TaskInterface[],
     bold?: boolean,
-    label2?: string,
   ): DashboardTile {
     const amount = tasks.filter((task) => task.status === status).length;
     return {
       area,
       label,
-      label2,
       amount,
       icon: icon || undefined,
       bold,
