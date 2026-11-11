@@ -278,17 +278,6 @@ export class SupabaseService {
   }
 
   /**
-   * Deletes an anonymous user from Supabase auth upon logout.
-   *
-   * @param user - The active Supabase user object.
-   */
-  public async cleanupAnonymousUser(user: User | null): Promise<void> {
-    if (user?.is_anonymous) {
-      await this.supabase.rpc('delete_auth_user', { target_uid: user.id });
-    }
-  }
-
-  /**
    * Shows the success or error toast of a create, update or delete operation.
    * Does nothing for tables that are not listed in `allowedFeedbackTables`.
    *
