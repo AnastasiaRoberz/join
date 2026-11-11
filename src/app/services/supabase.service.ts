@@ -76,7 +76,11 @@ export class SupabaseService {
    * @param selectedData - The SQL/PostgREST select pattern. Defaults to `'*'`
    * @returns A promise resolving to the record object, or `null` if not found or on error
    */
-  public async getOneItem(table: string, id: number, selectedData: string = '*'): Promise<any | null> {
+  public async getOneItem(
+    table: string,
+    id: number,
+    selectedData: string = '*',
+  ): Promise<any | null> {
     let { data, error } = await this.supabase
       .from(table)
       .select(selectedData)
@@ -272,6 +276,17 @@ export class SupabaseService {
     } else {
       this.feedbackService.showError(`Delete user failed.`);
       return false;
+    }
+  }
+
+  /**
+   * Deletes an anonymous user from Supabase auth upon logout.
+   *
+   * @param user - The active Supabase user object.
+   */
+  public async cleanupAnonymousUser(user: User | null): Promise<void> {
+    if (user?.is_anonymous) {
+      await this.supabase.rpc('delete_auth_user', { target_uid: user.id });
     }
   }
 
