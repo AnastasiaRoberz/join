@@ -69,9 +69,6 @@
       @include short-height(450) {
         margin-block: 0;
 
-        &:not(:has(.header-section__subheading)) {
-          margin-block: 0;
-        }
         &::after,
         .header-section__subheading {
           display: none;
@@ -101,28 +98,26 @@
 }
 
 .content-section {
-  --form-gap: #{min(calcClamp(24, 32), calcClamp(16, 32, 700, 350, height))};
+  --form-gap: #{calcClampMin((24, 32), (16, 32, 700, 350))};
   --btn-margin: #{calcClamp(0, 16, 700, 350, height)};
   --avatar-size: #{calcClamp(60, 120, 700, 450, height)};
   --padding-short: #{calcClamp(16, 64, 700, 350, height)};
   --input-wrapper-gap: #{calcClamp(32, 72, 1440, 1025)};
   @include flex-center(column);
   gap: 56px;
-  // padding-block: var(--padding-block-dialog);
   padding-inline: var(--padding-inline-dialog);
   position: relative;
   flex: 1;
 
   @include mobile {
     --avatar-gap: #{calcClamp(16, 32, 700, 350, height)};
-    --avatar-size: #{calcClamp(60, 120, 700, 450, height)};
     width: 100%;
     padding-top: #{calc(var(--avatar-gap) + (var(--avatar-size) / 2))};
-    padding-bottom: calcClamp(16, 64, 700, 350, height);
+    padding-bottom: var(--padding-short);
     flex: none;
 
     @include short-height(600) {
-      padding-top: calcClamp(16, 64, 700, 350, height);
+      padding-top: var(--padding-short);
     }
   }
 

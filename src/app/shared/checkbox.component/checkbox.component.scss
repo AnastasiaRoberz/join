@@ -1,7 +1,15 @@
 @use '../../../../public/assets/styles' as *;
 
 input[type='checkbox'] {
-  display: none;
+  position: relative;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
   appearance: none;
   -webkit-appearance: none;
 }
@@ -10,16 +18,37 @@ input[type='checkbox'] {
   @include flex-center;
   gap: 16px;
   color: $main-color;
-  border-radius: 8px;
+  border-radius: $radius-sm;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     background-color: $checkbox-hover;
   }
 
+  &:has(input[type='checkbox']:focus-visible) {
+    outline: 2px solid $main-color;
+    outline-offset: 2px;
+  }
+
   &.selected {
-    span {
+    .checkbox-text {
       text-decoration: line-through;
+    }
+  }
+
+  &.whiteIcon {
+    border-radius: 50%;
+    padding: 0;
+
+    &.selected {
+      label svg {
+        color: $text-light;
+      }
+
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 }
@@ -36,17 +65,8 @@ label {
   }
 }
 
-:host.whiteIcon {
-  border-radius: 50%;
-  padding: 0;
-
-  &.selected {
-    label svg {
-      color: $text-light;
-    }
-
-    &:hover {
-      background-color: transparent;
-    }
-  }
+.error-msg {
+  @include field-error-msg;
+  white-space: nowrap;
+  bottom: 0;
 }

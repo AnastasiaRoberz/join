@@ -2,7 +2,7 @@
   <div class="detail-header">
     <app-user-avatar [user]="contact" size="large"></app-user-avatar>
     <div class="name-wrapper">
-      <p class="name" appFitText [minSize]="20" [fitParent]="true" lang="de">
+      <p class="name" appFitText [minSize]="20" [fitParent]="true" lang="en">
         {{ fullName(contact) }}
       </p>
       @if (!contact.user_uid || contact.user_uid === userService.currentUser()?.id) {
@@ -22,6 +22,7 @@
             preset="delete"
             [attr.aria-label]="'Delete contact: ' + fullName(contact)"
             (click)="deleteContact(contact)"
+            [disabled]="isDeleting()"
           ></button>
         </div>
       }

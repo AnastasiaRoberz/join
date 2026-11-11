@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import { DialogService } from '../../../../../services/dialog.service';
 import { TaskService } from '../../../../../services/task.service';
 import { ContactService } from '../../../../../services/contact.service';
@@ -23,35 +23,19 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
  * Dialog form component for editing an existing task's properties
  * (title, description, due date, priority, assigned contacts, and subtasks).
  *
- * ### State model
- * - Title, description, due date and priority live in the reactive form `taskForm`.
+ * State model:
+ * - Title, description, due date, and priority live in the reactive form `taskForm`.
  * - Assigned contacts (`selectedContactIds`) and subtasks (`currentSubtasks`) live in
- *   local signals, because they are not simple form controls. They are bound to the child
- *imports: [
-    ReactiveFormsModule,
-    ScrollingModule,
-    TextField,
-    Buttons,
-    CalendarFieldComponent,
-    SelectFieldComponent,
-    UserAvatar,
-    CheckboxComponent,
-    SubtaskFieldComponent,
-    AvatarGroupComponent,
-    PriorityBtn
-]@example
+ *   local signals bound to child components.
+ *
+ * @example
  * ```ts
- * // e.g. from TaskDetails: switch from the detail view to the edit view
  * dialogService.openDialog('task-edit', task);
- * ```
- * ```html
- * <app-task-edit [task]="dialogService.selectedItem()" />
  * ```
  */
 @Component({
   imports: [
     ReactiveFormsModule,
-    ScrollingModule,
     TextField,
     Buttons,
     CalendarFieldComponent,
@@ -71,120 +55,67 @@ import { ResponsiveService } from '../../../../../services/responsive.service';
   },
 })
 export class TaskEdit {
-  /**
-   * Controls switching between the task detail view and the edit dialog
-   * (used by the close button and after saving to return to the detail view).
-   */
-  dialogService = inject(DialogService);
-  responsiveService = inject(ResponsiveService);
+  /** Controls switching between task detail view and edit dialog. */
+  private readonly dialogService = inject(DialogService);
 
-  /** Handles persisting task, assignment and subtask updates to Supabase (only called from `saveTask()`). */
-  taskService = inject(TaskService);
+  /** Responsive service for viewport checks. */
+  protected readonly responsiveService = inject(ResponsiveService);
 
-  /** Provides the reactive list of sorted contacts and their search strings for the assignment dropdown. */
-  contactService = inject(ContactService);
-  userService = inject(UserService);
+  /** Task service for persisting task, assignment, and subtask updates. */
+  private readonly taskService = inject(TaskService);
 
-  isShortHeight = this.responsiveService.isMaxHeight(600);
+  /** Contact service providing contact search strings for the assignment dropdown. */
+  protected readonly contactService = inject(ContactService);
+
+  /** User service providing assignable contacts for the assignment dropdown. */
+  protected readonly userService = inject(UserService);
+
+  /** Signal indicating viewports with height <= 600px. */
+  protected readonly isShortHeight = this.responsiveService.isMaxHeight(600);
 
   /** Angular FormBuilder instance used to construct `taskForm`. */
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
 
-  // ---------------------------------------------------------------------------
-  // Inputs, Signals & Computed State
-  // ---------------------------------------------------------------------------
+  /** The task currently being edited, resolved from `DialogService`. */
+  public readonly currentTask = computed<TaskInterface | null>(
+    () => this.dialogService.selectedItem() as TaskInterface | null,
+  );
 
-  /**
-   * The task currently being edited, passed in from the dialog container.
-   * Whenever it changes, the local edit state is re-initialized from it (see constructor).
-   */
-  currentTask = computed(() => this.dialogService.selectedItem() as TaskInterface);
+  /** Local unsaved list of assigned contact IDs. */
+  public readonly selectedContactIds = signal<number[]>([]);
 
-  /**
-   * Local, unsaved list of currently assigned contact IDs.
-   * Two-way bound to the `value` of the multi-select (`[(value)]="selectedContactIds"`) and
-   * additionally updated by `toggleAssignment()`. Only persisted in `saveTask()`.
-   */
-  selectedContactIds = signal<number[]>([]);
+  /** Local unsaved working copy of task subtasks. */
+  public readonly currentSubtasks = signal<SubtaskInterface[]>([]);
 
-  /**
-   * Local, unsaved working copy of the task's subtasks.
-   * Two-way bound to `<app-subtask-field [(subtasks)]="currentSubtasks" />`, which adds, renames
-   * and removes entries (new entries get temporary ids). Only persisted in `saveTask()`
-   * via `TaskService.setTaskSubtasks`.
-   */
-  currentSubtasks = signal<SubtaskInterface[]>([]);
-
-  /**
-   * Full contact objects corresponding to `selectedContactIds()`,
-   * used to render the assigned user avatars in the select-field footer.
-   */
-  selectedContacts = computed(() => {
+  /** Full contact objects matching `selectedContactIds()`. */
+  protected readonly selectedContacts = computed(() => {
     const ids = new Set(this.selectedContactIds());
     return this.contactService.sortedContacts().filter((contact) => ids.has(contact.id));
   });
 
-  selectedPrio = signal<Priority>('medium');
-
-  // ---------------------------------------------------------------------------
-  // Reactive Form Definition
-  // ---------------------------------------------------------------------------
-
-  /**
-   * Reactive form group holding the simple editable task fields
-   * (`title`, `description`, `dueDate`, `priority`), each of them required.
-   * Contacts and subtasks are handled separately via signals.
-   */
-  taskForm = this.fb.group({
+  /** Reactive form group holding editable task fields. */
+  protected readonly taskForm = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(200), generalCustomValidators()]],
     description: [''],
     dueDate: ['', [Validators.required]],
     priority: this.fb.control<Priority>('medium', { nonNullable: true }),
   });
 
-  /**
-   * Re-initializes the local edit state whenever the `task()` input changes:
-   * fills `taskForm`, `selectedContactIds` and `currentSubtasks` from the task,
-   * or resets all three to empty values if no task is available.
-   */
-  constructor() {
-    effect(() => {
-      const currentTask = this.currentTask();
-      if (currentTask) {
-        this.selectedContactIds.set(currentTask.assigned_users?.map((u) => u.id) ?? []);
-        this.currentSubtasks.set(currentTask.subtasks ?? []);
-        this.selectedPrio.set(currentTask.priority);
+  /** Submitting state flag preventing duplicate task updates. */
+  protected readonly isSubmitting = signal<boolean>(false);
 
-        this.taskForm.setValue({
-          title: currentTask.title,
-          description: currentTask.description,
-          dueDate: currentTask.due_date,
-          priority: currentTask.priority,
-        });
-      } else {
-        this.selectedContactIds.set([]);
-        this.currentSubtasks.set([]);
-        this.taskForm.reset();
-      }
-    });
+  /** Sets up reactive effect to synchronize form fields whenever currentTask changes. */
+  constructor() {
+    effect(() => this.syncFormWithTask(this.currentTask()));
   }
 
-  // ---------------------------------------------------------------------------
-  // Assignment & Form Submission Methods
-  // ---------------------------------------------------------------------------
-
   /**
-   * Toggles a single contact's assignment state locally when clicking an option's checkbox
-   * in the select dropdown. Only updates `selectedContactIds`; nothing is saved to the database.
-   * Duplicate assignments are prevented.
+   * Toggles assignment for a single contact in the local edit state.
    *
-   * Note: removing a contact via the delete button on an avatar badge in the footer is handled by
-   * `SelectFieldComponent.deselect()` (template: `(userDeletedId)="assignedSelect.deselect($event)"`).
-   *
-   * @param contactId - The ID of the contact to assign or unassign.
-   * @param isAssigned - `true` to assign the contact, `false` to remove the assignment.
+   * @param contactId - ID of the contact to toggle.
+   * @param isAssigned - Whether the contact should be assigned.
    */
-  toggleAssignment(contactId: number, isAssigned: boolean): void {
+  protected toggleAssignment(contactId: number, isAssigned: boolean): void {
     const currentIds = this.selectedContactIds();
     const updatedIds = isAssigned
       ? currentIds.includes(contactId)
@@ -196,36 +127,70 @@ export class TaskEdit {
   }
 
   /**
-   * Submit handler of the form (triggered by the "Ok" button).
-   *
-   * This is the only place where edits are written to the database. In order it:
-   * 1. updates the task's `title`, `description` and `due_date` (`TaskService.updateTask`),
-   * 2. replaces the contact assignments with `selectedContactIds()` (`TaskService.setTaskAssignments`),
-   * 3. replaces the subtasks with `currentSubtasks()` (`TaskService.setTaskSubtasks`),
-   * 4. switches back to the task detail dialog (`openDialog('task', ...)`).
-   *
-   * Form validation is currently not enforced (the `valid` check is commented out).
-   *
-   * @returns A promise that resolves once all updates are done and the detail view is opened.
+   * Persists all task edits to the database and returns to task detail view.
    */
-  async saveTask(): Promise<void> {
-    // if (!this.taskForm.valid) return;
-    const currentTaskId = this.currentTask()?.id;
-    const rawValue = this.taskForm.getRawValue();
-
-    if (currentTaskId && rawValue) {
-      await this.taskService.updateTask(currentTaskId, {
-        title: rawValue.title!,
-        description: rawValue.description!,
-        due_date: rawValue.dueDate!,
-        priority: rawValue.priority,
-      });
-
-      await this.taskService.setTaskAssignments(currentTaskId, this.selectedContactIds());
-      await this.taskService.setTaskSubtasks(currentTaskId, this.currentSubtasks());
+  protected async saveTask(): Promise<void> {
+    if (this.taskForm.invalid || this.isSubmitting()) {
+      this.taskForm.markAllAsTouched();
+      return;
     }
+    this.isSubmitting.set(true);
+    try {
+      const currentTaskId = this.currentTask()?.id;
+      if (currentTaskId) {
+        await this.persistTaskUpdates(currentTaskId);
+      }
+      const updatedTask = this.taskService.tasks().find((t) => t.id === currentTaskId);
+      this.dialogService.openDialog('task', updatedTask);
+    } finally {
+      this.isSubmitting.set(false);
+    }
+  }
 
-    const updatedTask = this.taskService.tasks().find((t) => t.id === currentTaskId);
-    this.dialogService.openDialog('task', updatedTask);
+  /**
+   * Synchronizes form controls and signals with incoming task data.
+   *
+   * @param task - The task interface or null.
+   */
+  private syncFormWithTask(task: TaskInterface | null): void {
+    if (task) {
+      this.selectedContactIds.set(task.assigned_users?.map((u) => u.id) ?? []);
+      this.currentSubtasks.set(task.subtasks ?? []);
+      this.taskForm.setValue({
+        title: task.title,
+        description: task.description,
+        dueDate: task.due_date,
+        priority: task.priority,
+      });
+    } else {
+      this.resetTaskEditState();
+    }
+  }
+
+  /** Clears form controls and local signals when no task is active. */
+  private resetTaskEditState(): void {
+    this.selectedContactIds.set([]);
+    this.currentSubtasks.set([]);
+    this.taskForm.reset();
+  }
+
+  /**
+   * Writes task field updates, assignments, and subtasks to Supabase.
+   *
+   * @param taskId - ID of the task to update.
+   */
+  private async persistTaskUpdates(taskId: number): Promise<void> {
+    const rawValue = this.taskForm.getRawValue();
+    await this.taskService.updateTask(taskId, {
+      title: rawValue.title!,
+      description: rawValue.description!,
+      due_date: rawValue.dueDate!,
+      priority: rawValue.priority,
+    });
+    await this.taskService.saveTaskRelations(
+      taskId,
+      this.selectedContactIds(),
+      this.currentSubtasks(),
+    );
   }
 }

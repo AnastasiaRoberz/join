@@ -1,8 +1,7 @@
-<!-- Greeter Overlay -->
 @if (greeterService.isGreeting()) {
   <div class="greeter-overlay" (animationend)="greeterService.finishGreeting()"></div>
 }
-<!-- header -->
+
 <header class="header">
   <h2>Join 360</h2>
   <hr aria-hidden="true" />
@@ -28,12 +27,16 @@
         }
         <div class="details">
           <span class="amount">{{ tile.amount }}</span>
-          <p class="type">{{ tile.label }}</p>
+          <p class="type">
+            {{ tile.label }}
+            @if (tile.label2) {
+              <br />{{ tile.label2 }}
+            }
+          </p>
         </div>
       </a>
     }
 
-    <!-- priority and deadline -->
     <a
       routerLink="/app/board"
       routerLinkActive="active"
@@ -59,15 +62,15 @@
       <hr aria-hidden="true" />
       <div class="deadline__info" (click)="onDeadlineTileClick($event)">
         @if (deadline(); as deadline) {
-          <span class="date" [style.color]="deadline.color">{{ deadline.formattedDate }} </span>
+          <span class="date" [class.overdue]="deadline.overdue">{{ deadline.formattedDate }} </span>
           <span class="headsup">{{ deadline.text }}</span>
         } @else {
-          <span>No Deadlines in your Board.</span>
+          <span class="headsup">No Deadlines in your Board.</span>
         }
       </div>
     </a>
   </div>
-  <!-- greeting -->
+
   @if (!hideGreeting() || greeterService.isGreeting()) {
     <div
       #welcome
@@ -75,7 +78,16 @@
       [class.greeter-fly]="greeterService.isGreeting() && !hideGreeting()"
       [class.greeter-fade]="greeterService.isGreeting() && hideGreeting()"
     >
-      <p class="greeting" [innerHTML]="getDaytime()"></p>
+      <p class="greeting">
+        {{ getDaytime().prefix }}
+        @if (getDaytime().name; as chars) {
+          <span class="name">
+            @for (char of chars; track $index) {
+              <span class="char">{{ char }}</span>
+            }</span
+          >{{ getDaytime().suffix ?? '' }}
+        }
+      </p>
     </div>
   }
 </div>

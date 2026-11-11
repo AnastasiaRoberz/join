@@ -9,32 +9,42 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: $z-dialog-backdrop;
   pointer-events: none;
 
-  // backdrop invisible while the dialog is closed
   backdrop-filter: blur(0px);
-  background-color: rgba($color: #000000, $alpha: 0);
+  background-color: rgba($color-black, 0);
   transition:
     background-color 400ms ease,
     backdrop-filter 400ms ease;
 
-  // backdrop visible while the dialog is open
   &.is-open {
     pointer-events: all;
-    backdrop-filter: blur(2px);
-    background-color: rgba($color: #000000, $alpha: 0.2);
+    backdrop-filter: $backdrop-blur;
+    background-color: $backdrop-bg;
   }
 }
 
 .overlay-content {
+  margin-top: var(--dialog-margin-top);
+  max-height: var(--dialog-max-height, none);
+  height: var(--dialog-height, auto);
+
+  margin-bottom: auto;
+  @include flex-start(column, both);
+  background-color: $color-white;
+  border-radius: $radius-dialog;
+  box-shadow: $overlay-shadow;
+  z-index: $z-dialog-content;
+  overflow: hidden;
+  position: relative;
+
+  @include slide-in-drawer(100dvw);
+
   &.contact {
     --dialog-height: #{min(95dvh, 592px)};
     --dialog-margin-top: auto;
-    --padding-block-dialog: #{min(
-        calcClamp(80, 136, 1440, 769),
-        calcClamp(32, 80, 700, 350, height)
-      )};
+    --padding-block-dialog: #{calcClampMin((80, 136, 1440, 769), (32, 80, 700, 350))};
     --padding-inline-dialog: #{calcClamp(24, 48, 1440, 769)};
     width: min(95vw, 1212px);
 
@@ -57,40 +67,12 @@
   &.add-task {
     --dialog-height: #{min(95dvh, 850px)};
     --dialog-margin-top: auto;
-  }
+    --padding-block-dialog: #{calcClampMin(24, 64)};
+    --padding-inline-dialog: #{calcClampMin(24, 64)};
 
-  margin-top: var(--dialog-margin-top);
-  max-height: var(--dialog-max-height, none);
-  height: var(--dialog-height, auto);
-
-  margin-bottom: auto;
-  @include flex-start(column, both);
-  background-color: white;
-  border-radius: 30px;
-  box-shadow: $overlay-shadow;
-  z-index: 100;
-  overflow: hidden;
-  position: relative;
-
-  // dialog closed: invisible + slides out
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(100dvw);
-  transition:
-    opacity 0.2s ease,
-    transform 0.4s ease,
-    visibility 0s linear 0.2s;
-
-  // dialog open: visible + slides in
-  :host.is-open & {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(0);
-    transform: translateY(0);
-    transition:
-      opacity 0.2s ease,
-      transform 0.4s ease,
-      visibility 0s linear 0s;
+    @include responsive(971, height, max) {
+      --dialog-height: 85dvh;
+    }
   }
 
   @include mobile {
@@ -106,10 +88,10 @@
     top: clamp(36px, var(--position), 76px);
     right: clamp(36px, var(--position), 76px);
     transform: translate(100%, -100%);
-    z-index: 20;
+    z-index: $z-confirm-toast;
 
     &.white-btn.btn--icon {
-      color: white;
+      color: $text-light;
     }
 
     @include mobile {

@@ -1,8 +1,35 @@
-@use '../../../../../public/assets/styles/' as *;
+@use '../../../../../public/assets/styles' as *;
 
 :host {
   @include main-styling;
   gap: calcClampMin((40, 48, 1440, 430), (16, 40, 1024, 350));
+
+  &.add-task-overlay {
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--padding-inline-dialog);
+    padding-inline: var(--padding-inline-dialog);
+    width: 95vw;
+    max-width: 1116px;
+    height: 100%;
+
+    @include responsive(701, height, min) {
+      .task-container {
+        flex: 1;
+        min-height: 0;
+      }
+    }
+
+    @include responsive(971, height, max) {
+      .task-container {
+        height: auto;
+      }
+
+      .task-wrap {
+        height: 100%;
+      }
+    }
+  }
 }
 
 form {
@@ -14,7 +41,6 @@ form {
   flex-direction: column;
   gap: calcClampMin((24, 48), (16, 40, 1024, 350));
 
-  // für sehr schmale Höhe Bildschirm (Umbruch zu column (mobile Ansicht)
   @include mobile {
     max-height: none;
     gap: 24px;
@@ -30,14 +56,12 @@ form {
   }
 
   .task-container {
-    // --col-gap: #{calcClamp(48, 96, 1440, 1025)}; // für before/ after Trennstrich
-    --col-gap: #{calcClamp(25, 96, 1440, 1025)}; // für divider-div
+    --col-gap: #{calcClamp(25, 96, 1440, 1025)};
     max-height: 568px;
     display: flex;
     justify-content: space-between;
     gap: var(--col-gap);
     overflow-x: clip;
-
     flex: 1;
     align-items: stretch;
 
@@ -54,15 +78,14 @@ form {
   }
 }
 
-// taskWrap: gibt es 2x, links und rechts die Spalten im add-task
 .task-wrap {
   width: 100%;
   max-height: 100%;
   min-height: 0;
   display: flex;
-  flex-direction: column; //positioniert inputs untereinander
+  flex-direction: column;
   gap: calcClamp(16, 32, 900, 350, height);
-  position: relative; //für das ::after
+  position: relative;
   min-width: 0;
   flex: 1 1 0;
 
@@ -91,11 +114,13 @@ form {
   font-size: calcClamp(16, 20, 768, 320);
 }
 
+.required {
+  color: $hint;
+}
+
 .task-footer {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  @include flex-between(row, flex-end);
   margin-top: auto;
   flex-shrink: 0;
 
@@ -114,39 +139,4 @@ form {
       align-self: flex-end;
     }
   }
-}
-
-.required {
-  color: $hint;
-}
-
-:host.add-task-overlay {
-  --padding-inline: 70px;
-  display: flex;
-  flex-direction: column;
-  padding-block: 64px;
-  padding-inline: var(--padding-inline);
-  width: 95vw;
-  max-width: 1116px;
-  max-height: 95dvh;
-
-  .task-container {
-    height: 530px;
-  }
-
-  @include responsive(971, height, max) {
-    height: 85vh;
-
-    .task-container {
-      height: auto;
-    }
-
-    .task-wrap {
-      height: 100%;
-    }
-  }
-}
-
-app-avatar-group.has-users {
-  margin-top: 8px;
 }

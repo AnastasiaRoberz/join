@@ -5,6 +5,7 @@
     #mainInput
     type="text"
     [id]="fieldId()"
+    placeholder="Add new subtask"
     autocomplete="off"
     (keydown.enter)="$event.preventDefault(); saveSubtask(mainInput)"
     (keydown.escape)="reset()"
@@ -22,7 +23,6 @@
       appBtn
       preset="iconSmall"
       icon="check"
-      class="btn-save"
       ariaLabel="Save subtask"
       (click)="saveSubtask(mainInput)"
     ></button>
@@ -58,7 +58,8 @@
           <input
             #editInput
             type="text"
-            id="editInput"
+            [id]="fieldId() + '-edit'"
+            aria-label="Edit subtask"
             [value]="subtask.title"
             autocomplete="off"
             (keydown.enter)="$event.preventDefault(); updateSubtaskTitle(editInput, subtask.id)"

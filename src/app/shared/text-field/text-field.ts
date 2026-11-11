@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { ErrorService } from '../../services/error.service';
-import { ControlValueAccessor, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ControlValueAccessor, NgControl, Validators } from '@angular/forms';
 import { ResponsiveService } from '../../services/responsive.service';
 import { Buttons } from '../button.component/button.component';
 
@@ -20,24 +20,17 @@ let nextId = 0;
  *
  * Implements {@link ControlValueAccessor}, so it can be used directly with reactive forms via
  * `formControlName` or `[formControl]`. The component injects its own `NgControl` and registers
- * itself as the value accessor in the constructor (instead of providing `NG_VALUE_ACCESSOR`),
- * which gives it access to the bound control and its validation state.
+ * itself as the value accessor in the constructor, which gives it access to the bound control.
  *
- * Validation errors are not shown while the user is still typing for the first time: the message
- * of the first error (translated by {@link ErrorService}) appears only once the control is both
- * `invalid` and `touched` (i.e. after the field lost focus). The label text is passed to the
- * error service so messages such as "Your Name is required." can include it.
+ * Validation errors appear only once the control is both `invalid` and `touched`.
  *
  * Inputs:
  * - `label`: label text (also used in error messages). No label is rendered when omitted.
  * - `labelPos`: `'inner'` (default, label inside the field container) or `'top'` (label above the field).
  * - `icon`: name of a symbol in `assets/icons/icons.svg` that is rendered inside the field.
  * - `type`: `'input'` (default, single line text) or `'textarea'`.
- * - `placeholder`: placeholder text. Defaults to a single space (`' '`), which keeps the
- *   CSS `:placeholder-shown` state usable for the floating inner label.
- * - `id`: DOM id for the input/label association. Auto-generated (`app-input-N`) if omitted.
- *
- * The host element gets the CSS class `is-mobile` on small screens (see {@link ResponsiveService}).
+ * - `placeholder`: placeholder text. Defaults to a single space (`' '`).
+ * - `fieldId`: DOM id for the input/label association. Auto-generated (`app-input-N`) if omitted.
  *
  * @example
  * <form [formGroup]="contactForm">
@@ -46,70 +39,151 @@ let nextId = 0;
  * </form>
  */
 @Component({
-  imports: [ReactiveFormsModule, Buttons],
+  imports: [Buttons],
   selector: 'app-text-field',
   styleUrl: './text-field.scss',
   templateUrl: './text-field.html',
 })
 export class TextField implements ControlValueAccessor {
   /** Translates validation error objects into user-facing messages. */
-  errorService = inject(ErrorService);
-  /** Provides the screen-size signals used for the mobile styling. */
-  responsiveService = inject(ResponsiveService);
+  private readonly errorService = inject(ErrorService);
+
+  /** Provides screen-size signals used for responsive styling in templates. */
+  protected readonly responsiveService = inject(ResponsiveService);
+
   /** Used to mark the component for check when the form control changes from outside. */
-  cdr = inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  /** The form control directive this field is bound to (`formControlName` / `formControl`). Gives access to the control's value and validation state. */
-  ngControl = inject(NgControl);
+  /** The form control directive this field is bound to (`formControlName` / `formControl`). */
+  private readonly ngControl = inject(NgControl);
+
   /** Label text. Also passed to the {@link ErrorService} for error messages. No label is rendered if empty. */
-  label = input<string>();
+  public readonly label = input<string>();
+
   /** Name of a symbol in `assets/icons/icons.svg` shown inside the field. No icon if empty. */
-  icon = input<string>();
+  public readonly icon = input<string>();
 
-  passwordIcon = signal<'lock' | 'password-hidden' | 'password-visible'>('lock');
   /** DOM id of the input/textarea, linked to the label via `for`. Defaults to a unique generated id. */
-  fieldId = input<string>(`app-input-${nextId++}`);
+  public readonly fieldId = input<string>(`app-input-${nextId++}`);
+
   /** Label position: `'inner'` (inside the field container, default) or `'top'` (above the field). */
-  labelPos = input<string>('inner');
+  public readonly labelPos = input<string>('inner');
+
   /** Renders either a single-line `<input type="text">` or a multi-line `<textarea>`. */
-  type = input<'input' | 'textarea'>('input');
+  public readonly type = input<'input' | 'textarea'>('input');
 
-  inputType = input<string | null>('text');
+  /** Input type string for specialized fields such as `'password'`. */
+  public readonly inputType = input<string | null>('text');
+
   /** Placeholder text. The default single space keeps `:placeholder-shown` based styling working. */
-  placeholder = input<string>(' ');
+  public readonly placeholder = input<string>(' ');
 
-  /** shows count for add-task-title-input */
-  showCharCount = input(false, { transform: booleanAttribute });
+  /** Shows character count for add-task title input. */
+  public readonly showCharCount = input(false, { transform: booleanAttribute });
 
-  /** maxLength for title in add-task */
-  maxLength = input<number | null>(null);
+  /** Maximum character length for add-task title input. */
+  public readonly maxLength = input<number | null>(null);
+
+  /**
+   * When `true`, displays the generic default message "This field is required" instead of the field-specific one.
+   */
+  public readonly requiredMsg = input(false, { transform: booleanAttribute });
+
+  /** Autocomplete attribute for the input element. Standard is `'off'`. */
+  public readonly autocomplete = input<string>('off');
+
+  /** Active icon state for password fields: `'lock'`, `'password-hidden'`, or `'password-visible'`. */
+  protected readonly passwordIcon = signal<'lock' | 'password-hidden' | 'password-visible'>('lock');
+
+  /** Tracks whether the password text is masked by bullet characters. */
+  protected readonly passwordHidden = signal<boolean>(true);
 
   /** Current value displayed in the field. Updated by user input and by `writeValue()`. */
-  value: string = '';
+  protected value: string = '';
 
-  actualPassword: string = '';
-  passwordHidden = signal<boolean>(true);
-
-  //for aria-autocomplete html -> standard= off, can be changed when using component
-  autocomplete = input<string>('off');
-
-  // requiredMsg = input(false, { transform: booleanAttribute });
+  /** Real unmasked password string stored internally. */
+  /** Stores the unmasked password string in memory when inputType is password. */
+  private actualPassword: string = '';
 
   /** Callback registered by Angular forms; call it to propagate a new value to the form control. */
-  onChange: (value: string) => void = () => {};
+  private onChange: (value: string) => void = () => {};
+
   /** Callback registered by Angular forms; called on blur to mark the control as touched. */
-  onTouched: () => void = () => {};
+  protected onTouched: () => void = () => {};
 
-  isRequired(): boolean {
-    const ctrl = this.ngControl?.control;
-    return ctrl ? ctrl.hasValidator(Validators.required) : false;
-  }
-
+  /** Registers ControlValueAccessor and initializes reactive control event listeners. */
   constructor() {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+    this.initControlEventsEffect();
+  }
 
+  /** Checks if the bound form control has a required validator attached. */
+  protected isRequired(): boolean {
+    const ctrl = this.ngControl?.control;
+    return ctrl ? ctrl.hasValidator(Validators.required) : false;
+  }
+
+  /**
+   * ControlValueAccessor: called by Angular when the form model changes programmatically.
+   *
+   * @param value - The new model value. `null`/`undefined` are displayed as an empty string.
+   */
+  public writeValue(value: string): void {
+    this.value = value ?? '';
+    this.actualPassword = this.value;
+    if (this.inputType() === 'password') this.updatePasswordDisplay();
+    this.cdr.markForCheck();
+  }
+
+  /** ControlValueAccessor: stores callback to report view-to-model value changes. */
+  public registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  /** ControlValueAccessor: stores callback to report that the field was blurred. */
+  public registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  /**
+   * Handles input events for text or password fields and notifies the form control.
+   *
+   * @param event - The native DOM input event.
+   */
+  protected onInput(event: Event): void {
+    const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
+    if (this.inputType() === 'password') {
+      this.handlePasswordInput(inputElement as HTMLInputElement);
+    } else {
+      this.value = inputElement.value;
+      this.onChange(this.value);
+    }
+  }
+
+  /** Toggles password visibility between masked characters and plain text. */
+  protected togglePasswordHidden(): void {
+    this.passwordHidden.update((hidden) => !hidden);
+    this.updatePasswordDisplay();
+  }
+
+  /**
+   * Returns the error message to display below the field.
+   *
+   * @returns Validation error message string, or `null` if valid/untouched.
+   */
+  protected showError(): string | null {
+    const ctrl = this.ngControl.control;
+    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
+
+    const errors =
+      this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
+    return this.errorService.getErrorMessage(errors, this.label() ?? '');
+  }
+
+  /** Subscribes to FormControl events to refresh error display. */
+  private initControlEventsEffect(): void {
     effect((onCleanUp) => {
       const ctrl = this.ngControl.control;
       if (ctrl) {
@@ -121,111 +195,57 @@ export class TextField implements ControlValueAccessor {
     });
   }
 
-  /**
-   * ControlValueAccessor: called by Angular when the form model changes programmatically
-   * (e.g. `setValue()`, `patchValue()`, `reset()`).
-   *
-   * @param value - The new model value. `null`/`undefined` are displayed as an empty string.
-   */
-  writeValue(value: string): void {
-    this.value = value ?? '';
-    this.actualPassword = this.value;
-    if (this.inputType() === 'password') this.updatePasswordDisplay();
-    this.cdr.markForCheck();
+  /** Processes password keystrokes, updates internal secret and masked display value. */
+  private handlePasswordInput(inputElement: HTMLInputElement): void {
+    const cursor = inputElement.selectionStart ?? inputElement.value.length;
+    this.applyPasswordEdit(
+      inputElement.value.length,
+      this.actualPassword.length,
+      cursor,
+      inputElement.value,
+    );
+    this.updatePasswordDisplay(cursor, inputElement);
+    this.onChange(this.actualPassword);
   }
 
-  /**
-   * ControlValueAccessor: stores the callback used to report view-to-model value changes.
-   *
-   * @param fn - Callback that updates the form control with the new value.
-   */
-  registerOnChange(fn: (value: string) => void): void {
-    this.onChange = fn;
-  }
-
-  /**
-   * ControlValueAccessor: stores the callback used to report that the field was touched (blurred).
-   *
-   * @param fn - Callback that marks the form control as touched.
-   */
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  /**
-   * Handles the `input` event of the native input/textarea: stores the value locally and
-   * propagates it to the bound form control.
-   *
-   * @param event - The native input event.
-   */
-  onInput(event: Event): void {
-    const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
-
-    if (this.inputType() === 'password') {
-      const cursor = inputElement.selectionStart ?? inputElement.value.length;
-      const oldLength = this.actualPassword.length;
-      const newLength = inputElement.value.length;
-      if (newLength < oldLength) {
-        const deletedCount = oldLength - newLength;
-        this.actualPassword =
-          this.actualPassword.slice(0, cursor) + this.actualPassword.slice(cursor + deletedCount);
-      } else if (newLength > oldLength) {
-        const addedCount = newLength - oldLength;
-        const addedText = inputElement.value.slice(cursor - addedCount, cursor);
-        this.actualPassword =
-          this.actualPassword.slice(0, cursor - addedCount) +
-          addedText +
-          this.actualPassword.slice(cursor - addedCount);
-      }
-
-      this.updatePasswordDisplay(cursor, inputElement as HTMLInputElement);
-      this.onChange(this.actualPassword);
-    } else {
-      this.value = inputElement.value;
-      this.onChange(this.value);
+  /** Slices added or deleted characters into the internal actualPassword buffer. */
+  private applyPasswordEdit(newLen: number, oldLen: number, cursor: number, val: string): void {
+    if (newLen < oldLen) {
+      const deletedCount = oldLen - newLen;
+      this.actualPassword =
+        this.actualPassword.slice(0, cursor) + this.actualPassword.slice(cursor + deletedCount);
+    } else if (newLen > oldLen) {
+      const addedCount = newLen - oldLen;
+      const addedText = val.slice(cursor - addedCount, cursor);
+      this.actualPassword =
+        this.actualPassword.slice(0, cursor - addedCount) +
+        addedText +
+        this.actualPassword.slice(cursor - addedCount);
     }
   }
 
-  updatePasswordDisplay(cursor?: number, inputElement?: HTMLInputElement) {
+  /** Refreshes masked password display characters and selection cursor. */
+  private updatePasswordDisplay(cursor?: number, inputElement?: HTMLInputElement): void {
+    this.computePasswordDisplayState();
+    if (inputElement) {
+      inputElement.value = this.value;
+      if (cursor !== undefined) {
+        inputElement.setSelectionRange(cursor, cursor);
+      }
+    }
+  }
+
+  /** Computes masked string and active icon based on actual password length and hidden flag. */
+  private computePasswordDisplayState(): void {
     if (this.actualPassword.length === 0) {
       this.value = '';
-      this.actualPassword = '';
       this.passwordIcon.set('lock');
-    } else if (this.passwordHidden() && this.actualPassword.length > 0) {
+    } else if (this.passwordHidden()) {
       this.value = '∗'.repeat(this.actualPassword.length);
       this.passwordIcon.set('password-hidden');
     } else {
       this.value = this.actualPassword;
       this.passwordIcon.set('password-visible');
     }
-
-    if (inputElement) {
-      inputElement.value = this.value;
-      if (cursor !== undefined) {
-        inputElement?.setSelectionRange(cursor, cursor);
-      }
-    }
-  }
-
-  togglePasswordHidden(): void {
-    this.passwordHidden.update((hidden) => !hidden);
-    this.updatePasswordDisplay();
-  }
-
-  /**
-   * Returns the error message to display below the field.
-   *
-   * @returns The message for the first validation error of the control, or `null` if there is
-   * no control, the control is valid, or it has not been touched yet.
-   */
-  showError(): string | null {
-    const ctrl = this.ngControl.control;
-    if (!ctrl || !ctrl.invalid || !ctrl.touched) return null;
-
-    const errors =
-      // this.requiredMsg() && ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
-      ctrl.errors?.['required'] ? { requiredDefault: true } : ctrl.errors;
-
-    return this.errorService.getErrorMessage(errors, this.label() ?? '');
   }
 }

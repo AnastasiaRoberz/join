@@ -1,31 +1,5 @@
 @use '../../../../public/assets/styles' as *;
 
-// Fades out the overlay background after a short hold.
-@keyframes overlay-fade {
-  0% {
-    opacity: 1;
-  }
-  60% {
-    opacity: 1; // hold fully visible before fading
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-// Moves the logo from the calculated center position back to its natural header position.
-// CSS custom properties --intro-x, --intro-y, --intro-scale are set via TypeScript
-// based on the logo's actual DOM position at runtime.
-@keyframes logo-intro {
-  0%,
-  20% {
-    transform: translate(var(--intro-x), var(--intro-y)) scale(var(--intro-scale));
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-}
-
 :host {
   width: 100%;
   height: 100dvh;
@@ -34,145 +8,136 @@
   justify-content: center;
   align-items: flex-start;
   position: relative;
+}
 
-  .content {
-    width: 100%;
-    max-width: 1920px;
-    height: 100%;
-    max-height: 900px;
+.content {
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  max-height: 900px;
+  position: relative;
 
-    position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: 'top' 'box' 'bottom';
 
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
-    grid-template-areas: 'top' 'box' 'bottom';
+  padding-inline: calcClamp(16, 77, 1300, 500);
+  padding-block: calcClampMin((16, 32), (8, 32, 800, 350));
 
-    padding-inline: calcClamp(16, 77, 1300, 500);
-    padding-block: calcClampMin((16, 32), (8, 32, 800, 350));
+  @include short-height {
+    grid-template-rows: auto 1fr auto;
+    gap: calcClamp(8, 16, 500, 350, height);
 
-    @include short-height {
-      grid-template-rows: auto 1fr auto;
-      gap: calcClamp(8, 16, 500, 350, height);
+    &.short-register {
+      padding-block: calcClamp(8, 16, 500, 350, height);
 
-      &.short-register {
-        padding-block: calcClamp(8, 16, 500, 350, height);
-      }
-    }
-
-    // Full-screen overlay that provides the colored background during the intro.
-    // position: fixed so it covers the whole viewport regardless of scroll or layout.
-    .intro-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 999; // below the logo (z-index: 1000) but above everything else
-      pointer-events: none; // prevent blocking clicks after animation ends
-      opacity: 1; // explicit start value so animation-delay doesn't flash transparent
-
-      background-color: #{$main-bg}; //background for desktop-animation
-      animation: overlay-fade 0.9s ease-in-out forwards;
-      animation-delay: 0.2s; // small delay so the overlay is visible before fading
-    }
-
-    // Mobile variant: navy background, white logo, slightly longer animation.
-    // .intro-mobile is set on .content via [class.intro-mobile]="introService.isMobile()".
-    &.intro-mobile {
-      .intro-overlay {
-        background-color: #{$main-color}; // navy background on mobile
-        animation-duration: 1.2s;
-      }
-
-      // On mobile the logo starts white and transitions to its default blue
-      // when .intro-active is removed (introService.isActive() becomes false).
-      .start-header .main-logo.intro-active {
-        --logo-main: white;
-      }
-    }
-
-    .start-header {
-      grid-area: top;
-      margin-top: calcClampMin((16, 64), (16, 64, 800, 500), (0, 0, 500, 300));
-      width: 100%;
-      height: 100%;
-      min-width: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-
-      .main-logo {
-        --logo-main: #{$main-color}; // default logo color: navy blue
-        height: calcClampMin((78, 122), (60, 122, 800, 550));
-        aspect-ratio: 56 / 67;
-        z-index: 1000; // above the overlay
-        position: relative; // required for z-index to take effect
-
-        // Active state during the intro animation.
-        // Sets the logo to its calculated center position as the animation start point.
-        &.intro-active {
-          transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 1));
-          animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; //cubic-bazier: standard material-design, forwards: stop with last keyframe
-          animation-delay: 0.2s;
-        }
-      }
-
-      &__login {
-        display: flex;
-        align-items: center;
-        align-self: flex-start;
-        gap: 32px;
-
-        span {
-          font-size: calcClamp(16, 20, 768, 400);
-        }
-
-        @include short-height {
-          height: 100%;
-          flex-direction: column;
-          align-items: flex-end;
-          gap: 8px;
-        }
-      }
-    }
-
-    .auth-main-box {
-      grid-area: box;
-      justify-self: center;
-      pointer-events: auto;
-      width: 100%;
-      max-width: calcClamp(396, 652, 1300, 500);
-      height: auto;
-      border-radius: 30px;
-      box-shadow: 0 0 14px 3px #00000024;
-      overflow: hidden;
-      z-index: 5;
-
-      &.short-register {
+      .auth-main-box {
         grid-row: top-start / box-end;
         height: 100%;
       }
     }
+  }
 
-    .auth-mobile-signup {
-      grid-area: bottom;
-      align-self: center;
-      justify-self: center;
-      display: flex;
-      align-items: center;
-      gap: 35px;
-      z-index: 5;
-      padding-bottom: 20px;
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: $z-intro-overlay;
+    pointer-events: none;
+    opacity: 1;
+
+    background-color: $main-bg;
+    animation: overlay-fade 0.9s ease-in-out forwards;
+    animation-delay: 0.2s;
+  }
+
+  &.intro-mobile {
+    .intro-overlay {
+      background-color: $main-color;
+      animation-duration: 1.2s;
     }
 
-    footer {
-      grid-area: bottom;
-      align-self: end;
-      justify-self: center;
-      z-index: 10;
-      flex-shrink: 0;
+    .start-header .main-logo.intro-active {
+      --logo-main: #{$color-white};
+    }
+  }
+
+  .start-header {
+    grid-area: top;
+    margin-top: calcClampMin((16, 64), (16, 64, 800, 500), (0, 0, 500, 300));
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .main-logo {
+      --logo-main: #{$main-color};
+      height: calcClampMin((78, 122), (60, 122, 800, 550));
+      aspect-ratio: 56 / 67;
+      z-index: $z-intro-element;
+      position: relative;
+
+      &.intro-active {
+        transform: translate(var(--intro-x, 0), var(--intro-y, 0)) scale(var(--intro-scale, 1));
+        animation: logo-intro 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        animation-delay: 0.2s;
+      }
+    }
+
+    &__login {
+      display: flex;
+      align-items: center;
+      align-self: flex-start;
+      gap: 32px;
+
+      span {
+        font-size: calcClamp(16, 20, 768, 400);
+      }
 
       @include short-height {
-        align-self: center;
+        height: 100%;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
       }
+    }
+  }
+
+  .auth-main-box {
+    grid-area: box;
+    justify-self: center;
+    pointer-events: auto;
+    width: 100%;
+    max-width: calcClamp(396, 652, 1300, 500);
+    height: auto;
+    border-radius: $radius-dialog;
+    box-shadow: $dropdown-shadow;
+    overflow: hidden;
+    z-index: $z-shell;
+  }
+
+  .auth-mobile-signup {
+    grid-area: bottom;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    z-index: $z-shell;
+    padding-bottom: 20px;
+  }
+
+  footer {
+    grid-area: bottom;
+    align-self: end;
+    justify-self: center;
+    z-index: $z-dialog-backdrop;
+    flex-shrink: 0;
+
+    @include short-height {
+      align-self: center;
     }
   }
 }

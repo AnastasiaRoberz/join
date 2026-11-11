@@ -1,22 +1,12 @@
-@use '../../../../../../../public/assets/styles/' as *;
+@use '../../../../../../../public/assets/styles' as *;
 
 :host {
-  @include flex-start(column, both);
-  gap: calcClamp(16, 24);
-  width: 525px;
-  min-height: 0;
-  height: 100%;
+  @include task-dialog-shell;
   font-size: $font-medium;
-  padding-inline: var(--padding-inline-dialog);
   padding-block: var(--padding-block-dialog);
 
   &.scroll-container {
-    width: 100%;
     padding-right: calc(var(--padding-inline-dialog) - var(--sb-width));
-  }
-
-  @include mobile {
-    width: 100%;
   }
 }
 
@@ -27,16 +17,11 @@
   gap: calcClamp(16, 24);
   height: auto;
   width: 100%;
-
-  &:has(.description.expanded) {
-    // width: calc(100% + 32px);
-    // padding-right: 8px;
-  }
 }
 
 .task-tag {
   padding: 4px calcClamp(16, 24);
-  border-radius: 8px;
+  border-radius: $radius-sm;
   color: $text-light;
   cursor: pointer;
   font-size: calcClamp(16, 20);
@@ -84,13 +69,13 @@ h2 {
 
   .show-more-btn {
     --btn-gap: 0;
-    margin-bottom: calcClamp(-24, 0, 320, 769);
+    margin-bottom: calcClamp(-24, 0, 769, 320);
     padding: 0 8px;
     border-radius: 6px;
     font-weight: 500;
     transition:
-      color 0.15s ease,
-      background-color 0.15s ease;
+      color 100ms ease,
+      background-color 100ms ease;
     font-size: calcClamp(13, 16, 769, 320);
 
     &:hover {
@@ -140,9 +125,7 @@ table {
 
 .label-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-between;
 
   .label {
     cursor: pointer;
@@ -186,7 +169,7 @@ ul {
 
 .btn-toggle-items {
   --btn-gap: 0;
-  --font-size-textbtn: calcClamp(13, 16, 1440, 768);
+  --font-size-textbtn: #{calcClamp(13, 16, 1440, 768)};
 }
 
 .show-more-btn,
@@ -205,9 +188,7 @@ ul {
   flex-shrink: 0;
 
   hr {
-    width: 1px;
-    height: 24px;
-    background-color: $devider;
+    @include vertical-divider(24px);
   }
 }
 

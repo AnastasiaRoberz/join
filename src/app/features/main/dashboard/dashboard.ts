@@ -1,229 +1,283 @@
 import {
   AfterViewInit,
   Component,
+  computed,
   ElementRef,
   inject,
+  OnInit,
   viewChild,
-  computed,
-  viewChildren,
 } from '@angular/core';
 import { ResponsiveService } from '../../../services/responsive.service';
 import { IntroService } from '../../../services/intro.service';
 import { UserService } from '../../../services/user.service';
 import { BoardFilter, TaskService } from '../../../services/task.service';
-import { getGreeting } from '../../../utils/greeting-utils';
+import { getGreetingFormatter, GreetingParts } from '../../../utils/greeting-utils';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DialogService } from '../../../services/dialog.service';
+import { TaskInterface } from '../../../interfaces/task.interface';
 
+/** Metric tile model on the dashboard. */
+export interface DashboardTile {
+  area: string;
+  label: string;
+  label2?: string;
+  amount: number;
+  icon?: string;
+  bold?: boolean;
+  filter: BoardFilter | null;
+}
+
+/** Priority summary tile item. */
+export interface PriorityItem {
+  icon: string;
+  amount: number;
+  filter: BoardFilter;
+}
+
+/** Nearest task deadline summary information. */
+export interface DeadlineInfo {
+  rawDate: string;
+  formattedDate: string;
+  text: string;
+  overdue: boolean;
+}
+
+/**
+ * Dashboard summary view presenting task metrics, priority counts, and greeting animation.
+ */
 @Component({
   imports: [RouterLink, RouterLinkActive],
   selector: 'app-dashboard',
   styleUrl: './dashboard.scss',
   templateUrl: './dashboard.html',
+  host: {
+    '[class.is-greeting]': 'greeterService.isGreeting()',
+  },
 })
-export class Dashboard implements AfterViewInit {
-  responsiveService = inject(ResponsiveService);
-  dialogService = inject(DialogService);
-  hideGreeting = this.responsiveService.observeQuery('(max-width: 768px) and (max-height: 601px)');
-  noPrioBg = this.responsiveService.observeQuery('(max-width: 450px) and (max-height: 500px)');
+export class Dashboard implements OnInit, AfterViewInit {
+  /** Responsive service for viewport layout queries. */
+  private readonly responsiveService = inject(ResponsiveService);
 
-  //to manage intro-animation
-  greeterService = inject(IntroService);
+  /** Dialog service for opening task detail popup. */
+  private readonly dialogService = inject(DialogService);
 
-  // Reference to <app-dashboard>
-  private host = inject<ElementRef<HTMLElement>>(ElementRef);
-  // Reference to the welcome div box in the template <div #welcome>
-  private welcome = viewChild<ElementRef<HTMLElement>>('welcome');
+  /** Intro service managing greeter overlay state and timing. */
+  protected readonly greeterService = inject(IntroService);
 
-  constructor() {
-    // Checks whether a greeting is waiting (after login) and switches it on.
+  /** User service providing the current contact and name for greetings. */
+  private readonly userService = inject(UserService);
+
+  /** Task service providing reactive task list and filter state. */
+  protected readonly taskService = inject(TaskService);
+
+  /** Router instance for navigation to board with pre-set filters. */
+  private readonly router = inject(Router);
+
+  /** Reference to host dashboard container element. */
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Reference to greeting DOM element animated across viewport. */
+  private readonly welcome = viewChild<ElementRef<HTMLElement>>('welcome');
+
+  /** Suppresses greeting animation on compact screens. */
+  protected readonly hideGreeting = this.responsiveService.observeQuery(
+    '(max-width: 768px) and (max-height: 601px)',
+  );
+
+  /** Current logged in user contact. */
+  protected readonly user = computed(() => this.userService.currentContact());
+
+  /** Stable slogan formatter chosen once per component initialization. */
+  private readonly greetingFormatter = getGreetingFormatter();
+
+  /** Formatted daytime greeting object based on stable formatter and current user firstname. */
+  protected readonly getDaytime = computed<GreetingParts>(() =>
+    this.greetingFormatter(this.user()?.firstname),
+  );
+
+  /** Dashboard metrics tiles for task statuses. */
+  protected readonly tiles = computed<DashboardTile[]>(() =>
+    this.buildDashboardTiles(this.taskService.tasks()),
+  );
+
+  /** Task counts grouped by priority. */
+  protected readonly priorities = computed<PriorityItem[]>(() =>
+    (['urgent', 'medium', 'low'] as const).map((p) =>
+      this.createPriorityItem(p, this.taskService.tasks()),
+    ),
+  );
+
+  /** Starts the greeting animation and ensures dashboard tasks are loaded. */
+  public ngOnInit(): void {
     this.greeterService.startGreeting();
+    if (this.taskService.tasks().length === 0) {
+      this.taskService.getAllTasks();
+    }
   }
 
-  //
-  // Only needed for the "fly" variant: calculate how far the greeting is
-  // from the centre of the page, so it can start there.
-  ngAfterViewInit(): void {
+  /** Schedules fly animation for the greeting box after fonts have loaded. */
+  public ngAfterViewInit(): void {
     const welcome = this.welcome()?.nativeElement;
     if (!this.greeterService.isGreeting() || !welcome || this.hideGreeting()) return;
 
-    // Hide the greeting until the web font has loaded: with the fallback font the text
-    // has a different size, so measuring now would give a slightly wrong centre.
     welcome.style.visibility = 'hidden';
     document.fonts.ready.then(() => this.playFly(welcome));
   }
 
-  // Measures the greeting and lets it fly from the centre to its spot
-  private playFly(welcome: HTMLElement): void {
-    // Greeting box in its final spot (grid cell / above the tiles)
-    const rect = welcome.getBoundingClientRect();
-    // The page area (right of the sidebar, under the header)
-    const area = this.host.nativeElement.getBoundingClientRect();
-
-    // Horizontal target: middle of the visible page area (right of the sidebar, never past the screen edge)
-    const left = Math.max(area.left, 0);
-    const right = Math.min(area.right, window.innerWidth);
-    const centerX = (left + right) / 2;
-    // Vertical target: middle of the whole screen
-    const centerY = window.innerHeight / 2;
-
-    // How far the greeting's middle has to move to sit on the target
-    const toX = centerX - (rect.left + rect.width / 2);
-    const toY = centerY - (rect.top + rect.height / 2);
-
-    // Start position as a CSS transform, e.g. "translate(-350px, -80px)"
-    const center = `translate(${toX}px, ${toY}px)`;
-
-    const animation = welcome.animate(
-      [
-        { transform: center }, // start: middle of the screen
-        { transform: center, offset: 0.5, easing: 'ease-in-out' }, // halfway: still in the middle, then slide
-        { transform: 'translate(0, 0)' }, // end: its spot
-      ],
-      { duration: 1800, delay: 200, fill: 'backwards' }, // same timing as .greeter-overlay
-    );
-
-    // Waiting for the font may take a few ms: start the greeting at the same moment
-    // as the overlay, so both stay in sync.
-    const overlayAnimation = this.host.nativeElement
-      .querySelector('.greeter-overlay')
-      ?.getAnimations()[0];
-
-    // wait until the overlay animation has really started (mobiles start later)
-    overlayAnimation?.ready.then(() => {
-      // then start the greeting at exactly the same moment as the overlay
-      animation.startTime = overlayAnimation.startTime;
-    });
-
-    welcome.style.visibility = ''; // show it again, now already in the middle
-  }
-
-  userService = inject(UserService);
-  taskService = inject(TaskService);
-  router = inject(Router);
-
-  user = computed(() => this.userService.currentContact());
-
-  getDaytime = computed(() => getGreeting(this.user()?.firstname));
-
-  tiles = computed(() => {
-    const tasks = this.taskService.tasks();
-    const countStatus = (status: string) => tasks.filter((task) => task.status === status).length;
-
-    return [
-      {
-        area: 'todo',
-        label: 'To-do',
-        amount: countStatus('To do'),
-        icon: 'edit',
-        filter: { type: 'status', status: 'To do', label: 'To-do' } as BoardFilter,
-      },
-      {
-        area: 'done',
-        label: 'Done',
-        amount: countStatus('Done'),
-        icon: 'check',
-        bold: true,
-        filter: { type: 'status', status: 'Done', label: 'Done' } as BoardFilter,
-      },
-      {
-        area: 'total',
-        label: 'Tasks in Board',
-        amount: tasks.length,
-        filter: null,
-      },
-      {
-        area: 'progress',
-        label: 'Tasks in Progress',
-        amount: countStatus('In progress'),
-        filter: { type: 'status', status: 'In progress', label: 'In Progress' } as BoardFilter,
-      },
-      {
-        area: 'feedback',
-        label: 'Awaiting Feedback',
-        amount: countStatus('Await feedback'),
-        filter: {
-          type: 'status',
-          status: 'Await feedback',
-          label: 'Awaiting Feedback',
-        } as BoardFilter,
-      },
-    ];
-  });
-
-  priorities = computed(() => {
-    const tasks = this.taskService.tasks();
-    const countPrio = (prio: string) => tasks.filter((task) => task.priority === prio).length;
-
-    return [
-      {
-        icon: 'urgent',
-        amount: countPrio('urgent'),
-        filter: { type: 'priority', priority: 'urgent', label: 'Urgent' } as BoardFilter,
-      },
-      {
-        icon: 'medium',
-        amount: countPrio('medium'),
-        filter: { type: 'priority', priority: 'medium', label: 'Medium' } as BoardFilter,
-      },
-      {
-        icon: 'low',
-        amount: countPrio('low'),
-        filter: { type: 'priority', priority: 'low', label: 'Low' } as BoardFilter,
-      },
-    ];
-  });
-
-  onPriorityClick(filter: BoardFilter, event: Event): void {
+  /** Filters board by priority and navigates to the board page. */
+  protected onPriorityClick(filter: BoardFilter, event: Event): void {
     event.preventDefault();
     event.stopPropagation();
     this.taskService.setBoardFilter(filter);
     this.router.navigate(['/app/board']);
   }
 
-  onDeadlineTileClick(event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-
+  /** Navigates to board or task dialog when the deadline tile is clicked. */
+  protected onDeadlineTileClick(event?: Event): void {
+    event?.preventDefault();
+    event?.stopImmediatePropagation();
     const currentDeadline = this.deadline();
     if (!currentDeadline) return;
 
-    const targetDueDate = currentDeadline.rawDate;
-    const tasks = this.taskService.tasks();
-
-    const filteredTasks = tasks.filter(
-      (task) =>
-        task.due_date?.slice(0, 10) === targetDueDate?.slice(0, 10) && task.status !== 'Done',
-    );
-
-    if (filteredTasks.length === 1) {
-      this.router.navigate(['/app/board']);
-      this.dialogService.openDialog('task', filteredTasks[0]);
-    } else if (filteredTasks.length > 1) {
-      this.taskService.setBoardFilter({
-        type: 'deadline',
-        dueDate: targetDueDate,
-        label: `Deadline: ${currentDeadline.formattedDate}`,
-      });
-      this.router.navigate(['/app/board']);
-    }
+    const tasks = this.taskService
+      .tasks()
+      .filter(
+        (t) =>
+          t.due_date?.slice(0, 10) === currentDeadline.rawDate?.slice(0, 10) && t.status !== 'Done',
+      );
+    this.router.navigate(['/app/board']);
+    this.taskService.setBoardFilter({
+      type: 'deadline',
+      dueDate: currentDeadline.rawDate,
+      label: `Deadline: ${currentDeadline.formattedDate}`,
+    });
   }
 
-  deadline() {
+  /** Evaluates nearest open deadline across all tasks as a reactive computed signal. */
+  protected readonly deadline = computed<DeadlineInfo | null>(() => {
     const tasks = this.taskService.tasks();
-    const today = new Date().setHours(0, 0, 0, 0);
+    const nextTask = this.findNextOpenTask(tasks);
+    if (!nextTask) return null;
+    return this.buildDeadlineInfo(nextTask, new Date().setHours(0, 0, 0, 0));
+  });
 
-    const nextTask = tasks
+  /** Measures coordinates and runs the fly animation for the greeting box. */
+  private playFly(welcome: HTMLElement): void {
+    const center = this.calculateFlyCenterTransform(welcome);
+    const animation = this.animateWelcomeFly(welcome, center);
+    this.syncWithOverlayAnimation(animation);
+    welcome.style.visibility = '';
+  }
+
+  /** Calculates translation offset from viewport center to final greeting element position. */
+  private calculateFlyCenterTransform(welcome: HTMLElement): string {
+    const rect = welcome.getBoundingClientRect();
+    const area = this.host.nativeElement.getBoundingClientRect();
+    const left = Math.max(area.left, 0);
+    const right = Math.min(area.right, window.innerWidth);
+    const toX = (left + right) / 2 - (rect.left + rect.width / 2);
+    const toY = window.innerHeight / 2 - (rect.top + rect.height / 2);
+    return `translate(${toX}px, ${toY}px)`;
+  }
+
+  /** Runs the CSS keyframe fly animation on the greeting element. */
+  private animateWelcomeFly(welcome: HTMLElement, center: string): Animation {
+    return welcome.animate(
+      [
+        { transform: center },
+        { transform: center, offset: 0.5, easing: 'ease-in-out' },
+        { transform: 'translate(0, 0)' },
+      ],
+      { duration: 1800, delay: 200, fill: 'backwards' },
+    );
+  }
+
+  /** Synchronizes greeting movement start time with the backdrop overlay. */
+  private syncWithOverlayAnimation(animation: Animation): void {
+    const overlay = this.host.nativeElement.querySelector('.greeter-overlay')?.getAnimations()[0];
+    overlay?.ready.then(() => {
+      animation.startTime = overlay.startTime;
+    });
+  }
+
+  /** Constructs all five status metric tiles. */
+  private buildDashboardTiles(tasks: TaskInterface[]): DashboardTile[] {
+    return [
+      this.createStatusTile('todo', 'To-do', 'To do', 'edit', tasks),
+      this.createStatusTile('done', 'Done', 'Done', 'check', tasks, true),
+      { area: 'total', label: 'Tasks in', label2: 'Board', amount: tasks.length, filter: null },
+      this.createStatusTile('progress', 'Tasks in', 'In progress', '', tasks, false, 'Progress'),
+      this.createStatusTile('feedback', 'Awaiting', 'Await feedback', '', tasks, false, 'Feedback'),
+    ];
+  }
+
+  /**
+   * Builds an individual metric tile configuration for a status.
+   *
+   * @param area - CSS grid area identifier.
+   * @param label - Tile label text.
+   * @param status - Task status category.
+   * @param icon - Icon name.
+   * @param tasks - Full task collection.
+   * @param bold - Whether to render text in bold.
+   * @returns Configured DashboardTile object.
+   */
+  private createStatusTile(
+    area: string,
+    label: string,
+    status: TaskInterface['status'],
+    icon: string,
+    tasks: TaskInterface[],
+    bold?: boolean,
+    label2?: string,
+  ): DashboardTile {
+    const amount = tasks.filter((task) => task.status === status).length;
+    return {
+      area,
+      label,
+      label2,
+      amount,
+      icon: icon || undefined,
+      bold,
+      filter: { type: 'status', status, label },
+    };
+  }
+
+  /**
+   * Maps a priority string to its metric summary object.
+   *
+   * @param prio - Priority level.
+   * @param tasks - Full task collection.
+   * @returns Configured PriorityItem object.
+   */
+  private createPriorityItem(
+    prio: 'urgent' | 'medium' | 'low',
+    tasks: TaskInterface[],
+  ): PriorityItem {
+    const label = prio.charAt(0).toUpperCase() + prio.slice(1);
+    return {
+      icon: prio,
+      amount: tasks.filter((task) => task.priority === prio).length,
+      filter: { type: 'priority', priority: prio, label },
+    };
+  }
+
+  /**
+   * Finds the next unfinished task with a due date.
+   *
+   * @param tasks - Full task collection.
+   * @returns The earliest upcoming open task or undefined.
+   */
+  private findNextOpenTask(tasks: TaskInterface[]): TaskInterface | undefined {
+    return tasks
       .filter((task) => task.due_date && task.status !== 'Done')
       .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime())[0];
+  }
 
-    if (!nextTask) return null;
-
+  /** Formats a deadline info object with relative status and text. */
+  private buildDeadlineInfo(nextTask: TaskInterface, today: number): DeadlineInfo {
     const date = new Date(nextTask.due_date);
     const overdue = date.setHours(0, 0, 0, 0) < today;
-
     return {
       rawDate: nextTask.due_date,
       formattedDate: date.toLocaleDateString('en-US', {
@@ -232,7 +286,7 @@ export class Dashboard implements AfterViewInit {
         year: 'numeric',
       }),
       text: overdue ? 'Overdue Deadline' : 'Upcoming Deadline',
-      color: overdue ? '#e60026' : null,
+      overdue,
     };
   }
 }

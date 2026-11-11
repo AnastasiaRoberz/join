@@ -14,43 +14,15 @@
   }
 
   a {
-    justify-content: flex-start;
-    padding: 8px 0;
-    width: 100%;
-    color: $sidebar-txt-default;
+    @include sidebar-nav-link;
     white-space: nowrap;
-    position: relative;
-    z-index: 2;
-
-    &::before {
-      content: '';
-      width: 100cqw;
-      height: 100%;
-      background-color: inherit;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      translate: -50% 0;
-      z-index: -1;
-    }
-
-    &:hover {
-      background-color: $sidebar-bg-hover;
-      color: $sidebar-txt-hover;
-    }
-
-    &.active,
-    &:active {
-      background-color: $sidebar-bg-active;
-      color: $text-light;
-    }
+    @include sidebar-link-hover;
   }
 }
 
 :host.auth-variant {
   width: 246px;
-  display: flex;
-  justify-content: space-between;
+  @include flex-between;
   gap: 16px;
 
   margin-top: 0;

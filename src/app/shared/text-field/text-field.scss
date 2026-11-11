@@ -2,17 +2,22 @@
 
 :host {
   @include field-host;
-}
+  position: relative;
 
-:host(.ng-invalid.ng-touched) .input-container {
-  border-color: $error;
+  &.ng-invalid.ng-touched .input-container {
+    border-color: $error;
 
-  &:focus-within,
-  &:has(input:not(:placeholder-shown)),
-  &:has(textarea:not(:placeholder-shown)) {
-    label.inner {
-      color: $error;
+    &:focus-within,
+    &:has(input:not(:placeholder-shown)),
+    &:has(textarea:not(:placeholder-shown)) {
+      label.inner {
+        color: $error;
+      }
     }
+  }
+
+  &.task-input .input-container {
+    --padding-inline: #{calcClamp(12, 16, 768, 320)};
   }
 }
 
@@ -62,24 +67,26 @@ textarea {
   }
 }
 
-label.top {
-  @include field-label;
-}
+label {
+  &.top {
+    @include field-label;
+  }
 
-label.inner {
-  @include field-label;
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: $main-color;
-  background-color: white;
-  padding: 0 8px;
-  transition: all 150ms ease-in-out;
-  cursor: text;
+  &.inner {
+    @include field-label;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $main-color;
+    background-color: $color-white;
+    padding: 0 8px;
+    transition: all 150ms ease-in-out;
+    cursor: text;
 
-  @include mobile {
-    padding: 0;
+    @include mobile {
+      padding: 0;
+    }
   }
 }
 
@@ -100,10 +107,4 @@ label.inner {
 
 .error-msg {
   @include field-error-msg;
-}
-
-:host(.task-input) .input-container {
-  --padding-inline: #{calcClamp(12, 16, 768, 320)};
-  padding-block: calcClamp(8, 12, 768, 320);
-  padding-inline: var(--padding-inline);
 }

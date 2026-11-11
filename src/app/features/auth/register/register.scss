@@ -1,12 +1,12 @@
-@use '../../../../../public/assets/styles/' as *;
+@use '../../../../../public/assets/styles' as *;
 
 :host {
   @include auth-page;
   --card-padding: #{calcClamp(16, 115)};
-  padding-block: calcClampMin((24, 48), (12, 48, 100, 600));
+  padding-block: calcClampMin((24, 48), (12, 48, 1000, 600));
   gap: calcClamp(12, 48, 1000, 600, height);
   padding-inline: var(--card-padding);
-  background-color: white;
+  background-color: $color-white;
 }
 
 header {
@@ -20,9 +20,13 @@ header {
     bottom: 0;
     left: calcClamp(24, 68);
     margin-block: auto;
+    transition: transform 100ms ease;
 
-    &.btn--icon ::ng-deep .icon {
-      width: calcClamp(24, 32, 500, 350, height);
+    --btn-icon-medium-size: #{calcClamp(24, 32, 500, 350, height)};
+
+    &:hover,
+    &:focus-visible {
+      transform: translateX(-4px);
     }
   }
 }
@@ -32,8 +36,8 @@ form {
   gap: calcClamp(16, 24, 600, 450, height);
   width: 100%;
 
-  app-text-field ::ng-deep .input-container {
-    padding-block: calcClampMin((8, 12, 768, 320), (2, 8, 500, 350));
+  app-text-field {
+    --input-padding-block: #{calcClampMin((8, 12, 768, 320), (2, 8, 500, 350))};
   }
 }
 
@@ -42,6 +46,16 @@ form {
   gap: 8px;
   font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
   margin-top: calcClamp(-6, 0, 600, 450, height);
+  width: 100%;
+
+  app-checkbox {
+    gap: 8px;
+    width: 100%;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
 
   label {
     cursor: pointer;
@@ -53,7 +67,6 @@ form {
 }
 
 button[type='submit'] {
-  margin-top: calcClamp(0, 8, 800, 350, height);
   margin-top: calcClamp(-6, 0, 500, 350, height);
 }
 
@@ -66,11 +79,24 @@ button[type='submit'] {
   gap: 8px;
   position: relative;
 
-  .info-icon {
-    width: 20px;
-    height: 20px;
-    color: $input-default-label;
+  .info-icon-btn {
+    all: unset;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: $radius-xs;
+
+    &:focus-visible {
+      outline: 2px solid $main-color;
+      outline-offset: 2px;
+    }
+
+    .info-icon {
+      width: 20px;
+      height: 20px;
+      color: $input-default-label;
+      cursor: pointer;
+    }
   }
 
   &:hover {
@@ -78,68 +104,54 @@ button[type='submit'] {
       visibility: visible;
     }
   }
-}
 
-.info-icon-btn {
-  all: unset;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-
-  &:focus-visible {
-    outline: 2px solid $main-color;
-    outline-offset: 2px;
-  }
-}
-
-.password-tooltip {
-  @include flex-start(column, both);
-  gap: 8px;
-  padding: 16px;
-  background-color: $main-color;
-  color: $text-light;
-  border-radius: 10px;
-  box-shadow: $overlay-shadow;
-  position: absolute;
-  bottom: 160%;
-  left: -100%;
-  font-size: 13px;
-  text-wrap: nowrap;
-
-  visibility: hidden;
-
-  &.visible {
-    visibility: visible;
-  }
-
-  ul {
+  .password-tooltip {
     @include flex-start(column, both);
     gap: 8px;
-  }
-
-  li {
-    @include flex-start;
-    gap: 8px;
-  }
-
-  .status-icon {
-    width: 16px;
-    height: 16px;
-    color: $error;
-
-    &.valid {
-      color: $prio-low;
-    }
-  }
-
-  &::after {
-    content: '';
+    padding: 16px;
+    background-color: $main-color;
+    color: $text-light;
+    border-radius: $radius-md;
+    box-shadow: $overlay-shadow;
     position: absolute;
-    top: 100%;
-    left: 19px;
-    border-width: 10px;
-    border-style: solid;
-    border-color: $main-color transparent transparent transparent;
+    bottom: 160%;
+    left: -100%;
+    font-size: 13px;
+    text-wrap: nowrap;
+    visibility: hidden;
+
+    &.visible {
+      visibility: visible;
+    }
+
+    ul {
+      @include flex-start(column, both);
+      gap: 8px;
+    }
+
+    li {
+      @include flex-start;
+      gap: 8px;
+    }
+
+    .status-icon {
+      width: 16px;
+      height: 16px;
+      color: $error;
+
+      &.valid {
+        color: $prio-low;
+      }
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 19px;
+      border-width: 10px;
+      border-style: solid;
+      border-color: $main-color transparent transparent transparent;
+    }
   }
 }

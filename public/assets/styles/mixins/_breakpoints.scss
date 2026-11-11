@@ -1,4 +1,5 @@
 @use 'sass:math';
+@use '../variables' as *;
 
 @function to-px($value) {
   @return if(math.is-unitless($value), #{$value}px, $value);
@@ -10,19 +11,19 @@
   }
 }
 
-@mixin mobile($width: 768) {
+@mixin mobile($width: $bp-mobile) {
   @include responsive($width, width, max) {
     @content;
   }
 }
 
-@mixin tablet($width: 1024) {
+@mixin tablet($width: $bp-tablet) {
   @include responsive($width, width, max) {
     @content;
   }
 }
 
-@mixin desktop($width: 1025) {
+@mixin desktop($width: $bp-desktop) {
   @include responsive($width, width, min) {
     @content;
   }
@@ -34,20 +35,20 @@
   }
 }
 
-@mixin short-height($height: 500) {
+@mixin short-height($height: $bp-short-height) {
   @include responsive($height, height, max) {
     @content;
   }
 }
 
-@mixin mobile-or-short($mobile-width: 768px, $ls-width: 1920, $ls-height: 500) {
+@mixin mobile-or-short($mobile-width: to-px($bp-mobile), $ls-width: 1920, $ls-height: $bp-short-height) {
   @media screen and (max-width: $mobile-width),
     screen and (max-width: #{$ls-width}px) and (max-height: #{$ls-height}px) and (orientation: landscape) {
     @content;
   }
 }
 
-@mixin middle-height($min: 501px, $max: 700px) {
+@mixin middle-height($min: to-px($bp-short-height + 1), $max: to-px($bp-middle-height)) {
   @media screen and (min-height: $min) and (max-height: $max) {
     @content;
   }

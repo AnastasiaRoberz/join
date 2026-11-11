@@ -24,19 +24,26 @@ import { Buttons } from '../button.component/button.component';
   templateUrl: './confirm-dialog.html',
 })
 export class ConfirmDialog {
-  confirmService = inject(ConfirmService);
+  /** Service providing the confirmation request state and answer callbacks. */
+  protected readonly confirmService = inject(ConfirmService);
 
-  //für afterNextRender
-  injector = inject(Injector);
+  /** Injector required to schedule afterNextRender callbacks inside reactive effects. */
+  private readonly injector = inject(Injector);
 
-  // Referenz auf die <section> im Template
-  dialogBox = viewChild<ElementRef>('dialogBox');
+  /** Reference to the dialog section element in the template for accessibility focus. */
+  protected readonly dialogBox = viewChild<ElementRef<HTMLElement>>('dialogBox');
 
+  /** Initializes accessibility focus management when confirmation dialog opens. */
   constructor() {
-    //setzt Fokus auf den Dialog nach dem Öffnen
+    this.initFocusEffect();
+  }
+
+  /**
+   * Sets focus to the dialog box once the confirmation prompt opens.
+   */
+  private initFocusEffect(): void {
     effect(() => {
       if (this.confirmService.request()) {
-        // afterNextRender: wartet bis Angular das DOM aktualisiert hat
         afterNextRender(
           () => {
             this.dialogBox()?.nativeElement.focus();

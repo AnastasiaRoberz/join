@@ -15,11 +15,13 @@
     [value]="displayValue()"
     #combobox="ngCombobox"
     ngCombobox
-    [(expanded)]="popupExpanded"
+    [expanded]="popupExpanded()"
+    (expandedChange)="onExpandedChange($event)"
     [preserveContent]="false"
     (click)="onInputClick()"
     (input)="onSearchInput($event)"
     autocomplete="off"
+    [style.visibility]="filterButton() ? 'hidden' : 'visible'"
     #inputField
   />
 
@@ -47,10 +49,11 @@
     ></button>
   }
 
+  <ng-content />
+
   <span class="error-msg" role="alert" aria-live="polite">{{ showError() }}</span>
 </div>
 
-<!-- Optional slot for footer content (e.g., assigned user avatar badges) -->
 <ng-content select="[footer]" />
 
 <ng-template

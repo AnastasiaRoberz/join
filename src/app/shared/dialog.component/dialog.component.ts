@@ -6,12 +6,21 @@ import { TaskEdit } from '../../features/main/board/components/task-edit/task-ed
 import { Buttons } from '../button.component/button.component';
 import { AddTask } from '../../features/main/add-task/add-task';
 import { ResponsiveService } from '../../services/responsive.service';
+
+/** Accessible labels mapped by dialog type. */
+const DIALOG_LABELS: Record<string, string> = {
+  contact: 'Contact details',
+  task: 'Task details',
+  'task-edit': 'Edit task',
+  'add-task': 'Add task',
+};
+
 /**
  * Global modal overlay that hosts the currently active dialog content.
  *
  * The visible content is chosen by `DialogService.dialogType()`
- * (`'contact'` → `ContactDialog`, `'task'` → `TaskDetails`, `'task-edit'` → `TaskEdit`;
- * the type `'add-task'` has no case in the template yet and renders nothing).
+ * (`'contact'` -> `ContactDialog`, `'task'` -> `TaskDetails`, `'task-edit'` -> `TaskEdit`,
+ * `'add-task'` -> `AddTask`).
  * `DialogService.selectedItem()` is passed to the content as its data (contact or task).
  *
  * Open/close behavior (via host bindings):
@@ -41,25 +50,43 @@ import { ResponsiveService } from '../../services/responsive.service';
   },
 })
 export class DialogComponent {
-  /** Provides the dialog state (open flag, type, selected item) and `closeDialog()` for the backdrop click. */
-  dialogService = inject(DialogService);
-  responsiveService = inject(ResponsiveService);
+  /** Provides the dialog state (open flag, type, selected item) and `closeDialog()` for backdrop clicks. */
+  protected readonly dialogService = inject(DialogService);
 
-  //ist false, wenn noch kein click innerhalb dialog erfolgt
+  /** Responsive service used to close desktop/tablet overlays on viewport transitions. */
+  private readonly responsiveService = inject(ResponsiveService);
+
+  /** Tracks whether the mousedown event initiated inside dialog content to avoid backdrop dismissal. */
   private mousedownInside = false;
 
-  //Click innerhalb Dialog: mousedown-event über html setzt property mousedownInside auf true
-  onContentMousedown(): void {
+  /** Dynamic aria-label for accessibility based on active dialog type. */
+  protected readonly dialogLabel = computed<string>(() => {
+    const type = this.dialogService.dialogType();
+    return (type && DIALOG_LABELS[type]) ?? 'Dialog';
+  });
+
+  /** Indicates whether the close button should appear white on mobile for contact dialogs. */
+  protected readonly whiteBtn = computed<boolean>(() => {
+    return this.responsiveService.isMobile() && this.dialogService.dialogType() === 'contact';
+  });
+
+  /** Initializes tablet viewport change listener to automatically close dialogs when needed. */
+  constructor() {
+    this.initTabletCloseEffect();
+  }
+
+  /** Marks that a mousedown event occurred within the dialog content. */
+  protected onContentMousedown(): void {
     this.mousedownInside = true;
   }
 
-  //Click innerhalb Dialog: wenn noch IM Dialog mousup-event: property wieder auf false, damit click backdrop sofort wieder funktioniert
-  onContentMouseUp(): void {
+  /** Resets mousedown flag so subsequent backdrop clicks function immediately. */
+  protected onContentMouseUp(): void {
     this.mousedownInside = false;
   }
 
-  //über click auf host: wenn click backdrop: close wird aufgerufen, außer click innerhalb dialog true, dann return
-  onBackdropClick(): void {
+  /** Closes dialog or navigates back when the backdrop overlay is clicked. */
+  protected onBackdropClick(): void {
     if (this.mousedownInside) {
       this.mousedownInside = false;
       return;
@@ -67,20 +94,8 @@ export class DialogComponent {
     this.handleClose();
   }
 
-  whiteBtn = computed(() => {
-    return this.responsiveService.isMobile() && this.dialogService.dialogType() === 'contact';
-  });
-
-  constructor() {
-    effect(() => {
-      const onTablet = this.responsiveService.isTablet();
-      if (onTablet && this.dialogService.dialogType() === 'add-task') {
-        this.dialogService.closeDialog();
-      }
-    });
-  }
-
-  handleClose(): void {
+  /** Handles close button or backdrop click, navigating back to task details when in edit mode. */
+  protected handleClose(): void {
     if (this.dialogService.dialogType() === 'task-edit') {
       this.dialogService.openDialog('task', this.dialogService.selectedItem());
     } else {
@@ -88,19 +103,13 @@ export class DialogComponent {
     }
   }
 
-  //dynamic aria-label for every type
-  dialogLabel = computed(() => {
-    switch (this.dialogService.dialogType()) {
-      case 'contact':
-        return 'Contact details';
-      case 'task':
-        return 'Task details';
-      case 'task-edit':
-        return 'Edit task';
-      case 'add-task':
-        return 'Add task';
-      default:
-        return 'Dialog';
-    }
-  });
+  /** Closes add-task dialog on tablet viewports where add-task is a dedicated page. */
+  private initTabletCloseEffect(): void {
+    effect(() => {
+      const onTablet = this.responsiveService.isTablet();
+      if (onTablet && this.dialogService.dialogType() === 'add-task') {
+        this.dialogService.closeDialog();
+      }
+    });
+  }
 }

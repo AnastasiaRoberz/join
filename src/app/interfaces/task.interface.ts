@@ -1,6 +1,7 @@
 import { ContactInterface } from './contact.interface';
 import { SubtaskInterface } from './subtask.interface';
 
+/** A task as used in the app: `tasks` row plus its joined subtasks and assigned contacts. */
 export interface TaskInterface {
   id: number;
   position: number; // position added for drag and drop (also in database)

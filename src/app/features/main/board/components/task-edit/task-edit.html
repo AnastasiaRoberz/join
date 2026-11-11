@@ -1,16 +1,32 @@
 <form [formGroup]="taskForm" (ngSubmit)="saveTask()" cdkScrollable aria-label="Edit task">
   <div class="form-content-wrapper" [class.scroll-container]="!isShortHeight()" cdkScrollable>
-    <app-text-field id="title" formControlName="title" labelPos="top" label="Title" />
+    <app-text-field
+      fieldId="task-edit-title"
+      formControlName="title"
+      requiredMsg
+      labelPos="top"
+      label="Title"
+      type="input"
+      placeholder="Enter a title"
+      showCharCount
+      [maxLength]="200"
+    />
 
     <app-text-field
-      fieldId="description"
+      fieldId="task-edit-description"
       formControlName="description"
       labelPos="top"
       label="Description"
       type="textarea"
+      placeholder="Enter a description"
     />
 
-    <app-calendar-field id="due-date" formControlName="dueDate" label="Due Date" />
+    <app-calendar-field
+      fieldId="task-edit-date"
+      formControlName="dueDate"
+      label="Due date"
+      requiredMsg
+    />
 
     <app-priority-btn formControlName="priority" />
 
@@ -52,7 +68,14 @@
     <app-subtask-field [(subtasks)]="currentSubtasks" />
   </div>
 
-  <button class="btn-submit" appBtn type="submit" preset="check" aria-label="Save task changes">
+  <button
+    class="btn-submit"
+    appBtn
+    type="submit"
+    preset="check"
+    aria-label="Save task changes"
+    [disabled]="taskForm.invalid || isSubmitting()"
+  >
     Ok
   </button>
 </form>

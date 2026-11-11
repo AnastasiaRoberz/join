@@ -1,5 +1,19 @@
 <div class="title-group">
   <h2>Board</h2>
+</div>
+<app-select-field
+  variant="search"
+  placeholder="Find Task"
+  aria-label="Search tasks"
+  emptyText="No results found"
+  [openOnTyping]="false"
+  [filterButton]="taskService.boardFilter() ? true : false"
+  [options]="taskService.sortedTasks()"
+  [labelFn]="taskLabelFn"
+  [getSearchStrings]="taskSearchStrings"
+  (searchChange)="taskService.searchQuery.set($event)"
+  (valueChange)="onTaskSelected($event)"
+>
   @if (taskService.boardFilter(); as filter) {
     <button
       appBtn
@@ -12,18 +26,8 @@
       {{ filter.label }}
     </button>
   }
-</div>
-<app-select-field
-  variant="search"
-  placeholder="Find Task"
-  aria-label="Search tasks"
-  emptyText="No tasks found."
-  [options]="taskService.sortedTasks()"
-  [labelFn]="taskLabelFn"
-  [getSearchStrings]="taskSearchStrings"
-  (valueChange)="onTaskSelected($event)"
-/>
-<!-- added method dialogService.openAddTask() in click (new in DialogService)-->
+</app-select-field>
+
 <button
   appBtn
   preset="addTask"

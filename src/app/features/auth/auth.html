@@ -1,6 +1,7 @@
 <div
   class="content"
   [class.short-register]="navService.currentUrl() === '/register' && isShortHeight()"
+  [class.intro-mobile]="introService.isMobile()"
 >
   @if (introService.isActive()) {
     <div class="intro-overlay" aria-hidden="true"></div>

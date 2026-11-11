@@ -25,7 +25,14 @@
   }
 }
 
-@mixin size($w: 100%, $h: 100%) {
+@mixin flex-between($direction: row, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: space-between;
+  align-items: $align;
+}
+
+@mixin size($w: 100%, $h: $w) {
   width: $w;
   height: $h;
 }
@@ -35,6 +42,90 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin vertical-divider($height: 24px, $color: $divider, $width: 1px) {
+  border: none;
+  width: $width;
+  height: $height;
+  background-color: $color;
+}
+
+@mixin slide-in-drawer($offset-x: 100dvw, $duration-transform: 0.4s, $duration-opacity: 0.2s) {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX($offset-x);
+  transition:
+    opacity $duration-opacity ease,
+    transform $duration-transform ease,
+    visibility 0s linear $duration-opacity;
+
+  :host.is-open & {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 0);
+    transition:
+      opacity $duration-opacity ease,
+      transform $duration-transform ease,
+      visibility 0s linear 0s;
+  }
+}
+
+@mixin sidebar-nav-link {
+  @include flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 0;
+  color: $sidebar-txt-default;
+  position: relative;
+  z-index: 2;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    background-color: inherit;
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+  }
+
+  &:hover {
+    background-color: $sidebar-bg-hover;
+    color: $sidebar-txt-hover;
+  }
+
+  &.active,
+  &:active {
+    background-color: $sidebar-bg-active;
+    color: $text-light;
+  }
+}
+
+@mixin task-dialog-shell {
+  @include flex-start(column, both);
+  gap: calcClamp(16, 24);
+  width: 525px;
+  min-height: 0;
+  height: 100%;
+  padding-inline: var(--padding-inline-dialog);
+
+  &.scroll-container {
+    width: 100%;
+  }
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 @mixin underline($width: 90px, $centered: false) {
@@ -52,7 +143,7 @@
   }
 }
 
-@mixin titleWithDevider($break-at: null) {
+@mixin titleWithDivider($break-at: null) {
   display: flex;
   align-items: center;
 
@@ -97,6 +188,69 @@
         margin-top: calcClampMin(0, 8);
         margin-inline: 0;
       }
+    }
+  }
+}
+
+@mixin sidebar-link-hover {
+  position: relative;
+  z-index: 2;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &::before {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -2;
+    background-image: linear-gradient(
+      90deg,
+      $sidebar-bg-hover 0%,
+      $sidebar-bg-hover 40%,
+      transparent 60%,
+      transparent 100%
+    );
+    background-size: 250% 100%;
+    background-position: 100% 0;
+    transition: background-position 0.3s ease;
+  }
+
+  &::after {
+    content: '';
+    width: 100cqw;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    translate: -50% 0;
+    z-index: -1;
+    background-color: $sidebar-bg-active;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover {
+    color: $sidebar-txt-hover;
+
+    &::before {
+      background-position: 0% 0;
+      transition: background-position 0.45s ease;
+    }
+  }
+
+  &.active,
+  &:active {
+    color: $text-light;
+
+    &::after {
+      opacity: 1;
+      transition: opacity 0.25s ease;
     }
   }
 }

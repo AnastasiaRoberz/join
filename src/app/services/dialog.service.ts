@@ -1,7 +1,8 @@
-import { inject, Service, signal } from '@angular/core';
+import { Service, signal } from '@angular/core';
 import { ContactInterface } from '../interfaces/contact.interface';
 import { TaskInterface } from '../interfaces/task.interface';
 
+/** Item the dialog works on: a task, a contact, or `null` (create new / nothing selected). */
 export type DialogItem = TaskInterface | ContactInterface | null;
 
 /**
@@ -32,27 +33,27 @@ export type DialogContentType = 'contact' | 'task' | 'task-edit' | 'add-task' | 
 @Service()
 export class DialogService {
   /** Whether the dialog is currently open (drives the open/close animation). */
-  isOpen = signal<boolean>(false);
+  public readonly isOpen = signal<boolean>(false);
   /** Which content the dialog shows. Stays set during the close animation and is reset to `null` afterwards. */
-  dialogType = signal<DialogContentType>(null);
+  public readonly dialogType = signal<DialogContentType>(null);
 
   /** The item (contact or task, depending on `dialogType`) the dialog works on, or `null` when creating a new one. */
-  selectedItem = signal<any | null>(null);
+  public readonly selectedItem = signal<DialogItem>(null);
 
   /**
    * Holds the id of a newly created contact until the Contacts container picks it up.
    * The container reads this in an effect(), sets it as selectedId, then resets it to null.
    */
-  pendingSelectedId = signal<number | null>(null);
+  public readonly pendingSelectedId = signal<number | null>(null);
 
   /**
    * True while a newly created contact should be scrolled to.
    * Set to true in selectContact(), reset to false in ContactList after scrolling.
    */
-  scrollToContact = signal<boolean>(false);
+  public readonly scrollToContact = signal<boolean>(false);
 
   /** Handle of the pending state reset started in `closeDialog()`; cleared if the dialog is reopened within 400ms. */
-  closeTimeout?: ReturnType<typeof setTimeout>;
+  private closeTimeout?: ReturnType<typeof setTimeout>;
 
   /**
    * Opens the dialog with the given content. Cancels a pending reset from `closeDialog()`,
@@ -61,7 +62,7 @@ export class DialogService {
    * @param type - Which content to show.
    * @param item - The contact/task to display or edit, or `null` to create a new one.
    */
-  openDialog<T>(type: DialogContentType, item: DialogItem | null = null): void {
+  public openDialog(type: DialogContentType, item: DialogItem = null): void {
     if (this.closeTimeout) {
       clearTimeout(this.closeTimeout);
     }
@@ -74,7 +75,7 @@ export class DialogService {
    * Closes the dialog. `isOpen` is set to `false` immediately; `dialogType` and `selectedItem`
    * are reset after 400ms so the content stays visible during the close animation.
    */
-  closeDialog(): void {
+  public closeDialog(): void {
     this.isOpen.set(false);
 
     this.closeTimeout = setTimeout(() => {
@@ -89,7 +90,7 @@ export class DialogService {
    *
    * @param id - The database id of the newly created contact
    */
-  selectContact(id: number): void {
+  public selectContact(id: number): void {
     this.pendingSelectedId.set(id);
     this.scrollToContact.set(true);
   }

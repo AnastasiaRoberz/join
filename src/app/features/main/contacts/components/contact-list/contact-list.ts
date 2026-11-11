@@ -1,20 +1,17 @@
 import {
   AfterViewInit,
   Component,
-  computed,
   effect,
   ElementRef,
   inject,
   input,
   output,
-  QueryList,
-  ViewChild,
-  ViewChildren,
+  viewChild,
+  viewChildren,
 } from '@angular/core';
 import { UserAvatar } from '../../../../../shared/user-avatar/user-avatar';
 import { DialogService } from '../../../../../services/dialog.service';
 import { ContactService } from '../../../../../services/contact.service';
-import { ContactInterface } from '../../../../../interfaces/contact.interface';
 import { Buttons } from '../../../../../shared/button.component/button.component';
 import { ResponsiveService } from '../../../../../services/responsive.service';
 import { fullName } from '../../../../../utils/name-utils';
@@ -41,104 +38,96 @@ import { fullName } from '../../../../../utils/name-utils';
   },
 })
 export class ContactList implements AfterViewInit {
-  /**
-   * Shared Contact service that provides the contact data
-   * (e.g. `getGroupedContacts()` used in the template).
-   */
-  contactService = inject(ContactService);
-  dialogService = inject(DialogService);
-  responsiveService = inject(ResponsiveService);
+  /** Contact service providing grouped contacts list and saved scroll position. */
+  protected readonly contactService = inject(ContactService);
 
-  shortHeight = this.responsiveService.isMaxHeight(500);
-  isSinglePane = computed(() => this.responsiveService.isMobile() || this.shortHeight());
+  /** Dialog service providing scroll trigger flags and open dialog controls. */
+  protected readonly dialogService = inject(DialogService);
 
-  // importing fullName for netter display purposes
-  protected fullName = fullName;
+  /** Responsive service for viewport layout queries. */
+  protected readonly responsiveService = inject(ResponsiveService);
+
+  /** Signal indicating viewports with height <= 500px. */
+  protected readonly shortHeight = this.responsiveService.isMaxHeight(500);
+
+  /** Formatter function combining name parts for accessible labels. */
+  protected readonly fullName = fullName;
 
   /**
    * Id of the contact currently shown in the detail pane.
-   * Set by the Contacts container; used to add the `contact--active`
-   * class (dark blue highlight) to the matching list entry.
-   * `null` when no contact is selected.
+   * Used to apply `contact-card-btn--active` highlight class.
    */
-  selectedId = input<number | undefined | null>(null);
+  public readonly selectedId = input<number | undefined | null>(null);
 
-  /**
-   * Emits the id of the contact the user clicked.
-   * The Contacts container listens to this and updates its `selectedId`,
-   * which then opens the contact details.
-   */
-  contactSelected = output<number | undefined>();
+  /** Emits the id of the contact the user clicked. */
+  public readonly contactSelected = output<number | undefined>();
 
-  // Collects all <button #contactBtn> elements from the template into a queryable list
-  @ViewChildren('contactBtn') contactButtons!: QueryList<ElementRef>;
-  @ViewChild('scrollContainer')
-  scrollContainer?: ElementRef<HTMLElement>;
+  /** Query list of all contact card button elements. */
+  private readonly contactButtons = viewChildren<ElementRef<HTMLElement>>('contactBtn');
 
+  /** Reference to the scrollable container wrapping contact cards. */
+  private readonly scrollContainer = viewChild<ElementRef<HTMLElement>>('scrollContainer');
+
+  /** Tracks previously selected contact id to detect deletions. */
+  private previousId: number | null = null;
+
+  /** Initializes reactive effect to scroll selected contact into view when selection changes. */
   constructor() {
-    /**
-     * Tracks the previously selected contact id.
-     * Used to detect when a contact was deleted (id goes from a value to null).
-     */
-    let previousId: number | null = null;
-
-    /**
-     * Reacts automatically whenever selectedId or isNewContact changes.
-     * - New contact created → scrolls to it in the center of the list
-     * - Contact deleted (id becomes null) → scrolls back to the top
-     */
-    effect(() => {
-      const id = this.selectedId();
-      const shouldScroll = this.dialogService.scrollToContact();
-
-      // Wait for Angular to finish rendering the DOM before scrolling
-      setTimeout(() => {
-        if (id) {
-          previousId = id;
-
-          if (shouldScroll) {
-            // Flatten grouped contacts into a single array in the same order as the DOM
-            const allContacts = this.contactService
-              .groupedContacts()
-              .flatMap((g: { letter: string; contacts: ContactInterface[] }) => g.contacts);
-
-            // Index in allContacts matches the button's index in contactButtons
-            const index = allContacts.findIndex((c) => c.id === id);
-            const button = this.contactButtons.toArray()[index];
-            button?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            // Reset flag after scrolling so subsequent selections don't trigger this branch
-            this.dialogService.scrollToContact.set(false);
-          }
-        } else if (!id && previousId) {
-          // A contact was deleted → scroll back to the top of the list
-          this.contactButtons.first?.nativeElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-          previousId = null;
-        }
-      }, 50);
-    });
+    this.initScrollEffect();
   }
 
-  selectContact(id: number | undefined): void {
-    if (this.scrollContainer) {
-      this.contactService.savedScrollTop = this.scrollContainer.nativeElement.scrollTop;
+  /** Restores previous scroll position after view initialization. */
+  public ngAfterViewInit(): void {
+    const scrollPos = this.contactService.savedScrollTop;
+    const container = this.scrollContainer()?.nativeElement;
+    if (container && scrollPos > 0) {
+      container.scrollTop = scrollPos;
+      requestAnimationFrame(() => {
+        container.scrollTop = scrollPos;
+      });
+    }
+  }
+
+  /** Stores current scroll offset and emits selected contact id. */
+  protected selectContact(id: number | undefined): void {
+    const container = this.scrollContainer()?.nativeElement;
+    if (container) {
+      this.contactService.savedScrollTop = container.scrollTop;
     }
     this.contactSelected.emit(id);
   }
 
-  ngAfterViewInit(): void {
-    const scrollPos = this.contactService.savedScrollTop;
-    if (this.scrollContainer && scrollPos > 0) {
-      this.scrollContainer.nativeElement.scrollTop = scrollPos;
+  /** Reacts to selection changes to center newly added contacts or scroll to top on deletion. */
+  private initScrollEffect(): void {
+    effect(() => {
+      const id = this.selectedId();
+      const shouldScroll = this.dialogService.scrollToContact();
+      setTimeout(() => this.handleContactScroll(id, shouldScroll), 50);
+    });
+  }
 
-      requestAnimationFrame(() => {
-        if (this.scrollContainer) {
-          this.scrollContainer.nativeElement.scrollTop = scrollPos;
-        }
+  /** Dispatches scroll actions depending on whether contact was selected or deleted. */
+  private handleContactScroll(id: number | undefined | null, shouldScroll: boolean): void {
+    if (id) {
+      this.previousId = id;
+      if (shouldScroll) {
+        this.scrollToContactById(id);
+      }
+    } else if (!id && this.previousId) {
+      this.contactButtons()[0]?.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
       });
+      this.previousId = null;
     }
+  }
+
+  /** Centers the button element of the contact with the given id into view. */
+  private scrollToContactById(id: number): void {
+    const allContacts = this.contactService.groupedContacts().flatMap((g) => g.contacts);
+    const index = allContacts.findIndex((c) => c.id === id);
+    const button = this.contactButtons()[index];
+    button?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.dialogService.scrollToContact.set(false);
   }
 }

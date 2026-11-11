@@ -8,7 +8,7 @@
   padding-block: calcClamp(16, 32, 768, 320) calcClamp(6, 12, 768, 320);
   padding-inline: var(--padding-inline);
   gap: 24px;
-  background-color: white;
+  background-color: $color-white;
   flex-shrink: 0;
   position: relative;
 
@@ -36,7 +36,7 @@
     line-height: 0.75;
   }
 
-  &__devider {
+  &__divider {
     width: 100%;
     margin: calcClamp(0, 4, 1440, 768) 0;
     border: none;
@@ -57,17 +57,13 @@
   width: 100%;
   gap: calcClamp(8, 32);
   padding: 16px 24px;
-  border-radius: 10px;
+  border-radius: $radius-md;
 
-  .name {
-    color: $text-dark;
-  }
-
-  &:hover:not(.contact--active) {
+  &:hover:not(.contact-card-btn--active) {
     background: $btn-contact-hover;
   }
 
-  &.contact--active {
+  &--active {
     background-color: $btn-contact-active;
 
     .contact-card-btn__name {
@@ -85,6 +81,7 @@
   &__name {
     @include text-ellipsis;
     font-size: $font-medium;
+    color: $text-dark;
   }
 
   &__mail {

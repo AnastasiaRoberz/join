@@ -1,10 +1,8 @@
-@use '../../../../public/assets/styles/' as *;
+@use '../../../../public/assets/styles' as *;
 
 :host {
-  display: flex;
-  flex-direction: column;
+  @include flex-start(column);
   justify-content: center;
-  align-items: flex-start;
   gap: 8px;
   width: 100%;
 }
@@ -14,30 +12,25 @@
 }
 
 .btn-wrapper {
-  display: flex;
-  justify-content: space-between;
+  @include flex-between;
   gap: 16px;
   width: 100%;
   padding: 0 4px;
 }
 
 .prio-btn {
-  width: 100%;
-  border-radius: 10px;
+  // width: 100%;
+  flex: 1;
+  min-width: 0;
+  border-radius: $radius-md;
   padding-inline: 10px;
   padding-block: calcClamp(8, 16, 500, 350, height);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-center;
   gap: 8px;
-  box-shadow: 0 0 4px 0 #00000066;
+  box-shadow: $overlay-shadow;
   background-color: $color-white;
   font-size: calcClampMin((16, 20, 768, 320), (14, 20, 500, 350));
   line-height: 120%;
-
-  // @include responsive-flex {
-  //   height: calcClamp(48, 56, 1800, 700, height);
-  // }
 
   @include tablet {
     font-size: calcClamp(16, 20, 1024, 769);
@@ -50,6 +43,7 @@
   svg {
     width: calcClamp(12, 20, 1300, 769);
     aspect-ratio: 1 / 1;
+    flex-shrink: 0;
 
     @include mobile {
       width: 20px;
@@ -57,7 +51,7 @@
   }
 
   &:hover:not(.active) {
-    box-shadow: 0 4px 4px 0 #00000040;
+    box-shadow: $btn-shadow;
   }
 
   &:active,

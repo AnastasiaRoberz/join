@@ -3,7 +3,6 @@
 html {
   font-family: 'Inter';
   font-size: calcClamp(14, 16, 800, 350, height);
-  font-family: 'Inter';
   font-weight: 400;
   color: $text-normal;
 }
@@ -15,26 +14,20 @@ p {
   font-size: 1rem;
 }
 
-body,
-input,
-textarea,
-p {
-  font-size: 1rem;
-}
-
 h2 {
-  font-size: calcClampMin((48, 60), (32, 60, 800, 350));
+  font-size: calcClampMinRem((48, 60), (32, 60, 800, 350));
   font-weight: 700;
   line-height: 0.75;
+  user-select: none;
 }
 
 h3 {
-  font-size: calcClampMin((20, 28), (16, 28, 800, 350));
+  font-size: calcClampMinRem((20, 28), (16, 28, 800, 350));
   font-weight: 700;
 }
 
 h4 {
-  font-size: calcClampMin(16, 20);
+  font-size: calcClampMinRem(16, 20);
   font-weight: 700;
 }
 
@@ -42,16 +35,11 @@ h4 {
   font-family: inherit;
 }
 
-/* ------------------------------------------------
-            * --- CLASSES --- * 
------------------------------------------------- */
-// * --- texts --- *
 .subheading {
-  font-size: calcClampMin(16, 27);
+  font-size: calcClampMinRem(16, 27);
   color: $color-navy-800;
 }
 
 .highlighted-txt {
   color: $text-lightblue;
 }
-// * ------------- *
