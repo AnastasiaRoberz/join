@@ -15,7 +15,8 @@
     [value]="displayValue()"
     #combobox="ngCombobox"
     ngCombobox
-    [(expanded)]="popupExpanded"
+    [expanded]="popupExpanded()"
+    (expandedChange)="onExpandedChange($event)"
     [preserveContent]="false"
     (click)="onInputClick()"
     (input)="onSearchInput($event)"

@@ -96,6 +96,9 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   /** Whether clicking the input field opens the dropdown popup. Ignored in search mode. */
   public readonly openOnClick = input<boolean>(true);
 
+  /** Whether typing into the input field automatically opens the dropdown popup. */
+  public readonly openOnTyping = input<boolean>(true);
+
   /** Two-way bound selection value (single key, array of keys, or transient key). */
   public readonly value = model<any>();
 
@@ -247,12 +250,25 @@ export class SelectFieldComponent<T = any> implements ControlValueAccessor {
   // User Interaction & Popup Methods
   // ---------------------------------------------------------------------------
 
-  /** Handles input typing and opens popup if non-empty. */
+  /** Handles input typing and opens popup if non-empty and openOnTyping is true. */
   protected onSearchInput(event: Event): void {
     const val = (event.target as HTMLInputElement).value;
     this.searchTerm.set(val);
     this.searchChange.emit(val);
-    if (!this.popupExpanded() && val.trim().length > 0) {
+    if (this.openOnTyping() && !this.popupExpanded() && val.trim().length > 0) {
+      this.openPopup();
+    }
+  }
+
+  /**
+   * Synchronizes popup expansion state emitted by ngCombobox directive.
+   *
+   * @param expanded - New expansion state from ngCombobox.
+   */
+  protected onExpandedChange(expanded: boolean): void {
+    if (!expanded) {
+      this.closePopup();
+    } else if (this.openOnTyping()) {
       this.openPopup();
     }
   }

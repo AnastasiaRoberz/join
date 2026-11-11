@@ -6,6 +6,7 @@
   placeholder="Find Task"
   aria-label="Search tasks"
   emptyText="No results found"
+  [openOnTyping]="false"
   [filterButton]="taskService.boardFilter() ? true : false"
   [options]="taskService.sortedTasks()"
   [labelFn]="taskLabelFn"
