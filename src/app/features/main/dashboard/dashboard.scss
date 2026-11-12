@@ -112,7 +112,7 @@
   transform: translateZ(0);
 
   &:hover:not(.deadline) {
-    transform: translateY(-4px) scale(var(--scale));
+    transform: translateY(-4px) scale(var(--scale)) translateZ(0);
     background-color: $main-color;
     border-color: $main-color;
     box-shadow: 0 8px 18px -4px rgba($color-navy-900, 0.25);
@@ -230,7 +230,7 @@
   }
 
   &:hover {
-    transform: translateY(-4px) scale(var(--scale));
+    transform: translateY(-4px) scale(var(--scale)) translateZ(0);
     background-color: $main-color;
     box-shadow: 0 8px 18px -4px rgba($color-navy-900, 0.25);
 
