@@ -6,6 +6,10 @@
   gap: calcClampMin((16, 56), (16, 56, 1024, 800));
 }
 
+:host:has(.greeter-overlay) {
+  overflow: hidden;
+}
+
 :host.is-greeting {
   pointer-events: none;
 }
