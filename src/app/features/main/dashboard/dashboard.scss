@@ -15,7 +15,7 @@
 }
 
 .greeter-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: $z-intro-overlay;
   pointer-events: none;
