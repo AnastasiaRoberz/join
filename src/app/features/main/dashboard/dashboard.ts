@@ -171,15 +171,28 @@ export class Dashboard implements OnInit, AfterViewInit {
     welcome.style.visibility = '';
   }
 
-  /** Calculates translation offset from viewport center to final greeting element position. */
+  /** Calculates how far the greeting text has to move to start in the centre of the screen. */
   private calculateFlyCenterTransform(welcome: HTMLElement): string {
-    const rect = welcome.getBoundingClientRect();
-    const area = this.host.nativeElement.getBoundingClientRect();
-    const left = Math.max(area.left, 0);
-    const right = Math.min(area.right, window.innerWidth);
-    const toX = (left + right) / 2 - (rect.left + rect.width / 2);
+    const rect = this.measureTextRect(welcome);
+    const toX = window.innerWidth / 2 - (rect.left + rect.width / 2);
     const toY = window.innerHeight / 2 - (rect.top + rect.height / 2);
     return `translate(${toX}px, ${toY}px)`;
+  }
+
+  /** Measures only the text lines (a wrapped <p> is full width, its text isn't). */
+  private measureTextRect(welcome: HTMLElement): DOMRect {
+    const range = document.createRange();
+    const walker = document.createTreeWalker(welcome, NodeFilter.SHOW_TEXT);
+    const lines: DOMRect[] = [];
+    while (walker.nextNode()) {
+      range.selectNodeContents(walker.currentNode);
+      lines.push(...range.getClientRects());
+    }
+    const left = Math.min(...lines.map((line) => line.left));
+    const right = Math.max(...lines.map((line) => line.right));
+    const top = Math.min(...lines.map((line) => line.top));
+    const bottom = Math.max(...lines.map((line) => line.bottom));
+    return new DOMRect(left, top, right - left, bottom - top);
   }
 
   /** Runs the CSS keyframe fly animation on the greeting element. */
