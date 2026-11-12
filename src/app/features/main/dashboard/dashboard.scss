@@ -109,10 +109,10 @@
     background-color 240ms ease,
     border-color 240ms ease,
     box-shadow 260ms cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translateZ(0);
+  will-change: transform;
 
   &:hover:not(.deadline) {
-    transform: translateY(-4px) scale(var(--scale)) translateZ(0);
+    transform: translateY(-4px) scale(var(--scale));
     background-color: $main-color;
     border-color: $main-color;
     box-shadow: 0 8px 18px -4px rgba($color-navy-900, 0.25);
@@ -308,7 +308,7 @@
     max-width: 50%;
     cursor: pointer;
     transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-    transform: translateZ(0);
+    will-change: transform;
     transform-origin: center center;
 
     .date {
@@ -328,7 +328,7 @@
     }
 
     &:hover {
-      transform: translateZ(0) scale(1.05);
+      transform: scale(1.05);
     }
 
     @media screen and (max-width: 499px) and (max-height: 500px) {
