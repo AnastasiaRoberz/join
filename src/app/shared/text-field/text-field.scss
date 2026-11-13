@@ -60,7 +60,7 @@ textarea {
       transform: translateY(-150%);
       color: $input-focus-label;
 
-      @media screen and (max-width: 768px), screen and (max-height: 500px) {
+      @media screen and (max-width: 1000px), screen and (max-height: 500px) {
         display: none;
       }
     }

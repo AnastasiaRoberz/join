@@ -75,11 +75,11 @@ export class ErrorService {
 
     passwordMissingUppercase: () => 'One uppercase needed',
 
-    passwordMissingLowercase: () => 'One lowercase letter',
+    passwordMissingLowercase: () => 'One lowercase letter needed',
 
     passwordMissingNumber: () => 'One number needed',
 
-    passwordMissingSpecialChar: () => 'One special character',
+    passwordMissingSpecialChar: () => 'Special character needed',
   };
 
   /**
